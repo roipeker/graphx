@@ -6,6 +6,7 @@ import 'package:graphx/graphx/graphx_widget.dart';
 import 'package:graphx/graphx/scene_controller.dart';
 
 import 'demos/test2.dart';
+import 'demos/test3.dart';
 
 void main() {
   runApp(MyApp());
@@ -133,19 +134,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SceneBuilderWidget(
-      useKeyboard: false,
-      usePointer: true,
-      builder: () => SceneController.withLayers(
-//        back: MainBackScene(),
-        front: Test2Scene(),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Center(
+      body: Center(
+        child: SceneBuilderWidget(
+          useKeyboard: false,
+          usePointer: true,
+          builder: () => SceneController.withLayers(
+//        back: MainBackScene(),
+            front: Test3Scene(),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -159,11 +160,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
       ),
     );
   }

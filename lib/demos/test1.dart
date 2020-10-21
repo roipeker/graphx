@@ -175,9 +175,9 @@ class MyAvatarFront extends RootScene {
       drawBox(Colors.green.value);
       stage.pointer.onUp.addOnce((e) {
         isPressed = false;
-        if (!box.getBounds(40, 40).contains(e.localX, e.localX)) {
-          drawBox(Colors.red.value);
-        }
+//        if (!box.getBounds(40, 40).contains(e.localX, e.localX)) {
+//          drawBox(Colors.red.value);
+//        }
       });
     });
 

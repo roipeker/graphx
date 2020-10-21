@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
+import 'package:graphx/graphx/geom/gxpoint.dart';
 
 enum PointerEventType { scroll, cancel, move, up, down, enter, exit, hover }
 
@@ -21,7 +22,9 @@ class PointerEventData {
     return null;
   }
 
-  Offset get position => rawEvent.localPosition;
+  GxPoint get windowPosition => GxPoint.fromNative(rawEvent.original.position);
+  GxPoint get stagePosition => GxPoint.fromNative(rawEvent.localPosition);
+//  Offset get position => rawEvent.localPosition;
 
   @override
   String toString() {

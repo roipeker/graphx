@@ -2,13 +2,12 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
+import 'package:graphx/graphx/geom/gxpoint.dart';
 import 'package:graphx/graphx/geom/gxrect.dart';
-import 'package:graphx/graphx/textures/base_texture.dart';
 import 'package:graphx/graphx/utils/interfases.dart';
 import 'package:graphx/graphx/utils/mixins.dart';
 
 class Graphics with RenderUtilMixin implements GxRenderable {
-//  Path _path = Path();
   final _commands = <_GraphicsDataModel>[];
   _GraphicsDataModel _currentDrawing = _GraphicsDataModel(null, Path());
   double alpha = 1;
@@ -23,7 +22,15 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     _currentDrawing = null;
   }
 
-  GxRect getBounds() {
+  void copyFrom(Graphics other) {
+    _commands.clear();
+    for (final command in other._commands) _commands.add(command.clone());
+    mask = other.mask;
+    alpha = other.alpha;
+    _currentDrawing = other._currentDrawing?.clone();
+  }
+
+  GxRect getBounds([GxRect out]) {
     Rect r;
     _commands.forEach((e) {
       final pathRect = e?.path?.getBounds();
@@ -34,46 +41,62 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         r = r.expandToInclude(pathRect);
       }
     });
-    return GxRect.fromNative(r ?? Rect.zero);
+    final result = r ?? Rect.zero;
+    if (out == null) {
+      out = GxRect.fromNative(result);
+    } else {
+      out.setTo(result.left, result.top, result.width, result.height);
+    }
+    return out;
   }
 
-  bool hitTest(double x, double y, [bool useShape = false]) {
-    final point = Offset(x, y);
+  bool hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (useShape) {
+      final point = Offset(
+        localPoint.x,
+        localPoint.y,
+      );
       for (var e in _commands) {
         if (e.path.contains(point)) return true;
       }
       return false;
     } else {
 //      return getBounds().contains(Offset(x, y));
-      return getBounds().contains(x, y);
+      return getBounds().contains(
+        localPoint.x,
+        localPoint.y,
+      );
     }
   }
 
-  void clear() {
+  Graphics clear() {
     _commands.clear();
     _currentDrawing = _GraphicsDataModel(null, Path());
+    return this;
   }
 
-  void beginFill(int color, [double alpha = 1]) {
+  Graphics beginFill(int color, [double alpha = 1]) {
     final fill = Paint();
     fill.style = PaintingStyle.fill;
     fill.isAntiAlias = true;
     fill.color = Color(color).withOpacity(alpha);
     _addFill(fill);
+    return this;
   }
 
-  void drawPicture(Picture picture) {
+  Graphics drawPicture(Picture picture) {
     _commands.add(_GraphicsDataModel()..picture = picture);
+    return this;
   }
 
   void drawImage(Image img) {}
 
-  void endFill() {
+  Graphics endFill() {
     _currentDrawing = _GraphicsDataModel(null, Path());
+    return this;
   }
 
-  void lineStyle([
+  Graphics lineStyle([
     double thickness = 0,
     int color,
     double alpha = 1,
@@ -91,9 +114,10 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     paint.strokeJoin = joints ?? StrokeJoin.miter;
     paint.strokeMiterLimit = miterLimit;
     _addFill(paint);
+    return this;
   }
 
-  beginGradientFill(
+  Graphics beginGradientFill(
     List<int> colors, [
     List<double> alphas,
     List<double> ratios,
@@ -120,9 +144,10 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     } else {
       _currentDrawing.grad = gradient;
     }
+    return this;
   }
 
-  lineGradientStyle(
+  Graphics lineGradientStyle(
     List<int> colors, [
     List<double> alphas,
     List<double> ratios,
@@ -143,38 +168,45 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     } else {
       _currentDrawing.grad = gradient;
     }
+    return this;
   }
 
-  void moveTo(double x, double y) {
+  Graphics moveTo(double x, double y) {
     _path.moveTo(x, y);
+    return this;
   }
 
-  void lineTo(double x, double y) {
+  Graphics lineTo(double x, double y) {
     _path.lineTo(x, y);
+    return this;
   }
 
-  void cubicCurveTo(double controlX1, double controlY1, double controlX2,
+  Graphics cubicCurveTo(double controlX1, double controlY1, double controlX2,
       double controlY2, double anchorX, double anchorY) {
     _path.cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
+    return this;
   }
 
-  void curveTo(
+  Graphics curveTo(
       double controlX, double controlY, double anchorX, double anchorY) {
     _path.quadraticBezierTo(controlX, controlY, anchorX, anchorY);
+    return this;
   }
 
-  void drawCircle(double x, double y, double radius) {
+  Graphics drawCircle(double x, double y, double radius) {
     final pos = Offset(x, y);
     final circ = Rect.fromCircle(center: pos, radius: radius);
     _path.addOval(circ);
+    return this;
   }
 
-  void drawRect(double x, double y, double width, double height) {
+  Graphics drawRect(double x, double y, double width, double height) {
     final r = Rect.fromLTWH(x, y, width, height);
     _path.addRect(r);
+    return this;
   }
 
-  void drawRoundRect(
+  Graphics drawRoundRect(
     double x,
     double y,
     double width,
@@ -185,9 +217,10 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     final r = RRect.fromLTRBXY(x, y, x + width, y + height, ellipseWidth,
         ellipseHeight ?? ellipseWidth);
     _path.addRRect(r);
+    return this;
   }
 
-  void drawPolygon(
+  Graphics drawPolygon(
     double x,
     double y,
     double radius,
@@ -202,9 +235,10 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       points[i - 1] = Offset(px, py);
     }
     _path.addPolygon(points, true);
+    return this;
   }
 
-  void drawStar(
+  Graphics drawStar(
     double x,
     double y,
     int points,
@@ -226,6 +260,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       ));
     }
     _path.addPolygon(polys, true);
+    return this;
   }
 
   void paint(Canvas canvas) {
@@ -279,6 +314,11 @@ class _GraphicsDataModel {
 
   get hasGrad => grad != null;
 
+  _GraphicsDataModel clone() {
+    return _GraphicsDataModel(fill, path)
+      ..grad = grad
+      ..picture = picture;
+  }
 // compute grad?
 }
 

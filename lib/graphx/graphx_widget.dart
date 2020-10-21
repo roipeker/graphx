@@ -10,6 +10,14 @@ class SceneBuilderWidget extends StatefulWidget {
   final bool useKeyboard;
   final bool isPersistent;
 
+  /// Absorbs mouse events blocking the child.
+  /// See [MouseRegion.opaque]
+  final bool mouseOpaque;
+
+  /// See [Listener.behavior]
+  /// defaults to capture translucent("empty") areas.
+  final HitTestBehavior pointerBehaviour;
+
   const SceneBuilderWidget({
     Key key,
     this.builder,
@@ -17,6 +25,8 @@ class SceneBuilderWidget extends StatefulWidget {
     this.usePointer,
     this.useKeyboard,
     this.isPersistent = false,
+    this.mouseOpaque = true,
+    this.pointerBehaviour = HitTestBehavior.translucent,
   }) : super(key: key);
 
   @override
@@ -57,8 +67,10 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
         onExit: converter.pointerExit,
         onHover: converter.pointerHover,
         cursor: MouseCursor.defer,
+        opaque: widget.mouseOpaque,
         child: Listener(
           child: child,
+          behavior: widget.pointerBehaviour,
           onPointerDown: converter.pointerDown,
           onPointerUp: converter.pointerUp,
           onPointerCancel: converter.pointerCancel,
