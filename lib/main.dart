@@ -144,7 +144,6 @@ class _MyHomePageState extends State<MyHomePage> {
           useKeyboard: false,
           usePointer: true,
           builder: () => SceneController.withLayers(
-//        back: MainBackScene(),
             front: Test3Scene(),
           ),
           child: Column(

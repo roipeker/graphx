@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:graphx/gameutils.dart';
+import 'package:graphx/graphx/display/shape.dart';
 import 'package:graphx/graphx/display/sprite.dart';
 import 'package:graphx/graphx/scene_painter.dart';
 import 'package:graphx/graphx/utils/math_utils.dart';
@@ -10,9 +11,9 @@ class Test3Scene extends RootScene {
   @override
   init() {
     owner.needsRepaint = true;
+    owner.core.config.painterWillChange = true;
     owner.core.config.usePointer = true;
     owner.core.config.useTicker = true;
-    owner.core.config.painterWillChange = true;
   }
 
   @override
@@ -20,6 +21,20 @@ class Test3Scene extends RootScene {
     super.ready();
 
     owner.core.resumeTicker();
+
+    var circle = Shape();
+    circle.graphics.lineStyle(2, Colors.purple.value)
+      ..drawCircle(0, 0, 20)
+      ..endFill();
+    addChild(circle);
+
+    graphics.beginFill(Colors.blue.value, .6)
+      ..drawRoundRect(100, 100, 40, 40, 4)
+      ..endFill();
+
+    graphics.beginFill(Colors.blue.value, .6)
+      ..drawCircle(30, 30, 10)
+      ..endFill();
 
     var car = Sprite();
     addChild(car);
