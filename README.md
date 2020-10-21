@@ -1,11 +1,11 @@
 # GraphX™
 
-GraphX™ rendering lib prototype.
+GraphX™ rendering lib, 
+ prototype code with a prototype lib
 
-WARNING: this is WIP code, based on a few days of experimentation.
+> *WARNING:* this is WIP code, based on a few days of experimentation.
 
-____
-NOTE: GraphX™ uses the `$` prefix convention to all "internal/private" members (properties and methods). __DO NOT__ use call them in your code... is meant to be consumed internally by the lib.
+> *NOTE:* GraphX™ uses the `$` prefix convention to all "internal/private" members (properties and methods). __DO NOT__ call them in your code... is meant to be consumed internally by the lib.
 ___
 
 ## Background
