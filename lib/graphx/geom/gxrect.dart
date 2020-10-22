@@ -124,8 +124,8 @@ class GxRect {
   GxRect expandToInclude(GxRect other) {
     x = math.min(left, other.left);
     y = math.min(top, other.top);
-    width = math.max(right, other.right);
-    height = math.max(bottom, other.bottom);
+    right = math.max(right, other.right);
+    bottom = math.max(bottom, other.bottom);
     return this;
   }
 

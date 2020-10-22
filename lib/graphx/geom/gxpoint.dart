@@ -11,9 +11,7 @@ class GxPoint {
     return 'GxPoint {$x,$y}';
   }
 
-  Offset toNative() {
-    return Offset(x, y);
-  }
+  Offset toNative() => Offset(x, y);
 
   GxPoint setTo(double x, double y) {
     this.x = x;

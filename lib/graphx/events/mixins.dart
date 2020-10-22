@@ -84,4 +84,13 @@ mixin RenderSignalMixin {
   Signal get onPostPaint => $onPostPaint ??= Signal();
 
   Signal get onPaint => $onPaint ??= Signal();
+
+  void $disposeRenderSignals() {
+    $onPrePaint?.removeAll();
+    $onPrePaint = null;
+    $onPostPaint?.removeAll();
+    $onPostPaint = null;
+    $onPaint?.removeAll();
+    $onPaint = null;
+  }
 }

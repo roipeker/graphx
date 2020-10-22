@@ -12,7 +12,7 @@ import 'package:graphx/graphx/utils/painter_utils.dart';
 import 'display_object_container.dart';
 import 'stage.dart';
 
-abstract class DisplayObject with DisplayListSignalsMixin {
+abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
   Canvas $canvas;
   DisplayObjectContainer $parent;
 
@@ -111,7 +111,6 @@ abstract class DisplayObject with DisplayListSignalsMixin {
   set y(double value) {
     if (_y == value) return;
     _y = value;
-    print("Redraw u::: $y");
     $setTransformationChanged();
   }
 
@@ -235,7 +234,6 @@ abstract class DisplayObject with DisplayListSignalsMixin {
 
   void alignPivot([Alignment alignment = Alignment.center]) {
     var bounds = getBounds(this, _sHelperRect);
-    print("Is empty?! ${bounds.isEmpty}");
     if (bounds.isEmpty) return;
     var ax = 0.5 + alignment.x / 2;
     var ay = 0.5 + alignment.y / 2;
@@ -448,7 +446,12 @@ abstract class DisplayObject with DisplayListSignalsMixin {
     return maskInverted ? !isHit : isHit;
   }
 
-  DisplayObject hitTest(GxPoint localPoint) {
+  bool hitTouch(GxPoint localPoint, [bool useShape = false]) {
+    return hitTest(localPoint, useShape) != null;
+  }
+
+  /// `useShape` is meant to be used by `Shape.graphics`.
+  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable) return null;
     if ($mask != null && !hitTestMask(localPoint)) return null;
     if (getBounds(this, _sHelperRect).containsPoint(localPoint)) return this;
@@ -539,8 +542,9 @@ abstract class DisplayObject with DisplayListSignalsMixin {
 //      final alphaPaint = GraphxUtils.getAlphaPaint(alpha);
 //      canvas.saveLayer(getBounds(), alphaPaint);
 //    }
+    $onPrePaint?.dispatch();
     $applyPaint();
-//    _onPostPaint?.dispatch();
+    $onPostPaint?.dispatch();
     if (_saveLayer) {
       canvas.restore();
     }
@@ -555,12 +559,14 @@ abstract class DisplayObject with DisplayListSignalsMixin {
 
   void $applyPaint() {}
 
+  @mustCallSuper
   void dispose() {
 //    _stage = null;
     $parent = null;
     userData = null;
     name = null;
     $disposeDisplayListSignals();
+    $disposeRenderSignals();
   }
 
   void removeFromParent([bool dispose = false]) {
@@ -580,15 +586,24 @@ abstract class DisplayObject with DisplayListSignalsMixin {
     }
   }
 
+  /// shortcut to scale proportionally
+  double get scale => _scaleX;
+
+  set scale(double value) {
+    if (value == _scaleX) return;
+    _scaleY = _scaleX = value;
+    $setTransformationChanged();
+  }
+
   void setPosition(double x, double y) {
     _x = x;
     _y = y;
     $setTransformationChanged();
   }
 
-  void setScale(double scaleX, double scaleY) {
+  void setScale(double scaleX, [double scaleY]) {
     _scaleX = scaleX;
-    _scaleY = scaleY;
+    _scaleY = scaleY ?? scaleX;
     $setTransformationChanged();
   }
 }

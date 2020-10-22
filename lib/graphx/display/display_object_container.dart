@@ -77,7 +77,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint) {
+  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable || !hitTestMask(localPoint)) return null;
     DisplayObject target;
     final numChild = children.length;
@@ -112,10 +112,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
       child.$setParent(this);
       child.$onAdded?.dispatch();
       if (stage != null) {
+        child.$onAddedToStage?.dispatch();
         if (child is DisplayObjectContainer) {
           _broadcastChildrenAddedToStage(child);
-        } else {
-          child.$onAddedToStage?.dispatch();
         }
       }
     }

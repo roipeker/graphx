@@ -8,7 +8,12 @@ GraphX™ rendering lib,
 > *NOTE:* GraphX™ uses the `$` prefix convention to all "internal/private" members (properties and methods). __DO NOT__ call them in your code... is meant to be consumed internally by the lib.
 ___
 
-## Background
+
+### wiki-tips.
+
+To get some extended, boring explanations, and eventually some sample codes, check the [GraphX™ Wiki](https://github.com/roipeker/graphx/wiki/GraphX-tips-and-random%5BnextInt()%5D-stuffs.#graphx-general-tips) 
+
+## background.
 
 GraphX™ is here to help you build custom drawing in your Flutter apps. Providing an amazing versatility to power those screen pixels to a different level.
 
@@ -165,8 +170,15 @@ Feel free to play around with the current API, even if it's still rough on edges
 
 SKIA is pretty powerful!
 
-----
+-------------
 
+#### Donation
+You can [buymeacoffee](https://www.buymeacoffee.com/roipeker) or support **GraphX™** via [Paypal](https://www.paypal.me/roipeker/)
+
+[![Donate via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/roipeker/)
+
+[![Support via buymeacoffee](https://cdn.buymeacoffee.com/buttons/v2/default-white.png)](https://www.buymeacoffee.com/roipeker)
+-------------
 
 Resources to get you started if this is your first Flutter project:
 

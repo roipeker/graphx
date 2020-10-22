@@ -12,7 +12,8 @@ class Signal {
   bool hasListeners() => _listeners.isNotEmpty || _listenersOnce.isNotEmpty;
 
   void add(Function callback) {
-    if (callback == null || _listenersOnce.contains(callback)) return;
+//    if (callback == null || _listenersOnce.contains(callback)) return;
+    if (callback == null || has(callback)) return;
     _listeners.add(callback);
   }
 
@@ -75,7 +76,7 @@ class EventSignal<T> {
   bool hasListeners() => _listeners.isNotEmpty || _listenersOnce.isNotEmpty;
 
   void add(EventSignalCallback<T> callback) {
-    if (callback == null || _listenersOnce.contains(callback)) return;
+    if (callback == null || has(callback)) return;
     _listeners.add(callback);
   }
 

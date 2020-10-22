@@ -17,6 +17,8 @@ class Stage extends DisplayObjectContainer
 
   static GxMatrix _sMatrix = GxMatrix();
 
+  bool maskBounds = false;
+
   @override
   String toString() {
     return '$runtimeType';
@@ -48,15 +50,22 @@ class Stage extends DisplayObjectContainer
   @override
   void paint(Canvas canvas) {
     /// scene start painting.
+    if (maskBounds && _stageRectNative != null) {
+      canvas.clipRect(_stageRectNative);
+    }
     if (_backgroundPaint != null) {
       canvas.drawPaint(_backgroundPaint);
     }
     super.paint(canvas);
   }
 
+  GxRect _stageRect = GxRect();
+  Rect _stageRectNative;
   void $initFrameSize(Size value) {
     if (value != _size) {
       _size = value;
+      _stageRectNative =
+          _stageRect.setTo(0, 0, _size.width, _size.height).toNative();
       $onResized?.dispatch();
     }
   }
@@ -74,7 +83,7 @@ class Stage extends DisplayObjectContainer
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint) {
+  DisplayObject hitTest(GxPoint localPoint, [bool useShapes = false]) {
     if (!visible || !touchable) return null;
 
     /// location outside stage area, is not accepted.

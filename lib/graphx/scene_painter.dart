@@ -56,10 +56,7 @@ class ScenePainter with EventDispatcherMixin {
 
   bool _ownCanvasNeedsRepaint = false;
 
-  int cnt = 0;
-
   void _paint(Canvas p_canvas, Size p_size) {
-//    print("PAINT!: $p_canvas");
     if (size != p_size) {
       size = p_size;
       _stage.$initFrameSize(p_size);
@@ -130,6 +127,11 @@ class ScenePainter with EventDispatcherMixin {
     if (needsRepaint) {
       notify();
     }
+  }
+
+  /// direct way to ask invalidation.
+  void requestRepaint() {
+    notify();
   }
 
   @override

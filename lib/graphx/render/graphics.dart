@@ -30,6 +30,21 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     _currentDrawing = other._currentDrawing?.clone();
   }
 
+  /// Getting all paths bounds is more "accurate" when the object is rotated.
+  /// cause it calculates each transformed matrix individually. But it has
+  /// a bigger CPU hit.
+  /// In [Graphics] "paths" are separated by [Paint] drawing commands:
+  /// [beginFill()] and [lineStyle()]
+  List<GxRect> getAllBounds([List<GxRect> out]) {
+    out ??= <GxRect>[];
+    _commands.forEach((e) {
+      final pathRect = e?.path?.getBounds();
+      if (pathRect == null) return;
+      out.add(GxRect.fromNative(pathRect));
+    });
+    return out;
+  }
+
   GxRect getBounds([GxRect out]) {
     Rect r;
     _commands.forEach((e) {
@@ -197,6 +212,11 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     final pos = Offset(x, y);
     final circ = Rect.fromCircle(center: pos, radius: radius);
     _path.addOval(circ);
+    return this;
+  }
+
+  Graphics drawGxRect(GxRect rect) {
+    _path.addRect(rect.toNative());
     return this;
   }
 
