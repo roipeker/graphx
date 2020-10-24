@@ -1,22 +1,89 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/painting.dart';
 import 'package:graphx/graphx/events/mixins.dart';
+import 'package:graphx/graphx/events/pointer_data.dart';
 import 'package:graphx/graphx/geom/gxmatrix.dart';
 import 'package:graphx/graphx/geom/gxpoint.dart';
 import 'package:graphx/graphx/geom/gxrect.dart';
+import 'package:graphx/graphx/textures/base_texture.dart';
 import 'package:graphx/graphx/utils/math_utils.dart';
 import 'package:graphx/graphx/utils/painter_utils.dart';
 
 import 'display_object_container.dart';
 import 'stage.dart';
 
-abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
+abstract class DisplayObject
+    with DisplayListSignalsMixin, RenderSignalMixin, PointerSignalsMixin {
   Canvas $canvas;
   DisplayObjectContainer $parent;
 
-  Rect _nativeBounds;
+  bool $debugBounds = false;
+
+  /// capture context mouse inputs.
+  void captureMouseInput(PointerEventData e) {
+    if (!$hasVisibleArea || !touchable) return;
+    if (e.captured && e.type == PointerEventType.up) {
+      /// mouse down node = null
+    }
+//    print("Capturing mouse data! $runtimeType");
+    bool prevCaptured = e.captured;
+
+    /// loop down for hit test.
+    final localCoord = globalToLocal(e.stagePosition);
+    if (hitTouch(localCoord)) {
+      $dispatchMouseCallback(e.type, this, e);
+    }
+  }
+
+  static DisplayObject $mouseObjDown;
+  static DisplayObject $mouseObjHover;
+
+  void $dispatchMouseCallback(
+    PointerEventType type,
+    DisplayObject object,
+    PointerEventData input,
+  ) {
+    if (touchable) {
+      var mouseInput = input.clone(this, object, type);
+      switch (type) {
+        case PointerEventType.down:
+          $mouseObjDown = object;
+          $onDown?.dispatch(mouseInput);
+          break;
+        case PointerEventType.up:
+          if ($mouseObjDown == object && $onClick != null) {
+            var mouseClickInput =
+                input.clone(this, object, PointerEventType.up);
+            $onClick?.dispatch(mouseClickInput);
+
+            /// todo: double click time.
+          }
+          $mouseObjDown = null;
+          $onUp?.dispatch(mouseInput);
+          break;
+
+        /// todo: hover/out.
+        case PointerEventType.hover:
+          $mouseObjHover = object;
+          $onHover?.dispatch(mouseInput);
+          break;
+        case PointerEventType.scroll:
+          $onScroll?.dispatch(mouseInput);
+          break;
+        default:
+          break;
+      }
+    }
+    $parent?.$dispatchMouseCallback(type, object, input);
+  }
+
+  /// todo: add caching to local bounds (Rect).
+//  Rect _nativeBounds;
+//  GxRect _cachedBounds;
 
   @override
   String toString() {
@@ -49,6 +116,7 @@ abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
     ));
   }
 
+  /// You can store any user defined data in this property for easy access.
   Object userData;
   String name;
 
@@ -156,14 +224,14 @@ abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
     $setTransformationChanged();
   }
 
-  double _alpha = 1;
+  double $alpha = 1;
 
-  double get alpha => _alpha;
+  double get alpha => $alpha;
 
   set alpha(double value) {
-    if (_alpha != value) {
+    if ($alpha != value) {
       value ??= 1;
-      _alpha = value.clamp(0.0, 1.0);
+      $alpha = value.clamp(0.0, 1.0);
       requiresRedraw();
     }
   }
@@ -230,8 +298,6 @@ abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
     touchable = true;
   }
 
-  GxRect _cachedBounds;
-
   void alignPivot([Alignment alignment = Alignment.center]) {
     var bounds = getBounds(this, _sHelperRect);
     if (bounds.isEmpty) return;
@@ -240,6 +306,10 @@ abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
     _pivotX = bounds.x + bounds.width * ax;
     _pivotY = bounds.y + bounds.height * ay;
   }
+
+  /// local bounds
+  /// todo: should be cached.
+  GxRect get bounds => getBounds(this);
 
   GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     throw "getBounds() is abstract in DisplayObject";
@@ -482,25 +552,29 @@ abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
   /// rendering.
   void requiresRedraw() {
     /// TODO: notify parent the current state of this DisplayObject.
-    $hasVisibleArea = _alpha != 0 &&
+    $hasVisibleArea = $alpha != 0 &&
         visible &&
         _maskee == null &&
         _scaleX != 0 &&
-        scaleY != 0;
+        _scaleY != 0;
   }
 
+  /// Do not override this method as it applies the basic transformations.
+  /// override $applyPaint() if you wanna use `Canvas` directly.
   void paint(Canvas canvas) {
     $canvas = canvas;
-    if (!$hasVisibleArea) return;
+    if (!$hasVisibleArea || !visible) return;
     final _hasScale = _scaleX != 1 || _scaleY != 1;
     final _hasTranslate = _x != 0 || _y != 0;
     final _hasPivot = _pivotX != 0 || _pivotX != 0;
     final _hasSkew = _skewX != 0 || _skewY != 0;
     final needSave =
         _hasTranslate || _hasScale || rotation != 0 || _hasPivot || _hasSkew;
+
     final _saveLayer = this is DisplayObjectContainer &&
         (this as DisplayObjectContainer).hasChildren &&
-        _alpha != 1;
+        $alpha != 1;
+
     if (needSave) {
       canvas.save();
 
@@ -533,7 +607,7 @@ abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
 //    }
 //    canvas.drawColor(Color(0xfffffff).withOpacity(.8), BlendMode.softLight);
     if (_saveLayer) {
-      final alphaPaint = PainterUtils.getAlphaPaint(_alpha);
+      final alphaPaint = PainterUtils.getAlphaPaint($alpha);
       final rect = getBounds(this).toNative();
       canvas.saveLayer(rect, alphaPaint);
 //      canvas.saveLayer(_nativeBounds, alphaPaint);
@@ -555,8 +629,20 @@ abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
     if (needSave) {
       canvas.restore();
     }
+
+    if ($debugBounds) {
+      final rect = getBounds(parent).toNative();
+      canvas.drawRect(rect, _debugPaint);
+    }
   }
 
+  static Paint _debugPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..color = Color(0xff00FFFF)
+    ..strokeWidth = 1;
+
+  /// override this method for custom drawing using Flutter's API.
+  /// Access `$canvas` from here.
   void $applyPaint() {}
 
   @mustCallSuper
@@ -605,5 +691,58 @@ abstract class DisplayObject with DisplayListSignalsMixin, RenderSignalMixin {
     _scaleX = scaleX;
     _scaleY = scaleY ?? scaleX;
     $setTransformationChanged();
+  }
+
+  /// ---- capture texture feature ---
+  /// When you create a picture it takes the current state of the DisplayObject.
+  /// Beware to call this before applying any
+  /// transformations (x, y, scale, etc) if you intend to use in it's "original"
+  /// form.
+  Picture createPicture([void Function(Canvas) prepaintCallback]) {
+    final r = PictureRecorder();
+    final c = Canvas(r);
+    prepaintCallback?.call(c);
+    this.paint(c);
+    return r.endRecording();
+  }
+
+  Future<GxTexture> createImageTexture([
+    bool adjustOffset = true,
+    double resolution = 1,
+    GxRect rect,
+  ]) async {
+    final img = await createImage(adjustOffset, resolution, rect);
+    return GxTexture(img, null, false, resolution);
+  }
+
+  Future<Image> createImage([
+    bool adjustOffset = true,
+    double resolution = 1,
+    GxRect rect,
+  ]) async {
+    rect ??= getBounds($parent);
+    if (resolution != 1) {
+      rect *= resolution;
+    }
+    final needsAdjust =
+        (rect.left != 0 || rect.top != 0) && adjustOffset || resolution != 1;
+
+    final picture = createPicture(
+      !needsAdjust
+          ? null
+          : (Canvas c) {
+              if (adjustOffset) {
+                c.translate(-rect.left, -rect.top);
+              }
+              if (resolution != 1) {
+                c.scale(resolution);
+              }
+            },
+    );
+    final int width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
+    final int height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
+    final output = await picture.toImage(width, height);
+    picture?.dispose();
+    return output;
   }
 }

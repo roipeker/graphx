@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
+import 'package:graphx/graphx/display/display_object.dart';
 import 'package:graphx/graphx/geom/gxpoint.dart';
 
 enum PointerEventType { scroll, cancel, move, up, down, enter, exit, hover }
@@ -29,5 +30,24 @@ class PointerEventData {
   @override
   String toString() {
     return 'PointerEventData{type: $type, localX: $localX, localY: $localY}';
+  }
+
+  /// new properties.
+  /// TODO: decide how to name mouse/pointer events.
+  DisplayObject target;
+  DisplayObject dispatcher;
+  bool captured = false;
+  bool mouseOut = false;
+
+  PointerEventData clone(
+    DisplayObject target,
+    DisplayObject dispatcher,
+    PointerEventType type,
+  ) {
+    var i = PointerEventData(type: type, rawEvent: rawEvent);
+    i.target = target;
+    i.dispatcher = dispatcher;
+    i.captured = captured;
+    return i;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:graphx/graphx/display/display_object.dart';
+import 'package:graphx/graphx/events/pointer_data.dart';
 import 'package:graphx/graphx/geom/gxmatrix.dart';
 import 'package:graphx/graphx/geom/gxpoint.dart';
 import 'package:graphx/graphx/geom/gxrect.dart';
@@ -21,6 +22,33 @@ abstract class DisplayObjectContainer extends DisplayObject {
   static GxPoint $sBoundsPoint = GxPoint();
 
   bool touchGroup = false;
+
+  /// capture context mouse inputs.
+  @override
+  void captureMouseInput(PointerEventData e) {
+    if (!$hasVisibleArea || !touchable) return;
+
+    if (!touchGroup) {
+      for (final child in children) {
+        child.captureMouseInput(e);
+      }
+    }
+
+    if (touchable) {
+      /// hit tesst?
+      if (e.captured && e.type == PointerEventType.up) {
+        /// mouse down node = null
+      }
+//    print("Capturing mouse data! $runtimeType");
+      bool prevCaptured = e.captured;
+
+      /// loop down for hit test.
+      final localCoord = globalToLocal(e.stagePosition);
+      if (hitTouch(localCoord)) {
+        $dispatchMouseCallback(e.type, this, e);
+      }
+    }
+  }
 
   @override
   GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {

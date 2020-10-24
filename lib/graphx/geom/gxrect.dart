@@ -171,4 +171,12 @@ class GxRect {
     height *= scale;
     return this;
   }
+
+  GxRect operator /(double scale) {
+    x /= scale;
+    y /= scale;
+    width /= scale;
+    height /= scale;
+    return this;
+  }
 }

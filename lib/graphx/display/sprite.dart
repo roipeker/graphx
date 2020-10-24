@@ -15,21 +15,25 @@ class Sprite extends DisplayObjectContainer {
   }
 
   static GxMatrix _sHelperMatrix = GxMatrix();
+  static GxPoint _sHelperPoint = GxPoint();
+
   Graphics _graphics;
 
   Graphics get graphics => _graphics ??= Graphics();
 
   @override
   GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
-    final matrix = _sHelperMatrix;
-    matrix.identity();
-    getTransformationMatrix(targetSpace, matrix);
+    out = super.getBounds(targetSpace, out);
     if (_graphics != null) {
+      /// add graphics later.
+      final matrix = _sHelperMatrix;
+      matrix.identity();
+      getTransformationMatrix(targetSpace, matrix);
+//      out ??= GxRect();
       var _allBounds = _graphics.getAllBounds();
-      out?.setEmpty();
+//      out?.setEmpty();
       _allBounds.forEach((localBounds) {
-        out ??= GxRect();
-
+//        out ??= GxRect();
         /// modify the same instance.
         out.expandToInclude(MatrixUtils.getTransformedBoundsRect(
           matrix,
@@ -37,10 +41,6 @@ class Sprite extends DisplayObjectContainer {
           localBounds,
         ));
       });
-    } else {
-      final pos = DisplayObjectContainer.$sBoundsPoint;
-      matrix.transformCoords(0, 0, pos);
-      out.setTo(pos.x, pos.y, 0, 0);
     }
     return out;
   }

@@ -2,6 +2,8 @@ import 'dart:collection';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:graphx/graphx/events/pointer_data.dart';
 
 import 'signal.dart';
 
@@ -92,5 +94,36 @@ mixin RenderSignalMixin {
     $onPostPaint = null;
     $onPaint?.removeAll();
     $onPaint = null;
+  }
+}
+
+mixin PointerSignalsMixin<T extends PointerEventData> {
+  EventSignal<T> $onClick;
+  EventSignal<T> $onDown;
+  EventSignal<T> $onUp;
+  EventSignal<T> $onHover;
+  EventSignal<T> $onOut;
+  EventSignal<T> $onScroll;
+
+  EventSignal<T> get onClick => $onClick ??= EventSignal();
+  EventSignal<T> get onDown => $onDown ??= EventSignal();
+  EventSignal<T> get onUp => $onUp ??= EventSignal();
+  EventSignal<T> get onHover => $onHover ??= EventSignal();
+  EventSignal<T> get onOut => $onOut ??= EventSignal();
+  EventSignal<T> get onScroll => $onScroll ??= EventSignal();
+
+  void $disposePointerSignals() {
+    $onClick?.removeAll();
+    $onClick = null;
+    $onDown?.removeAll();
+    $onDown = null;
+    $onUp?.removeAll();
+    $onUp = null;
+    $onHover?.removeAll();
+    $onHover = null;
+    $onOut?.removeAll();
+    $onOut = null;
+    $onScroll?.removeAll();
+    $onScroll = null;
   }
 }

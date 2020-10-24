@@ -39,6 +39,9 @@ class PointerManager<T extends PointerEventData> {
   SystemMouseCursor _cursor;
   SystemMouseCursor _lastCursor;
 
+  EventSignal<T> get onInput => _onInput ??= EventSignal<T>();
+  EventSignal<T> _onInput;
+
   EventSignal<T> get onDown => _onDown ??= EventSignal<T>();
   EventSignal<T> _onDown;
 
@@ -88,6 +91,7 @@ class PointerManager<T extends PointerEventData> {
   void $process(PointerEventData event) {
     final signal = _signalMapper[event.type]();
     _lastEvent = event;
+    onInput?.dispatch(event);
     signal?.dispatch(event);
   }
 }

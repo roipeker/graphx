@@ -6,6 +6,7 @@ import 'package:graphx/graphx/scene_controller.dart';
 
 import 'display/stage.dart';
 import 'events/mixins.dart';
+import 'events/pointer_data.dart';
 
 class RootScene extends Sprite {
   ScenePainter owner;
@@ -37,6 +38,8 @@ class ScenePainter with EventDispatcherMixin {
   ScenePainter(this.core, this.root) {
     _stage = Stage(this);
     root.owner = this;
+
+    /// initialize pointer events.
   }
 
   CustomPainter buildPainter() => _GraphicsPainter(this);
@@ -64,6 +67,7 @@ class ScenePainter with EventDispatcherMixin {
     $canvas = p_canvas;
     if (!_isReady) {
       _isReady = true;
+      _initMouseInput();
       _stage.addChild(root);
       root.ready();
     }
@@ -138,6 +142,14 @@ class ScenePainter with EventDispatcherMixin {
   void dispose() {
     _stage?.dispose();
     super.dispose();
+  }
+
+  void _initMouseInput() {
+    core?.pointer?.onInput?.add(_onInputHandler);
+  }
+
+  void _onInputHandler(PointerEventData e) {
+    stage.captureMouseInput(e);
   }
 }
 

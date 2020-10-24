@@ -2,14 +2,15 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
+import 'package:graphx/graphx/geom/gxmatrix.dart';
 import 'package:graphx/graphx/geom/gxpoint.dart';
 import 'package:graphx/graphx/geom/gxrect.dart';
 import 'package:graphx/graphx/utils/interfases.dart';
 import 'package:graphx/graphx/utils/mixins.dart';
 
 class Graphics with RenderUtilMixin implements GxRenderable {
-  final _commands = <_GraphicsDataModel>[];
-  _GraphicsDataModel _currentDrawing = _GraphicsDataModel(null, Path());
+  final _drawingQueue = <GraphicsDrawingData>[];
+  GraphicsDrawingData _currentDrawing = GraphicsDrawingData(null, Path());
   double alpha = 1;
 
   Graphics mask;
@@ -18,13 +19,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   void dispose() {
     mask = null;
-    _commands?.clear();
+    _drawingQueue?.clear();
     _currentDrawing = null;
   }
 
   void copyFrom(Graphics other) {
-    _commands.clear();
-    for (final command in other._commands) _commands.add(command.clone());
+    _drawingQueue.clear();
+    for (final command in other._drawingQueue)
+      _drawingQueue.add(command.clone());
     mask = other.mask;
     alpha = other.alpha;
     _currentDrawing = other._currentDrawing?.clone();
@@ -37,7 +39,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// [beginFill()] and [lineStyle()]
   List<GxRect> getAllBounds([List<GxRect> out]) {
     out ??= <GxRect>[];
-    _commands.forEach((e) {
+    _drawingQueue.forEach((e) {
       final pathRect = e?.path?.getBounds();
       if (pathRect == null) return;
       out.add(GxRect.fromNative(pathRect));
@@ -47,7 +49,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   GxRect getBounds([GxRect out]) {
     Rect r;
-    _commands.forEach((e) {
+    _drawingQueue.forEach((e) {
       final pathRect = e?.path?.getBounds();
       if (pathRect == null) return;
       if (r == null) {
@@ -71,7 +73,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         localPoint.x,
         localPoint.y,
       );
-      for (var e in _commands) {
+      for (var e in _drawingQueue) {
         if (e.path.contains(point)) return true;
       }
       return false;
@@ -85,41 +87,48 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   Graphics clear() {
-    _commands.clear();
-    _currentDrawing = _GraphicsDataModel(null, Path());
+    _drawingQueue.clear();
+    _holeMode = false;
+    _currentDrawing = GraphicsDrawingData(null, Path());
     return this;
   }
 
   Graphics beginFill(int color, [double alpha = 1]) {
+    if (_holeMode) return this;
     final fill = Paint();
     fill.style = PaintingStyle.fill;
     fill.isAntiAlias = true;
-    fill.color = Color(color).withOpacity(alpha);
+    fill.color = Color(color).withOpacity(alpha.clamp(0.0, 1.0));
     _addFill(fill);
     return this;
   }
 
   Graphics drawPicture(Picture picture) {
-    _commands.add(_GraphicsDataModel()..picture = picture);
+    _drawingQueue.add(GraphicsDrawingData()..picture = picture);
     return this;
   }
 
   void drawImage(Image img) {}
 
   Graphics endFill() {
-    _currentDrawing = _GraphicsDataModel(null, Path());
+    if (_holeMode) {
+      endHole();
+    }
+    _currentDrawing = GraphicsDrawingData(null, Path());
     return this;
   }
 
   Graphics lineStyle([
-    double thickness = 0,
+    double thickness = 0.0,
     int color,
-    double alpha = 1,
+    double alpha = 1.0,
     bool pixelHinting = true,
     StrokeCap caps,
     StrokeJoin joints,
     double miterLimit = 3.0,
   ]) {
+    alpha ??= 1.0;
+    alpha = alpha.clamp(0.0, 1.0);
     final paint = Paint();
     paint.style = PaintingStyle.stroke;
     paint.color = Color(color).withOpacity(alpha);
@@ -157,7 +166,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     if (gradientBox != null) {
       _currentDrawing.fill.shader = gradient.createShader(gradientBox);
     } else {
-      _currentDrawing.grad = gradient;
+      _currentDrawing.gradient = gradient;
     }
     return this;
   }
@@ -181,7 +190,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     if (gradientBox != null) {
       _currentDrawing.fill.shader = gradient.createShader(gradientBox);
     } else {
-      _currentDrawing.grad = gradient;
+      _currentDrawing.gradient = gradient;
     }
     return this;
   }
@@ -215,6 +224,18 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  Graphics drawEllipse(double x, double y, double radiusX, double radiusY) {
+    final pos = Offset(x, y);
+    _path.addOval(
+      Rect.fromCenter(
+        center: pos,
+        width: radiusX * 2,
+        height: radiusY * 2,
+      ),
+    );
+    return this;
+  }
+
   Graphics drawGxRect(GxRect rect) {
     _path.addRect(rect.toNative());
     return this;
@@ -224,6 +245,32 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     final r = Rect.fromLTWH(x, y, width, height);
     _path.addRect(r);
     return this;
+  }
+
+  Graphics drawRoundRectComplex(
+    double x,
+    double y,
+    double width,
+    double height, [
+    double topLeftRadius = 0,
+    double topRightRadius = 0,
+    double bottomLeftRadius = 0,
+    double bottomRightRadius = 0,
+  ]) {
+    _path.addRRect(
+      RRect.fromLTRBAndCorners(
+        x,
+        y,
+        x + width,
+        y + height,
+        topLeft: Radius.circular(topLeftRadius),
+        topRight: Radius.circular(topRightRadius),
+        bottomLeft: Radius.circular(bottomLeftRadius),
+        bottomRight: Radius.circular(bottomRightRadius),
+      ),
+    );
+    return this;
+//    drawRoundRectComplex (x:Float, y:Float, width:Float, height:Float, topLeftRadius:Float, topRightRadius:Float, bottomLeftRadius:Float, bottomRightRadius:Float):Void
   }
 
   Graphics drawRoundRect(
@@ -240,7 +287,58 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics drawPolygon(
+  Graphics drawPoly(List<GxPoint> points, [bool closePolygon = true]) {
+    final len = points.length;
+    final list = List<Offset>(len);
+    for (var i = 0; i < len; ++i) {
+      list[i] = points[i].toNative();
+    }
+    _path.addPolygon(list, true);
+    return this;
+  }
+
+  void shiftPath(double x, double y, [bool modifyPreviousPaths = false]) {
+    final offset = Offset(x, y);
+    if (modifyPreviousPaths) {
+      _drawingQueue.forEach((command) {
+        command?.path = command?.path?.shift(offset);
+      });
+    } else {
+      _currentDrawing?.path = _currentDrawing?.path?.shift(offset);
+    }
+  }
+
+//  public arc(cx: number, cy: number, radius: number, startAngle: number, endAngle: number, anticlockwise = false): this
+  Graphics arcOval(
+    double cx,
+    double cy,
+    double radiusX,
+    double radiusY,
+    double startAngle,
+    double sweepAngle,
+  ) {
+    _path.addArc(
+      Rect.fromCenter(
+          center: Offset(cx, cy), width: radiusX * 2, height: radiusY * 2),
+      startAngle,
+      sweepAngle,
+    );
+    return this;
+  }
+
+  Graphics arc(double cx, double cy, double radius, double startAngle,
+      double sweepAngle) {
+    if (sweepAngle == 0) return this;
+//    _path.arcToPoint(arcEnd)
+    _path.addArc(
+      Rect.fromCircle(center: Offset(cx, cy), radius: radius),
+      startAngle,
+      sweepAngle,
+    );
+    return this;
+  }
+
+  Graphics drawPolygonFaces(
     double x,
     double y,
     double radius,
@@ -283,10 +381,53 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  bool _holeMode = false;
+
+  Graphics beginHole() {
+    if (_holeMode) return this;
+    _holeMode = true;
+    _currentDrawing = GraphicsDrawingData(null, Path())..isHole = true;
+    return this;
+  }
+
+  /// finishes the current `beginHole()` command.
+  /// When `applyToCurrentQueue` is true, the drawing commands of the "hole"
+  /// will be applied to the current elements of the drawing queue (not including
+  /// future ones), when `applyToCurrentQueue` is false, it will only cut the
+  /// "holes" in the last drawing command.
+  Graphics endHole([bool applyToCurrentQueue = false]) {
+    _holeMode = false;
+    // apply to previous elements.
+    if (!_currentDrawing.isHole) {
+      throw "Can't endHole() without starting a beginHole() command.";
+//      return this;
+    }
+    final _holePath = _path;
+    _holePath.close();
+    _currentDrawing = _drawingQueue.last;
+    if (!applyToCurrentQueue) {
+      _currentDrawing.path = Path.combine(
+        PathOperation.difference,
+        _path,
+        _holePath,
+      );
+    } else {
+      for (final cmd in _drawingQueue) {
+        cmd.path = Path.combine(
+          PathOperation.difference,
+          cmd.path,
+          _holePath,
+        );
+      }
+    }
+    return this;
+  }
+
   void paint(Canvas canvas) {
+//    canvas.clipPath();
     _constrainAlpha();
     if (!_isVisible) return;
-    _commands.forEach((graph) {
+    _drawingQueue.forEach((graph) {
       if (graph.hasPicture) {
         canvas.drawPicture(graph.picture);
         return;
@@ -296,9 +437,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       if (baseColor.alpha == 0) return;
 
       /// calculate gradient.
-      if (graph.hasGrad) {
+      if (graph.hasGradient) {
         final _bounds = graph.path.getBounds();
-        fill.shader = graph.grad.createShader(_bounds);
+        fill.shader = graph.gradient.createShader(_bounds);
       } else {
         if (alpha != 1) {
           fill.color = baseColor.withOpacity(baseColor.opacity * alpha);
@@ -311,35 +452,119 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   void _addFill(Paint fill) {
     /// same type, create path.
-    _currentDrawing = _GraphicsDataModel(fill, _currentDrawing?.path ?? Path());
-    _commands.add(_currentDrawing);
+    Path path;
+    if (_currentDrawing.isSameType(fill)) {
+      path = Path();
+    } else {
+      path = _currentDrawing?.path;
+    }
+    _currentDrawing = GraphicsDrawingData(fill, path);
+    _drawingQueue.add(_currentDrawing);
   }
 
-  bool get _isVisible => alpha > 0 || _commands.isEmpty;
+  bool get _isVisible => alpha > 0.0 || _drawingQueue.isEmpty;
+
+  /// push a custom GraphicsDrawingData into the commands list.
+  /// this way you can use the low level APIs as you please.
+  /// When set `asCurrent` to `true`, it will be used as the current
+  /// `GraphicsDrawingData` and you can keep modifying the internal path
+  /// with `Graphics` commands.
+  /// This should be used only if you are operating with `Path` and `Paint` directly.
+  /// `x` and `y` can shift the Path coordinates.
+  void pushData(
+    GraphicsDrawingData data, [
+    bool asCurrent = false,
+    double x,
+    double y,
+  ]) {
+    if (x != null && y != null && data.path != null) {
+      data.path = data.path.shift(Offset(x, y));
+    }
+    _drawingQueue.add(data);
+    if (asCurrent) _currentDrawing = data;
+  }
+
+  /// removes the last `GraphicsDrawingData` from the drawing queue...
+  /// This should be used only if you are operating with `Path` and `Paint` directly.
+  GraphicsDrawingData popData() {
+    return _drawingQueue.removeLast();
+  }
+
+  /// removes, if enqueued, the specified `GraphicsDrawingData` instance from
+  /// the drawing queue list.
+  /// This should be used only if you are operating with `Path` and `Paint` directly.
+  void removeData(GraphicsDrawingData data) {
+    _drawingQueue.remove(data);
+  }
 
   void _constrainAlpha() {
     alpha = alpha.clamp(0.0, 1.0);
   }
+
+  /// Appends a native `Path` to the current drawing path,
+  /// `x` and `y` can offset the target position, while `transform` can be used
+  /// to rotated, scale, translate, the given shape.
+  Graphics drawPath(Path path,
+      [double x = 0, double y = 0, GxMatrix transform]) {
+    _path.addPath(
+      path,
+      Offset(x, y),
+      matrix4: transform?.toNative()?.storage,
+    );
+    return this;
+  }
 }
 
-class _GraphicsDataModel {
+class GraphicsDrawingData {
   Path path;
   Paint fill;
-  Gradient grad;
-  Picture picture;
 
-  _GraphicsDataModel([this.fill, this.path]);
+  Gradient gradient;
+  Picture picture;
+  bool isHole = false;
+
+  GraphicsDrawingData([this.fill, this.path]);
 
   get hasPicture => picture != null;
 
-  get hasGrad => grad != null;
+  get hasGradient => gradient != null;
 
-  _GraphicsDataModel clone() {
-    return _GraphicsDataModel(fill, path)
-      ..grad = grad
+  /// When cloning, we can pass fill and path by reference or make a deep copy.
+  /// Mostly intended for direct `Graphics.pushData` and `Graphics.removeData`
+  /// manipulation.
+  GraphicsDrawingData clone([bool cloneFill = false, bool clonePath = false]) {
+    final _fill = cloneFill ? fill?.clone() : fill;
+    final _path = clonePath ? (path != null ? Path.from(path) : null) : path;
+    return GraphicsDrawingData(_fill, _path)
+      ..gradient = gradient
       ..picture = picture;
   }
+
+  bool isSameType(Paint otherFill) {
+    return fill?.style == otherFill?.style ?? false;
+  }
 // compute grad?
+}
+
+extension ExtSkiaPaint on Paint {
+  Paint clone([Paint out]) {
+    out ??= Paint();
+    out.maskFilter = maskFilter;
+    out.blendMode = blendMode;
+    out.color = color;
+    out.style = style;
+    out.colorFilter = colorFilter;
+    out.filterQuality = filterQuality;
+    out.imageFilter = imageFilter;
+    out.invertColors = invertColors;
+    out.isAntiAlias = isAntiAlias;
+    out.shader = shader;
+    out.strokeCap = strokeCap;
+    out.strokeJoin = strokeJoin;
+    out.strokeMiterLimit = strokeMiterLimit;
+    out.strokeWidth = strokeWidth;
+    return out;
+  }
 }
 
 class _GraphUtils {

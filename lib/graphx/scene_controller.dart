@@ -58,7 +58,7 @@ class SceneController {
     if (_isInited) return;
     setup();
     if (_config.useTicker) {
-      createTicker();
+      _createTicker();
     }
     _initInput();
     _isInited = true;
@@ -114,7 +114,7 @@ class SceneController {
     return controller;
   }
 
-  void createTicker() {
+  void _createTicker() {
     if (_ticker != null) return;
     _ticker = Ticker(_onTick);
     _ticker.start();
@@ -126,6 +126,8 @@ class SceneController {
   bool get isActive => _ticker?.isActive;
 
   void resumeTicker() {
+    /// create if it doesnt exists.
+    _createTicker();
     _ticker?.muted = false;
   }
 

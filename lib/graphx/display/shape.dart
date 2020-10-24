@@ -23,7 +23,6 @@ class Shape extends DisplayObject {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
-    print("Matrix is : $matrix");
     if (_graphics != null) {
       /// todo: fix the rect size.
 //      var _allBounds = _graphics.getAllBounds();
