@@ -17,9 +17,23 @@ class Bitmap extends DisplayObject {
     return '$runtimeType (Bitmap)$msg';
   }
 
-  GxTexture texture;
+  GxTexture _texture;
 
-  Bitmap([this.texture]);
+  GxTexture get texture => _texture;
+
+  set texture(GxTexture value) {
+    if (_texture == value) return;
+    _texture = value;
+    if (_texture != null) {
+      pivotX = -_texture.anchorX;
+      pivotY = -_texture.anchorY;
+    }
+    requiresRedraw();
+  }
+
+  Bitmap([GxTexture texture]) {
+    this.texture = texture;
+  }
 
   @override
   GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
@@ -28,9 +42,12 @@ class Bitmap extends DisplayObject {
     getTransformationMatrix(targetSpace, matrix);
     if (texture != null) {
 //      GxRect rect = texture.sourceRect;
-      return MatrixUtils.getTransformedBoundsRect(
+      var r = texture.normalizedRect;
+//      print(texture.sourceRect);
+      out = MatrixUtils.getTransformedBoundsRect(
         matrix,
-        texture.normalizedRect,
+        r,
+        out,
       );
     } else {
       matrix.transformCoords(0, 0, _sHelperPoint);
@@ -40,11 +57,12 @@ class Bitmap extends DisplayObject {
   }
 
   final _paint = Paint();
+  Paint get nativePaint => _paint;
 
   @override
   set alpha(double value) {
     super.alpha = value;
-    _paint.color = Color(0x0).withOpacity($alpha);
+    _paint.color = _paint.color.withOpacity($alpha);
   }
 
   @override

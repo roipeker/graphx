@@ -4,6 +4,7 @@ import 'package:graphx/graphx/geom/gxrect.dart';
 
 class GxTexture {
   Image source;
+  GxRect _scaledRect;
   GxRect sourceRect;
 
   /// adjustment rect.
@@ -26,14 +27,17 @@ class GxTexture {
       sourceRect.setTo(
         0,
         0,
-        source.width.toDouble() * scale,
-        source.width.toDouble() * scale,
+        source.width.toDouble(),
+        source.height.toDouble(),
       );
     }
   }
 
   GxRect get normalizedRect {
-    return sourceRect /= scale;
+    _scaledRect ??= GxRect();
+    _scaledRect.copyFrom(sourceRect);
+    _scaledRect /= scale;
+    return _scaledRect;
   }
 
   int get width {

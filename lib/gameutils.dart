@@ -3,6 +3,10 @@ import 'dart:math';
 class GameUtils {
   static Random rnd = Random();
 
+  static bool rndBool() {
+    return rnd.nextBool();
+  }
+
   static double rndDouble() {
     return rnd.nextDouble();
   }

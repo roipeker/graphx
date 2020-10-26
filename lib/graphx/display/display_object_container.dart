@@ -286,15 +286,13 @@ abstract class DisplayObjectContainer extends DisplayObject {
         if (mask != null) {
           _drawMask(mask, child);
         }
-
-        /// if has a filter render here.
+        //TODO: add filters.
         child.paint($canvas);
         if (mask != null) {
           _eraseMask(mask, child);
         }
       }
     }
-//    children.forEach((child) {});
   }
 
   @override

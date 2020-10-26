@@ -12,15 +12,21 @@ class KeyboardEventData {
   bool isPress(LogicalKeyboardKey key) {
     return rawEvent.isKeyPressed(key);
   }
+
+  bool hasKey(LogicalKeyboardKey key) {
+    return rawEvent.logicalKey == key;
+  }
 }
 
 extension MyKeyEventExt on KeyboardEventData {
   bool get arrowLeft {
-    return rawEvent.isKeyPressed(LogicalKeyboardKey.arrowLeft);
+//    return rawEvent.isKeyPressed(LogicalKeyboardKey.arrowLeft);
+    return rawEvent.logicalKey == LogicalKeyboardKey.arrowLeft;
   }
 
   bool get arrowRight {
-    return rawEvent.isKeyPressed(LogicalKeyboardKey.arrowRight);
+    return rawEvent.logicalKey == LogicalKeyboardKey.arrowRight;
+//    return rawEvent.isKeyPressed(LogicalKeyboardKey.arrowRight);
   }
 
   bool get arrowUp {

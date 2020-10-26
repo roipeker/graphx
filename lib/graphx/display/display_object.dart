@@ -570,32 +570,13 @@ abstract class DisplayObject
     final _hasSkew = _skewX != 0 || _skewY != 0;
     final needSave =
         _hasTranslate || _hasScale || rotation != 0 || _hasPivot || _hasSkew;
-
     final _saveLayer = this is DisplayObjectContainer &&
         (this as DisplayObjectContainer).hasChildren &&
         $alpha != 1;
 
     if (needSave) {
       canvas.save();
-
-      /// use toggle for matrix transform.
       canvas.transform(transformationMatrix.toNative().storage);
-
-//      if (_hasTranslate) {
-//        canvas.translate(x, y);
-//      }
-//      if (rotation != 0) {
-//        canvas.rotate(rotation);
-//      }
-//      if (_hasScale) {
-//        canvas.scale(scaleX, scaleY);
-//      }
-//      if (_hasPivot) {
-//        canvas.translate(-pivotX, -pivotY);
-//      }
-//      if (_hasSkew) {
-//        canvas.skew(skewX, skewY);
-//      }
     }
 
 //    if (mask != null) {
@@ -610,36 +591,29 @@ abstract class DisplayObject
       final alphaPaint = PainterUtils.getAlphaPaint($alpha);
       final rect = getBounds(this).toNative();
       canvas.saveLayer(rect, alphaPaint);
-//      canvas.saveLayer(_nativeBounds, alphaPaint);
     }
-//    if (worldAlpha != 1) {
-//      final alphaPaint = GraphxUtils.getAlphaPaint(alpha);
-//      canvas.saveLayer(getBounds(), alphaPaint);
-//    }
     $onPrePaint?.dispatch();
     $applyPaint();
     $onPostPaint?.dispatch();
+    if ($debugBounds) {
+      final rect = getBounds(this).toNative();
+      canvas.drawLine(rect.topLeft, rect.bottomRight, _debugPaint);
+      canvas.drawLine(rect.topRight, rect.bottomLeft, _debugPaint);
+      canvas.drawRect(rect, _debugPaint);
+    }
+
     if (_saveLayer) {
       canvas.restore();
     }
-//    if (alpha != 1) {
-//      canvas.drawPaint(Paint()..color = Color(0xfffffff).withOpacity(alpha));
-//    }
-//    _paintChildren();
     if (needSave) {
       canvas.restore();
-    }
-
-    if ($debugBounds) {
-      final rect = getBounds(parent).toNative();
-      canvas.drawRect(rect, _debugPaint);
     }
   }
 
   static Paint _debugPaint = Paint()
     ..style = PaintingStyle.stroke
     ..color = Color(0xff00FFFF)
-    ..strokeWidth = 1;
+    ..strokeWidth = 0;
 
   /// override this method for custom drawing using Flutter's API.
   /// Access `$canvas` from here.
@@ -712,7 +686,12 @@ abstract class DisplayObject
     GxRect rect,
   ]) async {
     final img = await createImage(adjustOffset, resolution, rect);
-    return GxTexture(img, null, false, resolution);
+
+    /// get transformation.
+    var tx = GxTexture(img, null, false, resolution);
+    tx.anchorX = bounds.x;
+    tx.anchorY = bounds.y;
+    return tx;
   }
 
   Future<Image> createImage([
