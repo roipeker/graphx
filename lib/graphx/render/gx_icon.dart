@@ -7,13 +7,13 @@ import 'package:graphx/graphx/geom/gxpoint.dart';
 import 'package:graphx/graphx/geom/gxrect.dart';
 import 'package:graphx/graphx/utils/matrix_utils.dart';
 
-class GxIcon extends IAnimatable {
+class GxIcon extends DisplayObject {
   static GxMatrix _sHelperMatrix = GxMatrix();
 
   GxRect _localBounds = GxRect();
 
   @override
-  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
+  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     _sHelperMatrix.identity();
     getTransformationMatrix(targetSpace, _sHelperMatrix);
     return MatrixUtils.getTransformedBoundsRect(
@@ -24,7 +24,7 @@ class GxIcon extends IAnimatable {
   }
 
   @override
-  IAnimatable hitTest(GxPoint localPoint, [bool useShape = false]) {
+  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable) return null;
     return _localBounds.containsPoint(localPoint) ? this : null;
   }

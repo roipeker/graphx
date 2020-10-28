@@ -7,7 +7,7 @@ import 'package:graphx/graphx/textures/base_texture.dart';
 
 import '../../core/graphx.dart';
 
-class SimpleParticleSystem extends IAnimatable {
+class SimpleParticleSystem extends DisplayObject {
   static GxMatrix _sHelperMatrix = GxMatrix();
   static GxPoint _sHelperPoint = GxPoint();
   static Random random = Random();
@@ -22,7 +22,7 @@ class SimpleParticleSystem extends IAnimatable {
   }
 
   @override
-  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
+  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);

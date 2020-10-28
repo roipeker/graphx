@@ -2,8 +2,8 @@ import 'package:graphx/graphx/display/display_object.dart';
 import 'package:graphx/graphx/display/display_object_container.dart';
 
 abstract class ListUtils {
-  static void mergeSort(List<IAnimatable> input, SortChildrenCallback compare,
-      int startIndex, int len, List<IAnimatable> buffer) {
+  static void mergeSort(List<DisplayObject> input, SortChildrenCallback compare,
+      int startIndex, int len, List<DisplayObject> buffer) {
     if (len > 1) {
       int i,
           endIndex = startIndex + len,

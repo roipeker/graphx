@@ -12,6 +12,15 @@ import 'package:graphx/graphx/utils/math_utils.dart';
 import 'dart:ui';
 import '../gameutils.dart';
 
+class ChartApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ChartDemo(),
+    );
+  }
+}
+
 class ChartDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -99,14 +99,14 @@ class GameWorld extends Sprite {
     constrainInBounds(ship);
   }
 
-  void constrainInBounds(IAnimatable obj) {
+  void constrainInBounds(DisplayObject obj) {
     if (obj.x > stage.stageWidth) obj.x = 0;
     if (obj.x < 0) obj.x = stage.stageWidth;
     if (obj.y > stage.stageHeight) obj.y = 0;
     if (obj.y < 0) obj.y = stage.stageHeight;
   }
 
-  bool isOutBounds(IAnimatable obj, [double radius = 0]) {
+  bool isOutBounds(DisplayObject obj, [double radius = 0]) {
     return obj.x > stage.stageWidth + radius ||
         obj.x < -radius ||
         obj.y > stage.stageHeight + radius ||

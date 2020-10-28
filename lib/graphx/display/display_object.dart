@@ -17,7 +17,7 @@ import 'package:graphx/graphx/utils/painter_utils.dart';
 import 'display_object_container.dart';
 import 'stage.dart';
 
-abstract class IAnimatable
+abstract class DisplayObject
     with DisplayListSignalsMixin, RenderSignalMixin, PointerSignalsMixin {
   Canvas $canvas;
   DisplayObjectContainer $parent;
@@ -40,12 +40,12 @@ abstract class IAnimatable
     }
   }
 
-  static IAnimatable $mouseObjDown;
-  static IAnimatable $mouseObjHover;
+  static DisplayObject $mouseObjDown;
+  static DisplayObject $mouseObjHover;
 
   void $dispatchMouseCallback(
     PointerEventType type,
-    IAnimatable object,
+    DisplayObject object,
     PointerEventData input,
   ) {
     if (touchable) {
@@ -242,8 +242,8 @@ abstract class IAnimatable
   bool $matrixDirty = true;
   bool touchable = true;
 
-  IAnimatable $maskee;
-  IAnimatable $mask;
+  DisplayObject $maskee;
+  DisplayObject $mask;
   bool maskInverted = false;
 
   /// optimization.
@@ -251,7 +251,7 @@ abstract class IAnimatable
 
   bool get isMask => $maskee != null;
 
-  IAnimatable get mask => $mask;
+  DisplayObject get mask => $mask;
 
   static final Paint _grayscaleDstInPaint = Paint()
     ..blendMode = BlendMode.dstIn
@@ -262,7 +262,7 @@ abstract class IAnimatable
       0.2126, 0.7152, 0.0722, 0, 0,
     ]);
 
-  set mask(IAnimatable value) {
+  set mask(DisplayObject value) {
     if ($mask != value) {
       if ($mask != null) $mask.$maskee = null;
       value?.$maskee = this;
@@ -281,7 +281,7 @@ abstract class IAnimatable
   }
 
   /// common parent.
-  static List<IAnimatable> _sAncestors = [];
+  static List<DisplayObject> _sAncestors = [];
   static GxPoint _sHelperPoint = GxPoint();
   static GxRect _sHelperRect = GxRect();
   static GxMatrix _sHelperMatrix = GxMatrix();
@@ -298,7 +298,7 @@ abstract class IAnimatable
   double get worldY => y - pivotY * scaleY + ($parent?.worldY ?? 0);
   bool visible = true;
 
-  IAnimatable() {
+  DisplayObject() {
     x = y = 0.0;
     rotation = 0.0;
     alpha = 1.0;
@@ -321,7 +321,7 @@ abstract class IAnimatable
   /// todo: should be cached.
   GxRect get bounds => getBounds(this);
 
-  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
+  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     throw "getBounds() is abstract in DisplayObject";
   }
 
@@ -442,8 +442,8 @@ abstract class IAnimatable
     }
   }
 
-  GxMatrix getTransformationMatrix(IAnimatable targetSpace, [GxMatrix out]) {
-    IAnimatable commonParent, currentObj;
+  GxMatrix getTransformationMatrix(DisplayObject targetSpace, [GxMatrix out]) {
+    DisplayObject commonParent, currentObj;
     out?.identity();
     out ??= GxMatrix();
     if (targetSpace == this) {
@@ -469,7 +469,7 @@ abstract class IAnimatable
     }
 
     /// 1 - find a common parent between this and targetSpace.
-    commonParent = IAnimatable._findCommonParent(this, targetSpace);
+    commonParent = DisplayObject._findCommonParent(this, targetSpace);
 
     /// 2 - moveup from this to common parent.````
     currentObj = this;
@@ -494,8 +494,9 @@ abstract class IAnimatable
     return out;
   }
 
-  static IAnimatable _findCommonParent(IAnimatable obj1, IAnimatable obj2) {
-    IAnimatable current = obj1;
+  static DisplayObject _findCommonParent(
+      DisplayObject obj1, DisplayObject obj2) {
+    DisplayObject current = obj1;
 
     /// TODO: use faster Hash access.
     while (current != null) {
@@ -530,7 +531,7 @@ abstract class IAnimatable
   }
 
   /// `useShape` is meant to be used by `Shape.graphics`.
-  IAnimatable hitTest(GxPoint localPoint, [bool useShape = false]) {
+  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable) return null;
     if ($mask != null && !hitTestMask(localPoint)) return null;
     if (getBounds(this, _sHelperRect).containsPoint(localPoint)) return this;
@@ -539,7 +540,7 @@ abstract class IAnimatable
 
   DisplayObjectContainer get parent => $parent;
 
-  IAnimatable get base {
+  DisplayObject get base {
     var current = this;
     while (current.$parent != null) current = current.$parent;
     return current;
@@ -549,7 +550,7 @@ abstract class IAnimatable
 
   Stage get stage => base is Stage ? base : null;
 
-  IAnimatable get root {
+  DisplayObject get root {
     var current = this;
     while (current.$parent != null) {
       if (current.$parent is Stage) return current;

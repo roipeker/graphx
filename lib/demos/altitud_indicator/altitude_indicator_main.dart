@@ -356,7 +356,7 @@ class DemoAltitudIndicatorMain extends RootScene {
       ..graphics.beginFill(color).drawRect(0, 0, width, height).endFill();
   }
 
-  IAnimatable buildArrow({
+  DisplayObject buildArrow({
     double height = 45.0,
     int color = 0xffffff,
     double linkThickness = -1,

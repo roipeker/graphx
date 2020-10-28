@@ -6,13 +6,13 @@ import 'package:graphx/graphx/geom/gxrect.dart';
 import 'package:graphx/graphx/utils/matrix_utils.dart';
 import 'package:graphx/graphx/utils/painter_utils.dart';
 
-class StaticText extends IAnimatable {
+class StaticText extends DisplayObject {
   Paragraph _paragraph;
 
   static GxMatrix _sHelperMatrix = GxMatrix();
 
   @override
-  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
+  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     validate();
     out ??= GxRect();
     out.setTo(0, 0, intrinsicWidth, textHeight);

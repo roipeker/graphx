@@ -13,7 +13,6 @@ class JugglerDemoMain extends RootScene {
     super.ready();
     owner.core.resumeTicker();
     owner.needsRepaint = true;
-
     test();
   }
 

@@ -34,14 +34,14 @@ class PointerEventData {
 
   /// new properties.
   /// TODO: decide how to name mouse/pointer events.
-  IAnimatable target;
-  IAnimatable dispatcher;
+  DisplayObject target;
+  DisplayObject dispatcher;
   bool captured = false;
   bool mouseOut = false;
 
   PointerEventData clone(
-    IAnimatable target,
-    IAnimatable dispatcher,
+    DisplayObject target,
+    DisplayObject dispatcher,
     PointerEventType type,
   ) {
     var i = PointerEventData(type: type, rawEvent: rawEvent);
