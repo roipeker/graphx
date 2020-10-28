@@ -2,11 +2,12 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 import 'package:graphx/graphx/display/sprite.dart';
-import 'package:graphx/graphx/scene_controller.dart';
+import 'package:graphx/graphx/events/signal.dart';
+import 'package:graphx/graphx/core/scene_controller.dart';
 
-import 'display/stage.dart';
-import 'events/mixins.dart';
-import 'events/pointer_data.dart';
+import '../display/stage.dart';
+import '../events/mixins.dart';
+import '../events/pointer_data.dart';
 
 class RootScene extends Sprite {
   ScenePainter owner;
@@ -32,6 +33,8 @@ class ScenePainter with EventDispatcherMixin {
   SceneController core;
   RootScene root;
 
+  static ScenePainter current;
+
   /// allows to repaint on every tick()
   bool needsRepaint = false;
 
@@ -40,6 +43,7 @@ class ScenePainter with EventDispatcherMixin {
     root.owner = this;
 
     /// initialize pointer events.
+    makeCurrent();
   }
 
   CustomPainter buildPainter() => _GraphicsPainter(this);
@@ -60,7 +64,7 @@ class ScenePainter with EventDispatcherMixin {
   bool _ownCanvasNeedsRepaint = false;
 
   void _paint(Canvas p_canvas, Size p_size) {
-//    return;
+    /// render
     if (size != p_size) {
       size = p_size;
       _stage.$initFrameSize(p_size);
@@ -72,23 +76,16 @@ class ScenePainter with EventDispatcherMixin {
       _stage.addChild(root);
       root.ready();
     }
+
     if (useOwnCanvas) {
-      if (_ownCanvasNeedsRepaint) {
-        _ownCanvasNeedsRepaint = false;
-        _createPicture();
-      }
-//      if (_canvasImage != null) {
-//        p_canvas.drawImage(_canvasImage, Offset.zero, PainterUtils.emptyPaint);
-//      }
-      if (_canvasPicture != null) {
-        p_canvas.drawPicture(_canvasPicture);
-      }
+      _pictureFromCanvas();
     } else {
       _stage.paint($canvas);
     }
   }
 
   void setup() {
+    makeCurrent();
     root.init();
   }
 
@@ -123,12 +120,48 @@ class ScenePainter with EventDispatcherMixin {
 //    _createImage();
   }
 
-  void tick() {
+  bool autoUpdateAndRender = true;
+  int $currentFrameId = 0;
+  double $runTime = 0;
+
+  void tick(double time) {
+    // makeCurrent();
+    if (autoUpdateAndRender) {
+      $currentFrameId++;
+      $runTime += time;
+      update(time);
+      render();
+    }
     if (useOwnCanvas) {
       _ownCanvasNeedsRepaint = true;
 //      _disposePendingImages();
     }
-    _stage.$tick();
+  }
+
+  double maxFrameTime = -1;
+  double $currentFrameDeltaTime = 0;
+  double $accumulatedFrameDeltaTime = 0;
+  EventSignal<double> _onUpdate;
+
+  EventSignal<double> get onUpdate => _onUpdate ??= EventSignal<double>();
+
+  /// Update inner display list.
+  void update(double deltaTime) {
+    if (maxFrameTime != -1 && deltaTime > maxFrameTime)
+      deltaTime = maxFrameTime;
+    // print("Frame time: $deltaTime");
+    $currentFrameDeltaTime = deltaTime;
+    $accumulatedFrameDeltaTime += $currentFrameDeltaTime;
+
+    /// todo: make current GxTween.
+    // GxTween.update(deltaTime);
+    _stage.$tick(deltaTime);
+    _onUpdate?.dispatch(deltaTime);
+  }
+
+  /// this render only requests a new frame.
+  void render() {
+//    makeCurrent();
     if (needsRepaint) {
       notify();
     }
@@ -142,6 +175,8 @@ class ScenePainter with EventDispatcherMixin {
   @override
   void dispose() {
     _stage?.dispose();
+    _onUpdate?.removeAll();
+    _onUpdate = null;
     super.dispose();
   }
 
@@ -151,6 +186,24 @@ class ScenePainter with EventDispatcherMixin {
 
   void _onInputHandler(PointerEventData e) {
     stage.captureMouseInput(e);
+    makeCurrent();
+  }
+
+  void makeCurrent() {
+    ScenePainter.current = this;
+  }
+
+  void _pictureFromCanvas() {
+    if (_ownCanvasNeedsRepaint) {
+      _ownCanvasNeedsRepaint = false;
+      _createPicture();
+    }
+//      if (_canvasImage != null) {
+//        p_canvas.drawImage(_canvasImage, Offset.zero, PainterUtils.emptyPaint);
+//      }
+    if (_canvasPicture != null) {
+      $canvas.drawPicture(_canvasPicture);
+    }
   }
 }
 

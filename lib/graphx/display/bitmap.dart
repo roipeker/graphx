@@ -7,7 +7,7 @@ import 'package:graphx/graphx/geom/gxrect.dart';
 import 'package:graphx/graphx/textures/base_texture.dart';
 import 'package:graphx/graphx/utils/matrix_utils.dart';
 
-class Bitmap extends DisplayObject {
+class Bitmap extends IAnimatable {
   static GxMatrix _sHelperMatrix = GxMatrix();
   static GxPoint _sHelperPoint = GxPoint();
 
@@ -18,15 +18,29 @@ class Bitmap extends DisplayObject {
   }
 
   GxTexture _texture;
-
   GxTexture get texture => _texture;
+
+  double $originalPivotX = 0;
+  double $originalPivotY = 0;
+
+  @override
+  set pivotX(double value) {
+    $originalPivotX = value;
+    super.pivotY = value;
+  }
+
+  @override
+  set pivotY(double value) {
+    $originalPivotY = value;
+    super.pivotY = value;
+  }
 
   set texture(GxTexture value) {
     if (_texture == value) return;
     _texture = value;
     if (_texture != null) {
-      pivotX = -_texture.anchorX;
-      pivotY = -_texture.anchorY;
+      pivotX = -_texture.anchorX + $originalPivotX;
+      pivotY = -_texture.anchorY + $originalPivotY;
     }
     requiresRedraw();
   }
@@ -36,7 +50,7 @@ class Bitmap extends DisplayObject {
   }
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
@@ -57,6 +71,7 @@ class Bitmap extends DisplayObject {
   }
 
   final _paint = Paint();
+
   Paint get nativePaint => _paint;
 
   @override
@@ -76,10 +91,10 @@ class Bitmap extends DisplayObject {
     final useAtlas = texture.isSubTexture;
     if (useAtlas) {
       final dest = Rect.fromLTWH(
-        x,
-        y,
-        texture.sourceRect.width / scale,
-        texture.sourceRect.height / scale,
+        0,
+        0,
+        texture.sourceRect.width / texture.scale,
+        texture.sourceRect.height / texture.scale,
       );
       $canvas.drawImageRect(
         texture.source,

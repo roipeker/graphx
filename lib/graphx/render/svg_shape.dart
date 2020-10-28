@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:graphx/graphx/graphx.dart';
+import 'package:graphx/graphx/core/graphx.dart';
 import 'package:graphx/graphx/utils/matrix_utils.dart';
 
-class SvgShape extends DisplayObject {
+class SvgShape extends IAnimatable {
   static GxMatrix _sHelperMatrix = GxMatrix();
   static GxPoint _sHelperPoint = GxPoint();
 
@@ -62,7 +62,7 @@ class SvgShape extends DisplayObject {
   }
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);

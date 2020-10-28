@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:graphx/demos/simple_game/utils/game_mixins.dart';
 import 'package:graphx/gameutils.dart';
-import 'package:graphx/graphx/graphx.dart';
+import 'package:graphx/graphx/core/graphx.dart';
 
 import 'ship.dart';
 

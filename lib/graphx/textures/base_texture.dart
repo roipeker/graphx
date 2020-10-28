@@ -6,6 +6,7 @@ class GxTexture {
   Image source;
   GxRect _scaledRect;
   GxRect sourceRect;
+  GxTexture base;
 
   /// adjustment rect.
   GxRect spriteRect;

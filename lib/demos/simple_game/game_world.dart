@@ -1,9 +1,16 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graphx/demos/simple_game/objects/bullet.dart';
 import 'package:graphx/gameutils.dart';
-import 'package:graphx/graphx/graphx.dart';
+import 'package:graphx/graphx/core/graphx.dart';
+import 'package:graphx/graphx/render/graphics.dart';
+import 'package:graphx/graphx/render/movie_clip.dart';
+import 'package:graphx/graphx/render/particles/simple_particle_system.dart';
+import 'package:graphx/graphx/textures/base_texture.dart';
 import 'package:graphx/graphx/utils/math_utils.dart';
 import 'package:graphx/graphx/utils/pools.dart';
+import 'package:graphx/graphx/utils/texture_utils.dart';
 
 import 'objects/background.dart';
 import 'objects/enemy.dart';
@@ -25,6 +32,8 @@ class GameWorld extends Sprite {
 //  StaticText score;
 
   void initUI() {
+    loadAssets();
+
 //    stage.color = 0xff232323;
     stage.color = 0xff0000000;
     bg = GameBackground();
@@ -67,15 +76,17 @@ class GameWorld extends Sprite {
   }
 
   void removeEnemy(BasicEnemy enemy) {
+    explodeEnemy(enemy);
     enemy.dispose();
     enemies.remove(enemy);
   }
 
-  void update() {
+  void update(double delta) {
     ship.update();
     constrainShip();
     bg.update();
     updateEnemies();
+    updateGfx(delta);
   }
 
   void updateEnemies() {
@@ -88,14 +99,14 @@ class GameWorld extends Sprite {
     constrainInBounds(ship);
   }
 
-  void constrainInBounds(DisplayObject obj) {
+  void constrainInBounds(IAnimatable obj) {
     if (obj.x > stage.stageWidth) obj.x = 0;
     if (obj.x < 0) obj.x = stage.stageWidth;
     if (obj.y > stage.stageHeight) obj.y = 0;
     if (obj.y < 0) obj.y = stage.stageHeight;
   }
 
-  bool isOutBounds(DisplayObject obj, [double radius = 0]) {
+  bool isOutBounds(IAnimatable obj, [double radius = 0]) {
     return obj.x > stage.stageWidth + radius ||
         obj.x < -radius ||
         obj.y > stage.stageHeight + radius ||
@@ -126,5 +137,100 @@ class GameWorld extends Sprite {
     if (e.isPress(LogicalKeyboardKey.keyU)) {
       ship.toggleShield();
     }
+  }
+
+  void updateGfx(double delta) {
+    for (var i = 0; i < explosions.length; ++i) {
+      explosions[i].update(delta);
+    }
+  }
+
+  void explodeEnemy(BasicEnemy enemy) {
+    var mc = MovieClip(frames: explosionFrames, fps: 25);
+    mc.repeatable = false;
+    mc.reversed = false;
+    mc.nativePaint.blendMode = BlendMode.screen;
+    mc.onFramesComplete.addOnce(() {
+      explosions.remove(mc);
+      mc.removeFromParent(true);
+    });
+
+    //// add particle?
+    addParticle(enemy);
+
+    mc.gotoAndPlay(0);
+    mc.setPosition(enemy.x - mc.width / 2, enemy.y - mc.width / 2);
+    addChild(mc);
+    explosions.add(mc);
+  }
+
+  List<SimpleParticleSystem> particlesList = [];
+
+  var starParticle = Graphics()
+    ..beginFill(0xff00ff, 1)
+    ..drawStar(0, 0, 5, 9)
+    ..endFill();
+
+  void addParticle(BasicEnemy enemy) {
+    /// LEARN TO ADD PARTICLES!
+    var pp = SimpleParticleSystem();
+    pp.useWorldSpace = true;
+    pp.setPosition(enemy.x + 16, enemy.y + 16);
+    pp.scale = .5;
+    pp.texture = particle_tx;
+    pp.setup();
+    pp.init();
+    addChild(pp);
+
+    pp.emission = 100;
+    pp.emissionTime = 4;
+    pp.energy = 5;
+    pp.burst = true;
+    pp.emit = true;
+
+    pp.dispersionAngleVariance = deg2rad(360);
+    pp.dispersionAngle = deg2rad(40);
+    pp.initialVelocity = 20;
+    pp.initialVelocityVariance = 20;
+//    pp.initialAngleVariance = 2;
+//    pp.initialAlphaVariance = .55;
+    pp.initialAlphaVariance = .5;
+//    pp.initialAngularVelocity = .001;
+//    pp.initialAngularVelocityVariance = .2;
+//    pp.initialAngleVariance = 3;
+    pp.initialAngularVelocityVariance = .4;
+//    pp.initialScaleVariance = 2;
+    pp.endAlpha = 0;
+
+    pp.initialColor = Colors.amber.value;
+    pp.endColor = Colors.cyan.value;
+    pp.initialScale = .4;
+    pp.endScale = 1;
+    pp.endScaleVariance = .4;
+
+    /*pp.drawCallback = (canvas, paint) {
+      starParticle.paintWithFill(canvas, paint);
+    };*/
+
+//    pp.initialColor = Colors.purpleAccent.value;
+    pp.useAlphaOnColorFilter = true;
+    pp.blendMode = BlendMode.srcATop;
+    particlesList.add(pp);
+  }
+
+  var explosions = <MovieClip>[];
+  final explosionFrames = <GxTexture>[];
+  GxTexture particle_tx;
+
+  void loadAssets() async {
+    var explosion_tx =
+        await AssetLoader.loadImageTexture('assets/game/exp2.jpg');
+    explosionFrames.addAll(
+      TextureUtils.getRectAtlasFromTexture(explosion_tx, 64),
+    );
+
+    particle_tx =
+        await AssetLoader.loadImageTexture('assets/game/flare/sparkle.png', 3);
+//    var bmp = Bitmap(p_tx);
   }
 }

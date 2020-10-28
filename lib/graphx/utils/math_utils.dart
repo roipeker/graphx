@@ -7,6 +7,7 @@ double deg2rad(double deg) => deg / 180.0 * math.pi;
 double rad2deg(double rad) => rad / math.pi * 180.0;
 
 abstract class MathUtils {
+  static const double halfPi = math.pi / 2;
   static const double pi2 = math.pi * 2;
 
   static int getNextPowerOfTwo(num value) {
@@ -67,4 +68,13 @@ abstract class MathUtils {
 
   static bool isEquivalent(double a, double b, [double epsilon = .0001]) =>
       (a - epsilon < b) && (a + epsilon > b);
+
+  static double shortRotation(double rotation) {
+    if (rotation < -math.pi) {
+      rotation += pi2;
+    } else if (rotation > math.pi) {
+      rotation -= pi2;
+    }
+    return rotation;
+  }
 }

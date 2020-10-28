@@ -1,4 +1,4 @@
-import 'package:graphx/graphx/graphx.dart';
+import 'package:graphx/graphx/core/graphx.dart';
 
 class GameExplosion extends Sprite {
   GameExplosion() {

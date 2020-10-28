@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:graphx/graphx/animations/juggler.dart';
+import 'package:graphx/graphx/core/graphx.dart';
 import 'package:graphx/graphx/display/display_object_container.dart';
 import 'package:graphx/graphx/geom/gxmatrix.dart';
 import 'package:graphx/graphx/geom/gxpoint.dart';
@@ -8,7 +10,7 @@ import 'package:graphx/graphx/input/keyboard_manager.dart';
 import 'package:graphx/graphx/input/pointer_manager.dart';
 
 import '../events/mixins.dart';
-import '../scene_painter.dart';
+import '../core/scene_painter.dart';
 import 'display_object.dart';
 
 class Stage extends DisplayObjectContainer
@@ -37,6 +39,8 @@ class Stage extends DisplayObjectContainer
       _backgroundPaint.color = Color(value);
     }
   }
+
+  Juggler get juggler => Graphx.juggler;
 
   double get stageWidth => _size?.width ?? 0;
 
@@ -83,7 +87,7 @@ class Stage extends DisplayObjectContainer
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShapes = false]) {
+  IAnimatable hitTest(GxPoint localPoint, [bool useShapes = false]) {
     if (!visible || !touchable) return null;
 
     /// location outside stage area, is not accepted.
@@ -96,7 +100,7 @@ class Stage extends DisplayObjectContainer
     return super.hitTest(localPoint) ?? this;
   }
 
-  GxRect getStageBounds(DisplayObject targetSpace, [GxRect out]) {
+  GxRect getStageBounds(IAnimatable targetSpace, [GxRect out]) {
     out ??= GxRect();
     out.setTo(0, 0, stageWidth, stageHeight);
     getTransformationMatrix(targetSpace, _sMatrix);
@@ -112,7 +116,7 @@ class Stage extends DisplayObjectContainer
 //  }
 
   /// advance time... (passedTime)
-  void $tick() {
+  void $tick(double time) {
     $onEnterFrame?.dispatch();
   }
 

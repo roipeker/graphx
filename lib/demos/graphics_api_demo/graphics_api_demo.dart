@@ -10,7 +10,7 @@ import 'package:graphx/graphx/display/static_text.dart';
 import 'package:graphx/graphx/geom/gxpoint.dart';
 import 'package:graphx/graphx/render/graphics.dart';
 import 'package:graphx/graphx/render/gx_icon.dart';
-import 'package:graphx/graphx/scene_painter.dart';
+import 'package:graphx/graphx/core/scene_painter.dart';
 import 'package:graphx/graphx/utils/math_utils.dart';
 
 class GraphicsApiDemo extends RootScene {

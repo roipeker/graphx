@@ -22,7 +22,7 @@ class Sprite extends DisplayObjectContainer {
   Graphics get graphics => _graphics ??= Graphics();
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
     out = super.getBounds(targetSpace, out);
     if (_graphics != null) {
       /// add graphics later.
@@ -46,9 +46,9 @@ class Sprite extends DisplayObjectContainer {
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
+  IAnimatable hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable) return null;
-    DisplayObject target = super.hitTest(localPoint);
+    IAnimatable target = super.hitTest(localPoint);
     if (target == null) {
       target =
           (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;

@@ -30,10 +30,10 @@ extension MyKeyEventExt on KeyboardEventData {
   }
 
   bool get arrowUp {
-    return rawEvent.isKeyPressed(LogicalKeyboardKey.arrowUp);
+    return rawEvent.logicalKey == LogicalKeyboardKey.arrowUp;
   }
 
   bool get arrowDown {
-    return rawEvent.isKeyPressed(LogicalKeyboardKey.arrowDown);
+    return rawEvent.logicalKey == LogicalKeyboardKey.arrowDown;
   }
 }

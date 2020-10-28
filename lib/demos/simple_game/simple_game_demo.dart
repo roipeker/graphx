@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:graphx/graphx/graphx_widget.dart';
-import 'package:graphx/graphx/scene_controller.dart';
+import 'package:graphx/graphx/widgets/graphx_widget.dart';
+import 'package:graphx/graphx/core/scene_controller.dart';
 
 import 'simple_game_main.dart';
 

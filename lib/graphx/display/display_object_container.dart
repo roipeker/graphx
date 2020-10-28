@@ -5,10 +5,10 @@ import 'package:graphx/graphx/geom/gxpoint.dart';
 import 'package:graphx/graphx/geom/gxrect.dart';
 
 typedef SortChildrenCallback = int Function(
-    DisplayObject object1, DisplayObject object2);
+    IAnimatable object1, IAnimatable object2);
 
-abstract class DisplayObjectContainer extends DisplayObject {
-  final children = <DisplayObject>[];
+abstract class DisplayObjectContainer extends IAnimatable {
+  final children = <IAnimatable>[];
 
   @override
   String toString() {
@@ -51,7 +51,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
   }
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
     out ??= GxRect();
     final len = children.length;
     if (len == 0) {
@@ -81,11 +81,11 @@ abstract class DisplayObjectContainer extends DisplayObject {
     return out;
   }
 
-  List<DisplayObject> getObjectsUnderPoint(GxPoint localPoint) {
-    final result = <DisplayObject>[];
+  List<IAnimatable> getObjectsUnderPoint(GxPoint localPoint) {
+    final result = <IAnimatable>[];
     if (!visible || !touchable || !hitTestMask(localPoint)) return result;
     final numChild = children.length;
-    DisplayObject target;
+    IAnimatable target;
     for (var i = numChild - 1; i >= 0; --i) {
       var child = children[i];
       if (child.isMask) continue;
@@ -105,9 +105,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
+  IAnimatable hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable || !hitTestMask(localPoint)) return null;
-    DisplayObject target;
+    IAnimatable target;
     final numChild = children.length;
     for (var i = numChild - 1; i >= 0; --i) {
       var child = children[i];
@@ -122,11 +122,11 @@ abstract class DisplayObjectContainer extends DisplayObject {
     return null;
   }
 
-  DisplayObject addChild(DisplayObject child) {
+  IAnimatable addChild(IAnimatable child) {
     return addChildAt(child, children.length);
   }
 
-  DisplayObject addChildAt(DisplayObject child, int index) {
+  IAnimatable addChildAt(IAnimatable child, int index) {
     if (child == null) throw "::child can't be null";
     if (index < 0 || index > children.length) {
       throw RangeError('Invalid child index');
@@ -154,9 +154,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
 //    if (child is DisplayObjectContainer) {}
   }
 
-  int getChildIndex(DisplayObject child) => children.indexOf(child);
+  int getChildIndex(IAnimatable child) => children.indexOf(child);
 
-  void setChildIndex(DisplayObject child, int index) {
+  void setChildIndex(IAnimatable child, int index) {
     final old = getChildIndex(child);
     if (old == index) return;
     if (old == -1)
@@ -166,7 +166,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
     requiresRedraw();
   }
 
-  void swapChildren(DisplayObject child1, DisplayObject child2) {
+  void swapChildren(IAnimatable child1, IAnimatable child2) {
     final idx1 = getChildIndex(child1);
     final idx2 = getChildIndex(child2);
     if (idx1 == -1 || idx2 == -1)
@@ -193,14 +193,14 @@ abstract class DisplayObjectContainer extends DisplayObject {
     requiresRedraw();
   }
 
-  DisplayObject getChildAt(int index) {
+  IAnimatable getChildAt(int index) {
     final len = children.length;
     if (index < 0) index = len + index;
     if (index >= 0 && index < len) return children[index];
     throw RangeError("Invalid child index");
   }
 
-  DisplayObject getChildByName(String name) {
+  IAnimatable getChildByName(String name) {
     for (final child in children) {
       if (child.name == name) return child;
     }
@@ -226,7 +226,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   bool get hasChildren => children.isNotEmpty;
 
-  bool contains(DisplayObject child, [bool recursive = true]) {
+  bool contains(IAnimatable child, [bool recursive = true]) {
     if (!recursive) return children.contains(child);
     while (child != null) {
       if (child == this) return true;
@@ -235,29 +235,28 @@ abstract class DisplayObjectContainer extends DisplayObject {
     return false;
   }
 
-  DisplayObject removeChildAt(int index, [bool dispose = false]) {
+  IAnimatable removeChildAt(int index, [bool dispose = false]) {
     if (index >= 0 && index < children.length) {
       requiresRedraw();
       final child = children[index];
       child.$onRemoved?.dispatch();
-
       if (stage != null) {
         child.$onRemovedFromStage?.dispatch();
         if (child is DisplayObjectContainer) {
           _broadcastChildrenRemovedFromStage(child);
         }
-        child.$setParent(null);
-        index = children.indexOf(child);
-        if (index >= 0) children.removeAt(index);
-        if (dispose) child.dispose();
-        return child;
       }
+      child.$setParent(null);
+      index = children.indexOf(child);
+      if (index >= 0) children.removeAt(index);
+      if (dispose) child.dispose();
+      return child;
     }
 //    throw "Invalid child index";
     return null;
   }
 
-  DisplayObject removeChild(DisplayObject child, [bool dispose = false]) {
+  IAnimatable removeChild(IAnimatable child, [bool dispose = false]) {
     if (child == null || child?.$parent != this) return null;
     final index = getChildIndex(child);
     if (index > -1) return removeChildAt(index, dispose);
@@ -316,7 +315,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
     });
   }
 
-  void _drawMask(DisplayObject mask, DisplayObject child) {}
+  void _drawMask(IAnimatable mask, IAnimatable child) {}
 
-  void _eraseMask(DisplayObject mask, DisplayObject child) {}
+  void _eraseMask(IAnimatable mask, IAnimatable child) {}
 }

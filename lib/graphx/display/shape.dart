@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:graphx/graphx/display/display_object.dart';
 import 'package:graphx/graphx/display/display_object_container.dart';
 import 'package:graphx/graphx/geom/gxmatrix.dart';
@@ -6,7 +8,7 @@ import 'package:graphx/graphx/geom/gxrect.dart';
 import 'package:graphx/graphx/render/graphics.dart';
 import 'package:graphx/graphx/utils/matrix_utils.dart';
 
-class Shape extends DisplayObject {
+class Shape extends IAnimatable {
   Graphics _graphics;
   static GxMatrix _sHelperMatrix = GxMatrix();
 
@@ -19,7 +21,7 @@ class Shape extends DisplayObject {
   Graphics get graphics => _graphics ??= Graphics();
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
@@ -60,7 +62,7 @@ class Shape extends DisplayObject {
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
+  IAnimatable hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable) return null;
     return (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
   }
@@ -71,10 +73,36 @@ class Shape extends DisplayObject {
 //  else return MeshUtil.containsPoint(_vertexData, _indexData, localPoint) ? this : null;
 //  }
 
+  //        canvas.clipPath(path)
+  //      canvas.clipPath(path)
+
   @override
   void $applyPaint() {
-    _graphics?.alpha = worldAlpha;
-    _graphics?.paint($canvas);
+    if (isMask && _graphics != null) {
+//      $canvas.save();
+//      $canvas.transform(transformationMatrix.toNative().storage);
+
+      Path paths = _graphics.getPaths();
+      GxMatrix matrix;
+      if (inStage && $maskee.inStage) {
+        matrix = getTransformationMatrix($maskee);
+      } else {
+        matrix = transformationMatrix;
+      }
+
+      paths = paths.transform(matrix.toNative().storage);
+//      paths = paths.transform(transformationMatrix.toNative().storage);
+
+      $canvas.clipPath(paths);
+
+//      _graphics?.isMask = this.isMask;
+//      _graphics?.paint($canvas);
+//      $canvas.restore();
+    } else {
+      _graphics?.isMask = this.isMask;
+      _graphics?.alpha = worldAlpha;
+      _graphics?.paint($canvas);
+    }
   }
 
   @override

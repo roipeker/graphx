@@ -1,7 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:graphx/graphx/input_converter.dart';
-import 'package:graphx/graphx/scene_controller.dart';
+import 'package:graphx/graphx/input/input_converter.dart';
+import 'package:graphx/graphx/core/scene_controller.dart';
 
 class SceneBuilderWidget extends StatefulWidget {
   final Widget child;

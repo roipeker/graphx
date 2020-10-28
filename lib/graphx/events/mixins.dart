@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:graphx/graphx/events/pointer_data.dart';
+import 'package:graphx/graphx/events/signal_data.dart';
 
 import 'signal.dart';
 
@@ -36,9 +37,14 @@ mixin TickerSignalMixin {
   }
 }
 
+mixin JugglerSignalMixin {
+  EventSignal<JugglerObjectEventData> $onRemovedFromJuggler;
+  EventSignal<JugglerObjectEventData> get onRemovedFromJuggler =>
+      $onRemovedFromJuggler ??= EventSignal<JugglerObjectEventData>();
+}
+
 mixin ResizeSignalMixin {
   Signal $onResized;
-
   Signal get onResized => $onResized ??= Signal();
 
   void $disposeResizeSignals() {

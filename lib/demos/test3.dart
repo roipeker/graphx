@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:graphx/gameutils.dart';
 import 'package:graphx/graphx/display/shape.dart';
 import 'package:graphx/graphx/display/sprite.dart';
-import 'package:graphx/graphx/scene_painter.dart';
+import 'package:graphx/graphx/core/scene_painter.dart';
 import 'package:graphx/graphx/utils/math_utils.dart';
 
 class Test3Scene extends RootScene {

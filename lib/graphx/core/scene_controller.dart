@@ -1,10 +1,12 @@
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:graphx/graphx/animations/juggler.dart';
+import 'package:graphx/graphx/core/graphx.dart';
 import 'package:graphx/graphx/input/keyboard_manager.dart';
 import 'package:graphx/graphx/input/pointer_manager.dart';
-import 'package:graphx/graphx/scene_painter.dart';
+import 'package:graphx/graphx/core/scene_painter.dart';
 
-import 'input_converter.dart';
+import '../input/input_converter.dart';
+import '../ticker/gx_ticker.dart';
 
 class SceneConfig {
   bool useKeyboard;
@@ -39,7 +41,9 @@ class SceneController {
 
   ScenePainter back;
   ScenePainter front;
-  Ticker _ticker;
+  GxTicker ticker;
+
+//  Ticker _ticker;
 
   KeyboardManager get keyboard => _keyboard;
 
@@ -57,8 +61,10 @@ class SceneController {
   void $init() {
     if (_isInited) return;
     setup();
+    ticker = GxTicker();
     if (_config.useTicker) {
-      _createTicker();
+      // ticker.resume();
+      ticker.onFrame.add(_onTick);
     }
     _initInput();
     _isInited = true;
@@ -69,18 +75,41 @@ class SceneController {
     front?.setup();
   }
 
-  void _onTick(Duration elapsed) {
-    front?.tick();
-    back?.tick();
+  /// process timeframe
+//  int _lastElapsed = 0;
+  Juggler get juggler => Graphx.juggler;
+
+  /// enterframe ticker
+  void _onTick(double elapsed) {
+    Graphx.juggler.update(elapsed);
+    // _makeCurrent();
+//    _juggler.tick(elapsed);
+//    print('elapsed:: $elapsed');
+//    var ts = elapsed.inMilliseconds;
+//    double diff = (ts - _lastElapsed) / 1000;
+//    print("Elappsed!: $diff");
+    front?.tick(elapsed);
+    back?.tick(elapsed);
+//    _lastElapsed = ts;
+  }
+
+  void _makeCurrent() {
+    current = this;
+  }
+
+  void resumeTicker() {
+    ticker?.resume();
   }
 
   void dispose() {
     if (_config.isPersistent) return;
     front?.dispose();
     back?.dispose();
-    _ticker?.stop(canceled: true);
-    _ticker?.dispose();
-    _ticker = null;
+    ticker.dispose();
+    ticker = null;
+//    _ticker?.stop(canceled: true);
+//    _ticker?.dispose();
+//    _ticker = null;
   }
 
   CustomPainter buildBackPainter() => back?.buildPainter();
@@ -112,26 +141,5 @@ class SceneController {
       controller.front = ScenePainter(controller, front);
     }
     return controller;
-  }
-
-  void _createTicker() {
-    if (_ticker != null) return;
-    _ticker = Ticker(_onTick);
-    _ticker.start();
-    _ticker.muted = true;
-  }
-
-  bool get isTicking => _ticker?.isTicking;
-
-  bool get isActive => _ticker?.isActive;
-
-  void resumeTicker() {
-    /// create if it doesnt exists.
-    _createTicker();
-    _ticker?.muted = false;
-  }
-
-  void pauseTicker() {
-    _ticker?.muted = true;
   }
 }

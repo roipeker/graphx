@@ -15,6 +15,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Graphics mask;
 
+  bool isMask = false;
+
   Path get _path => _currentDrawing.path;
 
   void dispose() {
@@ -202,6 +204,11 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Graphics lineTo(double x, double y) {
     _path.lineTo(x, y);
+    return this;
+  }
+
+  Graphics closePolygon() {
+    _path.close();
     return this;
   }
 
@@ -423,8 +430,34 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  void paintWithFill(Canvas canvas, Paint fill) {
+    if (!_isVisible) return;
+    _drawingQueue.forEach((graph) {
+      if (graph.hasPicture) {
+        canvas.drawPicture(graph.picture);
+        return;
+      }
+      canvas.drawPath(graph.path, fill);
+    });
+  }
+
+  Path getPaths() {
+    Path output = Path();
+    _drawingQueue.forEach((graph) {
+      output = Path.combine(PathOperation.union, output, graph.path);
+    });
+    return output;
+  }
+
   void paint(Canvas canvas) {
-//    canvas.clipPath();
+    // TODO : add mask support.
+    if (isMask) {
+      _drawingQueue.forEach((graph) {
+        canvas.clipPath(graph.path, doAntiAlias: false);
+      });
+      return;
+    }
+
     _constrainAlpha();
     if (!_isVisible) return;
     _drawingQueue.forEach((graph) {

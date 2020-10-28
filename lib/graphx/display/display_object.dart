@@ -4,6 +4,7 @@ import 'dart:ui';
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+import 'package:graphx/graphx/display/shape.dart';
 import 'package:graphx/graphx/events/mixins.dart';
 import 'package:graphx/graphx/events/pointer_data.dart';
 import 'package:graphx/graphx/geom/gxmatrix.dart';
@@ -16,7 +17,7 @@ import 'package:graphx/graphx/utils/painter_utils.dart';
 import 'display_object_container.dart';
 import 'stage.dart';
 
-abstract class DisplayObject
+abstract class IAnimatable
     with DisplayListSignalsMixin, RenderSignalMixin, PointerSignalsMixin {
   Canvas $canvas;
   DisplayObjectContainer $parent;
@@ -39,12 +40,12 @@ abstract class DisplayObject
     }
   }
 
-  static DisplayObject $mouseObjDown;
-  static DisplayObject $mouseObjHover;
+  static IAnimatable $mouseObjDown;
+  static IAnimatable $mouseObjHover;
 
   void $dispatchMouseCallback(
     PointerEventType type,
-    DisplayObject object,
+    IAnimatable object,
     PointerEventData input,
   ) {
     if (touchable) {
@@ -241,21 +242,30 @@ abstract class DisplayObject
   bool $matrixDirty = true;
   bool touchable = true;
 
-  DisplayObject _maskee;
-  DisplayObject $mask;
+  IAnimatable $maskee;
+  IAnimatable $mask;
   bool maskInverted = false;
 
   /// optimization.
   bool $hasVisibleArea = true;
 
-  bool get isMask => _maskee != null;
+  bool get isMask => $maskee != null;
 
-  DisplayObject get mask => $mask;
+  IAnimatable get mask => $mask;
 
-  set mask(DisplayObject value) {
+  static final Paint _grayscaleDstInPaint = Paint()
+    ..blendMode = BlendMode.dstIn
+    ..colorFilter = const ColorFilter.matrix(<double>[
+      0, 0, 0, 0, 0, //
+      0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
+      0.2126, 0.7152, 0.0722, 0, 0,
+    ]);
+
+  set mask(IAnimatable value) {
     if ($mask != value) {
-      if ($mask != null) $mask._maskee = null;
-      value?._maskee = this;
+      if ($mask != null) $mask.$maskee = null;
+      value?.$maskee = this;
       value?.$hasVisibleArea = false;
       $mask = value;
       requiresRedraw();
@@ -271,7 +281,7 @@ abstract class DisplayObject
   }
 
   /// common parent.
-  static List<DisplayObject> _sAncestors = [];
+  static List<IAnimatable> _sAncestors = [];
   static GxPoint _sHelperPoint = GxPoint();
   static GxRect _sHelperRect = GxRect();
   static GxMatrix _sHelperMatrix = GxMatrix();
@@ -288,7 +298,7 @@ abstract class DisplayObject
   double get worldY => y - pivotY * scaleY + ($parent?.worldY ?? 0);
   bool visible = true;
 
-  DisplayObject() {
+  IAnimatable() {
     x = y = 0.0;
     rotation = 0.0;
     alpha = 1.0;
@@ -303,15 +313,15 @@ abstract class DisplayObject
     if (bounds.isEmpty) return;
     var ax = 0.5 + alignment.x / 2;
     var ay = 0.5 + alignment.y / 2;
-    _pivotX = bounds.x + bounds.width * ax;
-    _pivotY = bounds.y + bounds.height * ay;
+    pivotX = bounds.x + bounds.width * ax;
+    pivotY = bounds.y + bounds.height * ay;
   }
 
   /// local bounds
   /// todo: should be cached.
   GxRect get bounds => getBounds(this);
 
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
     throw "getBounds() is abstract in DisplayObject";
   }
 
@@ -432,8 +442,8 @@ abstract class DisplayObject
     }
   }
 
-  GxMatrix getTransformationMatrix(DisplayObject targetSpace, [GxMatrix out]) {
-    DisplayObject commonParent, currentObj;
+  GxMatrix getTransformationMatrix(IAnimatable targetSpace, [GxMatrix out]) {
+    IAnimatable commonParent, currentObj;
     out?.identity();
     out ??= GxMatrix();
     if (targetSpace == this) {
@@ -459,7 +469,7 @@ abstract class DisplayObject
     }
 
     /// 1 - find a common parent between this and targetSpace.
-    commonParent = DisplayObject._findCommonParent(this, targetSpace);
+    commonParent = IAnimatable._findCommonParent(this, targetSpace);
 
     /// 2 - moveup from this to common parent.````
     currentObj = this;
@@ -484,9 +494,8 @@ abstract class DisplayObject
     return out;
   }
 
-  static DisplayObject _findCommonParent(
-      DisplayObject obj1, DisplayObject obj2) {
-    DisplayObject current = obj1;
+  static IAnimatable _findCommonParent(IAnimatable obj1, IAnimatable obj2) {
+    IAnimatable current = obj1;
 
     /// TODO: use faster Hash access.
     while (current != null) {
@@ -521,7 +530,7 @@ abstract class DisplayObject
   }
 
   /// `useShape` is meant to be used by `Shape.graphics`.
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
+  IAnimatable hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable) return null;
     if ($mask != null && !hitTestMask(localPoint)) return null;
     if (getBounds(this, _sHelperRect).containsPoint(localPoint)) return this;
@@ -530,7 +539,7 @@ abstract class DisplayObject
 
   DisplayObjectContainer get parent => $parent;
 
-  DisplayObject get base {
+  IAnimatable get base {
     var current = this;
     while (current.$parent != null) current = current.$parent;
     return current;
@@ -540,7 +549,7 @@ abstract class DisplayObject
 
   Stage get stage => base is Stage ? base : null;
 
-  DisplayObject get root {
+  IAnimatable get root {
     var current = this;
     while (current.$parent != null) {
       if (current.$parent is Stage) return current;
@@ -554,7 +563,7 @@ abstract class DisplayObject
     /// TODO: notify parent the current state of this DisplayObject.
     $hasVisibleArea = $alpha != 0 &&
         visible &&
-        _maskee == null &&
+        $maskee == null &&
         _scaleX != 0 &&
         _scaleY != 0;
   }
@@ -570,31 +579,65 @@ abstract class DisplayObject
     final _hasSkew = _skewX != 0 || _skewY != 0;
     final needSave =
         _hasTranslate || _hasScale || rotation != 0 || _hasPivot || _hasSkew;
-    final _saveLayer = this is DisplayObjectContainer &&
+    bool _saveLayer = this is DisplayObjectContainer &&
         (this as DisplayObjectContainer).hasChildren &&
         $alpha != 1;
 
+    final hasMask = mask != null;
+    final maskIsGraphics = hasMask ? mask is Shape : false;
+
+    if (hasMask && !maskIsGraphics) {
+      _saveLayer = true;
+    }
+
+    if (_saveLayer) {
+      final alphaPaint = PainterUtils.getAlphaPaint($alpha);
+      final rect = getBounds(this).toNative();
+      canvas.saveLayer(null, alphaPaint);
+    }
     if (needSave) {
       canvas.save();
       canvas.transform(transformationMatrix.toNative().storage);
     }
 
-//    if (mask != null) {
-//      canvas.clipPath(path)
-//    }
+    if (hasMask && maskIsGraphics) {
+//      final g = (mask as Shape).graphics;
+//      if (g != null) {
+//        g.paint($canvas);
+//      }
+//      (mask as Shape).graphics.getPaths();
+      mask.$canvas = canvas;
+      mask.$applyPaint();
+    }
+
 //    if (_graphics != null) {
 //      _graphics?.alpha = worldAlpha;
 //      _graphics?.paint(canvas);
 //    }
 //    canvas.drawColor(Color(0xfffffff).withOpacity(.8), BlendMode.softLight);
-    if (_saveLayer) {
-      final alphaPaint = PainterUtils.getAlphaPaint($alpha);
-      final rect = getBounds(this).toNative();
-      canvas.saveLayer(rect, alphaPaint);
-    }
+
     $onPrePaint?.dispatch();
     $applyPaint();
     $onPostPaint?.dispatch();
+
+    if (hasMask && !maskIsGraphics) {
+      final maskPaint = Paint();
+      maskPaint.blendMode = BlendMode.dstIn;
+//      maskPaint.blendMode = BlendMode.srcOver;
+      final rect = getBounds(this).toNative();
+//      canvas.transform(transformationMatrix.invert().toNative().storage);
+//      canvas.saveLayer(null, _grayscaleDstInPaint);
+      canvas.saveLayer(null, maskPaint);
+      mask.$canvas = canvas;
+//      mask.paint(canvas);
+      mask.$applyPaint();
+      canvas.restore();
+//      mask.$applyPaint();
+    }
+
+    if (needSave) {
+      canvas.restore();
+    }
     if ($debugBounds) {
       final rect = getBounds(this).toNative();
       canvas.drawLine(rect.topLeft, rect.bottomRight, _debugPaint);
@@ -603,9 +646,6 @@ abstract class DisplayObject
     }
 
     if (_saveLayer) {
-      canvas.restore();
-    }
-    if (needSave) {
       canvas.restore();
     }
   }

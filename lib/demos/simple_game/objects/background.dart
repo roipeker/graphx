@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:graphx/demos/simple_game/utils/game_mixins.dart';
 import 'package:graphx/graphx/display/sprite.dart';
-import 'package:graphx/graphx/graphx.dart';
+import 'package:graphx/graphx/core/graphx.dart';
 import 'package:graphx/graphx/textures/base_texture.dart';
 import 'package:graphx/graphx/utils/assets_loader.dart';
 

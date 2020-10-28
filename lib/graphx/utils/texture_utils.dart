@@ -1,4 +1,4 @@
-import 'package:graphx/graphx/graphx.dart';
+import 'package:graphx/graphx/core/graphx.dart';
 import 'package:graphx/graphx/render/graphics.dart';
 import 'package:graphx/graphx/textures/base_texture.dart';
 
@@ -52,5 +52,32 @@ abstract class TextureUtils {
 
   static Future<GxTexture> _drawShape() {
     return _helperShape.createImageTexture(true, TextureUtils.resolution);
+  }
+
+  static List<GxTexture> getRectAtlasFromTexture(
+    GxTexture base,
+    int w, {
+    int h,
+    int padding = 0,
+    double scale = 1,
+  }) {
+    h ??= w;
+
+    /// create subtextures from the main texture.
+    var cols = base.sourceRect.width / w;
+    var rows = base.sourceRect.height / h;
+    var total = cols * rows;
+    var output = <GxTexture>[];
+    double _w = w.toDouble();
+    double _h = h.toDouble();
+    for (var i = 0; i < total; ++i) {
+      double px = (i % cols) * _w;
+      double py = (i ~/ cols) * _h;
+      var subrect = GxRect(px, py, _w, _h);
+      var texture = GxTexture(base.source, subrect, true, scale);
+      texture.base = base;
+      output.add(texture);
+    }
+    return output;
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:graphx/demos/svg_demo/test_svg.dart';
 
 import 'demos/base_demo_widget.dart';
+import 'demos/juggler_demos/juggler_demo_main.dart';
 //import 'demos/audio_visuals/audio_visuals_demo.dart';
 
 void main() {
   runApp(MyApp());
+//  runApp(AltitudeIndicatorWidget());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +24,11 @@ class MyApp extends StatelessWidget {
 //      home: SimpleGameDemo(),
       home: Scaffold(
         body: DemoSceneTester(
-          backScene: TestSVGMain(),
+//          backScene: TestSVGMain(),
+//          backScene: DemoParticlesMain(),
+//          backScene: DemoParticlesMain(),
+//          backScene: DemoAltitudIndicatorMain(),
+          backScene: JugglerDemoMain(),
         ),
       ),
     );

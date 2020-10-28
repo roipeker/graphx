@@ -3,8 +3,18 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/services.dart';
+import 'package:graphx/graphx/textures/base_texture.dart';
+import 'package:graphx/graphx/utils/texture_utils.dart';
 
 abstract class AssetLoader {
+  static Future<GxTexture> loadImageTexture(
+    String path, [
+    double resolution,
+  ]) async {
+    final img = await loadImage(path);
+    return GxTexture(img, null, false, resolution ?? TextureUtils.resolution);
+  }
+
   /// load local assets.
   static Future<Image> loadImage(String path) async {
     final data = await rootBundle.load(path);
