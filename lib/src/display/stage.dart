@@ -79,7 +79,7 @@ class Stage extends DisplayObjectContainer
   }
 
   @override
-  IAnimatable hitTest(GxPoint localPoint, [bool useShapes = false]) {
+  DisplayObject hitTest(GxPoint localPoint, [bool useShapes = false]) {
     if (!visible || !touchable) return null;
 
     /// location outside stage area, is not accepted.
@@ -92,7 +92,7 @@ class Stage extends DisplayObjectContainer
     return super.hitTest(localPoint) ?? this;
   }
 
-  GxRect getStageBounds(IAnimatable targetSpace, [GxRect out]) {
+  GxRect getStageBounds(DisplayObject targetSpace, [GxRect out]) {
     out ??= GxRect();
     out.setTo(0, 0, stageWidth, stageHeight);
     getTransformationMatrix(targetSpace, _sMatrix);

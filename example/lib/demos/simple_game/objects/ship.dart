@@ -84,7 +84,7 @@ class Ship extends Sprite with GameObject {
     var si = sin(shieldExpansion);
 //    var si2 = sin(shieldExpansion / 1.2);
 
-    void _transformShield(IAnimatable obj, double sino, [double rotDir]) {
+    void _transformShield(DisplayObject obj, double sino, [double rotDir]) {
       var p = .5 + sino / 2;
       obj.alpha = 0.13 + (1 - p) * .45;
 //      obj.scale = 0.8 + p * .4;

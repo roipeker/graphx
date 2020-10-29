@@ -4,7 +4,7 @@ import '../../graphx.dart';
 
 
 
-class Shape extends IAnimatable {
+class Shape extends DisplayObject {
   Graphics _graphics;
   static final _sHelperMatrix = GxMatrix();
 
@@ -17,7 +17,7 @@ class Shape extends IAnimatable {
   Graphics get graphics => _graphics ??= Graphics();
 
   @override
-  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
+  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
@@ -58,7 +58,7 @@ class Shape extends IAnimatable {
   }
 
   @override
-  IAnimatable hitTest(GxPoint localPoint, [bool useShape = false]) {
+  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !touchable) return null;
     return (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
   }

@@ -2,13 +2,13 @@ import 'dart:ui';
 
 import '../../graphx.dart';
 
-class StaticText extends IAnimatable {
+class StaticText extends DisplayObject {
   Paragraph _paragraph;
 
   static final _sHelperMatrix = GxMatrix();
 
   @override
-  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
+  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     validate();
     out ??= GxRect();
     out.setTo(0, 0, intrinsicWidth, textHeight);

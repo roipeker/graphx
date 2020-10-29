@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import '../../graphx.dart';
 
-class Bitmap extends IAnimatable {
+class Bitmap extends DisplayObject {
   static final _sHelperMatrix = GxMatrix();
   static final _sHelperPoint = GxPoint();
 
@@ -45,7 +45,7 @@ class Bitmap extends IAnimatable {
   }
 
   @override
-  GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {
+  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
