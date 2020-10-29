@@ -1,0 +1,27 @@
+name: exampleGraphx
+description: Graphx rendering prototype examples
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^0.19.1
+  graphx:
+    path: ../
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/game/
+    - assets/game/flare/
