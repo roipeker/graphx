@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:graphx/graphx/display/shape.dart';
-import 'package:graphx/graphx/utils/math_utils.dart';
+import 'package:graphx/graphx.dart';
+
 
 class GraphxPreloader extends Shape {
   double borderW = 4, radius = 40, progress = .5;

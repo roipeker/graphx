@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:graphx/graphx/display/display_object_container.dart';
-import 'package:graphx/graphx/display/shape.dart';
-import 'package:graphx/graphx/display/sprite.dart';
-import 'package:graphx/graphx/display/static_text.dart';
-import 'package:graphx/graphx/widgets/graphx_widget.dart';
-import 'package:graphx/graphx/render/gx_icon.dart';
-import 'package:graphx/graphx/core/scene_controller.dart';
-import 'package:graphx/graphx/core/scene_painter.dart';
-import 'package:graphx/graphx/utils/math_utils.dart';
+import 'package:graphx/graphx.dart';
+
 import 'dart:ui';
-import '../gameutils.dart';
+
 import 'chart_nico.dart';
 
 class ChartDemo extends StatelessWidget {

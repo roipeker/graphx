@@ -1,14 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:graphx/gameutils.dart';
-import 'package:graphx/graphx/display/display_object_container.dart';
-import 'package:graphx/graphx/display/shape.dart';
-import 'package:graphx/graphx/display/sprite.dart';
-import 'package:graphx/graphx/display/static_text.dart';
-import 'package:graphx/graphx/render/gx_icon.dart';
-import 'package:graphx/graphx/core/scene_painter.dart';
-import 'package:graphx/graphx/utils/math_utils.dart';
+import 'package:graphx/src/gameutils/gameutils.dart';
+import 'package:graphx/graphx.dart';
+
 
 class DemoGraphXStats extends RootScene {
   @override

@@ -1,4 +1,5 @@
-import 'package:graphx/graphx/core/graphx.dart';
+import 'package:graphx/graphx.dart';
+
 
 class JugglerDemoMain extends RootScene {
   @override

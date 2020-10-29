@@ -2,10 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:graphx/demos/simple_game/utils/game_mixins.dart';
-import 'package:graphx/graphx/core/graphx.dart';
-import 'package:graphx/graphx/utils/pools.dart';
+import 'package:graphx/graphx.dart';
 
+import '../utils/game_mixins.dart';
 import 'bullet.dart';
 
 class Ship extends Sprite with GameObject {

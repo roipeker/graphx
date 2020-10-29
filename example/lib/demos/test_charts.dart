@@ -1,16 +1,5 @@
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:graphx/graphx/display/bitmap.dart';
-import 'package:graphx/graphx/display/shape.dart';
-import 'package:graphx/graphx/display/sprite.dart';
-import 'package:graphx/graphx/display/static_text.dart';
-import 'package:graphx/graphx/events/pointer_data.dart';
-import 'package:graphx/graphx/geom/gxpoint.dart';
-import 'package:graphx/graphx/render/gx_icon.dart';
-import 'package:graphx/graphx/core/scene_painter.dart';
-import 'package:graphx/graphx/textures/base_texture.dart';
+import 'package:graphx/graphx.dart';
 
 class GraphChartDemo extends RootScene {
   @override

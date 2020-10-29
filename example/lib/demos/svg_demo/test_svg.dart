@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:graphx/demos/svg_demo/svg_assets.dart';
-import 'package:graphx/demos/svg_demo/svg_utils.dart';
-import 'package:graphx/graphx/core/graphx.dart';
-import 'package:graphx/graphx/render/svg_shape.dart';
+import 'package:graphx/graphx.dart';
+
+import 'svg_assets.dart';
+import 'svg_utils.dart';
+
 
 class TestSVGMain extends RootScene {
   @override

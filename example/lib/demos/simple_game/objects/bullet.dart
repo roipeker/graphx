@@ -1,9 +1,7 @@
-import 'dart:math';
 
-import 'package:graphx/demos/simple_game/utils/game_mixins.dart';
-import 'package:graphx/gameutils.dart';
-import 'package:graphx/graphx/core/graphx.dart';
+import 'package:graphx/graphx.dart';
 
+import '../utils/game_mixins.dart';
 import 'ship.dart';
 
 class Bullet with GameObject {

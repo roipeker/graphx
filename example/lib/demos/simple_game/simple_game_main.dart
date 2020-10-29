@@ -1,6 +1,5 @@
-import 'package:graphx/gameutils.dart';
-import 'package:graphx/graphx/core/graphx.dart';
-import 'package:graphx/graphx/utils/texture_utils.dart';
+
+import 'package:graphx/graphx.dart';
 
 import 'game_world.dart';
 

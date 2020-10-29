@@ -1,12 +1,9 @@
-import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:graphx/demos/simple_game/utils/game_mixins.dart';
-import 'package:graphx/graphx/display/sprite.dart';
-import 'package:graphx/graphx/core/graphx.dart';
-import 'package:graphx/graphx/textures/base_texture.dart';
-import 'package:graphx/graphx/utils/assets_loader.dart';
+import 'package:graphx/graphx.dart';
+
+import '../utils/game_mixins.dart';
+
 
 class GameBackground extends Sprite with GameObject {
   Bitmap bg;

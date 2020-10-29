@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graphx/graphx/core/graphx.dart';
-import 'package:graphx/graphx/widgets/graphx_widget.dart';
-
-import 'simple_game/simple_game_main.dart';
+import 'package:graphx/graphx.dart';
 
 class DemoSceneTester extends StatelessWidget {
   final RootScene backScene;

@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../graphx/core/graphx.dart';
+import 'package:graphx/graphx.dart';
 
 class ChartNico extends RootScene {
   final List<Venta> lista;

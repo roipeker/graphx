@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:graphx/graphx/display/shape.dart';
-import 'package:graphx/graphx/display/sprite.dart';
-import 'package:graphx/graphx/core/scene_painter.dart';
-import 'package:graphx/graphx/utils/math_utils.dart';
-import 'package:graphx/graphx/utils/pools.dart';
+import 'package:graphx/graphx.dart';
+
 
 class Test2Scene extends RootScene {
   @override

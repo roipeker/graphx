@@ -1,13 +1,12 @@
+
 import 'dart:ui';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:graphx/graphx/geom/gxrect.dart';
-import 'package:graphx/graphx/render/graphics.dart';
-import 'package:graphx/graphx/render/svg_shape.dart';
+import 'package:graphx/graphx.dart';
 
 class SvgUtils {
   static Future<Picture> svgStringToPicutre(String rawSvg) async {
-    final DrawableRoot svgRoot = await svg.fromSvgString(rawSvg, rawSvg);
+    final svgRoot = await svg.fromSvgString(rawSvg, rawSvg);
     print(svgRoot.viewport.width);
     return svgRoot.toPicture();
   }

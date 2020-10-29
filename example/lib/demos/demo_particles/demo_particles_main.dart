@@ -1,14 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:graphx/gameutils.dart';
-import 'package:graphx/graphx/core/graphx.dart';
-import 'package:graphx/graphx/render/filters/color_filter.dart';
-import 'package:graphx/graphx/render/graphics.dart';
-import 'package:graphx/graphx/render/movie_clip.dart';
-import 'package:graphx/graphx/render/particles/simple_particle_system.dart';
-import 'package:graphx/graphx/utils/math_utils.dart';
-import 'package:graphx/graphx/utils/texture_utils.dart';
+import 'package:graphx/src/gameutils/gameutils.dart';
+import 'package:graphx/graphx.dart';
+
 
 class DemoParticlesMain extends RootScene {
   @override
