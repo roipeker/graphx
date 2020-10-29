@@ -3,9 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
-import '../../graphx.dart';
-
-
+import '../geom/geom.dart';
+import '../utils/utils.dart';
 
 class Graphics with RenderUtilMixin implements GxRenderable {
   final _drawingQueue = <GraphicsDrawingData>[];
@@ -567,8 +566,6 @@ class GraphicsDrawingData {
   /// Mostly intended for direct `Graphics.pushData` and `Graphics.removeData`
   /// manipulation.
   GraphicsDrawingData clone([bool cloneFill = false, bool clonePath = false]) {
-
-    //TODO this doesnt work in flutter v1.20.2
     final _fill = cloneFill ? fill?.clone() : fill;
     final _path = clonePath ? (path != null ? Path.from(path) : null) : path;
     return GraphicsDrawingData(_fill, _path)
@@ -582,7 +579,7 @@ class GraphicsDrawingData {
 // compute grad?
 }
 
-extension ExtSkiaPaint on Paint {
+extension ExtSkiaPaintCustom on Paint {
   Paint clone([Paint out]) {
     out ??= Paint();
     out.maskFilter = maskFilter;
