@@ -1,10 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
-
 
 import '../../graphx.dart';
 import 'display_object_container.dart';
