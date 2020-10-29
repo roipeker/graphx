@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import '../../graphx/geom/gxrect.dart';
-import '../../graphx/textures/base_texture.dart';
-import 'interfases.dart';
+import '../../graphx.dart';
+
+
 
 mixin RenderUtilMixin {
   Picture createPicture([void Function(Canvas) prepaintCallback]) {

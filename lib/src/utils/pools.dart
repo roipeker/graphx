@@ -1,6 +1,6 @@
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
-import '../../graphx/geom/gxrect.dart';
+
+
+import '../../graphx.dart';
 
 abstract class Pool {
   static final _points = <GxPoint>[];

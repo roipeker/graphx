@@ -1,4 +1,5 @@
-import '../../graphx/animations/updatable.dart';
+import '../../graphx.dart';
+
 
 class JugglerObjectEventData {
   IUpdatable target;

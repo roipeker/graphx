@@ -2,7 +2,9 @@ import 'dart:math' as math;
 
 import 'package:vector_math/vector_math_64.dart';
 
-import '../../graphx/geom/gxpoint.dart';
+import '../../graphx.dart';
+
+
 
 double deg2rad(double deg) => deg / 180.0 * math.pi;
 double rad2deg(double rad) => rad / math.pi * 180.0;

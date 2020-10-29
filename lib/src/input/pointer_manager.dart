@@ -1,8 +1,9 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-import '../../graphx/events/pointer_data.dart';
-import '../../graphx/events/signal.dart';
+import '../../graphx.dart';
+
+
 
 class PointerManager<T extends PointerEventData> {
   SystemMouseCursor get cursor => _cursor;

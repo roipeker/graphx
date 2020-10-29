@@ -1,9 +1,4 @@
-import '../../graphx/display/display_object_container.dart';
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
-import '../../graphx/geom/gxrect.dart';
-import '../../graphx/render/graphics.dart';
-import '../../graphx/utils/matrix_utils.dart';
+import '../../graphx.dart';
 import 'display_object.dart';
 
 class Sprite extends DisplayObjectContainer {
@@ -13,8 +8,8 @@ class Sprite extends DisplayObjectContainer {
     return '$runtimeType (Sprite)$msg';
   }
 
-  static GxMatrix _sHelperMatrix = GxMatrix();
-  static GxPoint _sHelperPoint = GxPoint();
+  static final _sHelperMatrix = GxMatrix();
+  static final _sHelperPoint = GxPoint();
 
   Graphics _graphics;
 

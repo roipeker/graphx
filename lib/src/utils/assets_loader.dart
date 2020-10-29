@@ -4,8 +4,9 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
-import '../../graphx/textures/base_texture.dart';
-import '../../graphx/utils/texture_utils.dart';
+import '../../graphx.dart';
+
+
 
 abstract class AssetLoader {
   static Future<GxTexture> loadImageTexture(

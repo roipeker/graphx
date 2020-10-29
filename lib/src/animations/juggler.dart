@@ -1,8 +1,6 @@
-import '../../graphx/animations/tween.dart';
-import '../../graphx/events/mixins.dart';
-import '../../graphx/events/signal_data.dart';
-import 'delayed_call.dart';
-import 'updatable.dart';
+
+import '../../graphx.dart';
+
 
 class Juggler {
   static int _currentObjectId = 0;

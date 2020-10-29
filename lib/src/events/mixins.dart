@@ -2,10 +2,8 @@ import 'dart:collection';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 
-import '../../graphx/events/pointer_data.dart';
-import '../../graphx/events/signal_data.dart';
+import '../../graphx.dart';
 import 'signal.dart';
 
 mixin EventDispatcherMixin implements Listenable {

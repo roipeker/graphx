@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../../graphx/render/particles/simple_particle_system.dart';
-import '../../../graphx/textures/base_texture.dart';
+import '../../../graphx.dart';
+
 
 class SimpleParticle {
   SimpleParticle $next;

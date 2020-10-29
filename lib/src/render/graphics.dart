@@ -3,11 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
-import '../../graphx/geom/gxrect.dart';
-import '../../graphx/utils/interfases.dart';
-import '../../graphx/utils/mixins.dart';
+import '../../graphx.dart';
+
+
 
 class Graphics with RenderUtilMixin implements GxRenderable {
   final _drawingQueue = <GraphicsDrawingData>[];

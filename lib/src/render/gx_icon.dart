@@ -2,16 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart' as widgets;
 
-import '../../graphx/display/display_object.dart';
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
-import '../../graphx/geom/gxrect.dart';
-import '../../graphx/utils/matrix_utils.dart';
+import '../../graphx.dart';
 
 class GxIcon extends IAnimatable {
-  static GxMatrix _sHelperMatrix = GxMatrix();
-
-  GxRect _localBounds = GxRect();
+  static final _sHelperMatrix = GxMatrix();
+  final _localBounds = GxRect();
 
   @override
   GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {

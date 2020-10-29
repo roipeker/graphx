@@ -1,8 +1,7 @@
 import 'dart:math';
 
-import '../../graphx/core/graphx.dart';
-import '../../graphx/events/mixins.dart';
-import '../../graphx/events/signal_data.dart';
+
+import '../../graphx.dart';
 import 'updatable.dart';
 
 class GxDelayedCall with IUpdatable, JugglerSignalMixin {

@@ -2,12 +2,9 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
-import '../../graphx/core/scene_controller.dart';
-import '../../graphx/display/sprite.dart';
-import '../../graphx/events/signal.dart';
-import '../display/stage.dart';
-import '../events/mixins.dart';
-import '../events/pointer_data.dart';
+import '../../graphx.dart';
+
+
 
 class RootScene extends Sprite {
   ScenePainter owner;

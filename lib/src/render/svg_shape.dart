@@ -1,11 +1,12 @@
 import 'dart:ui';
 
-import '../../graphx/core/graphx.dart';
-import '../../graphx/utils/matrix_utils.dart';
+import '../../graphx.dart';
+import '../core/core.dart';
+import '../utils/utils.dart';
 
 class SvgShape extends IAnimatable {
-  static GxMatrix _sHelperMatrix = GxMatrix();
-  static GxPoint _sHelperPoint = GxPoint();
+  static final GxMatrix _sHelperMatrix = GxMatrix();
+  static final GxPoint _sHelperPoint = GxPoint();
 
   Color _tint;
 

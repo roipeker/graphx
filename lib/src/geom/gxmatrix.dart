@@ -1,8 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import '../../graphx/geom/gxpoint.dart';
 import 'package:vector_math/vector_math_64.dart';
+
+import 'geom.dart';
+
+
 
 class GxMatrix {
   double a, b, c, d, tx, ty;

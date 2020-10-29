@@ -1,6 +1,7 @@
+
 import 'package:flutter/scheduler.dart';
 
-import '../../graphx/events/signal.dart';
+import '../events/events.dart';
 
 class GxTicker {
   GxTicker();

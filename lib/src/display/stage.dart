@@ -1,13 +1,6 @@
 import 'dart:ui';
 
-import '../../graphx/animations/juggler.dart';
-import '../../graphx/core/graphx.dart';
-import '../../graphx/display/display_object_container.dart';
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
-import '../../graphx/geom/gxrect.dart';
-import '../../graphx/input/keyboard_manager.dart';
-import '../../graphx/input/pointer_manager.dart';
+import '../../graphx.dart';
 import '../core/scene_painter.dart';
 import '../events/mixins.dart';
 import 'display_object.dart';
@@ -16,7 +9,7 @@ class Stage extends DisplayObjectContainer
     with ResizeSignalMixin, TickerSignalMixin {
   final ScenePainter scene;
 
-  static GxMatrix _sMatrix = GxMatrix();
+  static final _sMatrix = GxMatrix();
 
   bool maskBounds = false;
 

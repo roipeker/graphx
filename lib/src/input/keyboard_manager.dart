@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../graphx/events/keyboard_data.dart';
-import '../../graphx/events/signal.dart';
+import '../../graphx.dart';
 
 class KeyboardManager<T extends KeyboardEventData> {
   FocusNode focusNode = FocusNode();

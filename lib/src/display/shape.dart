@@ -1,16 +1,12 @@
 import 'dart:ui';
 
-import '../../graphx/display/display_object.dart';
-import '../../graphx/display/display_object_container.dart';
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
-import '../../graphx/geom/gxrect.dart';
-import '../../graphx/render/graphics.dart';
-import '../../graphx/utils/matrix_utils.dart';
+import '../../graphx.dart';
+
+
 
 class Shape extends IAnimatable {
   Graphics _graphics;
-  static GxMatrix _sHelperMatrix = GxMatrix();
+  static final _sHelperMatrix = GxMatrix();
 
   @override
   String toString() {

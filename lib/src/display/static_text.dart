@@ -1,15 +1,11 @@
 import 'dart:ui';
 
-import '../../graphx/display/display_object.dart';
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxrect.dart';
-import '../../graphx/utils/matrix_utils.dart';
-import '../../graphx/utils/painter_utils.dart';
+import '../../graphx.dart';
 
 class StaticText extends IAnimatable {
   Paragraph _paragraph;
 
-  static GxMatrix _sHelperMatrix = GxMatrix();
+  static final _sHelperMatrix = GxMatrix();
 
   @override
   GxRect getBounds(IAnimatable targetSpace, [GxRect out]) {

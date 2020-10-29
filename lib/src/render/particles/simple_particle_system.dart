@@ -1,14 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
 
-import '../../../graphx/display/display_object.dart';
-import '../../../graphx/render/particles/simple_particle.dart';
-import '../../../graphx/textures/base_texture.dart';
-import '../../core/graphx.dart';
+import '../../../graphx.dart';
 
 class SimpleParticleSystem extends IAnimatable {
-  static GxMatrix _sHelperMatrix = GxMatrix();
-  static GxPoint _sHelperPoint = GxPoint();
+  static final _sHelperMatrix = GxMatrix();
+  static final _sHelperPoint = GxPoint();
   static Random random = Random();
 
   bool useWorldSpace = false;

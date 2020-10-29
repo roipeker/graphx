@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 
-import '../../graphx/display/display_object.dart';
-import '../../graphx/geom/gxpoint.dart';
+import '../../graphx.dart';
 
 enum PointerEventType { scroll, cancel, move, up, down, enter, exit, hover }
 

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxrect.dart';
+import '../../graphx.dart';
+
 
 abstract class MatrixUtils {
   static void skew(GxMatrix matrix, double skewX, double skewY) {
@@ -24,18 +24,18 @@ abstract class MatrixUtils {
     out ??= GxRect();
     //      out = out.getBounds(matrix);
 //      return out;
-    double minX = 10000000.0;
-    double maxX = -10000000.0;
-    double minY = 10000000.0;
-    double maxY = -10000000.0;
-    double tx1 = matrix.a * rect.x + matrix.c * rect.y + matrix.tx;
-    double ty1 = matrix.d * rect.y + matrix.b * rect.x + matrix.ty;
-    double tx2 = matrix.a * rect.x + matrix.c * rect.bottom + matrix.tx;
-    double ty2 = matrix.d * rect.bottom + matrix.b * rect.x + matrix.ty;
-    double tx3 = matrix.a * rect.right + matrix.c * rect.y + matrix.tx;
-    double ty3 = matrix.d * rect.y + matrix.b * rect.right + matrix.ty;
-    double tx4 = matrix.a * rect.right + matrix.c * rect.bottom + matrix.tx;
-    double ty4 = matrix.d * rect.bottom + matrix.b * rect.right + matrix.ty;
+    var minX = 10000000.0;
+    var maxX = -10000000.0;
+    var minY = 10000000.0;
+    var maxY = -10000000.0;
+    var tx1 = matrix.a * rect.x + matrix.c * rect.y + matrix.tx;
+    var ty1 = matrix.d * rect.y + matrix.b * rect.x + matrix.ty;
+    var tx2 = matrix.a * rect.x + matrix.c * rect.bottom + matrix.tx;
+    var ty2 = matrix.d * rect.bottom + matrix.b * rect.x + matrix.ty;
+    var tx3 = matrix.a * rect.right + matrix.c * rect.y + matrix.tx;
+    var ty3 = matrix.d * rect.y + matrix.b * rect.right + matrix.ty;
+    var tx4 = matrix.a * rect.right + matrix.c * rect.bottom + matrix.tx;
+    var ty4 = matrix.d * rect.bottom + matrix.b * rect.right + matrix.ty;
     if (minX > tx1) minX = tx1;
     if (minX > tx2) minX = tx2;
     if (minX > tx3) minX = tx3;

@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
+import 'geom.dart';
+
 
 class GxRect {
   static GxRect fromNative(Rect nativeRect) {
@@ -56,14 +56,14 @@ class GxRect {
   }
 
   static List<GxPoint> _sHelperPositions;
-  static GxPoint _sHelperPoint = GxPoint();
+  static final _sHelperPoint = GxPoint();
 
   GxRect getBounds(GxMatrix matrix, [GxRect out]) {
     out ??= GxRect();
-    double minX = 10000000.0;
-    double maxX = -10000000.0;
-    double minY = 10000000.0;
-    double maxY = -10000000.0;
+    var minX = 10000000.0;
+    var maxX = -10000000.0;
+    var minY = 10000000.0;
+    var maxY = -10000000.0;
     final positions = getPositions(_sHelperPositions);
     for (var point in positions) {
       matrix.transformCoords(point.x, point.y, _sHelperPoint);

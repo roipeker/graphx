@@ -1,15 +1,10 @@
 import 'dart:ui';
 
-import '../../graphx/display/display_object.dart';
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
-import '../../graphx/geom/gxrect.dart';
-import '../../graphx/textures/base_texture.dart';
-import '../../graphx/utils/matrix_utils.dart';
+import '../../graphx.dart';
 
 class Bitmap extends IAnimatable {
-  static GxMatrix _sHelperMatrix = GxMatrix();
-  static GxPoint _sHelperPoint = GxPoint();
+  static final _sHelperMatrix = GxMatrix();
+  static final _sHelperPoint = GxPoint();
 
   @override
   String toString() {

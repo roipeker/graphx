@@ -1,12 +1,8 @@
-import 'package:flutter/widgets.dart';
 
-import '../../graphx/animations/juggler.dart';
-import '../../graphx/core/graphx.dart';
-import '../../graphx/core/scene_painter.dart';
-import '../../graphx/input/keyboard_manager.dart';
-import '../../graphx/input/pointer_manager.dart';
-import '../input/input_converter.dart';
-import '../ticker/gx_ticker.dart';
+import 'package:flutter/material.dart';
+
+import '../../graphx.dart';
+
 
 class SceneConfig {
   bool useKeyboard;

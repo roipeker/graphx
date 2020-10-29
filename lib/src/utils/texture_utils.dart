@@ -1,6 +1,5 @@
-import '../../graphx/core/graphx.dart';
-import '../../graphx/render/graphics.dart';
-import '../../graphx/textures/base_texture.dart';
+
+import '../../graphx.dart';
 
 abstract class TextureUtils {
   static Shape _helperShape = Shape();

@@ -1,6 +1,9 @@
 import 'dart:ui';
 
-import '../../graphx/geom/gxrect.dart';
+import '../../graphx.dart';
+
+
+
 
 class GxTexture {
   Image source;

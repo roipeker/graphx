@@ -1,6 +1,8 @@
-import '../../graphx/display/bitmap.dart';
-import '../../graphx/events/signal.dart';
-import '../../graphx/textures/base_texture.dart';
+import '../../graphx.dart';
+import '../events/events.dart';
+import '../textures/textures.dart';
+
+
 
 class MovieClip extends Bitmap {
   double timeDilation = 1;

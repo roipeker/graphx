@@ -1,6 +1,4 @@
-import '../../graphx/events/mixins.dart';
-import '../../graphx/events/signal_data.dart';
-import 'updatable.dart';
+import '../../graphx.dart';
 
 class GxTween with IUpdatable, JugglerSignalMixin {
   Object target;
@@ -26,7 +24,7 @@ class GxTween with IUpdatable, JugglerSignalMixin {
   @override
   void update(double delta) {}
 
-  static List<GxTween> _pool = [];
+  static final _pool = <GxTween>[];
   static void toPool(GxTween obj) {
     /// reset all references to make sure is garbage collected.
     obj.target = null;

@@ -1,19 +1,12 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-//import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
-import 'package:graphx/graphx/display/shape.dart';
-import 'package:graphx/graphx/events/mixins.dart';
-import 'package:graphx/graphx/events/pointer_data.dart';
-import 'package:graphx/graphx/geom/gxmatrix.dart';
-import 'package:graphx/graphx/geom/gxpoint.dart';
-import 'package:graphx/graphx/geom/gxrect.dart';
-import 'package:graphx/graphx/textures/base_texture.dart';
-import 'package:graphx/graphx/utils/math_utils.dart';
-import 'package:graphx/graphx/utils/painter_utils.dart';
 
+
+import '../../graphx.dart';
 import 'display_object_container.dart';
 import 'stage.dart';
 

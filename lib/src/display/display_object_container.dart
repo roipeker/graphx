@@ -1,8 +1,4 @@
-import '../../graphx/display/display_object.dart';
-import '../../graphx/events/pointer_data.dart';
-import '../../graphx/geom/gxmatrix.dart';
-import '../../graphx/geom/gxpoint.dart';
-import '../../graphx/geom/gxrect.dart';
+import '../../graphx.dart';
 
 typedef SortChildrenCallback = int Function(
     IAnimatable object1, IAnimatable object2);
@@ -16,8 +12,8 @@ abstract class DisplayObjectContainer extends IAnimatable {
     return '$runtimeType (DisplayObjectContainer)$msg';
   }
 
-  static GxMatrix _sHitTestMatrix = GxMatrix();
-  static GxPoint _sHitTestPoint = GxPoint();
+  static final _sHitTestMatrix = GxMatrix();
+  static final _sHitTestPoint = GxPoint();
   static GxMatrix $sBoundsMatrix = GxMatrix();
   static GxPoint $sBoundsPoint = GxPoint();
 
