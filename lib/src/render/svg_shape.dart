@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import '../../graphx.dart';
-import '../core/core.dart';
 import '../utils/utils.dart';
 
 class SvgShape extends IAnimatable {

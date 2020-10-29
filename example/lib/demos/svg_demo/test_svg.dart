@@ -100,9 +100,9 @@ class TestSVGMain extends RootScene {
       } else if (e.arrowRight) {
         moveBlendMode(1);
       } else if (e.arrowDown) {
-        print("DPW!");
+        print('DPW!');
         isBlend1 = !isBlend1;
-        print("Current blend is: ${isBlend1 ? 1 : 2}");
+        print('Current blend is: ${isBlend1 ? 1 : 2}');
       }
     });
 

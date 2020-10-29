@@ -57,10 +57,10 @@ abstract class DisplayObjectContainer extends IAnimatable {
     } else if (len == 1) {
       children[0].getBounds(targetSpace, out);
     } else {
-      double minx = 10000000.0;
-      double maxx = -10000000.0;
-      double miny = 10000000.0;
-      double maxy = -10000000.0;
+      var minx = 10000000.0;
+      var maxx = -10000000.0;
+      var miny = 10000000.0;
+      var maxy = -10000000.0;
       final len = numChildren;
       for (var i = 0; i < len; ++i) {
         children[i].getBounds(targetSpace, out);

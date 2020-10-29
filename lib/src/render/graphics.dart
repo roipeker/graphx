@@ -48,6 +48,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return out;
   }
 
+  @override
   GxRect getBounds([GxRect out]) {
     Rect r;
     _drawingQueue.forEach((e) {
@@ -374,7 +375,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     final startAngle = (-1 * pi / 2) + rotation;
     final len = points * 2;
     final delta = pi * 2 / len;
-    final polys = List<Offset>();
+    final polys = <Offset>[];
     for (var i = 0; i < len; ++i) {
       final r = i.isOdd ? innerRadius : radius;
       final a = i * delta + startAngle;
@@ -441,13 +442,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   Path getPaths() {
-    Path output = Path();
+    var output = Path();
     _drawingQueue.forEach((graph) {
       output = Path.combine(PathOperation.union, output, graph.path);
     });
     return output;
   }
 
+  @override
   void paint(Canvas canvas) {
     // TODO : add mask support.
     if (isMask) {

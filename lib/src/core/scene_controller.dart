@@ -50,7 +50,7 @@ class SceneController {
   InputConverter $inputConverter;
 
   SceneConfig get config => _config;
-  SceneConfig _config = SceneConfig();
+  final  _config = SceneConfig();
   int id = -1;
   bool _isInited = false;
 

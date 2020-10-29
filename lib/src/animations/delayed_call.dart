@@ -1,6 +1,5 @@
 import 'dart:math';
 
-
 import '../../graphx.dart';
 import 'updatable.dart';
 
