@@ -11,7 +11,7 @@ class GameUtils {
     return rnd.nextDouble();
   }
 
-  static rndFromList<E>(List<E> list) {
+  static E rndFromList<E>(List<E> list) {
     final idx = rndRangeInt(0, list.length - 1);
     return list[idx];
   }
