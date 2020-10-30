@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:graphx/graphx/core/graphx.dart';
+
 import 'package:graphx/graphx/events/mixins.dart';
 import 'package:graphx/graphx/events/signal_data.dart';
 
@@ -14,7 +14,9 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
   JugglerObjectEventData _eventData;
 
   double get currentTime => _currentTime;
+
   double get totalTime => _totalTime;
+
   bool get isComplete => repeatCount == 1 && _currentTime >= _totalTime;
 
   GxDelayedCall(Function callback, double delay) {
@@ -26,6 +28,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
   void update(double delta) {
     var prevTime = _currentTime;
     _currentTime += delta;
+//    print('delta: $delta // $_currentTime');
     if (_currentTime > _totalTime) {
       _currentTime = _totalTime;
     }
@@ -42,7 +45,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
         /// during callback, people might wanna call [reset] and readd this to the
         /// juggler, so the signal has to be dispatched *before* executing the
         /// callback.
-        $onRemovedFromJuggler?.dispatch(_eventData);
+        onRemovedFromJuggler.dispatch(_eventData);
         $callback?.call();
       }
     }
@@ -63,6 +66,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
   }
 
   static List<GxDelayedCall> _pool = [];
+
   static void toPool(GxDelayedCall obj) {
     /// reset all references to make sure is garbage collected.
     obj.target = null;

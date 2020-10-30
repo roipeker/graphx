@@ -7,6 +7,8 @@ import 'package:graphx/graphx/render/filters/color_filter.dart';
 import 'package:graphx/graphx/render/graphics.dart';
 import 'package:graphx/graphx/render/movie_clip.dart';
 import 'package:graphx/graphx/render/particles/simple_particle_system.dart';
+import 'package:graphx/graphx/textures/base_texture.dart';
+import 'package:graphx/graphx/textures/gx_texture_utils.dart';
 import 'package:graphx/graphx/utils/math_utils.dart';
 import 'package:graphx/graphx/utils/texture_utils.dart';
 
@@ -23,11 +25,10 @@ class DemoParticlesMain extends RootScene {
     owner.core.resumeTicker();
     owner.needsRepaint = true;
 
-    testParticles();
-
     // stage.color = Colors.green.value;
     // createTextures();
     // initUI();
+    testParticles();
   }
 
   Future<void> testParticles() async {

@@ -1,18 +1,20 @@
+import 'package:graphx/graphx/animations/easings.dart';
 import 'package:graphx/graphx/animations/tween.dart';
 import 'package:graphx/graphx/events/mixins.dart';
 import 'package:graphx/graphx/events/signal_data.dart';
+
 import 'delayed_call.dart';
 import 'updatable.dart';
 
 class Juggler {
   static int _currentObjectId = 0;
-
   final objects = <IUpdatable>[];
   final objectsIds = <IUpdatable, int>{};
   double _elapsed = 0;
   double timeScale = 1;
 
   double get elapsedTime => _elapsed;
+
   static int _getNextId() => ++_currentObjectId;
 
   int add(IUpdatable obj) => addWithId(obj, _getNextId());
@@ -23,7 +25,7 @@ class Juggler {
     if (obj != null && !objectsIds.containsKey(obj)) {
       /// check if it has events.
       if (obj is JugglerSignalMixin) {
-        (obj as JugglerSignalMixin)?.$onRemovedFromJuggler?.addOnce(_onRemove);
+        (obj as JugglerSignalMixin)?.onRemovedFromJuggler?.add(_onRemove);
       }
       objects.add(obj);
       objectsIds[obj] = id;
@@ -40,7 +42,7 @@ class Juggler {
     if (obj != null && objectsIds.containsKey(obj)) {
       /// check if it has events.
       if (obj is JugglerSignalMixin) {
-        (obj as JugglerSignalMixin)?.$onRemovedFromJuggler?.remove(_onRemove);
+        (obj as JugglerSignalMixin).onRemovedFromJuggler.remove(_onRemove);
       }
       var index = objects.indexOf(obj);
       objects[index] = null;
@@ -68,9 +70,9 @@ class Juggler {
       /// var tween
       var obj = objects[i];
       if (obj is GxTween) {
-        var tween = obj as GxTween;
+        var tween = obj;
         if (tween.target == target) {
-          tween.$onRemovedFromJuggler?.remove(_onRemove);
+          tween.onRemovedFromJuggler.remove(_onRemove);
           objects[i] = null;
           objectsIds.remove(obj);
         }
@@ -84,7 +86,7 @@ class Juggler {
     for (var i = 0; i < objects.length; ++i) {
       var obj = objects[i];
       if (obj is GxDelayedCall && obj.target == callback) {
-        obj.$onRemovedFromJuggler?.remove(_onRemove);
+        obj.onRemovedFromJuggler.remove(_onRemove);
         objects[i] = null;
         objectsIds.remove(obj);
       }
@@ -96,7 +98,7 @@ class Juggler {
     if (target == null) return false;
     for (var i = 0; i < objects.length; ++i) {
       var obj = objects[i];
-      if (obj is GxTween && (obj as GxTween).target == target) return true;
+      if (obj is GxTween && obj.target == target) return true;
     }
     return false;
   }
@@ -138,28 +140,62 @@ class Juggler {
     return add(obj);
   }
 
-  void _onPoolTweenComplete(JugglerObjectEventData e) {
-    GxTween.toPool(e.target as GxTween);
-  }
-
   void _onPoolDelayedCallComplete(JugglerObjectEventData e) {
     GxDelayedCall.toPool(e.target as GxDelayedCall);
   }
 
   /// TODO: add proper tweens properties.
-  int tween(Object target, double time) {
+  /// and evaluate target as Object and map as required with reflection.
+  int tween(
+    Map<String, dynamic> target,
+    double time,
+    Map<String, dynamic> properties, {
+    double delay = 0,
+    Function ease = Transitions.linear,
+    Function onComplete,
+    Function onUpdate,
+    Function onStart,
+  }) {
     if (target == null) throw 'target must not be null';
-    var obj = GxTween.fromPool(target, time);
-
-    /// TODO: for each prop do something.
+    var obj = GxTween.fromPool(target, time, ease);
+    for (String prop in properties.keys) {
+      var value = properties[prop];
+      if (obj.hasSpecialProperty(prop)) {
+        obj.setSpecialProperty(prop, value);
+      } else if (target.containsKey(GxTween.getPropertyName(prop))) {
+        obj.animate(prop, value as double);
+      } else {
+        throw "Invalid property: '$prop'";
+      }
+    }
+    obj.delay = delay;
+    obj.transitionFun = ease;
+    obj.onStart = onStart;
+    obj.onComplete = onComplete;
+    obj.onUpdate = onUpdate;
+    var id = add(obj);
     obj.onRemovedFromJuggler.add(_onPoolTweenComplete);
-    return add(obj);
+    return id;
+  }
+
+  GxTween getTweenById(int id) {
+    for (var i = 0; i < objects.length; ++i) {
+      var obj = objects[i];
+      if (objectsIds[obj] == id) return obj;
+    }
+    return null;
+  }
+
+  void _onPoolTweenComplete(JugglerObjectEventData e) {
+    GxTween.toPool(e.target as GxTween);
   }
 
   /// advanced the objects by the specific time (in seconds).
   void update(double time) {
     var numObjects = objects.length;
     var currentIndex = 0;
+//    print('update objects::: $numObjects');
+
     int i;
     _elapsed += time;
     time *= timeScale;

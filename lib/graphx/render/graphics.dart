@@ -8,6 +8,11 @@ import 'package:graphx/graphx/geom/gxrect.dart';
 import 'package:graphx/graphx/utils/interfases.dart';
 import 'package:graphx/graphx/utils/mixins.dart';
 
+enum GradientType {
+  linear,
+  radial,
+}
+
 class Graphics with RenderUtilMixin implements GxRenderable {
   final _drawingQueue = <GraphicsDrawingData>[];
   GraphicsDrawingData _currentDrawing = GraphicsDrawingData(null, Path());
@@ -144,6 +149,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   Graphics beginGradientFill(
+    GradientType type,
     List<int> colors, [
     List<double> alphas,
     List<double> ratios,
@@ -151,24 +157,44 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     Alignment end,
     GradientTransform transform,
     Rect gradientBox,
+
+    /// only radial
+    double focalRadius = 1.0,
   ]) {
     final _colors = _GraphUtils.colorsFromHex(colors, alphas);
-    final gradient = LinearGradient(
-      colors: _colors,
-      stops: ratios,
-      begin: begin ?? Alignment.topLeft,
-      end: end ?? Alignment.topRight,
-      tileMode: TileMode.clamp,
-      transform: transform,
-    );
+    begin ??= Alignment.topLeft;
+    end ??= Alignment.topRight;
+    Gradient _gradient;
+    if (type == GradientType.linear) {
+      _gradient = LinearGradient(
+        colors: _colors,
+        stops: ratios,
+        begin: begin,
+        end: end,
+        tileMode: TileMode.clamp,
+        transform: transform,
+      );
+    } else {
+      _gradient = RadialGradient(
+        center: begin,
+        focal: end,
+        radius: 0.5,
+        colors: _colors,
+        stops: ratios,
+        tileMode: TileMode.clamp,
+        focalRadius: focalRadius,
+        transform: transform,
+      );
+    }
+
     final paint = Paint();
     paint.style = PaintingStyle.fill;
 //    paint.isAntiAlias = true;
     _addFill(paint);
     if (gradientBox != null) {
-      _currentDrawing.fill.shader = gradient.createShader(gradientBox);
+      _currentDrawing.fill.shader = _gradient.createShader(gradientBox);
     } else {
-      _currentDrawing.gradient = gradient;
+      _currentDrawing.gradient = _gradient;
     }
     return this;
   }

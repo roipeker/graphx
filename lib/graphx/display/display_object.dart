@@ -689,7 +689,6 @@ abstract class DisplayObject
 
   /// shortcut to scale proportionally
   double get scale => _scaleX;
-
   set scale(double value) {
     if (value == _scaleX) return;
     _scaleY = _scaleX = value;

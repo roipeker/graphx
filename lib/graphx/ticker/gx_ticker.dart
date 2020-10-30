@@ -36,7 +36,7 @@ class GxTicker {
     _ticker?.muted = true;
   }
 
-  /// process timeframe
+  /// process timeframe in integer MS
   double _currentTime = 0;
   double _currentDeltaTime = 0;
 
@@ -44,7 +44,7 @@ class GxTicker {
 
   /// enterframe ticker
   void _onTick(Duration elapsed) {
-    var now = elapsed.inMilliseconds / 1000;
+    var now = elapsed.inMilliseconds.toDouble() * .001;
     _currentDeltaTime = (now - _currentTime);
     _currentTime = now;
 

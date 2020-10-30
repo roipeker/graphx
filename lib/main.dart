@@ -5,7 +5,7 @@ import 'demos/juggler_demos/juggler_demo_main.dart';
 //import 'demos/audio_visuals/audio_visuals_demo.dart';
 
 void main() {
-//  runApp(MyApp());
+  runApp(MyApp());
 //  runApp(AltitudeIndicatorWidget());
 }
 
@@ -23,6 +23,9 @@ class MyApp extends StatelessWidget {
 //      home: AudioVisualDemo(),
 //      home: SimpleGameDemo(),
       home: Scaffold(
+        appBar: AppBar(
+          title: Text('ok!'),
+        ),
         body: DemoSceneTester(
 //          backScene: TestSVGMain(),
 //          backScene: DemoParticlesMain(),
