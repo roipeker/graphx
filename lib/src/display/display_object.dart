@@ -485,7 +485,12 @@ abstract class DisplayObject
     return out;
   }
 
+<<<<<<< HEAD:lib/src/display/display_object.dart
   static DisplayObject _findCommonParent(DisplayObject obj1, DisplayObject obj2) {
+=======
+  static DisplayObject _findCommonParent(
+      DisplayObject obj1, DisplayObject obj2) {
+>>>>>>> a34cb106e759e2fec814fd0d0b1ab8977065470b:lib/graphx/display/display_object.dart
     DisplayObject current = obj1;
 
     /// TODO: use faster Hash access.
@@ -679,7 +684,6 @@ abstract class DisplayObject
 
   /// shortcut to scale proportionally
   double get scale => _scaleX;
-
   set scale(double value) {
     if (value == _scaleX) return;
     _scaleY = _scaleX = value;

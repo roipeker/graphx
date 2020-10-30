@@ -6,6 +6,15 @@ import 'dart:ui';
 
 import 'chart_nico.dart';
 
+class ChartApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ChartDemo(),
+    );
+  }
+}
+
 class ChartDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

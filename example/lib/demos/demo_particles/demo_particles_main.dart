@@ -18,11 +18,10 @@ class DemoParticlesMain extends RootScene {
     owner.core.resumeTicker();
     owner.needsRepaint = true;
 
-    testParticles();
-
     // stage.color = Colors.green.value;
     // createTextures();
     // initUI();
+    testParticles();
   }
 
   Future<void> testParticles() async {

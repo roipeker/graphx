@@ -68,7 +68,7 @@ class EventSignal<T> {
   final _listenersOnce = <EventSignalCallback<T>>[];
   final _listeners = <EventSignalCallback<T>>[];
   int _iterDispatchers = 0;
-
+  int id = -1;
   bool has<T>(EventSignalCallback<T> callback) {
     return _listeners.contains(callback) || _listenersOnce.contains(callback);
   }
@@ -88,10 +88,11 @@ class EventSignal<T> {
   void remove(EventSignalCallback<T> callback) {
     final idx = _listeners.indexOf(callback);
     if (idx > -1) {
+      print("REMOVE callback!! $idx // $_iterDispatchers");
       if (idx <= _iterDispatchers) _iterDispatchers--;
-      _listeners.removeAt(idx);
+      _listeners?.removeAt(idx);
     } else {
-      _listenersOnce.remove(callback);
+      _listenersOnce?.remove(callback);
     }
   }
 
@@ -101,10 +102,24 @@ class EventSignal<T> {
   }
 
   void dispatch(T data) {
-    final len = _listeners.length;
-    for (_iterDispatchers = 0; _iterDispatchers < len; ++_iterDispatchers) {
-      _listeners[_iterDispatchers]?.call(data);
+//    final len = _listeners.length;
+//    for (_iterDispatchers = 0; _iterDispatchers < len; ++_iterDispatchers) {
+//    print("DISPATCH!? $len");
+
+//    for (_iterDispatchers = len - 1;
+//        _iterDispatchers >= 0;
+//        _iterDispatchers--) {
+//      if (id > 0) {
+//        print("Fipatching to:: $_iterDispatchers /// $len");
+//      }
+//      _listeners[_iterDispatchers]?.call(data);
+//    }
+
+    for (var i = 0; i < _listeners.length; ++i) {
+      if (id > 0) print('Calling ::: $i - ${_listeners.length}');
+      _listeners[i]?.call(data);
     }
+
     final lenCount = _listenersOnce.length;
 //    for (int i = lenCount; i >= 0; i--) {
     for (int i = 0; i < lenCount; i++) {
