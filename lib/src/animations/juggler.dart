@@ -1,6 +1,5 @@
-
 import '../../graphx.dart';
-
+import 'easings.dart';
 
 class Juggler {
   static int _currentObjectId = 0;

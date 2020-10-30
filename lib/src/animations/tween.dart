@@ -174,12 +174,7 @@ class GxTween with IUpdatable, JugglerSignalMixin {
     _delay = value;
   }
 
-<<<<<<< HEAD:lib/src/animations/tween.dart
   static final _pool = <GxTween>[];
-=======
-  static List<GxTween> _pool = [];
-
->>>>>>> a34cb106e759e2fec814fd0d0b1ab8977065470b:lib/graphx/animations/tween.dart
   static void toPool(GxTween obj) {
     /// reset all references to make sure is garbage collected.
     obj.onStart = obj.onUpdate = obj.onComplete = obj.onRepeat = null;

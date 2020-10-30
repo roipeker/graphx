@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import '../../graphx.dart';
 
-
-
 class Shape extends DisplayObject {
   Graphics _graphics;
   static final _sHelperMatrix = GxMatrix();
@@ -95,7 +93,7 @@ class Shape extends DisplayObject {
 //      _graphics?.paint($canvas);
 //      $canvas.restore();
     } else {
-      _graphics?.isMask = this.isMask;
+      _graphics?.isMask = isMask;
       _graphics?.alpha = worldAlpha;
       _graphics?.paint($canvas);
     }

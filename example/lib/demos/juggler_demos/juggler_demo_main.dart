@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
-
 
 class JugglerDemoMain extends RootScene {
   @override
