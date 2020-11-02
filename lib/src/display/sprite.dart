@@ -41,7 +41,7 @@ class Sprite extends DisplayObjectContainer {
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!visible || !touchable) return null;
+    if (!visible || !mouseEnabled) return null;
     DisplayObject target = super.hitTest(localPoint);
     if (target == null) {
       target =

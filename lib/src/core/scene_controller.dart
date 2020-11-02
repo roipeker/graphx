@@ -1,26 +1,51 @@
-
 import 'package:flutter/material.dart';
 
 import '../../graphx.dart';
 
-
 class SceneConfig {
+  /// If the GraphX SceneController will use keyboard events.
   bool useKeyboard;
+
+  /// If this GraphX SceneController will use pointer (touch/mouse) events.
   bool usePointer;
+
+  /// Will be overwritten to `true` if [autoUpdateAndRender] is set on any [ScenePainter] layer.
+  /// Can be initialized on [SceneBuilderWidget()] or [ScenePainter::setupScene()].
+  /// Warning: [setupScene()] takes priority over Widget initialization.
   bool useTicker;
+
   bool painterIsComplex;
+
+  /// See [CustomPaint.]
   bool painterWillChange;
 
-  bool isPersistent;
+  /// Avoids the scene from being disposed by the Widget.
+  /// Meant to be used with `ScenePainter.useOwnCanvas=true`
+  /// where a Layer captures it's own drawing to be used as Picture or Image
+  /// by other SceneLayers.
+  /// Warning: Experimental
+  bool isPersistent = false;
 
   SceneConfig({
     this.useKeyboard = false,
     this.usePointer = false,
-    this.useTicker = true,
-    this.painterIsComplex = false,
-    this.painterWillChange = true,
+    this.useTicker = false,
     this.isPersistent = false,
+    this.painterIsComplex,
+    this.painterWillChange,
   });
+
+  void setTo({
+    bool useTicker,
+    bool useKeyboard,
+    bool usePointer,
+    bool sceneIsComplex,
+  }) {
+    if (useTicker != null) this.useTicker = useTicker;
+    if (useKeyboard != null) this.useKeyboard = useKeyboard;
+    if (usePointer != null) this.usePointer = usePointer;
+    if (sceneIsComplex != null) painterIsComplex = sceneIsComplex;
+  }
 
   void copyFrom(SceneConfig other) {
     useKeyboard = other.useKeyboard;
@@ -30,6 +55,13 @@ class SceneConfig {
     painterWillChange = other.painterWillChange;
     isPersistent = other.isPersistent;
   }
+
+  bool painterMightChange() {
+    if (useTicker || usePointer || useKeyboard) {
+      return true;
+    }
+    return painterWillChange ?? false;
+  }
 }
 
 class SceneController {
@@ -37,45 +69,52 @@ class SceneController {
 
   ScenePainter back;
   ScenePainter front;
-  GxTicker ticker;
 
-//  Ticker _ticker;
+  GxTicker get ticker {
+    if (_ticker == null) {
+      throw 'You need to enable ticker usage with SceneBuilderWidget( useTicker=true ) or RootScene::setup(useTicker: true), or RootScene::setup(autoUpdateAndRender: true)';
+    }
+    return _ticker;
+  }
 
   KeyboardManager get keyboard => _keyboard;
 
   PointerManager get pointer => _pointer;
+
   KeyboardManager _keyboard;
   PointerManager _pointer;
+  GxTicker _ticker;
 
   InputConverter $inputConverter;
 
   SceneConfig get config => _config;
-  final  _config = SceneConfig();
+  final _config = SceneConfig();
   int id = -1;
   bool _isInited = false;
 
   void $init() {
     if (_isInited) return;
     setup();
-    ticker = GxTicker();
-    if (_config.useTicker) {
-      // ticker.resume();
-      ticker.onFrame.add(_onTick);
+    if (_hasTicker()) {
+      _ticker = GxTicker();
+      _ticker.onFrame.add(_onTick);
+      if (_hasAutoUpdate()) {
+        _ticker.resume();
+      }
     }
     _initInput();
     _isInited = true;
   }
 
   void setup() {
-    back?.setup();
-    front?.setup();
+    back?.$setup();
+    front?.$setup();
   }
 
-  /// process timeframe
-//  int _lastElapsed = 0;
   Juggler get juggler => Graphx.juggler;
 
-  /// enterframe ticker
+  /// [GxTicker] that runs the `enterFrame`.
+  /// Is independent from the rendering pipeline.
   void _onTick(double elapsed) {
     Graphx.juggler.update(elapsed);
     // _makeCurrent();
@@ -101,8 +140,8 @@ class SceneController {
     if (_config.isPersistent) return;
     front?.dispose();
     back?.dispose();
-    ticker.dispose();
-    ticker = null;
+    _ticker?.dispose();
+    _ticker = null;
 //    _ticker?.stop(canceled: true);
 //    _ticker?.dispose();
 //    _ticker = null;
@@ -127,7 +166,7 @@ class SceneController {
 
   SceneController._();
 
-  static SceneController withLayers({RootScene back, RootScene front}) {
+  static SceneController withLayers({SceneRoot back, SceneRoot front}) {
     assert(back != null || front != null);
     final controller = SceneController._();
     if (back != null) {
@@ -138,4 +177,11 @@ class SceneController {
     }
     return controller;
   }
+
+  bool _layerHasAutoUpdate(ScenePainter p) => p?.autoUpdateAndRender ?? false;
+
+  bool _hasAutoUpdate() =>
+      _layerHasAutoUpdate(back) || _layerHasAutoUpdate(front);
+
+  bool _hasTicker() => _hasAutoUpdate() || _config.useTicker;
 }

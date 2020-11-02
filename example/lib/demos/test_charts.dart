@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-class GraphChartDemo extends RootScene {
+class GraphChartDemo extends SceneRoot {
   @override
   void init() {
-    owner.needsRepaint = true;
-    owner.core.config.useTicker = true;
-    owner.core.config.usePointer = true;
-    owner.core.config.useKeyboard = true;
-    owner.core.config.painterWillChange = true;
+    scene.needsRepaint = true;
+    scene.core.config.useTicker = true;
+    scene.core.config.usePointer = true;
+    scene.core.config.useKeyboard = true;
+    scene.core.config.painterWillChange = true;
   }
 
   GxTexture bd;
@@ -19,7 +19,7 @@ class GraphChartDemo extends RootScene {
     super.ready();
 
     /// starts the Ticker, required for onEnterFrame()
-    owner.core.resumeTicker();
+    scene.core.resumeTicker();
 
     /// clips the stage area.
     stage.maskBounds = true;
@@ -243,7 +243,7 @@ class MyButton extends Sprite {
   }
 
   void draw() {
-    if (inStage) stage.scene.requestRepaint();
+    if (inStage) stage.scene.requestRender();
 
     /// we draw a "focus" border around the button.
     final borderOffset = 2.0;

@@ -11,6 +11,8 @@ class GxPoint {
     return 'GxPoint {$x,$y}';
   }
 
+  GxPoint clone() => GxPoint(x, y);
+
   Offset toNative() => Offset(x, y);
 
   GxPoint setTo(double x, double y) {

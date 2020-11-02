@@ -3,16 +3,16 @@ import 'package:graphx/graphx.dart';
 
 import 'game_world.dart';
 
-class SimpleGameMain extends RootScene {
+class SimpleGameMain extends SceneRoot {
   static SimpleGameMain me;
 
   @override
   void init() {
     super.init();
     me = this;
-    owner.core.config.useKeyboard = true;
-    owner.core.config.useTicker = true;
-    owner.needsRepaint = true;
+    scene.core.config.useKeyboard = true;
+    scene.core.config.useTicker = true;
+    scene.needsRepaint = true;
   }
 
   GameWorld world;
@@ -20,7 +20,7 @@ class SimpleGameMain extends RootScene {
   @override
   void ready() {
     super.ready();
-    owner.core.resumeTicker();
+    scene.core.resumeTicker();
     ScenePainter.current.onUpdate.add(onEnterFrame);
 //    stage.onEnterFrame.add(onEnterFrame);
     stage.keyboard.onDown.add(onKeyboard);

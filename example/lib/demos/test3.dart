@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 import 'package:graphx/src/gameutils/gameutils.dart';
 
-class Test3Scene extends RootScene {
+class Test3Scene extends SceneRoot {
   @override
   init() {
-    owner.needsRepaint = true;
-    owner.core.config.painterWillChange = true;
-    owner.core.config.usePointer = true;
-    owner.core.config.useTicker = true;
+    scene.needsRepaint = true;
+    scene.core.config.painterWillChange = true;
+    scene.core.config.usePointer = true;
+    scene.core.config.useTicker = true;
   }
 
   @override
   void ready() {
     super.ready();
 
-    owner.core.resumeTicker();
+    scene.core.resumeTicker();
 
     var circle = Shape();
     circle.graphics.lineStyle(2, Colors.purple.value)

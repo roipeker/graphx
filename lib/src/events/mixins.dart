@@ -25,9 +25,10 @@ mixin EventDispatcherMixin implements Listenable {
 }
 
 mixin TickerSignalMixin {
-  Signal $onEnterFrame;
+  EventSignal<double> $onEnterFrame;
 
-  Signal get onEnterFrame => $onEnterFrame ??= Signal();
+  EventSignal<double> get onEnterFrame =>
+      $onEnterFrame ??= EventSignal<double>();
 
   void $disposeTickerSignals() {
     $onEnterFrame?.removeAll();
@@ -98,6 +99,51 @@ mixin RenderSignalMixin {
     $onPostPaint = null;
     $onPaint?.removeAll();
     $onPaint = null;
+  }
+}
+
+/// use mouse signal for now.
+mixin MouseSignalsMixin<T extends MouseInputData> {
+  EventSignal<T> $onRightMouseDown;
+  EventSignal<T> $onMouseDoubleClick;
+  EventSignal<T> $onMouseClick;
+  EventSignal<T> $onMouseDown;
+  EventSignal<T> $onMouseUp;
+  EventSignal<T> $onMouseMove;
+  EventSignal<T> $onMouseOut;
+  EventSignal<T> $onMouseOver;
+  EventSignal<T> $onMouseWheel;
+
+  EventSignal<T> get onMouseClick => $onMouseClick ??= EventSignal();
+  EventSignal<T> get onMouseDoubleClick =>
+      $onMouseDoubleClick ??= EventSignal();
+  EventSignal<T> get onRightMouseDown => $onRightMouseDown ??= EventSignal();
+  EventSignal<T> get onMouseDown => $onMouseDown ??= EventSignal();
+  EventSignal<T> get onMouseUp => $onMouseUp ??= EventSignal();
+  EventSignal<T> get onMouseMove => $onMouseMove ??= EventSignal();
+  EventSignal<T> get onMouseOver => $onMouseOver ??= EventSignal();
+  EventSignal<T> get onMouseOut => $onMouseOut ??= EventSignal();
+  EventSignal<T> get onMouseScroll => $onMouseWheel ??= EventSignal();
+
+  void $disposePointerSignals() {
+    $onRightMouseDown?.removeAll();
+    $onRightMouseDown = null;
+    $onMouseClick?.removeAll();
+    $onMouseClick = null;
+    $onMouseDoubleClick?.removeAll();
+    $onMouseDoubleClick = null;
+    $onMouseDown?.removeAll();
+    $onMouseDown = null;
+    $onMouseUp?.removeAll();
+    $onMouseUp = null;
+    $onMouseMove?.removeAll();
+    $onMouseMove = null;
+    $onMouseOver?.removeAll();
+    $onMouseOver = null;
+    $onMouseOut?.removeAll();
+    $onMouseOut = null;
+    $onMouseWheel?.removeAll();
+    $onMouseWheel = null;
   }
 }
 

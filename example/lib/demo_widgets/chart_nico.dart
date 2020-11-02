@@ -2,19 +2,19 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-class ChartNico extends RootScene {
+class ChartNico extends SceneRoot {
   final List<Venta> lista;
 
   ChartNico(this.lista);
   @override
   void init() {
-    owner.core.config.useTicker = true;
+    scene.core.config.useTicker = true;
   }
 
   @override
   void ready() {
     super.ready();
-    owner.needsRepaint = true;
+    scene.needsRepaint = true;
     stage.scene.core.resumeTicker();
     var obj = _Base(
       lista,

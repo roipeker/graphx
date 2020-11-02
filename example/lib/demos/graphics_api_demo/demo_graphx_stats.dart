@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:graphx/src/gameutils/gameutils.dart';
 import 'package:graphx/graphx.dart';
 
-
-class DemoGraphXStats extends RootScene {
+class DemoGraphXStats extends SceneRoot {
   @override
   void init() {
-    owner.core.config.usePointer = true;
-    owner.core.config.painterWillChange = true;
-    owner.core.config.painterIsComplex = true;
+    scene.core.config.usePointer = true;
+    scene.core.config.painterWillChange = true;
+    scene.core.config.painterIsComplex = true;
   }
 
   @override

@@ -6,19 +6,17 @@ import 'package:graphx/graphx.dart';
 
 import 'demo_triangles.dart';
 
-
-class GraphicsApiDemo extends RootScene {
+class GraphicsApiDemo extends SceneRoot {
   @override
   void init() {
-    owner.core.config.usePointer = true;
-    owner.core.config.useTicker = true;
-    owner.core.resumeTicker();
+    scene.core.config.usePointer = true;
+    scene.core.config.useTicker = true;
+    scene.core.resumeTicker();
   }
 
   @override
   void ready() {
     super.ready();
-
     var demo = DemoTriangles();
     addChild(demo);
 //    someTest();

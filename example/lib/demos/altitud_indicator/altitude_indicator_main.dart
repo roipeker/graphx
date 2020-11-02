@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graphx/graphx.dart';
 
-
-class DemoAltitudIndicatorMain extends RootScene {
+class DemoAltitudIndicatorMain extends SceneRoot {
   @override
   void init() {
-    owner.core.config.useKeyboard = true;
+    scene.core.config.useKeyboard = true;
 //    owner.core.config.usePointer = true;
   }
 
@@ -29,8 +28,8 @@ class DemoAltitudIndicatorMain extends RootScene {
   @override
   void ready() {
     super.ready();
-    owner.core.resumeTicker();
-    owner.needsRepaint = true;
+    scene.core.resumeTicker();
+    scene.needsRepaint = true;
     meterSize = stage.stageWidth;
     drawBackground();
     drawInnerCircle();
@@ -95,7 +94,8 @@ class DemoAltitudIndicatorMain extends RootScene {
     return 0;
   }
 
-  void update() {
+  @override
+  void update(e) {
     int dirY = getDirY();
     int dirX = getDirX();
 

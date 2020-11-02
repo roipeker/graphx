@@ -17,33 +17,33 @@ abstract class DisplayObjectContainer extends DisplayObject {
   static GxMatrix $sBoundsMatrix = GxMatrix();
   static GxPoint $sBoundsPoint = GxPoint();
 
-  bool touchGroup = false;
+  bool mouseChildren = true;
 
   /// capture context mouse inputs.
   @override
-  void captureMouseInput(PointerEventData e) {
-    if (!$hasVisibleArea || !touchable) return;
-
-    if (!touchGroup) {
+  void captureMouseInput(MouseInputData e) {
+    if (!$hasVisibleArea) return;
+    if (mouseChildren) {
       for (final child in children) {
         child.captureMouseInput(e);
       }
     }
 
-    if (touchable) {
-      /// hit tesst?
-      if (e.captured && e.type == PointerEventType.up) {
-        /// mouse down node = null
-      }
-//    print("Capturing mouse data! $runtimeType");
-      bool prevCaptured = e.captured;
-
-      /// loop down for hit test.
-      final localCoord = globalToLocal(e.stagePosition);
-      if (hitTouch(localCoord)) {
-        $dispatchMouseCallback(e.type, this, e);
-      }
-    }
+//    if (mouseEnabled) {
+//      /// hit tesst?
+//      if (e.captured && e.type == PointerEventType.up) {
+//        /// mouse down node = null
+//      }
+////    print("Capturing mouse data! $runtimeType");
+//      bool prevCaptured = e.captured;
+//
+//      /// loop down for hit test.
+//      final localCoord = globalToLocal(e.stagePosition);
+//      if (hitTouch(localCoord)) {
+//        $dispatchMouseCallback(e.type, this, e);
+//      }
+//    }
+    super.captureMouseInput(e);
   }
 
   @override
@@ -79,7 +79,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   List<DisplayObject> getObjectsUnderPoint(GxPoint localPoint) {
     final result = <DisplayObject>[];
-    if (!visible || !touchable || !hitTestMask(localPoint)) return result;
+    if (!visible || !mouseEnabled || !hitTestMask(localPoint)) return result;
     final numChild = children.length;
     DisplayObject target;
     for (var i = numChild - 1; i >= 0; --i) {
@@ -102,7 +102,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!visible || !touchable || !hitTestMask(localPoint)) return null;
+    if (!visible || !mouseEnabled || !hitTestMask(localPoint)) return null;
     DisplayObject target;
     final numChild = children.length;
     for (var i = numChild - 1; i >= 0; --i) {
@@ -113,7 +113,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
       _sHitTestMatrix.transformCoords(
           localPoint.x, localPoint.y, _sHitTestPoint);
       target = child.hitTest(_sHitTestPoint);
-      if (target != null) return touchGroup ? this : target;
+      if (target != null) return mouseChildren ? this : target;
     }
     return null;
   }
@@ -140,6 +140,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
         if (child is DisplayObjectContainer) {
           _broadcastChildrenAddedToStage(child);
         }
+        child.addedToStage();
       }
     }
     return child;
@@ -238,6 +239,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
       child.$onRemoved?.dispatch();
       if (stage != null) {
         child.$onRemovedFromStage?.dispatch();
+        child.removedFromStage();
         if (child is DisplayObjectContainer) {
           _broadcastChildrenRemovedFromStage(child);
         }
@@ -299,6 +301,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   static void _broadcastChildrenRemovedFromStage(DisplayObjectContainer child) {
     child.children.forEach((e) {
+      e.removedFromStage();
       e.$onRemovedFromStage?.dispatch();
       if (e is DisplayObjectContainer) _broadcastChildrenRemovedFromStage(e);
     });
@@ -306,6 +309,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   static void _broadcastChildrenAddedToStage(DisplayObjectContainer child) {
     child.children.forEach((e) {
+      e.addedToStage();
       e.$onAddedToStage?.dispatch();
       if (e is DisplayObjectContainer) _broadcastChildrenAddedToStage(e);
     });

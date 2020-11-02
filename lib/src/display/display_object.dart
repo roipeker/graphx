@@ -9,62 +9,107 @@ import 'display_object_container.dart';
 import 'stage.dart';
 
 abstract class DisplayObject
-    with DisplayListSignalsMixin, RenderSignalMixin, PointerSignalsMixin {
+    with DisplayListSignalsMixin, RenderSignalMixin, MouseSignalsMixin {
   Canvas $canvas;
   DisplayObjectContainer $parent;
 
   bool $debugBounds = false;
 
-  /// capture context mouse inputs.
-  void captureMouseInput(PointerEventData e) {
-    if (!$hasVisibleArea || !touchable) return;
-    if (e.captured && e.type == PointerEventType.up) {
-      /// mouse down node = null
-    }
-//    print("Capturing mouse data! $runtimeType");
-    // final prevCaptured = e.captured;
+  DisplayObject $mouseDownObj;
+  DisplayObject $mouseOverObj;
+//  DisplayObject $rightMouseDownObj;
 
-    /// loop down for hit test.
-    final localCoord = globalToLocal(e.stagePosition);
-    if (hitTouch(localCoord)) {
-      $dispatchMouseCallback(e.type, this, e);
+  double $lastClickTime = -1;
+
+  /// capture context mouse inputs.
+  void captureMouseInput(MouseInputData input) {
+    if (!$hasVisibleArea || !visible) return;
+
+    if (mouseEnabled) {
+      if (input.captured && input.type == MouseInputType.up) {
+        $mouseDownObj = null;
+      }
+      var prevCaptured = input.captured;
+
+      final localCoord = globalToLocal(input.stagePosition);
+
+      if (hitTouch(localCoord)) {
+        input.captured = true;
+        input.localPosition.setTo(localCoord.x, localCoord.y);
+//        input.localX = localCoord.x;
+//        input.localY = localCoord.y;
+//        e.localPosition.setTo(, localCoord.y);
+      }
+
+      if (!prevCaptured && input.captured) {
+        $dispatchMouseCallback(input.type, this, input);
+        if ($mouseOverObj != this) {
+          $dispatchMouseCallback(MouseInputType.over, this, input);
+        }
+      } else if ($mouseOverObj == this) {
+        $dispatchMouseCallback(MouseInputType.out, this, input);
+      }
     }
+
+//    if (e.captured && e.type == PointerEventType.up) {
+//      /// mouse down node = null
+//    }
+////    print("Capturing mouse data! $runtimeType");
+//    // final prevCaptured = e.captured;
+//
+//    /// loop down for hit test.
+//    final localCoord = globalToLocal(e.stagePosition);
+//    if (hitTouch(localCoord)) {
+//      $dispatchMouseCallback(e.type, this, e);
+//    }
   }
 
-  static DisplayObject $mouseObjDown;
-  static DisplayObject $mouseObjHover;
-
   void $dispatchMouseCallback(
-    PointerEventType type,
+    MouseInputType type,
     DisplayObject object,
-    PointerEventData input,
+    MouseInputData input,
   ) {
-    if (touchable) {
+    if (mouseEnabled) {
       var mouseInput = input.clone(this, object, type);
       switch (type) {
-        case PointerEventType.down:
-          $mouseObjDown = object;
-          $onDown?.dispatch(mouseInput);
+        case MouseInputType.wheel:
+          $onMouseWheel?.dispatch(mouseInput);
           break;
-        case PointerEventType.up:
-          if ($mouseObjDown == object && $onClick != null) {
-            var mouseClickInput =
-                input.clone(this, object, PointerEventType.up);
-            $onClick?.dispatch(mouseClickInput);
+        case MouseInputType.down:
+          $mouseDownObj = object;
+          $onMouseDown?.dispatch(mouseInput);
+          break;
+//        case MouseInputType.rightDown:
+//          $rightMouseDownObj = object;
+//          $onRightMouseDown?.dispatch(mouseInput);
+//          break;
+        case MouseInputType.move:
+          $onMouseMove?.dispatch(mouseInput);
+          break;
+        case MouseInputType.up:
+          if ($mouseDownObj == object &&
+              ($onMouseClick != null || $onMouseDoubleClick != null)) {
+            var mouseClickInput = input.clone(this, object, MouseInputType.up);
+            $onMouseClick?.dispatch(mouseClickInput);
 
-            /// todo: double click time.
+            if ($lastClickTime > 0 &&
+                input.time - $lastClickTime < MouseInputData.doubleClickTime) {
+              $onMouseDoubleClick?.dispatch(mouseClickInput);
+              $lastClickTime = -1;
+            } else {
+              $lastClickTime = input.time;
+            }
           }
-          $mouseObjDown = null;
-          $onUp?.dispatch(mouseInput);
+          $mouseDownObj = null;
+          $onMouseUp?.dispatch(mouseInput);
           break;
-
-        /// todo: hover/out.
-        case PointerEventType.hover:
-          $mouseObjHover = object;
-          $onHover?.dispatch(mouseInput);
+        case MouseInputType.over:
+          $mouseOverObj = this;
+          $onMouseOver?.dispatch(mouseInput);
           break;
-        case PointerEventType.scroll:
-          $onScroll?.dispatch(mouseInput);
+        case MouseInputType.out:
+          $mouseOverObj = null;
+          $onMouseOut?.dispatch(mouseInput);
           break;
         default:
           break;
@@ -231,7 +276,7 @@ abstract class DisplayObject
   bool get isRotated => _rotation != 0 || _skewX != 0 || _skewY != 0;
 
   bool $matrixDirty = true;
-  bool touchable = true;
+  bool mouseEnabled = true;
 
   DisplayObject $maskee;
   DisplayObject $mask;
@@ -290,13 +335,13 @@ abstract class DisplayObject
   bool visible = true;
 
   DisplayObject() {
-    x = y = 0.0;
-    rotation = 0.0;
+    _x = _y = 0.0;
+    _rotation = 0.0;
     alpha = 1.0;
-    pivotX = pivotY = 0.0;
-    scaleX = scaleY = 1.0;
-    skewX = skewX = 0.0;
-    touchable = true;
+    _pivotX = _pivotY = 0.0;
+    _scaleX = _scaleY = 1.0;
+    _skewX = _skewX = 0.0;
+    mouseEnabled = true;
   }
 
   void alignPivot([Alignment alignment = Alignment.center]) {
@@ -523,7 +568,7 @@ abstract class DisplayObject
 
   /// `useShape` is meant to be used by `Shape.graphics`.
   DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!visible || !touchable) return null;
+    if (!visible || !mouseEnabled) return null;
     if ($mask != null && !hitTestMask(localPoint)) return null;
     if (getBounds(this, _sHelperRect).containsPoint(localPoint)) return this;
     return null;
@@ -560,6 +605,12 @@ abstract class DisplayObject
         _scaleY != 0;
   }
 
+  void removedFromStage() {}
+
+  void addedToStage() {}
+
+  void update(double delta) {}
+
   /// Do not override this method as it applies the basic transformations.
   /// override $applyPaint() if you wanna use `Canvas` directly.
   void paint(Canvas canvas) {
@@ -571,7 +622,7 @@ abstract class DisplayObject
     final _hasSkew = _skewX != 0 || _skewY != 0;
     final needSave =
         _hasTranslate || _hasScale || rotation != 0 || _hasPivot || _hasSkew;
-    bool _saveLayer = this is DisplayObjectContainer &&
+    var _saveLayer = this is DisplayObjectContainer &&
         (this as DisplayObjectContainer).hasChildren &&
         $alpha != 1;
 
@@ -642,7 +693,7 @@ abstract class DisplayObject
     }
   }
 
-  static Paint _debugPaint = Paint()
+  static final Paint _debugPaint = Paint()
     ..style = PaintingStyle.stroke
     ..color = Color(0xff00FFFF)
     ..strokeWidth = 0;
@@ -680,6 +731,7 @@ abstract class DisplayObject
 
   /// shortcut to scale proportionally
   double get scale => _scaleX;
+
   set scale(double value) {
     if (value == _scaleX) return;
     _scaleY = _scaleX = value;
@@ -749,8 +801,8 @@ abstract class DisplayObject
               }
             },
     );
-    final int width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
-    final int height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
+    final width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
+    final height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
     final output = await picture.toImage(width, height);
     picture?.dispose();
     return output;

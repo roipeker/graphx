@@ -57,7 +57,7 @@ class Shape extends DisplayObject {
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!visible || !touchable) return null;
+    if (!visible || !mouseEnabled) return null;
     return (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
   }
 

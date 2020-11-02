@@ -21,7 +21,7 @@ class Bitmap extends DisplayObject {
   @override
   set pivotX(double value) {
     $originalPivotX = value;
-    super.pivotY = value;
+    super.pivotX = value;
   }
 
   @override

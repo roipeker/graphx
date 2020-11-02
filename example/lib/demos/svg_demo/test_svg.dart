@@ -4,18 +4,17 @@ import 'package:graphx/graphx.dart';
 import 'svg_assets.dart';
 import 'svg_utils.dart';
 
-
-class TestSVGMain extends RootScene {
+class TestSVGMain extends SceneRoot {
   @override
   void init() {
-    owner.core.config.useKeyboard = true;
+    scene.core.config.useKeyboard = true;
   }
 
   @override
   void ready() {
     super.ready();
-    owner.core.resumeTicker();
-    owner.needsRepaint = true;
+    scene.core.resumeTicker();
+    scene.needsRepaint = true;
     loadSvgs();
   }
 

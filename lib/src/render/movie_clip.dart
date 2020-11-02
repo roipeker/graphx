@@ -2,8 +2,6 @@ import '../../graphx.dart';
 import '../events/events.dart';
 import '../textures/textures.dart';
 
-
-
 class MovieClip extends Bitmap {
   double timeDilation = 1;
   bool repeatable = true;
@@ -77,6 +75,7 @@ class MovieClip extends Bitmap {
     playing = true;
   }
 
+  @override
   void update(double delta) {
     if (playing && frameCount > 1) {
       accumulatedTime += delta * timeDilation;

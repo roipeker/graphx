@@ -62,7 +62,7 @@ class Signal {
 
 /// --- EVENT SIGNAL
 
-typedef EventSignalCallback<T> = Function(T);
+typedef EventSignalCallback<T> = void Function(T);
 
 class EventSignal<T> {
   final _listenersOnce = <EventSignalCallback<T>>[];
@@ -120,10 +120,10 @@ class EventSignal<T> {
       _listeners[i]?.call(data);
     }
 
-    final lenCount = _listenersOnce.length;
+//    final lenCount = _listenersOnce.length;
 //    for (int i = lenCount; i >= 0; i--) {
-    for (int i = 0; i < lenCount; i++) {
-      _listenersOnce.removeAt(i)?.call(data);
+    for (int i = 0; i < _listenersOnce.length; i++) {
+      _listenersOnce?.removeAt(i)?.call(data);
     }
   }
 }

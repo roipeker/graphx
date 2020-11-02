@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-
-class Test2Scene extends RootScene {
+class Test2Scene extends SceneRoot {
   @override
   void init() {
-    owner.core.config.useTicker = true;
-    owner.core.config.usePointer = true;
-    owner.needsRepaint = true;
-    owner.core.config.painterIsComplex = false;
+    scene.core.config.useTicker = true;
+    scene.core.config.usePointer = true;
+    scene.needsRepaint = true;
+    scene.core.config.painterIsComplex = false;
   }
 
   @override
   void ready() {
     super.ready();
-    owner.core.resumeTicker();
+    scene.core.resumeTicker();
 
     var bg = Shape();
     addChild(bg);

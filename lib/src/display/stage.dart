@@ -67,20 +67,22 @@ class Stage extends DisplayObjectContainer
   }
 
   KeyboardManager get keyboard {
-    if (scene?.core?.keyboard == null)
+    if (scene?.core?.keyboard == null) {
       throw 'You need to enable keyboard capture, define useKeyboard=true in your SceneController';
+    }
     return scene?.core?.keyboard;
   }
 
   PointerManager get pointer {
-    if (scene?.core?.pointer == null)
+    if (scene?.core?.pointer == null) {
       throw 'You need to enable pointer capture, define usePointer=true in your SceneController';
+    }
     return scene?.core?.pointer;
   }
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShapes = false]) {
-    if (!visible || !touchable) return null;
+    if (!visible || !mouseEnabled) return null;
 
     /// location outside stage area, is not accepted.
     if (localPoint.x < 0 ||
@@ -108,8 +110,8 @@ class Stage extends DisplayObjectContainer
 //  }
 
   /// advance time... (passedTime)
-  void $tick(double time) {
-    $onEnterFrame?.dispatch();
+  void $tick(double delta) {
+    $onEnterFrame?.dispatch(delta);
   }
 
   @override
@@ -121,4 +123,36 @@ class Stage extends DisplayObjectContainer
     $disposeTickerSignals();
     super.dispose();
   }
+
+  @override
+  set width(double value) => throw 'Cannot set width of stage';
+
+  @override
+  set height(double value) => throw 'Cannot set height of stage';
+
+  @override
+  set x(double value) => throw 'Cannot set x-coordinate of stage';
+
+  @override
+  set y(double value) => throw 'Cannot set y-coordinate of stage';
+
+  @override
+  set scaleX(double value) => throw 'Cannot scale stage';
+
+  @override
+  set scaleY(double value) => throw 'Cannot scale stage';
+
+  @override
+  set pivotX(double value) => throw 'Cannot pivot stage';
+  @override
+  set pivotY(double value) => throw 'Cannot pivot stage';
+
+  @override
+  set skewX(double value) => throw 'Cannot skew stage';
+
+  @override
+  set skewY(double value) => throw 'Cannot skew stage';
+
+  @override
+  set rotation(double value) => throw 'Cannot rotate stage';
 }

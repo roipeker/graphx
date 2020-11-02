@@ -1,13 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-class MainFrontScene extends RootScene {
+class MainFrontScene extends SceneRoot {
   @override
   void init() {
     /// setup the controller from within the Scene.
-    owner.core.config.useTicker = true;
-    owner.core.config.usePointer = true;
+    scene.core.config.useTicker = true;
+    scene.core.config.usePointer = true;
   }
 
   Shape yellowCircle;
@@ -28,9 +27,9 @@ class MainFrontScene extends RootScene {
   }
 }
 
-class MainBackScene extends RootScene {
+class MainBackScene extends SceneRoot {
   /// access to the other "scene layer"
-  MainFrontScene get frontRoot => owner.core.front.root as MainFrontScene;
+  MainFrontScene get frontRoot => scene.core.front.root as MainFrontScene;
 
   var redCircle = Shape();
 
@@ -61,12 +60,12 @@ class MainBackScene extends RootScene {
   }
 }
 
-class MyAvatarBack extends RootScene {
+class MyAvatarBack extends SceneRoot {
   MyAvatarBack();
 
   @override
   void init() {
-    owner.useOwnCanvas = false;
+    scene.useOwnCanvas = false;
   }
 
   @override
@@ -92,7 +91,7 @@ class MyAvatarBack extends RootScene {
   }
 }
 
-class MyAvatarFront extends RootScene {
+class MyAvatarFront extends SceneRoot {
   Function(bool) handleDragging;
 
   MyAvatarFront(this.handleDragging) {
@@ -101,17 +100,17 @@ class MyAvatarFront extends RootScene {
 
   @override
   void init() {
-    owner.core.config.usePointer = true;
-    owner.core.config.useTicker = true;
-    owner.useOwnCanvas = false;
-    owner.needsRepaint = true;
+    scene.core.config.usePointer = true;
+    scene.core.config.useTicker = true;
+    scene.useOwnCanvas = false;
+    scene.needsRepaint = true;
     print("Create me!");
   }
 
   @override
   void ready() {
     super.ready();
-    owner.core.resumeTicker();
+    scene.core.resumeTicker();
 
     var box = new Shape();
     addChild(box);

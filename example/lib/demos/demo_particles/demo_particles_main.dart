@@ -4,19 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:graphx/src/gameutils/gameutils.dart';
 import 'package:graphx/graphx.dart';
 
-
-class DemoParticlesMain extends RootScene {
+class DemoParticlesMain extends SceneRoot {
   @override
   void init() {
-    owner.core.config.useKeyboard = true;
-    owner.core.config.usePointer = true;
+    scene.core.config.useKeyboard = true;
+    scene.core.config.usePointer = true;
   }
 
   @override
   void ready() {
     super.ready();
-    owner.core.resumeTicker();
-    owner.needsRepaint = true;
+    scene.core.resumeTicker();
+    scene.needsRepaint = true;
 
     // stage.color = Colors.green.value;
     // createTextures();
