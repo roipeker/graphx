@@ -6,6 +6,7 @@ GraphX™ rendering lib,
 > *WARNING:* this is WIP code, based on a few days of experimentation.
 
 > *NOTE:* GraphX™ uses the `$` prefix convention to all "internal/private" members (properties and methods). __DO NOT__ call them in your code... is meant to be consumed internally by the lib.
+> until I cleanup and organize the code for an alpha version, then will probably moved all as part of the package. 
 ___
 
 
@@ -30,7 +31,19 @@ So, let your imagination fly.
    
 ## concept.
 
-This is just a very early WIP to put something online... still lacks support for loading images, rendering Text, etc. 
+This repo is just a very early WIP to put something online... 
+still lacks support for loading remote images, 2.5D and some other nicities.
+
+Yet, we have some super basic support for loading rootBundle assets!
+```dart
+AssetLoader.loadImageTexture(assetId)  
+AssetLoader.loadString(assetId)  
+AssetLoader.loadJson(assetId)  
+```
+
+And some basic "raw" support for Text rendering with the `StaticText` class.
+
+-----------
 
 GraphX™ drives a CustomPainter inside, the idea is to simplify the usage of Flutter's `Canvas`, plus adding the DisplayList concept, so you can manage and create more complex "scenes".
 
@@ -69,7 +82,7 @@ each `SceneBuilderWidget` requires a `SceneController`. This controller is the "
  - `front` (foreground painter), 
  - or both.
 
-Each "Scene Layer" has to extend `RootScene`, it represents the starting point of that particular scene hierarchy. Think of it as `MaterialApp` widget is to all other children Widgets in the tree.  
+Each "Scene Layer" has to extend `SceneRoot`, it represents the starting point of that particular scene hierarchy. Think of it as `MaterialApp` widget is to all other children Widgets in the tree.  
 
 Here we get into **GraphX™** world, no more Widgets Trees or immutable properties.
 
@@ -78,35 +91,31 @@ You can override `init()` to setup things needed for this current Scene Painter 
 Override `ready()` as your entry point, here the engine is set up, and the glorified `Stage` is available to use.
 
 ```dart
-class GameScene extends RootScene {
-  @override
-  init() {
-    owner.needsRepaint = true;
-    owner.core.config.painterWillChange = true;
-    owner.core.config.usePointer = true;
-    owner.core.config.useTicker = true;
+class GameScene extends SceneRoot {
+  GameScene(){
+    config(autoUpdateAndRender: true, usePointer: true);
   }
 
   @override
-  void ready() {
-    super.ready();
-    owner.core.resumeTicker(); /// we can "start" and pause the Ticker on demand.
-    ...
+  void addedToStage() {
+    /// if you have to stop the Ticker. Will stop all
+    /// Tweens, Jugglers objects in GraphX.
+    stage.scene.core.ticker.pause();
   }
 ```
 
 For now, GraphX™ has a couple of classes for rendering the display list:
-`Shape` and `Sprite` (`DisplayObject`, `DisplayObjectContainer` are _abstracts_),
+`Shape` and `Sprite` ( which are `DisplayObject`, `DisplayObjectContainer` are _abstracts_),
 
 They both have a `graphics` property which is of type `Graphics` and provides a simplistic API to paint on the Flutter's `Canvas`.
 
-By the way, `RootScene` is a Sprite!, and it's your `root` node in the display tree, kinda where all starts to render, and where you need to add your own objects.
+By the way, `SceneRoot` is a Sprite as well!, and it's your `root` node in the display tree, kinda where all starts to render, and where you need to add your own objects.
 
 For instance, to create a simple purple circle:
 
 ```dart
 @override
-ready(){
+void addedToStage(){
     var circle = Shape();
     circle.graphics.lineStyle(2, Colors.purple.value) /// access hex value of Color
       ..drawCircle(0, 0, 20)
@@ -115,13 +124,13 @@ ready(){
 }
 ```
 
-`RootScene` is a `Sprite` (which is a `DisplayObjectContainer`) and can have children inside, yet `Shape` is a `DisplayObject`, and can't have children. But it makes it a little bit more performant on each painter step.
+`SceneRoot` is a `Sprite` (which is a `DisplayObjectContainer`) and can have children inside, yet `Shape` is a `DisplayObject`, and can't have children. But it makes it a little bit more performant on each painter step.
 
 We could also use our root scene to draw things:
 
 ```dart
 @override
-ready(){
+addedToStage(){
   graphics.beginFill(0x0000ff, .6)
   ..drawRoundRect(100, 100, 40, 40, 4)
   ..endFill();
@@ -129,6 +138,31 @@ ready(){
 }
 ```
 
+Scene setup sample in your `SceneRoot` (in your constructor):
+```dart
+config(
+  autoUpdateAndRender: true,
+  usePointer: true,
+  useTicker: true,
+  useKeyboard: false,
+  sceneIsComplex: true,
+);
+```
+
+Pointer signals has been "simplified" as Mouse events now... as it's super easy to work with single touch / mouse interactions in `DisplayObject`s.
+There're a bunch of signals to listen on each element... taken from AS3, and JS.
+- onMouseDoubleClick
+- onMouseClick
+- onMouseDown
+- onMouseUp
+- onMouseMove
+- onMouseOver
+- onMouseOut
+- onMouseScroll
+
+They all emit a `MouseInputData` with all the needed info inside, like stage coordinates, or translated local coordinates, which "mouse" button is pressed, etc.
+
+------
 
 *I will keep adding further explanation in the upcoming days.* 
 
