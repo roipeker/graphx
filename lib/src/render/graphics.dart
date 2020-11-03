@@ -232,7 +232,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics closePolygon() {
+  Graphics closePath() {
     _path.close();
     return this;
   }

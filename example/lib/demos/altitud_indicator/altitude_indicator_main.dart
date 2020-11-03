@@ -371,7 +371,7 @@ class DemoAltitudIndicatorMain extends SceneRoot {
           linkThickness, color, 1, true, StrokeCap.square, StrokeJoin.miter, 4);
     }
     arrow.graphics.moveTo(0, 0).lineTo(w, 0).lineTo(w / 2, h).lineTo(0, 0);
-    arrow.graphics.closePolygon();
+    arrow.graphics.closePath();
     arrow.graphics.endFill();
     arrow.alignPivot(Alignment.bottomCenter);
 //    shape.height = 20;
