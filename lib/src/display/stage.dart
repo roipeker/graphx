@@ -112,6 +112,7 @@ class Stage extends DisplayObjectContainer
   /// advance time... (passedTime)
   void $tick(double delta) {
     $onEnterFrame?.dispatch(delta);
+    super.update(delta);
   }
 
   @override

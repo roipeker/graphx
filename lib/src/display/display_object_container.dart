@@ -275,6 +275,13 @@ abstract class DisplayObjectContainer extends DisplayObject {
   }
 
   @override
+  void update(double delta) {
+    for (var child in children) {
+      child.update(delta);
+    }
+  }
+
+  @override
   void $applyPaint() {
     if (!$hasVisibleArea) return;
     for (var child in children) {
