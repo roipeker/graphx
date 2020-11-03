@@ -127,7 +127,7 @@ class MouseInputData {
 
   bool get isPrimaryDown => buttonsFlags & kPrimaryButton == kPrimaryButton;
 
-  bool get isTertiaryDown => buttonsFlags & kTertiaryButton == kTertiaryButton;
+  bool get isTertiaryDown => buttonsFlags & 0x04 == 0x04;
 
   GxPoint get stagePosition => _stagePosition;
   GxPoint _stagePosition = GxPoint();
