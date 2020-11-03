@@ -105,6 +105,11 @@ class MouseInputData {
 
   bool captured = false;
 
+  @override
+  String toString() {
+    return 'MouseInputData{captured: $captured, target: $target, dispatcher: $dispatcher, type: $type, buttonDown: $buttonDown, mouseOut: $mouseOut, time: $time, buttonsFlags: $buttonsFlags, localPosition: $localPosition, stagePosition: $_stagePosition, scrollDelta: $scrollDelta}';
+  }
+
   /// display objects
   DisplayObject target;
   DisplayObject dispatcher;
@@ -129,6 +134,20 @@ class MouseInputData {
   GxPoint localPosition = GxPoint();
   GxPoint scrollDelta = GxPoint();
 
+  double get localX => localPosition.x;
+
+  double get localY => localPosition.y;
+
+  double get windowX => rawEvent?.rawEvent?.original?.position?.dx ?? 0;
+
+  double get windowY => rawEvent?.rawEvent?.original?.position?.dy ?? 0;
+
+  double get stageX => _stagePosition?.x ?? 0;
+
+  double get stageY => _stagePosition?.y ?? 0;
+
+  static int uniqueId = 0;
+  int uid;
   MouseInputData({this.target, this.dispatcher, this.type});
 
   MouseInputData clone(
@@ -138,6 +157,7 @@ class MouseInputData {
       dispatcher: dispatcher,
       type: type,
     );
+    input.uid = uid;
     input.buttonDown = buttonDown;
     input.rawEvent = rawEvent;
     input.captured = captured;
@@ -160,18 +180,6 @@ class MouseInputData {
 //    return null;
 //  }
 //  int get time => rawEvent.rawEvent.timeStamp.inMilliseconds;
-
-  double get localX => localPosition.x;
-
-  double get localY => localPosition.y;
-
-  double get windowX => rawEvent?.rawEvent?.original?.position?.dx ?? 0;
-
-  double get windowY => rawEvent?.rawEvent?.original?.position?.dy ?? 0;
-
-  double get stageX => _stagePosition?.x ?? 0;
-
-  double get stageY => _stagePosition?.y ?? 0;
 
   static MouseInputType fromNativeType(PointerEventType nativeType) {
     if (nativeType == PointerEventType.down) {

@@ -81,6 +81,11 @@ class Stage extends DisplayObjectContainer
   }
 
   @override
+  bool hitTouch(GxPoint localPoint, [bool useShape = false]) {
+    return super.hitTest(localPoint, useShape) != null;
+  }
+
+  @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShapes = false]) {
     if (!visible || !mouseEnabled) return null;
 

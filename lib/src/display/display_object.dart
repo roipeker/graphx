@@ -17,30 +17,19 @@ abstract class DisplayObject
 
   DisplayObject $mouseDownObj;
   DisplayObject $mouseOverObj;
-//  DisplayObject $rightMouseDownObj;
 
   double $lastClickTime = -1;
 
   /// capture context mouse inputs.
   void captureMouseInput(MouseInputData input) {
     if (!$hasVisibleArea || !visible) return;
-
     if (mouseEnabled) {
       if (input.captured && input.type == MouseInputType.up) {
         $mouseDownObj = null;
       }
       var prevCaptured = input.captured;
-
-      final localCoord = globalToLocal(input.stagePosition);
-
-      if (hitTouch(localCoord)) {
-        input.captured = true;
-        input.localPosition.setTo(localCoord.x, localCoord.y);
-//        input.localX = localCoord.x;
-//        input.localY = localCoord.y;
-//        e.localPosition.setTo(, localCoord.y);
-      }
-
+      globalToLocal(input.stagePosition, input.localPosition);
+      input.captured = input.captured || hitTouch(input.localPosition);
       if (!prevCaptured && input.captured) {
         $dispatchMouseCallback(input.type, this, input);
         if ($mouseOverObj != this) {
@@ -50,18 +39,6 @@ abstract class DisplayObject
         $dispatchMouseCallback(MouseInputType.out, this, input);
       }
     }
-
-//    if (e.captured && e.type == PointerEventType.up) {
-//      /// mouse down node = null
-//    }
-////    print("Capturing mouse data! $runtimeType");
-//    // final prevCaptured = e.captured;
-//
-//    /// loop down for hit test.
-//    final localCoord = globalToLocal(e.stagePosition);
-//    if (hitTouch(localCoord)) {
-//      $dispatchMouseCallback(e.type, this, e);
-//    }
   }
 
   void $dispatchMouseCallback(
@@ -104,7 +81,7 @@ abstract class DisplayObject
           $onMouseUp?.dispatch(mouseInput);
           break;
         case MouseInputType.over:
-          $mouseOverObj = this;
+          $mouseOverObj = object;
           $onMouseOver?.dispatch(mouseInput);
           break;
         case MouseInputType.out:

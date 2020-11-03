@@ -10,15 +10,17 @@ class SvgShape extends DisplayObject {
   Color _tint;
 
   /// play nice with Colorization.
-  BlendMode _blendMode = BlendMode.modulate;
+  BlendMode _blendMode = BlendMode.srcATop;
+
+  /// or modulate.
 
   bool _invalidColor = false;
-
   Color get tint => _tint;
 
   set tint(Color value) {
     _tint = value;
     _invalidColor = true;
+    usePaint = true;
     requiresRedraw();
   }
 
@@ -27,6 +29,7 @@ class SvgShape extends DisplayObject {
   set blendMode(BlendMode value) {
     _blendMode = value;
     _invalidColor = true;
+    usePaint = true;
     requiresRedraw();
   }
 
@@ -81,6 +84,7 @@ class SvgShape extends DisplayObject {
   }
 
   final _paint = Paint();
+
   Paint get nativePaint => _paint;
   bool usePaint = false;
 

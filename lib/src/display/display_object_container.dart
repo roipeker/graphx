@@ -21,29 +21,15 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   /// capture context mouse inputs.
   @override
-  void captureMouseInput(MouseInputData e) {
+  void captureMouseInput(MouseInputData input) {
     if (!$hasVisibleArea) return;
     if (mouseChildren) {
-      for (final child in children) {
-        child.captureMouseInput(e);
+      /// from last child to the bottom to capture the input.
+      for (var i = children.length - 1; i >= 0; --i) {
+        children[i].captureMouseInput(input);
       }
     }
-
-//    if (mouseEnabled) {
-//      /// hit tesst?
-//      if (e.captured && e.type == PointerEventType.up) {
-//        /// mouse down node = null
-//      }
-////    print("Capturing mouse data! $runtimeType");
-//      bool prevCaptured = e.captured;
-//
-//      /// loop down for hit test.
-//      final localCoord = globalToLocal(e.stagePosition);
-//      if (hitTouch(localCoord)) {
-//        $dispatchMouseCallback(e.type, this, e);
-//      }
-//    }
-    super.captureMouseInput(e);
+    super.captureMouseInput(input);
   }
 
   @override

@@ -151,6 +151,7 @@ class ScenePainter with EventDispatcherMixin {
 
   void $setup() {
     makeCurrent();
+    GTween.registerCommonWraps();
     root._applyConfig();
     root.init();
   }
@@ -211,8 +212,9 @@ class ScenePainter with EventDispatcherMixin {
     GTween.ticker.dispatch(deltaTime);
     // GxTween.update(deltaTime);
     _stage.$tick(deltaTime);
-
-    _detectMouseMove();
+    if (_hasPointer) {
+      _detectMouseMove();
+    }
   }
 
   /// temporal
@@ -230,6 +232,7 @@ class ScenePainter with EventDispatcherMixin {
         dispatcher: _stage,
         type: MouseInputType.still,
       );
+      input.uid = ++MouseInputData.uniqueId;
       input.localPosition.setTo(_lastMouseX, _lastMouseY);
       input.stagePosition.setTo(_lastMouseX, _lastMouseY);
       input.mouseOut = _lastMouseOut;
@@ -258,8 +261,6 @@ class ScenePainter with EventDispatcherMixin {
       _lastMouseY = input.stageY;
     }
     _lastMouseInput = input;
-
-    /// process directly on stage.
     stage.captureMouseInput(input);
 //    onMouseInput.dispatch(input);
   }
@@ -291,23 +292,26 @@ class ScenePainter with EventDispatcherMixin {
     super.dispose();
   }
 
+  bool get _hasPointer => core?.pointer?.onInput != null;
+
   void _initMouseInput() {
     core?.pointer?.onInput?.add(_onInputHandler);
   }
 
   void _onInputHandler(PointerEventData e) {
-    var event = MouseInputData(
+    var input = MouseInputData(
       target: stage,
       dispatcher: stage,
       type: MouseInputData.fromNativeType(e.type),
     );
-    event.rawEvent = e;
-    event.buttonsFlags = e.rawEvent.buttons;
-    event.buttonDown = e.rawEvent.down;
-    event.localPosition.setTo(e.localX, e.localY);
-    event.scrollDelta.setTo(e.scrollDelta?.dx ?? 0, e.scrollDelta?.dy ?? 0);
-    event.stagePosition.setTo(e.stagePosition.x, e.stagePosition.y);
-    _mouseInputHandler(event);
+    input.rawEvent = e;
+    input.buttonsFlags = e.rawEvent.buttons;
+    input.buttonDown = e.rawEvent.down;
+    input.localPosition.setTo(e.localX, e.localY);
+    input.scrollDelta.setTo(e.scrollDelta?.dx ?? 0, e.scrollDelta?.dy ?? 0);
+    input.stagePosition.setTo(e.stagePosition.x, e.stagePosition.y);
+    input.uid = ++MouseInputData.uniqueId;
+    _mouseInputHandler(input);
   }
 
   void makeCurrent() {
