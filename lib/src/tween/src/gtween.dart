@@ -41,11 +41,17 @@ class GVars {
     this.onUpdateParams = CallbackParams.parse(onUpdateParams);
   }
 
-  defaults() {
+  void defaults() {
     ease ??= GTween.defaultEase;
     immediateRender ??= false;
     useFrames ??= false;
     runBackwards ??= false;
+  }
+
+  void _setTween(GTween gTween) {
+    onStartParams?._setTween(gTween);
+    onCompleteParams?._setTween(gTween);
+    onUpdateParams?._setTween(gTween);
   }
 }
 
@@ -63,10 +69,10 @@ class GTween {
   static void registerCommonWraps([List<GxAnimatableBuilder> otherWraps]) {
     GTween.registerWrap(GTweenableDisplayObject.wrap);
     GTween.registerWrap(GTweenableMap.wrap);
-//    GTween.registerWrap(GTweenableDouble.wrap);
-//    GTween.registerWrap(GTweenableInt.wrap);
-//    GTween.registerWrap(GTweenableMap.wrap);
-//    GTween.registerWrap(GTweenableList.wrap);
+    GTween.registerWrap(GTweenableDouble.wrap);
+    GTween.registerWrap(GTweenableInt.wrap);
+    GTween.registerWrap(GTweenableMap.wrap);
+    GTween.registerWrap(GTweenableList.wrap);
 //    GTween.registerWrap(GTweenableColor.wrap);
     otherWraps?.forEach(GTween.registerWrap);
   }
@@ -132,6 +138,7 @@ class GTween {
 
     nanoVars = myVars ?? GVars();
     nanoVars.defaults();
+    nanoVars._setTween(this);
     this.vars = vars;
 
     _duration = duration;
@@ -189,7 +196,7 @@ class GTween {
     }
   }
 
-  _init() {
+  void _init() {
     if (nanoVars.startAt != null) {
       var newVars = GVars()..immediateRender = true;
       GTween.to(target, 0, nanoVars.startAt, newVars);
@@ -219,8 +226,8 @@ class GTween {
     for (final key in vars.keys) {
       final prop = '$key';
       if (!_reservedProps.containsKey(prop)) {
-        _firstPT = PropTween(target: p_target, property: prop, next: _firstPT);
-        var startVal = _getStartValue(p_target, prop);
+        _firstPT = PropTween(target: p_target, property: key, next: _firstPT);
+        var startVal = _getStartValue(p_target, key);
         _firstPT.s = startVal;
         var endValue = _getEndValue(vars, key, _firstPT.s);
         _firstPT.cObj = vars[key];
@@ -261,7 +268,7 @@ class GTween {
     }
   }
 
-  double _getStartValue(Object t, String prop) {
+  double _getStartValue(Object t, dynamic prop) {
     if (t is GTweenable) {
       return t.getProperty(prop);
     } else if (t is Map) {

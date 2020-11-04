@@ -4,8 +4,8 @@ class PropTween {
   /// target or dynamic
   GTweenable t;
 
-  /// property name
-  String p;
+  /// property "name" (commonly a String), or value!
+  Object p;
 
   /// start value
   double s;
@@ -34,7 +34,7 @@ class PropTween {
   PropTween _next, _prev;
   PropTween({
     GTweenable target,
-    String property,
+    Object property,
     double start,
     double change,
     String name,

@@ -18,19 +18,19 @@ mixin GTweenable {
   @override
   String toString() => '[GTweenable] ' + target?.toString();
 
-  Map<String, List<Function>> _accessors;
+  Map<Object, List<Function>> _accessors;
 
   void initProps() => _accessors = getTweenableAccessors();
 
   /// implement in class.
   Map<String, List<Function>> getTweenableAccessors() => null;
 
-  void setProperty(String prop, double value) {
+  void setProperty(Object prop, double value) {
     if (_accessors == null) initProps();
     _accessors[prop][1](value);
   }
 
-  double getProperty(String prop) {
+  double getProperty(Object prop) {
     if (_accessors == null) initProps();
 
     /// analyze property type.

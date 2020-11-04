@@ -22,14 +22,14 @@ abstract class CommonTweenWraps {
   }
 }
 
-class GTweenableDouble with GTweenable {
+class GTweenableDouble with GTweenable, SingleValueTweenMixin {
   static GTweenable wrap(Object target) =>
       target is double ? GTweenableDouble(target) : null;
 
   double value;
 
   GTweenableDouble(double target) {
-    this.value = this.target = target;
+    value = this.target = target;
   }
 
   @override
@@ -38,14 +38,14 @@ class GTweenableDouble with GTweenable {
       };
 }
 
-class GTweenableInt with GTweenable {
+class GTweenableInt with GTweenable, SingleValueTweenMixin {
   static GTweenable wrap(Object target) =>
       target is int ? GTweenableInt(target) : null;
 
   int value;
 
   GTweenableInt(int target) {
-    this.value = this.target = target;
+    value = this.target = target;
   }
 
   @override
@@ -61,25 +61,65 @@ class GTweenableMap with GTweenable {
   static GTweenable wrap(Object target) =>
       target is Map<String, dynamic> ? GTweenableMap(target) : null;
 
-  Map<String, dynamic> value;
+  Map value;
 
-  GTweenableMap(Map<String, dynamic> target) {
+  GTweenableMap(Map target) {
     value = this.target = target;
   }
 
   @override
-  void setProperty(String prop, double val) {
+  void setProperty(Object prop, double val) {
     value[prop] = convertFromDouble(value[prop], val);
   }
 
   @override
-  double getProperty(String prop) {
-    /// add other conversions.
+  double getProperty(Object prop) {
     return convertToDouble(value[prop]);
   }
 
-  @override
-  Map<String, List<Function>> getTweenableAccessors() => null;
+  GTween tween(Map targetMap,
+      {@required double duration,
+      EaseFunction ease,
+      double delay,
+      bool useFrames,
+      int overwrite,
+      Function onStart,
+      Object onStartParams,
+      Function onComplete,
+      Object onCompleteParams,
+      Function onUpdate,
+      Object onUpdateParams,
+      bool runBackwards,
+      bool immediateRender,
+      Map startAt}) {
+    assert(targetMap != null);
+
+    targetMap.removeWhere((k, v) => !value.containsKey(k));
+    if (targetMap.isEmpty) {
+      throw "tween(targetMap) Map can't be empty. Or there are no matching keys with the tweenable target.";
+    }
+
+    return GTween.to(
+        this,
+        duration,
+        targetMap,
+        GVars(
+          ease: ease,
+          delay: delay,
+          useFrames: useFrames,
+          overwrite: overwrite,
+          onStart: onStart,
+          onStartParams: onStartParams,
+          onComplete: onComplete,
+          onCompleteParams: onCompleteParams,
+          onUpdate: onUpdate,
+          onUpdateParams: onUpdateParams,
+//          vars: vars,
+          runBackwards: runBackwards,
+          immediateRender: immediateRender,
+          startAt: startAt,
+        ));
+  }
 }
 
 class GTweenableList with GTweenable {
@@ -94,21 +134,64 @@ class GTweenableList with GTweenable {
   }
 
   @override
-  void setProperty(String prop, double val) {
-    final index = int.tryParse(prop);
+  void setProperty(Object prop, double val) {
+    final index = int.tryParse('$prop');
     value[index] = convertFromDouble(value[index], val);
   }
 
   @override
-  double getProperty(String prop) {
-    return convertToDouble(value[int.parse(prop)]);
+  double getProperty(Object prop) {
+    return convertToDouble(value[int.parse('$prop')]);
   }
 
-  @override
-  Map<String, List<Function>> getTweenableAccessors() => null;
+  GTween tween(List targetList,
+      {@required double duration,
+      EaseFunction ease,
+      double delay,
+      bool useFrames,
+      int overwrite,
+      Function onStart,
+      Object onStartParams,
+      Function onComplete,
+      Object onCompleteParams,
+      Function onUpdate,
+      Object onUpdateParams,
+      bool runBackwards,
+      bool immediateRender,
+      Map startAt}) {
+    assert(targetList != null);
+    targetList.removeWhere((element) => element is! num);
+    if (targetList.isEmpty) {
+      throw "tween(targetList) List can't be empty. Or values inside of it where not a number type";
+    }
+    final targetMap = {};
+    for (var i = 0; i < targetList.length; ++i) {
+      targetMap[i] = targetList[i];
+    }
+    return GTween.to(
+        this,
+        duration,
+        targetMap,
+        GVars(
+          ease: ease,
+          delay: delay,
+          useFrames: useFrames,
+          overwrite: overwrite,
+          onStart: onStart,
+          onStartParams: onStartParams,
+          onComplete: onComplete,
+          onCompleteParams: onCompleteParams,
+          onUpdate: onUpdate,
+          onUpdateParams: onUpdateParams,
+//          vars: vars,
+          runBackwards: runBackwards,
+          immediateRender: immediateRender,
+          startAt: startAt,
+        ));
+  }
 }
 
-convertFromDouble(originalValue, double val) {
+Object convertFromDouble(originalValue, double val) {
   if (originalValue is int) {
     return val.toInt();
   } else if (originalValue is String) {
@@ -125,4 +208,46 @@ double convertToDouble(val) {
     return double.tryParse(val);
   }
   return val;
+}
+
+mixin SingleValueTweenMixin {
+  Object getValue;
+
+  GTween tween(Object value,
+      {@required double duration,
+      EaseFunction ease,
+      double delay,
+      bool useFrames,
+      int overwrite,
+      Function onStart,
+      Object onStartParams,
+      Function onComplete,
+      Object onCompleteParams,
+      Function onUpdate,
+      Object onUpdateParams,
+      bool runBackwards,
+      bool immediateRender,
+      Map startAt}) {
+    assert(value != null);
+    return GTween.to(
+        this,
+        duration,
+        {'value': value},
+        GVars(
+          ease: ease,
+          delay: delay,
+          useFrames: useFrames,
+          overwrite: overwrite,
+          onStart: onStart,
+          onStartParams: onStartParams,
+          onComplete: onComplete,
+          onCompleteParams: onCompleteParams,
+          onUpdate: onUpdate,
+          onUpdateParams: onUpdateParams,
+//          vars: vars,
+          runBackwards: runBackwards,
+          immediateRender: immediateRender,
+          startAt: startAt,
+        ));
+  }
 }

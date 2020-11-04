@@ -16,7 +16,9 @@ part 'src/extensions/display_object.dart';
 
 part 'src/gtween.dart';
 part 'src/wraps/common_wraps.dart';
+part 'src/wraps/geom_wraps.dart';
 part 'src/extensions/common_types.dart';
+part 'src/extensions/geom_types.dart';
 
 Stopwatch _stopwatch;
 
