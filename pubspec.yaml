@@ -1,6 +1,6 @@
 name: graphx
-description: A starting point for Dart libraries or applications.
-version: 1.0.0+3
+description: Flash a-like render API on CustomPainter to power-up your Flutter apps.
+version: 1.0.0+4
 homepage: https://github.com/roipeker/graphx
 
 environment:

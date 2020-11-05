@@ -20,6 +20,7 @@ class Stage extends DisplayObjectContainer
 
   Size _size;
   Paint _backgroundPaint;
+  DisplayBoundsDebugger _boundsDebugger;
 
   int get color => _backgroundPaint?.color?.value;
 
@@ -41,6 +42,7 @@ class Stage extends DisplayObjectContainer
   Stage(this.scene) {
 //    $stage = this;
     $parent = null;
+    _boundsDebugger = DisplayBoundsDebugger(this);
   }
 
   @override
@@ -53,10 +55,16 @@ class Stage extends DisplayObjectContainer
       canvas.drawPaint(_backgroundPaint);
     }
     super.paint(canvas);
+
+    if (DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.stage) {
+      _boundsDebugger.canvas = canvas;
+      _boundsDebugger.render();
+    }
   }
 
-  GxRect _stageRect = GxRect();
+  final GxRect _stageRect = GxRect();
   Rect _stageRectNative;
+
   void $initFrameSize(Size value) {
     if (value != _size) {
       _size = value;
@@ -80,10 +88,11 @@ class Stage extends DisplayObjectContainer
     return scene?.core?.pointer;
   }
 
-  @override
-  bool hitTouch(GxPoint localPoint, [bool useShape = false]) {
-    return super.hitTest(localPoint, useShape) != null;
-  }
+  /// uncomment if it has issues with Desktop over/out.
+//  @override
+//  bool hitTouch(GxPoint localPoint, [bool useShape = false]) {
+//    return super.hitTest(localPoint, useShape) != null;
+//  }
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShapes = false]) {
@@ -150,6 +159,7 @@ class Stage extends DisplayObjectContainer
 
   @override
   set pivotX(double value) => throw 'Cannot pivot stage';
+
   @override
   set pivotY(double value) => throw 'Cannot pivot stage';
 

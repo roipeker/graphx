@@ -12,11 +12,12 @@ class GxIcon extends DisplayObject {
   GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     _sHelperMatrix.identity();
     getTransformationMatrix(targetSpace, _sHelperMatrix);
-    return MatrixUtils.getTransformedBoundsRect(
+    var r = MatrixUtils.getTransformedBoundsRect(
       _sHelperMatrix,
       _localBounds,
       out,
     );
+    return r;
   }
 
   @override

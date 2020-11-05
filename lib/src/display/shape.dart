@@ -35,7 +35,7 @@ class Shape extends DisplayObject {
 
       /// single bounds, all paths as 1 rect.
       return MatrixUtils.getTransformedBoundsRect(
-          matrix, _graphics.getBounds(out));
+          matrix, _graphics.getBounds(out), out);
     } else {
       final pos = DisplayObjectContainer.$sBoundsPoint;
       matrix.transformCoords(0, 0, pos);

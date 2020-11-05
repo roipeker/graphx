@@ -122,10 +122,13 @@ class GxRect {
 
   /// union
   GxRect expandToInclude(GxRect other) {
+    /// TODO: might rect calculo be wrong?
+    var r = right;
+    var b = bottom;
     x = math.min(left, other.left);
     y = math.min(top, other.top);
-    right = math.max(right, other.right);
-    bottom = math.max(bottom, other.bottom);
+    right = math.max(r, other.right);
+    bottom = math.max(b, other.bottom);
     return this;
   }
 

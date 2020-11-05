@@ -14,6 +14,7 @@ abstract class DisplayObject
   DisplayObjectContainer $parent;
 
   bool $debugBounds = false;
+  bool mouseUseShape = false;
 
   DisplayObject $mouseDownObj;
   DisplayObject $mouseOverObj;
@@ -29,7 +30,8 @@ abstract class DisplayObject
       }
       var prevCaptured = input.captured;
       globalToLocal(input.stagePosition, input.localPosition);
-      input.captured = input.captured || hitTouch(input.localPosition);
+      input.captured =
+          input.captured || hitTouch(input.localPosition, mouseUseShape);
       if (!prevCaptured && input.captured) {
         $dispatchMouseCallback(input.type, this, input);
         if ($mouseOverObj != this) {
@@ -161,6 +163,7 @@ abstract class DisplayObject
   double get height => getBounds($parent, _sHelperRect).height;
 
   set width(double value) {
+    if (value == null) throw "width can not be null";
     double actualW;
     bool zeroScale = _scaleX < 1e-8 && _scaleX > -1e-8;
     if (zeroScale) {
@@ -173,6 +176,7 @@ abstract class DisplayObject
   }
 
   set height(double value) {
+    if (value == null) throw "height can not be null";
     double actualH;
     bool zeroScale = _scaleY < 1e-8 && _scaleY > -1e-8;
     if (zeroScale) {
@@ -185,24 +189,28 @@ abstract class DisplayObject
   }
 
   set x(double value) {
+    if (value == null) throw "x can not be null";
     if (_x == value) return;
     _x = value;
     $setTransformationChanged();
   }
 
   set y(double value) {
+    if (value == null) throw "y can not be null";
     if (_y == value) return;
     _y = value;
     $setTransformationChanged();
   }
 
   set scaleX(double value) {
+    if (value == null) throw "scaleX can not be null";
     if (_scaleX == value) return;
     _scaleX = value;
     $setTransformationChanged();
   }
 
   set scaleY(double value) {
+    if (value == null) throw "scaleY can not be null";
     if (_scaleY == value) return;
     _scaleY = value;
     $setTransformationChanged();
@@ -210,29 +218,32 @@ abstract class DisplayObject
 
   set pivotX(double value) {
     if (_pivotX == value) return;
-    _pivotX = value;
+    _pivotX = value ?? 0.0;
     $setTransformationChanged();
   }
 
   set pivotY(double value) {
     if (_pivotY == value) return;
-    _pivotY = value;
+    _pivotY = value ?? 0.0;
     $setTransformationChanged();
   }
 
   set skewX(double value) {
+    if (value == null) throw "skewX can not be null";
     if (_skewX == value) return;
     _skewX = value;
     $setTransformationChanged();
   }
 
   set skewY(double value) {
+    if (value == null) throw "skewY can not be null";
     if (_skewY == value) return;
     _skewY = value;
     $setTransformationChanged();
   }
 
   set rotation(double value) {
+    if (value == null) throw "rotation can not be null";
     if (_rotation == value) return;
     _rotation = value;
     $setTransformationChanged();
@@ -243,6 +254,7 @@ abstract class DisplayObject
   double get alpha => $alpha;
 
   set alpha(double value) {
+    if (value == null) throw "alpha can not be null";
     if ($alpha != value) {
       value ??= 1;
       $alpha = value.clamp(0.0, 1.0);
@@ -592,7 +604,9 @@ abstract class DisplayObject
   /// override $applyPaint() if you wanna use `Canvas` directly.
   void paint(Canvas canvas) {
     $canvas = canvas;
-    if (!$hasVisibleArea || !visible) return;
+    if (!$hasVisibleArea || !visible) {
+      return;
+    }
     final _hasScale = _scaleX != 1 || _scaleY != 1;
     final _hasTranslate = _x != 0 || _y != 0;
     final _hasPivot = _pivotX != 0 || _pivotX != 0;
@@ -655,16 +669,20 @@ abstract class DisplayObject
 //      mask.$applyPaint();
     }
 
+    if (DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
+        ($debugBounds || DisplayBoundsDebugger.debugAll)) {
+      final _paint = $debugBoundsPaint ?? _debugPaint;
+      final linePaint = _paint.clone();
+      linePaint.color = linePaint.color.withOpacity(.3);
+      final rect = getBounds(this).toNative();
+      canvas.drawLine(rect.topLeft, rect.bottomRight, linePaint);
+      canvas.drawLine(rect.topRight, rect.bottomLeft, linePaint);
+      canvas.drawRect(rect, _paint);
+    }
+
     if (needSave) {
       canvas.restore();
     }
-    if ($debugBounds) {
-      final rect = getBounds(this).toNative();
-      canvas.drawLine(rect.topLeft, rect.bottomRight, _debugPaint);
-      canvas.drawLine(rect.topRight, rect.bottomLeft, _debugPaint);
-      canvas.drawRect(rect, _debugPaint);
-    }
-
     if (_saveLayer) {
       canvas.restore();
     }
@@ -673,7 +691,9 @@ abstract class DisplayObject
   static final Paint _debugPaint = Paint()
     ..style = PaintingStyle.stroke
     ..color = Color(0xff00FFFF)
-    ..strokeWidth = 0;
+    ..strokeWidth = 1;
+
+  Paint $debugBoundsPaint = _debugPaint.clone();
 
   /// override this method for custom drawing using Flutter's API.
   /// Access `$canvas` from here.

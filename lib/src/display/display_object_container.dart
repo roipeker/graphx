@@ -40,27 +40,32 @@ abstract class DisplayObjectContainer extends DisplayObject {
       getTransformationMatrix(targetSpace, $sBoundsMatrix);
       $sBoundsMatrix.transformCoords(0, 0, $sBoundsPoint);
       out.setTo($sBoundsPoint.x, $sBoundsPoint.y, 0, 0);
+      return out;
     } else if (len == 1) {
-      children[0].getBounds(targetSpace, out);
+      return children[0].getBounds(targetSpace, out);
     } else {
       var minx = 10000000.0;
       var maxx = -10000000.0;
       var miny = 10000000.0;
       var maxy = -10000000.0;
       final len = numChildren;
+//      print('fits here with: $len');
       for (var i = 0; i < len; ++i) {
         children[i].getBounds(targetSpace, out);
-
-        /// TODO: add flag to validate this?
+//        print('i $i, out: $out $this');
         if (out.isEmpty) continue;
         if (minx > out.x) minx = out.x;
         if (maxx < out.right) maxx = out.right;
         if (miny > out.y) miny = out.y;
         if (maxy < out.bottom) maxy = out.bottom;
+//        minx = minx < out.x ? minx : out.x;
+//        maxx = maxx > out.right ? maxx : out.right;
+//        miny = miny < out.y ? miny : out.y;
+//        maxy = maxy > out.bottom ? maxy : out.bottom;
       }
       out.setTo(minx, miny, maxx - minx, maxy - miny);
+      return out;
     }
-    return out;
   }
 
   List<DisplayObject> getObjectsUnderPoint(GxPoint localPoint) {

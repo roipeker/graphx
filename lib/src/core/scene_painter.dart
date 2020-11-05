@@ -286,7 +286,7 @@ class ScenePainter with EventDispatcherMixin {
   @override
   void dispose() {
     _stage?.dispose();
-//    core?.pointer?.onInput?.remove(_onInputHandler);
+    core?.pointer?.onInput?.remove(_onInputHandler);
     _onUpdate?.removeAll();
     _onUpdate = null;
     super.dispose();
