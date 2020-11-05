@@ -19,3 +19,4 @@ export 'src/ticker/gx_ticker.dart';
 export 'src/utils/utils.dart';
 export 'src/widgets/graphx_widget.dart';
 export 'src/tween/gtween.dart';
+export 'src/debug/debug.dart';
