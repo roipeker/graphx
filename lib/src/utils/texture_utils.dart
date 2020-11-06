@@ -1,8 +1,7 @@
-
 import '../../graphx.dart';
 
 abstract class TextureUtils {
-  static Shape _helperShape = Shape();
+  static final Shape _helperShape = Shape();
 
   static Graphics get _g => _helperShape.graphics;
   static double resolution = 1.0;
@@ -42,7 +41,7 @@ abstract class TextureUtils {
         .beginFill(color, alpha)
         .drawPolygonFaces(0, 0, w / 2, 3, rotation)
         .endFill();
-    double heightScale = h / w;
+    var heightScale = h / w;
     _helperShape.scaleY = heightScale;
     var tx = await _drawShape();
     _helperShape.scaleY = 1;
@@ -67,16 +66,38 @@ abstract class TextureUtils {
     var rows = base.sourceRect.height / h;
     var total = cols * rows;
     var output = <GxTexture>[];
-    double _w = w.toDouble();
-    double _h = h.toDouble();
+    final _w = w.toDouble();
+    final _h = h.toDouble();
     for (var i = 0; i < total; ++i) {
-      double px = (i % cols) * _w;
-      double py = (i ~/ cols) * _h;
+      final px = (i % cols) * _w;
+      final py = (i ~/ cols) * _h;
       var subrect = GxRect(px, py, _w, _h);
       var texture = GxTexture(base.source, subrect, true, scale);
       texture.base = base;
       output.add(texture);
     }
     return output;
+  }
+
+  static bool isValidTextureSize(int size) {
+    return getNextValidTextureSize(size) == size;
+  }
+
+  static int getNextValidTextureSize(int size) {
+    var _size = 1;
+    while (size > _size) {
+      _size *= 2;
+    }
+    return _size;
+  }
+
+  static int getPreviousValidTextureSize(int size) {
+    return getNextValidTextureSize(size) >> 1;
+  }
+
+  static int getNearestValidTextureSize(int size) {
+    final prev = getPreviousValidTextureSize(size);
+    final next = getNextValidTextureSize(size);
+    return size - prev < next - size ? prev : next;
   }
 }

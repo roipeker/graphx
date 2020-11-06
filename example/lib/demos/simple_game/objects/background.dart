@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import '../utils/game_mixins.dart';
-
 
 class GameBackground extends Sprite with GameObject {
   Bitmap bg;

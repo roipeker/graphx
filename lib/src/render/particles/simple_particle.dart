@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import '../../../graphx.dart';
 
-
 class SimpleParticle {
   SimpleParticle $next;
   SimpleParticle $prev;

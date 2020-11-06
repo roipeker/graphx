@@ -1,2 +1,4 @@
 export './base_texture.dart';
-export './gx_texture_utils.dart';
+export './gtexture.dart';
+export './gtexture_atlas.dart';
+export './gsub_texture.dart';

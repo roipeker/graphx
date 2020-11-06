@@ -2,9 +2,6 @@ import 'dart:ui';
 
 import '../../graphx.dart';
 
-
-
-
 class GxTexture {
   Image source;
   GxRect _scaledRect;

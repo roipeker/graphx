@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter_svg/flutter_svg.dart';

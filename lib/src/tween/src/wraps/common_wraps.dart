@@ -11,6 +11,8 @@ abstract class CommonTweenWraps {
       'scaleY': [() => o.scaleY, (v) => o.scaleY = v],
       'scale': [() => o.scale, (v) => o.scale = v],
       'rotation': [() => o.rotation, (v) => o.rotation = v],
+      'rotationX': [() => o.rotationX, (v) => o.rotationX = v],
+      'rotationY': [() => o.rotationY, (v) => o.rotationY = v],
       'pivotX': [() => o.pivotX, (v) => o.pivotX = v],
       'pivotY': [() => o.pivotY, (v) => o.pivotY = v],
       'width': [() => o.width, (v) => o.width = v],

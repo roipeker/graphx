@@ -139,6 +139,12 @@ abstract class DisplayObject
   double _x = 0, _y = 0, _scaleX = 1, _scaleY = 1, _rotation = 0;
   double _pivotX = 0, _pivotY = 0;
   double _skewX = 0, _skewY = 0;
+  double _z = 0, _rotationX = 0, _rotationY = 0;
+
+  double get rotationX => _rotationX;
+
+  double get rotationY => _rotationY;
+  double get z => _z;
 
   double get x => _x;
 
@@ -249,12 +255,50 @@ abstract class DisplayObject
     $setTransformationChanged();
   }
 
+  set rotationX(double value) {
+    if (value == null) {
+      throw "rotationX can not be null";
+    }
+    if (_rotationX == value) return;
+    _rotationX = value ?? 0.0;
+    if (!_3dWarned) _warn3d();
+    $setTransformationChanged();
+  }
+
+  static bool _3dWarned = false;
+  void _warn3d() {
+    print('Warning: 3d transformations still not properly supported');
+    _3dWarned = true;
+  }
+
+  set rotationY(double value) {
+    if (value == null) {
+      throw "rotationY can not be null";
+    }
+    if (_rotationY == value) return;
+    _rotationY = value ?? 0.0;
+    if (!_3dWarned) _warn3d();
+    $setTransformationChanged();
+  }
+
+  set z(double value) {
+    if (value == null) {
+      throw "z can not be null";
+    }
+    if (_z == value) return;
+    _z = value ?? 0.0;
+    if (!_3dWarned) _warn3d();
+    $setTransformationChanged();
+  }
+
   double $alpha = 1;
 
   double get alpha => $alpha;
 
   set alpha(double value) {
-    if (value == null) throw "alpha can not be null";
+    if (value == null) {
+      throw "alpha can not be null";
+    }
     if ($alpha != value) {
       value ??= 1;
       $alpha = value.clamp(0.0, 1.0);
@@ -299,9 +343,11 @@ abstract class DisplayObject
 
   /// to detect matrix change.
   bool _transformationChanged = false;
+  bool _is3D = false;
 
   void $setTransformationChanged() {
     _transformationChanged = true;
+    _is3D = _rotationX != 0 || _rotationY != 0 || _z != 0;
     requiresRedraw();
   }
 
@@ -329,7 +375,8 @@ abstract class DisplayObject
     alpha = 1.0;
     _pivotX = _pivotY = 0.0;
     _scaleX = _scaleY = 1.0;
-    _skewX = _skewX = 0.0;
+    _skewX = _skewY = 0.0;
+    _rotationX = _rotationY = 0.0;
     mouseEnabled = true;
   }
 
@@ -611,8 +658,13 @@ abstract class DisplayObject
     final _hasTranslate = _x != 0 || _y != 0;
     final _hasPivot = _pivotX != 0 || _pivotX != 0;
     final _hasSkew = _skewX != 0 || _skewY != 0;
-    final needSave =
-        _hasTranslate || _hasScale || rotation != 0 || _hasPivot || _hasSkew;
+    final needSave = _hasTranslate ||
+        _hasScale ||
+        rotation != 0 ||
+        _hasPivot ||
+        _hasSkew ||
+        _is3D;
+
     var _saveLayer = this is DisplayObjectContainer &&
         (this as DisplayObjectContainer).hasChildren &&
         $alpha != 1;
@@ -631,7 +683,21 @@ abstract class DisplayObject
     }
     if (needSave) {
       canvas.save();
-      canvas.transform(transformationMatrix.toNative().storage);
+      var m = transformationMatrix.toNative();
+      canvas.transform(m.storage);
+
+      if (_is3D) {
+        m = GxMatrix().toNative();
+        m.setEntry(3, 2, 0.002);
+//        m.setTranslationRaw(80.0, 20.0, -1000);
+        m.rotateX(_rotationX);
+        m.rotateY(_rotationY);
+        if (z != 0) {
+          m.translate(0.0, 0.0, z);
+        }
+//        m.translate(0.0, 0.0, -90);
+        canvas.transform(m.storage);
+      }
     }
 
     if (hasMask && maskIsGraphics) {
@@ -682,6 +748,9 @@ abstract class DisplayObject
 
     if (needSave) {
       canvas.restore();
+//      if (_is3D) {
+//        canvas.restore();
+//      }
     }
     if (_saveLayer) {
       canvas.restore();

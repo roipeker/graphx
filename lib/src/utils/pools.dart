@@ -1,5 +1,3 @@
-
-
 import '../../graphx.dart';
 
 abstract class Pool {

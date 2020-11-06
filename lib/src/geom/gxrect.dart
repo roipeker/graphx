@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'geom.dart';
 
-
 class GxRect {
   static GxRect fromNative(Rect nativeRect) {
     return GxRect(
@@ -47,11 +46,11 @@ class GxRect {
 
   GxRect([this.x = 0, this.y = 0, this.width = 0, this.height = 0]);
 
-  GxRect setTo(double x, double y, double w, double h) {
+  GxRect setTo(double x, double y, double width, double height) {
     this.x = x;
     this.y = y;
-    this.width = w;
-    this.height = h;
+    this.width = width;
+    this.height = height;
     return this;
   }
 
@@ -77,7 +76,9 @@ class GxRect {
 
   List<GxPoint> getPositions([List<GxPoint> out]) {
     out ??= List.generate(4, (i) => GxPoint());
-    for (var i = 0; i < 4; ++i) out[i] ??= GxPoint();
+    for (var i = 0; i < 4; ++i) {
+      out[i] ??= GxPoint();
+    }
     out[2].x = out[0].x = left;
     out[1].y = out[0].y = top;
     out[3].x = out[1].x = right;
@@ -162,10 +163,7 @@ class GxRect {
       x >= this.x && y >= this.y && x < right && y < bottom;
 
   bool containsPoint(GxPoint point) =>
-      point.x >= this.x &&
-      point.y >= this.y &&
-      point.x < right &&
-      point.y < bottom;
+      point.x >= x && point.y >= y && point.x < right && point.y < bottom;
 
   GxRect operator *(double scale) {
     x *= scale;

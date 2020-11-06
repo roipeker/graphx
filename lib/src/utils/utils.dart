@@ -7,3 +7,4 @@ export './mixins.dart';
 export './painter_utils.dart';
 export './pools.dart';
 export './texture_utils.dart';
+export './string_utils.dart';

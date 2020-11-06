@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import '../../graphx.dart';
 
-
 abstract class MatrixUtils {
   static void skew(GxMatrix matrix, double skewX, double skewY) {
     var sinX = math.sin(skewX);

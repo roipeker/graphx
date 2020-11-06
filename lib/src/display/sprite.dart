@@ -12,44 +12,34 @@ class Sprite extends DisplayObjectContainer {
   static final _sHelperPoint = GxPoint();
 
   Graphics _graphics;
+
   Graphics get graphics => _graphics ??= Graphics();
 
   @override
   GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     out = super.getBounds(targetSpace, out);
-//    final matrix = _sHelperMatrix;
-//    matrix.identity();
-//    getTransformationMatrix(targetSpace, matrix);
-//    if (_graphics != null) {
-//      /// add graphics later.
-////      out ??= GxRect();
-//      var _allBounds = _graphics.getAllBounds();
-//      _allBounds.forEach((localBounds) {
-////        out ??= GxRect();
-//        /// modify the same instance.
-//        var newRect = MatrixUtils.getTransformedBoundsRect(
-//          matrix,
-//          localBounds,
-//          localBounds,
-//        );
-//        out.expandToInclude(newRect);
-//      });
-//    } else {
-//      MatrixUtils.getTransformedBoundsRect(matrix, out, out);
-//    print('inner get bounds: $out $this');
+    if (_graphics != null) {
+      _sHelperMatrix.identity();
+      getTransformationMatrix(targetSpace, _sHelperMatrix);
 
-//    }
+      /// single bounds, all paths as 1 rect.
+      final graphicsBounds = _graphics.getBounds();
+      MatrixUtils.getTransformedBoundsRect(
+        _sHelperMatrix,
+        graphicsBounds,
+        graphicsBounds,
+      );
+      out.expandToInclude(graphicsBounds);
+    }
     return out;
   }
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
     if (!visible || !mouseEnabled) return null;
-    DisplayObject target = super.hitTest(localPoint);
-    if (target == null) {
-      target =
-          (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
-    }
+    var target = super.hitTest(localPoint);
+    target ??=
+        (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
     return target;
   }
 

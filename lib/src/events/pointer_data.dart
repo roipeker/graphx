@@ -130,9 +130,10 @@ class MouseInputData {
   bool get isTertiaryDown => buttonsFlags & 0x04 == 0x04;
 
   GxPoint get stagePosition => _stagePosition;
-  GxPoint _stagePosition = GxPoint();
+  final GxPoint _stagePosition = GxPoint();
   GxPoint localPosition = GxPoint();
   GxPoint scrollDelta = GxPoint();
+  static final GxPoint _localDelta = GxPoint();
 
   double get localX => localPosition.x;
 
@@ -145,6 +146,14 @@ class MouseInputData {
   double get stageX => _stagePosition?.x ?? 0;
 
   double get stageY => _stagePosition?.y ?? 0;
+
+  GxPoint get localDelta {
+    final d = rawEvent?.rawEvent?.localDelta;
+    if (d == null) {
+      return _localDelta.setEmpty();
+    }
+    return _localDelta.setTo(d.dx, d.dy);
+  }
 
   static int uniqueId = 0;
   int uid;

@@ -2,14 +2,12 @@ import 'dart:ui';
 
 import '../../graphx.dart';
 
-
-
 mixin RenderUtilMixin {
   Picture createPicture([void Function(Canvas) prepaintCallback]) {
     final r = PictureRecorder();
     final c = Canvas(r);
     prepaintCallback?.call(c);
-    this.paint(c);
+    paint(c);
     return r.endRecording();
   }
 
@@ -28,7 +26,7 @@ mixin RenderUtilMixin {
     bool adjustOffset = true,
     double resolution = 1,
   ]) async {
-    GxRect rect = getBounds();
+    var rect = getBounds();
     if (resolution != 1) {
       rect *= resolution;
 //      rect = GxRect(
@@ -53,8 +51,8 @@ mixin RenderUtilMixin {
             },
     );
 
-    final int width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
-    final int height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
+    final width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
+    final height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
     final output = await picture.toImage(width, height);
     picture?.dispose();
     return output;

@@ -15,6 +15,11 @@ class GxPoint {
 
   Offset toNative() => Offset(x, y);
 
+  GxPoint setEmpty() {
+    x = y = 0.0;
+    return this;
+  }
+
   GxPoint setTo(double x, double y) {
     this.x = x;
     this.y = y;
@@ -31,17 +36,6 @@ class GxPoint {
     dy *= dy;
     return math.sqrt(dx + dy);
   }
-
-//  GxPointek]pqr3
-//  Point.prototype.dot = function (p) {
-//    var result = ((this.x*p.x)+(this.y*p.y));
-//    return result;
-//  };
-//
-//  Point.prototype.cross = function (p) {
-//    var result = ((this.x*p.y)-(this.y*p.x));
-//    return result;
-//  };
 
   double get length => math.sqrt(x * x + y * y);
 }
