@@ -5,8 +5,6 @@ import 'package:vector_math/vector_math_64.dart';
 
 import 'geom.dart';
 
-
-
 class GxMatrix {
   double a, b, c, d, tx, ty;
 
@@ -126,13 +124,13 @@ class GxMatrix {
 //    tx = (matrix.tx * a1) + (matrix.ty * c1) + tx;
 //    ty = (matrix.tx * b1) + (matrix.ty * d1) + ty;
 
-    this.a = (matrix.a * a1) + (matrix.b * c1);
-    this.b = (matrix.a * b1) + (matrix.b * d1);
-    this.c = (matrix.c * a1) + (matrix.d * c1);
-    this.d = (matrix.c * b1) + (matrix.d * d1);
+    a = (matrix.a * a1) + (matrix.b * c1);
+    b = (matrix.a * b1) + (matrix.b * d1);
+    c = (matrix.c * a1) + (matrix.d * c1);
+    d = (matrix.c * b1) + (matrix.d * d1);
 
-    this.tx = (matrix.tx * a1) + (matrix.ty * c1) + this.tx;
-    this.ty = (matrix.tx * b1) + (matrix.ty * d1) + this.ty;
+    tx = (matrix.tx * a1) + (matrix.ty * c1) + tx;
+    ty = (matrix.tx * b1) + (matrix.ty * d1) + ty;
 
     return this;
   }
@@ -182,19 +180,19 @@ class GxMatrix {
 //}
 
   GxMatrix invert() {
-    double n = a * d - b * c;
+    var n = a * d - b * c;
     if (n == 0) {
       a = b = c = d = 0;
       tx = -tx;
       ty = -ty;
     } else {
       n = 1 / n;
-      double a1 = d * n;
+      var a1 = d * n;
       d = a * n;
       a = a1;
       b *= -n;
       c *= -n;
-      double tx1 = -a * tx - c * ty;
+      var tx1 = -a * tx - c * ty;
       ty = -b * tx - d * ty;
       tx = tx1;
     }
