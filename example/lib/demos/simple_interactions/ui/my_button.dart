@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class MyButton extends Sprite {
+  // variables to define the size of the button.
   double w = 80;
   double h = 80;
 
+  // backwards background (black)
   Shape bg;
+  // filled background that changes with [_fillPercent] (yellow)
   Shape fillBg;
+  // the light bulb icon that toggles when clicking the button
   GxIcon icon;
 
   bool _isTouching = false;
@@ -31,12 +35,16 @@ class MyButton extends Sprite {
     icon.x = w / 2;
     icon.y = h / 2;
 
+    /// add all children into this Sprite.
     addChild(bg);
     addChild(fillBg);
     addChild(icon);
+
+    // center the pivot based on the current size.
     alignPivot();
-    // take the Sprite as an entire active area.
-    // disable children from recieving pointer events.
+
+    // Takes the Sprite as an whole active area.
+    // disable children from receiving pointer events.
     mouseChildren = false;
 
     onMouseDown.add(_onMouseDown);
@@ -66,7 +74,7 @@ class MyButton extends Sprite {
   /// Handler for pointer down (mouse or touch).
   void _onMouseDown(MouseInputData input) {
     scale = .8;
-    stage.onMouseUp.addOnce(_onStageRelase);
+    stage.onMouseUp.addOnce(_onStageRelease);
   }
 
   /// Handler for mouse scroll wheel (only desktop).
@@ -105,7 +113,7 @@ class MyButton extends Sprite {
   /// bounds of the object, we can still get a callback. That's why we used
   /// [onMouseOver] and [onMouseOut] to know if we are releasing inside the
   /// object ("click" or [onTap] in Flutter's world) or not.
-  void _onStageRelase(MouseInputData input) {
+  void _onStageRelease(MouseInputData input) {
     scale = 1;
     if (_isTouching) {
       toggleButton();
