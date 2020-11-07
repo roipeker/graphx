@@ -70,7 +70,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   List<DisplayObject> getObjectsUnderPoint(GxPoint localPoint) {
     final result = <DisplayObject>[];
-    if (!visible || !mouseEnabled || !hitTestMask(localPoint)) return result;
+    if (!$hasVisibleArea || !mouseEnabled || !hitTestMask(localPoint)) {
+      return result;
+    }
     final numChild = children.length;
     DisplayObject target;
     for (var i = numChild - 1; i >= 0; --i) {
@@ -93,8 +95,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!visible || !mouseEnabled || !hitTestMask(localPoint)) return null;
-    DisplayObject target;
+    if (!$hasVisibleArea || !mouseEnabled || !hitTestMask(localPoint)) {
+      return null;
+    }
     final numChild = children.length;
     for (var i = numChild - 1; i >= 0; --i) {
       var child = children[i];
@@ -102,9 +105,14 @@ abstract class DisplayObjectContainer extends DisplayObject {
       _sHitTestMatrix.copyFrom(child.transformationMatrix);
       _sHitTestMatrix.invert();
       _sHitTestMatrix.transformCoords(
-          localPoint.x, localPoint.y, _sHitTestPoint);
-      target = child.hitTest(_sHitTestPoint);
-      if (target != null) return mouseChildren ? this : target;
+        localPoint.x,
+        localPoint.y,
+        _sHitTestPoint,
+      );
+      final target = child.hitTest(_sHitTestPoint);
+      if (target != null) {
+        return mouseChildren ? this : target;
+      }
     }
     return null;
   }
@@ -147,8 +155,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
   void setChildIndex(DisplayObject child, int index) {
     final old = getChildIndex(child);
     if (old == index) return;
-    if (old == -1)
-      throw ArgumentError.value(child, null, "Not a child of this container");
+    if (old == -1) {
+      throw ArgumentError.value(child, null, 'Not a child of this container');
+    }
     children.removeAt(old);
     children.insert(index.clamp(0, numChildren), child);
     requiresRedraw();
@@ -157,8 +166,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
   void swapChildren(DisplayObject child1, DisplayObject child2) {
     final idx1 = getChildIndex(child1);
     final idx2 = getChildIndex(child2);
-    if (idx1 == -1 || idx2 == -1)
-      throw ArgumentError("Not a child of this container");
+    if (idx1 == -1 || idx2 == -1) {
+      throw ArgumentError('Not a child of this container');
+    }
     swapChildrenAt(idx1, idx2);
   }
 
@@ -185,7 +195,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
     final len = children.length;
     if (index < 0) index = len + index;
     if (index >= 0 && index < len) return children[index];
-    throw RangeError("Invalid child index");
+    throw RangeError('Invalid child index');
   }
 
   DisplayObject getChildByName(String name) {
@@ -200,14 +210,16 @@ abstract class DisplayObjectContainer extends DisplayObject {
     int endIndex = -1,
     bool dispose = false,
   ]) {
-    if (endIndex < 0 || endIndex >= children.length)
+    if (endIndex < 0 || endIndex >= children.length) {
       endIndex = children.length - 1;
+    }
 
-    for (var i = fromIndex; i <= endIndex; ++i)
+    for (var i = fromIndex; i <= endIndex; ++i) {
       removeChildAt(
         fromIndex,
         dispose,
       );
+    }
   }
 
   int get numChildren => children.length;
@@ -292,7 +304,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   @override
   void dispose() {
-    for (final child in children) child?.dispose();
+    for (final child in children) {
+      child?.dispose();
+    }
     children.clear();
     super.dispose();
   }

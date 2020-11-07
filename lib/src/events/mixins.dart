@@ -10,7 +10,9 @@ mixin EventDispatcherMixin implements Listenable {
   final _updaters = HashSet<VoidCallback>();
 
   void notify() {
-    for (final updater in _updaters) updater();
+    for (final updater in _updaters) {
+      updater();
+    }
   }
 
   @override

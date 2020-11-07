@@ -100,7 +100,7 @@ class MovieClip extends Bitmap {
             return;
           }
         }
-        if (bitmap == null) bitmap = resolveBitmap();
+        bitmap ??= resolveBitmap();
         if (bitmap != null) {
           bitmap.texture = _frameTextures[currentFrame];
         }

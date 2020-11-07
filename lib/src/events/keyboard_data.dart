@@ -9,11 +9,11 @@ class KeyboardEventData {
 
   KeyboardEventData({this.type, this.rawEvent});
 
-  bool isPress(LogicalKeyboardKey key) {
+  bool isPressed(LogicalKeyboardKey key) {
     return rawEvent.isKeyPressed(key);
   }
 
-  bool hasKey(LogicalKeyboardKey key) {
+  bool isKey(LogicalKeyboardKey key) {
     return rawEvent.logicalKey == key;
   }
 }

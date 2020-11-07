@@ -26,7 +26,7 @@ class DisplayBoundsDebugger {
     ..color = Color(0xff00FFFF)
     ..strokeWidth = 1;
 
-  DisplayObjectContainer _root;
+  final DisplayObjectContainer _root;
   Canvas canvas;
   static final GxRect _sHelpRect = GxRect();
 

@@ -111,7 +111,7 @@ abstract class DisplayObject
     if (inStage) {
       return globalToLocal(_sHelperPoint.setTo(stage.pointer.mouseX, 0)).x;
     } else {
-      throw "To get mouseX object needs to be a descendant of Stage.";
+      throw 'To get mouseX object needs to be a descendant of Stage.';
     }
   }
 
@@ -119,13 +119,14 @@ abstract class DisplayObject
     if (inStage) {
       return globalToLocal(_sHelperPoint.setTo(0, stage.pointer.mouseY)).y;
     } else {
-      throw "To get mouseY object needs to be a descendant of Stage.";
+      throw 'To get mouseY object needs to be a descendant of Stage.';
     }
   }
 
   GxPoint get mousePosition {
-    if (!inStage)
-      throw "To get mousePosition, the object needs to be in the Stage.";
+    if (!inStage) {
+      throw 'To get mousePosition, the object needs to be in the Stage.';
+    }
     return globalToLocal(_sHelperPoint.setTo(
       stage.pointer.mouseX,
       stage.pointer.mouseY,
@@ -169,9 +170,9 @@ abstract class DisplayObject
   double get height => getBounds($parent, _sHelperRect).height;
 
   set width(double value) {
-    if (value == null) throw "width can not be null";
+    if (value == null) throw 'width can not be null';
     double actualW;
-    bool zeroScale = _scaleX < 1e-8 && _scaleX > -1e-8;
+    var zeroScale = _scaleX < 1e-8 && _scaleX > -1e-8;
     if (zeroScale) {
       scaleX = 1.0;
       actualW = width;
@@ -182,9 +183,9 @@ abstract class DisplayObject
   }
 
   set height(double value) {
-    if (value == null) throw "height can not be null";
+    if (value == null) throw 'height can not be null';
     double actualH;
-    bool zeroScale = _scaleY < 1e-8 && _scaleY > -1e-8;
+    var zeroScale = _scaleY < 1e-8 && _scaleY > -1e-8;
     if (zeroScale) {
       scaleY = 1.0;
       actualH = height;
@@ -195,28 +196,28 @@ abstract class DisplayObject
   }
 
   set x(double value) {
-    if (value == null) throw "x can not be null";
+    if (value == null) throw 'x can not be null';
     if (_x == value) return;
     _x = value;
     $setTransformationChanged();
   }
 
   set y(double value) {
-    if (value == null) throw "y can not be null";
+    if (value == null) throw 'y can not be null';
     if (_y == value) return;
     _y = value;
     $setTransformationChanged();
   }
 
   set scaleX(double value) {
-    if (value == null) throw "scaleX can not be null";
+    if (value == null) throw 'scaleX can not be null';
     if (_scaleX == value) return;
     _scaleX = value;
     $setTransformationChanged();
   }
 
   set scaleY(double value) {
-    if (value == null) throw "scaleY can not be null";
+    if (value == null) throw 'scaleY can not be null';
     if (_scaleY == value) return;
     _scaleY = value;
     $setTransformationChanged();
@@ -235,21 +236,21 @@ abstract class DisplayObject
   }
 
   set skewX(double value) {
-    if (value == null) throw "skewX can not be null";
+    if (value == null) throw 'skewX can not be null';
     if (_skewX == value) return;
     _skewX = value;
     $setTransformationChanged();
   }
 
   set skewY(double value) {
-    if (value == null) throw "skewY can not be null";
+    if (value == null) throw 'skewY can not be null';
     if (_skewY == value) return;
     _skewY = value;
     $setTransformationChanged();
   }
 
   set rotation(double value) {
-    if (value == null) throw "rotation can not be null";
+    if (value == null) throw 'rotation can not be null';
     if (_rotation == value) return;
     _rotation = value;
     $setTransformationChanged();
@@ -257,7 +258,7 @@ abstract class DisplayObject
 
   set rotationX(double value) {
     if (value == null) {
-      throw "rotationX can not be null";
+      throw 'rotationX can not be null';
     }
     if (_rotationX == value) return;
     _rotationX = value ?? 0.0;
@@ -273,7 +274,7 @@ abstract class DisplayObject
 
   set rotationY(double value) {
     if (value == null) {
-      throw "rotationY can not be null";
+      throw 'rotationY can not be null';
     }
     if (_rotationY == value) return;
     _rotationY = value ?? 0.0;
@@ -283,7 +284,7 @@ abstract class DisplayObject
 
   set z(double value) {
     if (value == null) {
-      throw "z can not be null";
+      throw 'z can not be null';
     }
     if (_z == value) return;
     _z = value ?? 0.0;
@@ -297,7 +298,7 @@ abstract class DisplayObject
 
   set alpha(double value) {
     if (value == null) {
-      throw "alpha can not be null";
+      throw 'alpha can not be null';
     }
     if ($alpha != value) {
       value ??= 1;
@@ -352,11 +353,11 @@ abstract class DisplayObject
   }
 
   /// common parent.
-  static List<DisplayObject> _sAncestors = [];
-  static GxPoint _sHelperPoint = GxPoint();
-  static GxRect _sHelperRect = GxRect();
-  static GxMatrix _sHelperMatrix = GxMatrix();
-  static GxMatrix _sHelperMatrixAlt = GxMatrix();
+  static final List<DisplayObject> _sAncestors = [];
+  static final GxPoint _sHelperPoint = GxPoint();
+  static final GxRect _sHelperRect = GxRect();
+  static final GxMatrix _sHelperMatrix = GxMatrix();
+  static final GxMatrix _sHelperMatrixAlt = GxMatrix();
 
   double get worldAlpha => alpha * ($parent?.worldAlpha ?? 1);
 
@@ -394,7 +395,7 @@ abstract class DisplayObject
   GxRect get bounds => getBounds(this);
 
   GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
-    throw "getBounds() is abstract in DisplayObject";
+    throw 'getBounds() is abstract in DisplayObject';
   }
 
   GxPoint globalToLocal(GxPoint globalPoint, [GxPoint out]) {
@@ -491,14 +492,14 @@ abstract class DisplayObject
           y - pivotY * scaleY,
         );
       } else {
-        double cos = math.cos(rotation);
-        double sin = math.sin(rotation);
-        double a = scaleX * cos;
-        double b = scaleX * sin;
-        double c = scaleY * -sin;
-        double d = scaleY * cos;
-        double tx = x - pivotX * a - pivotY * c;
-        double ty = y - pivotX * b - pivotY * d;
+        final cos = math.cos(rotation);
+        final sin = math.sin(rotation);
+        final a = scaleX * cos;
+        final b = scaleX * sin;
+        final c = scaleY * -sin;
+        final d = scaleY * cos;
+        final tx = x - pivotX * a - pivotY * c;
+        final ty = y - pivotX * b - pivotY * d;
         out.setTo(a, b, c, d, tx, ty);
       }
     } else {
@@ -568,7 +569,7 @@ abstract class DisplayObject
 
   static DisplayObject _findCommonParent(
       DisplayObject obj1, DisplayObject obj2) {
-    DisplayObject current = obj1;
+    var current = obj1;
 
     /// TODO: use faster Hash access.
     while (current != null) {
@@ -576,16 +577,18 @@ abstract class DisplayObject
       current = current.$parent;
     }
     current = obj2;
-    while (current != null && _sAncestors.indexOf(current) == -1) {
+    while (current != null && !_sAncestors.contains(current)) {
       current = current.$parent;
     }
     _sAncestors.length = 0;
     if (current != null) return current;
-    throw "Object not connected to target";
+    throw 'Object not connected to target';
   }
 
   bool hitTestMask(GxPoint localPoint) {
-    if ($mask == null) return true;
+    if ($mask == null) {
+      return true;
+    }
     if ($mask.inStage) {
       getTransformationMatrix($mask, _sHelperMatrixAlt);
     } else {
@@ -604,9 +607,15 @@ abstract class DisplayObject
 
   /// `useShape` is meant to be used by `Shape.graphics`.
   DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!visible || !mouseEnabled) return null;
-    if ($mask != null && !hitTestMask(localPoint)) return null;
-    if (getBounds(this, _sHelperRect).containsPoint(localPoint)) return this;
+    if (!$hasVisibleArea || !mouseEnabled) {
+      return null;
+    }
+    if ($mask != null && !hitTestMask(localPoint)) {
+      return null;
+    }
+    if (getBounds(this, _sHelperRect).containsPoint(localPoint)) {
+      return this;
+    }
     return null;
   }
 
@@ -614,7 +623,9 @@ abstract class DisplayObject
 
   DisplayObject get base {
     var current = this;
-    while (current.$parent != null) current = current.$parent;
+    while (current.$parent != null) {
+      current = current.$parent;
+    }
     return current;
   }
 
@@ -678,8 +689,7 @@ abstract class DisplayObject
 
     if (_saveLayer) {
       final alphaPaint = PainterUtils.getAlphaPaint($alpha);
-      final rect = getBounds(this).toNative();
-      canvas.saveLayer(null, alphaPaint);
+      canvas.saveLayer(getBounds(this).toNative(), alphaPaint);
     }
     if (needSave) {
       canvas.save();
@@ -687,15 +697,14 @@ abstract class DisplayObject
       canvas.transform(m.storage);
 
       if (_is3D) {
+        /// TODO: experimental, just transforms
         m = GxMatrix().toNative();
         m.setEntry(3, 2, 0.002);
-//        m.setTranslationRaw(80.0, 20.0, -1000);
         m.rotateX(_rotationX);
         m.rotateY(_rotationY);
         if (z != 0) {
           m.translate(0.0, 0.0, z);
         }
-//        m.translate(0.0, 0.0, -90);
         canvas.transform(m.storage);
       }
     }
@@ -724,9 +733,10 @@ abstract class DisplayObject
       final maskPaint = Paint();
       maskPaint.blendMode = BlendMode.dstIn;
 //      maskPaint.blendMode = BlendMode.srcOver;
-      final rect = getBounds(this).toNative();
 //      canvas.transform(transformationMatrix.invert().toNative().storage);
 //      canvas.saveLayer(null, _grayscaleDstInPaint);
+      /// todo: not sure if applying rect will work properly.
+//      final rect = getBounds(this).toNative();
       canvas.saveLayer(null, maskPaint);
       mask.$canvas = canvas;
 //      mask.paint(canvas);
@@ -785,11 +795,13 @@ abstract class DisplayObject
   /// internal
   void $setParent(DisplayObjectContainer value) {
     var ancestor = value;
-    while (ancestor != this && ancestor != null) ancestor = ancestor.$parent;
+    while (ancestor != this && ancestor != null) {
+      ancestor = ancestor.$parent;
+    }
     if (ancestor == this) {
       throw ArgumentError(
-          "An object cannot be added as a child to itself or one "
-          "of its children (or children's children, etc.)");
+          'An object cannot be added as a child to itself or one '
+          'of its children (or children\'s children, etc.)');
     } else {
       $parent = value;
     }
@@ -825,7 +837,7 @@ abstract class DisplayObject
     final r = PictureRecorder();
     final c = Canvas(r);
     prepaintCallback?.call(c);
-    this.paint(c);
+    paint(c);
     return r.endRecording();
   }
 

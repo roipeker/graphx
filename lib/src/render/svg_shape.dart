@@ -102,7 +102,7 @@ class SvgShape extends DisplayObject {
 
   @override
   void $applyPaint() {
-    bool _saveLayer = $alpha != 1 || usePaint;
+    var _saveLayer = $alpha != 1 || usePaint;
     if (_saveLayer) {
       if (_invalidColor) _validateColor();
       final rect = getBounds(this).toNative();

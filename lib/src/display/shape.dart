@@ -32,7 +32,6 @@ class Shape extends DisplayObject {
 //          localBounds,
 //        ));
 //      });
-
       /// single bounds, all paths as 1 rect.
       return MatrixUtils.getTransformedBoundsRect(
           matrix, _graphics.getBounds(out), out);
@@ -42,56 +41,28 @@ class Shape extends DisplayObject {
       out.setTo(pos.x, pos.y, 0, 0);
     }
     return out;
-//    print("Transform matrix:: $m");
-//    getTransformationMatrix(targetSpace, _sBoundsMatrix);
-//    _sBoundsMatrix.transformCoords(0, 0, _sBoundsPoint);
-//    out.setTo(_sBoundsPoint.x, _sBoundsPoint.y, 0, 0);
-
-//    m.transformCoords(0, 0, p);
-//    out.setTo(p.x, p.y, 0, 0);
-//    print(m);
-//    print(p);
-//    if(!visible||!touchable ||!hitTestMask(loca))
-    return _graphics?.getBounds();
   }
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!visible || !mouseEnabled) return null;
+    if (!$hasVisibleArea || !mouseEnabled) {
+      return null;
+    }
     return (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
   }
-
-//  override public function hitTest(localPoint:Point):DisplayObject
-//  {
-//  if (!visible || !touchable || !hitTestMask(localPoint)) return null;
-//  else return MeshUtil.containsPoint(_vertexData, _indexData, localPoint) ? this : null;
-//  }
-
-  //        canvas.clipPath(path)
-  //      canvas.clipPath(path)
 
   @override
   void $applyPaint() {
     if (isMask && _graphics != null) {
-//      $canvas.save();
-//      $canvas.transform(transformationMatrix.toNative().storage);
-
-      Path paths = _graphics.getPaths();
       GxMatrix matrix;
+      var paths = _graphics.getPaths();
       if (inStage && $maskee.inStage) {
         matrix = getTransformationMatrix($maskee);
       } else {
         matrix = transformationMatrix;
       }
-
       paths = paths.transform(matrix.toNative().storage);
-//      paths = paths.transform(transformationMatrix.toNative().storage);
-
       $canvas.clipPath(paths);
-
-//      _graphics?.isMask = this.isMask;
-//      _graphics?.paint($canvas);
-//      $canvas.restore();
     } else {
       _graphics?.isMask = isMask;
       _graphics?.alpha = worldAlpha;

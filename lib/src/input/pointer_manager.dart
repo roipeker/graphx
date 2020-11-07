@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 
 import '../../graphx.dart';
 
-
-
 class PointerManager<T extends PointerEventData> {
   SystemMouseCursor get cursor => _cursor;
 
@@ -69,7 +67,7 @@ class PointerManager<T extends PointerEventData> {
   EventSignal<T> _onEnter;
 
   PointerEventData _lastEvent;
-  Map _signalMapper = {};
+  final Map _signalMapper = {};
 
   PointerManager() {
     _signalMapper[PointerEventType.down] = () => _onDown;

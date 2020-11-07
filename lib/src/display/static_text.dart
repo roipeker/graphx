@@ -64,8 +64,10 @@ class StaticText extends DisplayObject {
   }
 
   /// deprecated.
+  @override
   double get width => _width;
 
+  @override
   set width(double value) {
     if (value == null || _width == value) return;
     _width = value;
@@ -197,7 +199,7 @@ class StaticText extends DisplayObject {
     }
     if (_paragraph != null) {
       if (alpha != 1) {
-        Rect bounds = Rect.fromLTWH(0, 0, textWidth, textHeight);
+        var bounds = Rect.fromLTWH(0, 0, textWidth, textHeight);
         final alphaPaint = PainterUtils.getAlphaPaint(alpha);
         $canvas.saveLayer(bounds, alphaPaint);
         $canvas.drawParagraph(_paragraph, Offset.zero);

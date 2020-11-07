@@ -43,7 +43,7 @@ class Signal {
       _listeners[_iterDispatchers]?.call();
     }
     final lenCount = _listenersOnce.length;
-    for (int i = 0; i < lenCount; i++) {
+    for (var i = 0; i < lenCount; i++) {
       _listenersOnce.removeAt(0)?.call();
     }
   }
@@ -54,7 +54,7 @@ class Signal {
       _listeners[_iterDispatchers]?.call(data);
     }
     final lenCount = _listenersOnce.length;
-    for (int i = 0; i < lenCount; i++) {
+    for (var i = 0; i < lenCount; i++) {
       _listenersOnce.removeAt(i)?.call(data);
     }
   }
@@ -88,7 +88,6 @@ class EventSignal<T> {
   void remove(EventSignalCallback<T> callback) {
     final idx = _listeners.indexOf(callback);
     if (idx > -1) {
-      print("REMOVE callback!! $idx // $_iterDispatchers");
       if (idx <= _iterDispatchers) _iterDispatchers--;
       _listeners?.removeAt(idx);
     } else {
@@ -122,7 +121,7 @@ class EventSignal<T> {
 
 //    final lenCount = _listenersOnce.length;
 //    for (int i = lenCount; i >= 0; i--) {
-    for (int i = 0; i < _listenersOnce.length; i++) {
+    for (var i = 0; i < _listenersOnce.length; i++) {
       _listenersOnce?.removeAt(i)?.call(data);
     }
   }

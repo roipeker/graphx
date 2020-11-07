@@ -30,8 +30,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   void copyFrom(Graphics other) {
     _drawingQueue.clear();
-    for (final command in other._drawingQueue)
+    for (final command in other._drawingQueue) {
       _drawingQueue.add(command.clone());
+    }
     mask = other.mask;
     alpha = other.alpha;
     _currentDrawing = other._currentDrawing?.clone();

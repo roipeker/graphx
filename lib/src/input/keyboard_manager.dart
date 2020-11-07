@@ -7,7 +7,7 @@ import '../../graphx.dart';
 class KeyboardManager<T extends KeyboardEventData> {
   FocusNode focusNode = FocusNode();
 
-  dispose() {
+  void dispose() {
     focusNode?.dispose();
   }
 

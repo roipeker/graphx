@@ -8,8 +8,10 @@ class MyButton extends Sprite {
 
   // backwards background (black)
   Shape bg;
+
   // filled background that changes with [_fillPercent] (yellow)
   Shape fillBg;
+
   // the light bulb icon that toggles when clicking the button
   GxIcon icon;
 
@@ -27,6 +29,9 @@ class MyButton extends Sprite {
     fillBg = Shape();
     _dragBackground(fillBg.graphics, Colors.yellow.shade800);
     _updateFill();
+
+    bg.name = 'bg';
+    fillBg.name = 'fillBg';
 
     icon = GxIcon(null);
     _updateIcon();
@@ -47,12 +52,22 @@ class MyButton extends Sprite {
     // disable children from receiving pointer events.
     mouseChildren = false;
 
-    onMouseDown.add(_onMouseDown);
     onMouseOver.add(_onMouseOver);
+    onMouseDown.add(_onMouseDown);
     onMouseOut.add(_onMouseOut);
 
     // only on desktop.
     onMouseScroll.add(_onMouseScroll);
+
+//    stage.onMouseMove.add((e) {
+////      print(e.stagePosition);
+//      var p = fillBg.globalToLocal(e.stagePosition);
+////      print(p);
+////      print(this.hitTest(p));
+////      print(fillBg.bounds);
+////      print('${fillBg.hitTest(p)} /// ${fillBg.$hasVisibleArea}');
+////      this.alpha = this.hitTouch(p) ? 1 : .5;
+//    });
   }
 
   /// Draws a rounded cornder rectangle with the current w and h in any

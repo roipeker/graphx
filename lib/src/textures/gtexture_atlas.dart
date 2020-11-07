@@ -57,8 +57,6 @@ class GTextureAtlas {
     final pivots = <String, GxPoint>{};
     final nodeList = atlasXml.firstChild.findElements('SubTexture');
 
-    var atlasScale = 0;
-
     for (var subTexture in nodeList) {
       var name = subTexture.getAttribute('name');
       var x = attrDouble(subTexture, 'x') / scale * _atlasXmlRatio;

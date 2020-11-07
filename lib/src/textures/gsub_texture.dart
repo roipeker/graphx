@@ -108,6 +108,7 @@ class GSubTexture extends GTexture {
   /// no support
   void updateMatrices() {}
 
+  @override
   void render(Canvas canvas, [Paint paint]) {
     paint ??= GTexture.sDefaultPaint;
     paint.isAntiAlias = true;
