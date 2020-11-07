@@ -55,7 +55,6 @@ class Stage extends DisplayObjectContainer
       canvas.drawPaint(_backgroundPaint);
     }
     super.paint(canvas);
-
     if (DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.stage) {
       _boundsDebugger.canvas = canvas;
       _boundsDebugger.render();
@@ -63,6 +62,7 @@ class Stage extends DisplayObjectContainer
   }
 
   final GxRect _stageRect = GxRect();
+  GxRect get stageRect => _stageRect;
   Rect _stageRectNative;
 
   void $initFrameSize(Size value) {
@@ -70,6 +70,7 @@ class Stage extends DisplayObjectContainer
       _size = value;
       _stageRectNative =
           _stageRect.setTo(0, 0, _size.width, _size.height).toNative();
+      Graphics.updateStageRect(_stageRect);
       $onResized?.dispatch();
     }
   }

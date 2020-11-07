@@ -127,14 +127,14 @@ class GxIcon extends DisplayObject {
   }
 
   @override
-  void $applyPaint() {
+  void $applyPaint(Canvas canvas) {
     if (data == null) return;
     if (_invalidStyle) {
       _invalidStyle = false;
       _updateStyle();
     }
     if (_paragraph != null) {
-      $canvas.drawParagraph(_paragraph, Offset.zero);
+      canvas.drawParagraph(_paragraph, Offset.zero);
     }
   }
 }

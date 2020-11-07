@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
+import 'package:graphx/graphx.dart';
 
 import '../geom/geom.dart';
 import '../utils/utils.dart';
@@ -21,6 +22,12 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   bool isMask = false;
 
   Path get _path => _currentDrawing.path;
+
+  static final Path stageRectPath = Path();
+  static void updateStageRect(GxRect rect) {
+    stageRectPath.reset();
+    stageRectPath.addRect(rect.toNative());
+  }
 
   void dispose() {
     mask = null;

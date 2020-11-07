@@ -82,7 +82,7 @@ class Bitmap extends DisplayObject {
   }
 
   @override
-  void $applyPaint() {
+  void $applyPaint(Canvas canvas) {
     final useAtlas = texture.isSubTexture;
     if (useAtlas) {
       final dest = Rect.fromLTWH(
@@ -91,7 +91,7 @@ class Bitmap extends DisplayObject {
         texture.sourceRect.width / texture.scale,
         texture.sourceRect.height / texture.scale,
       );
-      $canvas.drawImageRect(
+      canvas.drawImageRect(
         texture.source,
         texture.sourceRect.toNative(),
         dest,
@@ -99,12 +99,12 @@ class Bitmap extends DisplayObject {
       );
     } else {
       if (texture.scale != 1) {
-        $canvas.save();
-        $canvas.scale(1 / texture.scale);
-        $canvas.drawImage(texture.source, Offset.zero, _paint);
-        $canvas.restore();
+        canvas.save();
+        canvas.scale(1 / texture.scale);
+        canvas.drawImage(texture.source, Offset.zero, _paint);
+        canvas.restore();
       } else {
-        $canvas.drawImage(texture.source, Offset.zero, _paint);
+        canvas.drawImage(texture.source, Offset.zero, _paint);
       }
     }
   }

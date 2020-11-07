@@ -147,7 +147,7 @@ class StaticText extends DisplayObject {
     double width = double.infinity,
   }) {
     this.text = text;
-    _width = width;
+    _width = width ?? double.infinity;
     _invalidBuilder = true;
     _invalidSize = true;
     setTextStyle(textStyle ?? defaultTextStyle);
@@ -175,6 +175,7 @@ class StaticText extends DisplayObject {
   }
 
   void _invalidateBuilder() {
+    _paragraphStyle ??= defaultParagraphStyle;
     _builder = ParagraphBuilder(_paragraphStyle);
     if (_style != null) _builder.pushStyle(_style);
     _builder.addText(_text ?? '');
@@ -190,12 +191,12 @@ class StaticText extends DisplayObject {
   }
 
   @override
-  void $applyPaint() {
-    super.$applyPaint();
+  void $applyPaint(canvas) {
+    super.$applyPaint(canvas);
     if (_text == '') return;
     validate();
     if (backgroundColor != null && backgroundColor.alpha > 0) {
-      $canvas.drawRect(
+      canvas.drawRect(
         Rect.fromLTWH(0, 0, intrinsicWidth, textHeight),
         Paint()..color = backgroundColor,
       );
@@ -205,12 +206,12 @@ class StaticText extends DisplayObject {
 //        print("ALPHA is: $alpha");
 //        final alphaPaint = PainterUtils.getAlphaPaint($alpha);
 //        final alphaPaint = _alphaPaint;
-        var bounds = Rect.fromLTWH(0, 0, textWidth, textHeight);
-        $canvas.saveLayer(bounds, _alphaPaint);
-        $canvas.drawParagraph(_paragraph, Offset.zero);
-        $canvas.restore();
+//        var bounds = Rect.fromLTWH(0, 0, textWidth, textHeight);
+        canvas.saveLayer(null, _alphaPaint);
+        canvas.drawParagraph(_paragraph, Offset.zero);
+        canvas.restore();
       } else {
-        $canvas.drawParagraph(_paragraph, Offset.zero);
+        canvas.drawParagraph(_paragraph, Offset.zero);
       }
     }
   }

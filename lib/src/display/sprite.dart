@@ -44,12 +44,13 @@ class Sprite extends DisplayObjectContainer {
   }
 
   @override
-  void $applyPaint() {
+  void $applyPaint(Canvas canvas) {
+//    print("Apply paint!");
     if (!$hasVisibleArea) return;
     _graphics?.alpha = worldAlpha;
-    _graphics?.paint($canvas);
+    _graphics?.paint(canvas);
     if (hasChildren) {
-      super.$applyPaint();
+      super.$applyPaint(canvas);
     }
   }
 

@@ -285,7 +285,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
   }
 
   @override
-  void $applyPaint() {
+  void $applyPaint(Canvas canvas) {
     if (!$hasVisibleArea) return;
     for (var child in children) {
       if (child.$hasVisibleArea) {
@@ -294,7 +294,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
           _drawMask(mask, child);
         }
         //TODO: add filters.
-        child.paint($canvas);
+        child.paint(canvas);
         if (mask != null) {
           _eraseMask(mask, child);
         }

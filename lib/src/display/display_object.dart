@@ -10,7 +10,6 @@ import 'stage.dart';
 
 abstract class DisplayObject
     with DisplayListSignalsMixin, RenderSignalMixin, MouseSignalsMixin {
-  Canvas $canvas;
   DisplayObjectContainer $parent;
 
   bool $debugBounds = false;
@@ -313,15 +312,16 @@ abstract class DisplayObject
   bool mouseEnabled = true;
 
   DisplayObject $maskee;
-  DisplayObject $mask;
-  bool maskInverted = false;
+  Shape $mask;
 
   /// optimization.
   bool $hasVisibleArea = true;
 
   bool get isMask => $maskee != null;
+  Shape get mask => $mask;
 
-  DisplayObject get mask => $mask;
+  /// can be set on the Shape mask, or the maskee DisplayObject.
+  bool maskInverted = false;
 
   static final Paint _grayscaleDstInPaint = Paint()
     ..blendMode = BlendMode.dstIn
@@ -332,7 +332,7 @@ abstract class DisplayObject
       0.2126, 0.7152, 0.0722, 0, 0,
     ]);
 
-  set mask(DisplayObject value) {
+  set mask(Shape value) {
     if ($mask != value) {
       if ($mask != null) $mask.$maskee = null;
       value?.$maskee = this;
@@ -598,6 +598,7 @@ abstract class DisplayObject
     var helperPoint = localPoint == _sHelperPoint ? GxPoint() : _sHelperPoint;
     _sHelperMatrixAlt.transformPoint(localPoint, helperPoint);
     final isHit = mask.hitTest(helperPoint) != null;
+//    return maskInverted ? !isHit : isHit;
     return maskInverted ? !isHit : isHit;
   }
 
@@ -661,7 +662,6 @@ abstract class DisplayObject
   /// Do not override this method as it applies the basic transformations.
   /// override $applyPaint() if you wanna use `Canvas` directly.
   void paint(Canvas canvas) {
-    $canvas = canvas;
     if (!$hasVisibleArea || !visible) {
       return;
     }
@@ -681,11 +681,6 @@ abstract class DisplayObject
         $alpha != 1;
 
     final hasMask = mask != null;
-    final maskIsGraphics = hasMask ? mask is Shape : false;
-
-    if (hasMask && !maskIsGraphics) {
-      _saveLayer = true;
-    }
 
     if (_saveLayer) {
 //       TODO: static painter seems to have some issues, try local var later.
@@ -711,41 +706,13 @@ abstract class DisplayObject
       }
     }
 
-    if (hasMask && maskIsGraphics) {
-//      final g = (mask as Shape).graphics;
-//      if (g != null) {
-//        g.paint($canvas);
-//      }
-//      (mask as Shape).graphics.getPaths();
-      mask.$canvas = canvas;
-      mask.$applyPaint();
+    if (hasMask) {
+      mask.$applyPaint(canvas);
     }
 
-//    if (_graphics != null) {
-//      _graphics?.alpha = worldAlpha;
-//      _graphics?.paint(canvas);
-//    }
-//    canvas.drawColor(Color(0xfffffff).withOpacity(.8), BlendMode.softLight);
-
-    $onPrePaint?.dispatch();
-    $applyPaint();
-    $onPostPaint?.dispatch();
-
-    if (hasMask && !maskIsGraphics) {
-      final maskPaint = Paint();
-      maskPaint.blendMode = BlendMode.dstIn;
-//      maskPaint.blendMode = BlendMode.srcOver;
-//      canvas.transform(transformationMatrix.invert().toNative().storage);
-//      canvas.saveLayer(null, _grayscaleDstInPaint);
-      /// todo: not sure if applying rect will work properly.
-//      final rect = getBounds(this).toNative();
-      canvas.saveLayer(null, maskPaint);
-      mask.$canvas = canvas;
-//      mask.paint(canvas);
-      mask.$applyPaint();
-      canvas.restore();
-//      mask.$applyPaint();
-    }
+    $onPrePaint?.dispatch(canvas);
+    $applyPaint(canvas);
+    $onPostPaint?.dispatch(canvas);
 
     if (DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
         ($debugBounds || DisplayBoundsDebugger.debugAll)) {
@@ -760,9 +727,6 @@ abstract class DisplayObject
 
     if (needSave) {
       canvas.restore();
-//      if (_is3D) {
-//        canvas.restore();
-//      }
     }
     if (_saveLayer) {
       canvas.restore();
@@ -778,7 +742,7 @@ abstract class DisplayObject
 
   /// override this method for custom drawing using Flutter's API.
   /// Access `$canvas` from here.
-  void $applyPaint() {}
+  void $applyPaint(Canvas canvas) {}
 
   @mustCallSuper
   void dispose() {

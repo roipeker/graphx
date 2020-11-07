@@ -51,8 +51,20 @@ class Shape extends DisplayObject {
     return (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
   }
 
+  static Path _inverseHugePath;
+  static void _initInversePath() {
+    if (_inverseHugePath != null) {
+      return;
+    }
+    _inverseHugePath = Path();
+    final w = 100000.0;
+    var r = Pool.getRect(-w / 2, -w / 2, w, w);
+    _inverseHugePath.addRect(r.toNative());
+    _inverseHugePath.close();
+  }
+
   @override
-  void $applyPaint() {
+  void $applyPaint(Canvas canvas) {
     if (isMask && _graphics != null) {
       GxMatrix matrix;
       var paths = _graphics.getPaths();
@@ -61,12 +73,23 @@ class Shape extends DisplayObject {
       } else {
         matrix = transformationMatrix;
       }
-      paths = paths.transform(matrix.toNative().storage);
-      $canvas.clipPath(paths);
+      var clipPath = paths.transform(matrix.toNative().storage);
+      final inverted = maskInverted || $maskee.maskInverted;
+      if (inverted) {
+        _initInversePath();
+//        var invPath = Graphics.stageRectPath;
+//        var rect = $maskee.bounds;
+//        invPath = invPath.shift(Offset(rect.x, rect.y));
+        clipPath =
+            Path.combine(PathOperation.difference, _inverseHugePath, clipPath);
+        canvas.clipPath(clipPath);
+      } else {
+        canvas.clipPath(clipPath);
+      }
     } else {
       _graphics?.isMask = isMask;
       _graphics?.alpha = worldAlpha;
-      _graphics?.paint($canvas);
+      _graphics?.paint(canvas);
     }
   }
 

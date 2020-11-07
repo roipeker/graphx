@@ -113,12 +113,12 @@ class SimpleParticleSystem extends DisplayObject {
   SimpleParticle $lastParticle;
 
   void _setInitialParticlePosition(SimpleParticle p) {
-    p.x = useWorldSpace ? this.x : 0;
+    p.x = useWorldSpace ? x : 0;
     if (dispersionXVariance > 0) {
       p.x +=
           dispersionXVariance * random.nextDouble() - dispersionXVariance * .5;
     }
-    p.y = useWorldSpace ? this.y : 0;
+    p.y = useWorldSpace ? y : 0;
     if (dispersionYVariance > 0) {
       p.y +=
           dispersionYVariance * random.nextDouble() - dispersionYVariance * .5;
@@ -129,7 +129,7 @@ class SimpleParticleSystem extends DisplayObject {
     }
     p.scaleX = p.scaleY = initialScale;
     if (initialScaleVariance > 0) {
-      double sd = initialScaleVariance * random.nextDouble();
+      var sd = initialScaleVariance * random.nextDouble();
       p.scaleX += sd;
       p.scaleY += sd;
     }
@@ -160,12 +160,15 @@ class SimpleParticleSystem extends DisplayObject {
   double particlePivotY;
 
   void forceBurst() {
-    int currentEmission =
+    var currentEmission =
         (emission + emissionVariance * random.nextDouble()).toInt();
-    for (var i = 0; i < currentEmission; ++i) activateParticle();
+    for (var i = 0; i < currentEmission; ++i) {
+      activateParticle();
+    }
     emit = false;
   }
 
+  @override
   void update(double delta) {
     delta *= 1000;
     if (particlePivotX == null && texture != null) {
@@ -178,11 +181,12 @@ class SimpleParticleSystem extends DisplayObject {
         forceBurst();
       } else {
         $accumulatedTime += delta * .001;
-        double time = $accumulatedTime % (emissionTime + emissionDelay);
+        var time = $accumulatedTime % (emissionTime + emissionDelay);
         if (time <= emissionTime) {
-          double updateEmission = emission.toDouble();
-          if (emissionVariance > 0)
+          var updateEmission = emission.toDouble();
+          if (emissionVariance > 0) {
             updateEmission += emissionVariance * random.nextDouble();
+          }
           $accumulatedEmission += updateEmission * delta * .001;
           while ($accumulatedEmission > 0) {
             activateParticle();
@@ -191,9 +195,9 @@ class SimpleParticleSystem extends DisplayObject {
         }
       }
     }
-    SimpleParticle particle = $firstParticle;
+    var particle = $firstParticle;
     while (particle != null) {
-      SimpleParticle next = particle.$next;
+      var next = particle.$next;
       particle.$update(this, $lastUpdateTime);
       particle = next;
     }
@@ -203,17 +207,15 @@ class SimpleParticleSystem extends DisplayObject {
   void paint(Canvas canvas) {
     if (!$hasVisibleArea) return;
     if (useWorldSpace) {
-      $canvas = canvas;
-      render();
+      render(canvas);
     } else {
       super.paint(canvas);
     }
   }
 
   @override
-  void $applyPaint() {
-    /// render.
-    render();
+  void $applyPaint(Canvas canvas) {
+    render(canvas);
   }
 
   bool useAlphaOnColorFilter = false;
@@ -224,11 +226,11 @@ class SimpleParticleSystem extends DisplayObject {
     ..color = Color(0xff000000)
     ..filterQuality = FilterQuality.low;
 
-  void render() {
+  void render(Canvas canvas) {
     if (texture == null) return;
-    SimpleParticle particle = $firstParticle;
+    var particle = $firstParticle;
     while (particle != null) {
-      SimpleParticle next = particle.$next;
+      var next = particle.$next;
       double tx, ty, sx, sy;
       tx = particle.x;
       ty = particle.y;
@@ -250,36 +252,36 @@ class SimpleParticleSystem extends DisplayObject {
       var filterColor = useAlphaOnColorFilter ? _color : _color.withOpacity(1);
       nativePaint.colorFilter =
           ColorFilter.mode(filterColor, particleBlendMode);
-      $canvas.save();
-      $canvas.translate(tx, ty);
-      $canvas.rotate(particle.rotation);
-      $canvas.scale(sx, sy);
-      $canvas.translate(-particlePivotX, -particlePivotY);
+      canvas.save();
+      canvas.translate(tx, ty);
+      canvas.rotate(particle.rotation);
+      canvas.scale(sx, sy);
+      canvas.translate(-particlePivotX, -particlePivotY);
 
       // $canvas.scale(particle.scaleX, particle.scaleY);
       // $canvas.rotate(particle.rotation);
       /// render in canvas.
       if (drawCallback != null) {
-        drawCallback($canvas, nativePaint);
+        drawCallback(canvas, nativePaint);
 //        $canvas.drawImage(texture.source, Offset.zero, nativePaint);
       } else {
-        $canvas.drawImage(texture.source, Offset.zero, nativePaint);
+        canvas.drawImage(texture.source, Offset.zero, nativePaint);
       }
       // $canvas.drawImage(texture.source, Offset(tx, ty), nativePaint);
-      $canvas.restore();
+      canvas.restore();
 
       particle = next;
     }
   }
 
   void activateParticle() {
-    SimpleParticle p = _createParticle();
+    var p = _createParticle();
     _setInitialParticlePosition(p);
     p.init(this);
   }
 
   SimpleParticle _createParticle() {
-    SimpleParticle p = SimpleParticle.get();
+    var p = SimpleParticle.get();
     if ($firstParticle != null) {
       p.$next = $firstParticle;
       $firstParticle.$prev = p;
