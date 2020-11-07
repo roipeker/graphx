@@ -51,9 +51,9 @@ class GxIcon extends DisplayObject {
     requiresRedraw();
   }
 
-  widgets.IconData get icon => _data;
+  widgets.IconData get data => _data;
 
-  set icon(widgets.IconData value) {
+  set data(widgets.IconData value) {
     if (value == _data) return;
     _data = value;
     _invalidStyle = true;
@@ -95,6 +95,7 @@ class GxIcon extends DisplayObject {
   }
 
   void _updateStyle() {
+    if (_data == null) return;
     _style = TextStyle(
       color: _paint == null ? Color(color).withOpacity(alpha) : null,
       fontSize: _size,
@@ -112,11 +113,11 @@ class GxIcon extends DisplayObject {
   }
 
   String _resolveFontFamily() {
-    if (icon == null) return null;
-    if (icon.fontPackage == null) {
-      return icon.fontFamily;
+    if (data == null) return null;
+    if (data.fontPackage == null) {
+      return data.fontFamily;
     } else {
-      return 'packages/${icon.fontPackage}/${icon.fontFamily}';
+      return 'packages/${data.fontPackage}/${data.fontFamily}';
     }
   }
 
@@ -127,7 +128,7 @@ class GxIcon extends DisplayObject {
 
   @override
   void $applyPaint() {
-    if (icon == null) return;
+    if (data == null) return;
     if (_invalidStyle) {
       _invalidStyle = false;
       _updateStyle();

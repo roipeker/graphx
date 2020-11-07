@@ -140,6 +140,9 @@ class ScenePainter with EventDispatcherMixin {
       _stage.addChild(root);
       root._ready = true;
       root.ready();
+
+      /// notify children that the stage resized.
+      _stage?.$onResized?.dispatch();
     }
 
     if (useOwnCanvas) {
@@ -187,7 +190,7 @@ class ScenePainter with EventDispatcherMixin {
   /// Manages the `update()` and can request redraw the CustomPainter.
   void tick(double time) {
     // makeCurrent();
-    if (autoUpdateAndRender) {
+    if (autoUpdateAndRender || time != null) {
       $currentFrameId++;
       $runTime += time;
       $update(time);
