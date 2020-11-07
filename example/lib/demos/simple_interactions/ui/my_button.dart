@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:graphx/graphx.dart';
 
 class MyButton extends Sprite {
@@ -19,19 +20,20 @@ class MyButton extends Sprite {
   bool _isOn = false;
   double _fillPercent = 0.0;
 
-  MyButton() {}
+  StaticText _fillText;
 
-  @override
-  void addedToStage() {
+  MyButton() {
+    _init();
+  }
+
+  /// we dont make usage of stage, so is safe to initialize all objects
+  /// as soon as we instantiate [MyButton].
+  void _init() {
     bg = Shape();
     _dragBackground(bg.graphics, Colors.black);
 
     fillBg = Shape();
     _dragBackground(fillBg.graphics, Colors.yellow.shade800);
-    _updateFill();
-
-    bg.name = 'bg';
-    fillBg.name = 'fillBg';
 
     icon = GxIcon(null);
     _updateIcon();
@@ -44,9 +46,15 @@ class MyButton extends Sprite {
     addChild(bg);
     addChild(fillBg);
     addChild(icon);
-
     // center the pivot based on the current size.
     alignPivot();
+
+    /// now add the text to the side, "outside"
+    /// of button area...
+    _initText();
+
+    /// update the button state to the default values.
+    _updateFill();
 
     // Takes the Sprite as an whole active area.
     // disable children from receiving pointer events.
@@ -58,16 +66,23 @@ class MyButton extends Sprite {
 
     // only on desktop.
     onMouseScroll.add(_onMouseScroll);
+  }
 
-//    stage.onMouseMove.add((e) {
-////      print(e.stagePosition);
-//      var p = fillBg.globalToLocal(e.stagePosition);
-////      print(p);
-////      print(this.hitTest(p));
-////      print(fillBg.bounds);
-////      print('${fillBg.hitTest(p)} /// ${fillBg.$hasVisibleArea}');
-////      this.alpha = this.hitTouch(p) ? 1 : .5;
-//    });
+  void _initText() {
+    _fillText = StaticText(
+      text: '0%',
+      textStyle: StaticText.getStyle(
+        color: Colors.black,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+
+    /// disable the touch interaction for the text.
+    /// we dont want this affecting the buttons states
+    _fillText.mouseEnabled = false;
+    _fillText.x = w + 5;
+    addChild(_fillText);
   }
 
   /// Draws a rounded cornder rectangle with the current w and h in any
@@ -88,7 +103,7 @@ class MyButton extends Sprite {
 
   /// Handler for pointer down (mouse or touch).
   void _onMouseDown(MouseInputData input) {
-    scale = .8;
+    scale = .94;
     stage.onMouseUp.addOnce(_onStageRelease);
   }
 
@@ -107,7 +122,8 @@ class MyButton extends Sprite {
   /// Means that the pointer started to interact with this object.
   /// Similar to "onmouseover" in Javascript.
   void _onMouseOver(MouseInputData input) {
-    _dragBackground(bg.graphics, Colors.grey.shade800);
+    alpha = .9;
+    _fillText.visible = true;
     _isTouching = true;
   }
 
@@ -117,7 +133,8 @@ class MyButton extends Sprite {
   /// Means that the pointer is no longer interacting with this object.
   /// Similar to "onmouseout" in Javascript.
   void _onMouseOut(MouseInputData input) {
-    _dragBackground(bg.graphics, Colors.black);
+    alpha = 1;
+    _fillText.visible = false;
     _isTouching = false;
   }
 
@@ -138,10 +155,10 @@ class MyButton extends Sprite {
   /// update the [icon.data] and icon's color, based on [_isOn] current state.
   void _updateIcon() {
     if (_isOn) {
-      icon.data = Icons.wb_incandescent;
+      icon.data = Feather.sun;
       icon.color = Colors.yellow.value;
     } else {
-      icon.data = Icons.wb_incandescent_outlined;
+      icon.data = Feather.moon;
       icon.color = Colors.white.value;
     }
   }
@@ -149,8 +166,27 @@ class MyButton extends Sprite {
   /// updates the [fillBg] Shape based on [_fillPercent]
   /// so it scales down (scaleY) and fades in (alpha) as _fillPercent
   /// goes from 0 (fully hidden) to 1 (fully shown).
+  /// and updates the text position based on the height of the button.
   void _updateFill() {
+    _updateFillText();
     fillBg.alpha = _fillPercent;
     fillBg.scaleY = _fillPercent;
+  }
+
+  void _updateFillText() {
+    /// position the text based on the %.
+    var textH = _fillText.textHeight;
+
+    /// textH/2 is the vertical center of the text.
+    /// as we wanna match the fillBg line, we offset that value
+    /// so it looks centered.
+    var textY = _fillPercent * h - textH / 2;
+
+    /// and we limit the position so it moves inside the button's
+    /// height
+    textY = textY.clamp(0.0, h - textH);
+    _fillText.y = textY;
+    _fillText.text = (_fillPercent * 100).toStringAsFixed(0) + '%';
+    _fillText.alpha = _fillPercent.clamp(.3, 1.0);
   }
 }

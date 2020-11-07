@@ -21,20 +21,15 @@ class SimpleInteractionsScene extends SceneRoot {
     addChild(button);
     button.alignPivot();
     button.mouseUseShape = true;
-//    stage.mouseEnabled = false;
-//    stage.mouseChildren = false;
 
     /// We can listen for the same signals the button is listening
     /// internally.
 //    button.onMouseDown.add((e) => print("mouse down on button! $e"));
 
-    button.x = 80;
-    button.y = 80;
-
-//    stage.onResized.add(() {
-//      button.x = stage.stageWidth / 2;
-//      button.y = stage.stageHeight / 2;
-//    });
+    stage.onResized.add(() {
+      button.x = stage.stageWidth / 2;
+      button.y = stage.stageHeight / 2;
+    });
 
     _initBall();
   }

@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^0.19.1
+  flutter_icons: ^1.1.0
   graphx:
     path: ../
 dev_dependencies:
@@ -19,9 +20,9 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-  uses-material-design: true
+  uses-material-design: false
 
-  assets:
-    - assets/
-    - assets/game/
-    - assets/game/flare/
+#  assets:
+#    - assets/
+#    - assets/game/
+#    - assets/game/flare/

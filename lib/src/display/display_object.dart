@@ -688,8 +688,10 @@ abstract class DisplayObject
     }
 
     if (_saveLayer) {
+//       TODO: static painter seems to have some issues, try local var later.
       final alphaPaint = PainterUtils.getAlphaPaint($alpha);
-      canvas.saveLayer(getBounds(this).toNative(), alphaPaint);
+      final rect = getBounds(this).toNative();
+      canvas.saveLayer(rect, alphaPaint);
     }
     if (needSave) {
       canvas.save();

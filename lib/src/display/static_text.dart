@@ -7,6 +7,9 @@ class StaticText extends DisplayObject {
 
   static final _sHelperMatrix = GxMatrix();
 
+  /// TODO: check if Paint is required locally in every DisplayObject.
+  final _alphaPaint = Paint();
+
   @override
   GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
     validate();
@@ -198,15 +201,26 @@ class StaticText extends DisplayObject {
       );
     }
     if (_paragraph != null) {
-      if (alpha != 1) {
+      if ($alpha != 1.0) {
+//        print("ALPHA is: $alpha");
+//        final alphaPaint = PainterUtils.getAlphaPaint($alpha);
+//        final alphaPaint = _alphaPaint;
         var bounds = Rect.fromLTWH(0, 0, textWidth, textHeight);
-        final alphaPaint = PainterUtils.getAlphaPaint(alpha);
-        $canvas.saveLayer(bounds, alphaPaint);
+        $canvas.saveLayer(bounds, _alphaPaint);
         $canvas.drawParagraph(_paragraph, Offset.zero);
         $canvas.restore();
       } else {
         $canvas.drawParagraph(_paragraph, Offset.zero);
       }
+    }
+  }
+
+  @override
+  set alpha(double value) {
+    final changed = value != $alpha && value != null;
+    super.alpha = value;
+    if (changed) {
+      _alphaPaint.color = _alphaPaint.color.withOpacity($alpha);
     }
   }
 
