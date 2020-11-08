@@ -22,7 +22,7 @@ abstract class DisplayObject
 
   /// capture context mouse inputs.
   void captureMouseInput(MouseInputData input) {
-    if (!$hasVisibleArea || !visible) return;
+    if (!$hasVisibleArea) return;
     if (mouseEnabled) {
       if (input.captured && input.type == MouseInputType.up) {
         $mouseDownObj = null;

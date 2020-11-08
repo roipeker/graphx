@@ -39,6 +39,10 @@ abstract class AssetLoader {
     return GTextureAtlas(texture, xmlData);
   }
 
+  static Future<ByteData> loadBinary(String path) async {
+    return await rootBundle.load(path);
+  }
+
   /// load local assets.
   static Future<Image> loadImage(String path,
       {int targetWidth, int targetHeight}) async {

@@ -89,11 +89,8 @@ class Stage extends DisplayObjectContainer
     return scene?.core?.pointer;
   }
 
-  /// uncomment if it has issues with Desktop over/out.
-//  @override
-//  bool hitTouch(GxPoint localPoint, [bool useShape = false]) {
-//    return super.hitTest(localPoint, useShape) != null;
-//  }
+  @override
+  bool hitTouch(GxPoint localPoint, [bool useShape = false]) => true;
 
   @override
   DisplayObject hitTest(GxPoint localPoint, [bool useShapes = false]) {
