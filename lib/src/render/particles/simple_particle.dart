@@ -55,21 +55,21 @@ class SimpleParticle {
 
   static void precache(int count) {
     if (count < $instanceCount) return;
-    SimpleParticle cached = get();
+    var cached = get();
     while ($instanceCount < count) {
-      SimpleParticle n = get();
+      var n = get();
       n.$prev = cached;
       cached = n;
     }
     while (cached != null) {
-      SimpleParticle d = cached;
+      var d = cached;
       cached = d.$prev;
       d?.dispose();
     }
   }
 
   static SimpleParticle get() {
-    SimpleParticle instance = $availableInstance;
+    var instance = $availableInstance;
     if (instance != null) {
       $availableInstance = instance.$nextInstance;
       instance.$nextInstance = null;
@@ -84,7 +84,7 @@ class SimpleParticle {
   void init(SimpleParticleSystem emitter, [bool invalidate = true]) {
     accumulatedEnergy = 0;
     texture = emitter.texture;
-    double ratioEnergy = 1000;
+    var ratioEnergy = 1000;
     energy = emitter.energy * ratioEnergy;
     if (emitter.energyVariance > 0) {
       energy += (emitter.energyVariance * ratioEnergy) * random.nextDouble();
@@ -100,25 +100,25 @@ class SimpleParticle {
     }
 
     double particleVelocityX, particleVelocityY;
-    double v = emitter.initialVelocity;
+    var v = emitter.initialVelocity;
     if (emitter.initialVelocityVariance > 0) {
       v += emitter.initialVelocityVariance * random.nextDouble();
     }
 
     double particleAccelerationX, particleAccelerationY;
-    double a = emitter.initialAcceleration;
+    var a = emitter.initialAcceleration;
     if (emitter.initialAccelerationVariance > 0) {
       a += emitter.initialAccelerationVariance * random.nextDouble();
     }
 
-    double vx = particleVelocityX = v;
-    double vy = particleVelocityY = 0;
-    double ax = particleAccelerationX = a;
-    double ay = particleAccelerationY = 0;
-    double rot = emitter.rotation;
+    var vx = particleVelocityX = v;
+    var vy = particleVelocityY = 0;
+    var ax = particleAccelerationX = a;
+    var ay = particleAccelerationY = 0;
+    var rot = emitter.rotation;
     if (rot != 0) {
-      double _sin = sin(rot);
-      double _cos = cos(rot);
+      var _sin = sin(rot);
+      var _cos = cos(rot);
       vx = particleVelocityX = v * _cos;
       vy = particleVelocityY = v * _sin;
       ax = particleAccelerationX = a * _cos;
@@ -126,19 +126,20 @@ class SimpleParticle {
     }
 
     if (emitter.dispersionAngle != 0 || emitter.dispersionAngleVariance != 0) {
-      double rangle = emitter.dispersionAngle;
+      var dispersionAngle = emitter.dispersionAngle;
       if (emitter.dispersionAngleVariance > 0) {
-        rangle += emitter.dispersionAngleVariance * random.nextDouble();
+        dispersionAngle +=
+            emitter.dispersionAngleVariance * random.nextDouble();
       }
-      double _sin = sin(rangle);
-      double _cos = cos(rangle);
+      var _sin = sin(dispersionAngle);
+      var _cos = cos(dispersionAngle);
       particleVelocityX = (vx * _cos - vy * _sin);
       particleVelocityY = (vy * _cos + vx * _sin);
       particleAccelerationX = (ax * _cos - ay * _sin);
       particleAccelerationY = (ay * _cos + ay * _sin);
     }
 
-    double ratioVel = .001;
+    var ratioVel = .001;
 
     initialVelocityX = velocityX = particleVelocityX * ratioVel;
     initialVelocityY = velocityY = particleVelocityY * ratioVel;
@@ -147,9 +148,10 @@ class SimpleParticle {
     initialAccelerationY = accelerationY = particleAccelerationY * ratioVel;
 
     initialVelocityAngular = emitter.initialAngularVelocity;
-    if (emitter.initialAngularVelocityVariance > 0)
+    if (emitter.initialAngularVelocityVariance > 0) {
       initialVelocityAngular +=
           emitter.initialAngularVelocityVariance * random.nextDouble();
+    }
 
     // print("Initial vel x: $initialVelocityX");
     initialAlpha = emitter.initialAlpha;
@@ -195,13 +197,12 @@ class SimpleParticle {
 
   void $update(SimpleParticleSystem emitter, double delta) {
     accumulatedEnergy += delta;
-    // print("acc energ: $accumulatedEnergy /// $energy");
     if (accumulatedEnergy >= energy) {
       emitter.$deactivateParticle(this);
       return;
     }
 
-    double p = accumulatedEnergy / energy;
+    var p = accumulatedEnergy / energy;
     velocityX += accelerationX * delta;
     velocityY += accelerationY * delta;
 

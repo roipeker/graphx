@@ -143,7 +143,7 @@ class SimpleParticleSystem extends DisplayObject {
   void setup(
       [int maxCount = 0,
       int precacheCount = 0,
-      bool disposeImmediatly = true]) {
+      bool disposeImmediately = true]) {
     $accumulatedTime = 0;
     $accumulatedEmission = 0;
     if (texture != null) {

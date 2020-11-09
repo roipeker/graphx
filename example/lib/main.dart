@@ -5,9 +5,9 @@ void main() {
   runApp(
     MaterialApp(
 //      home: SimpleShapesMain(),
-//      home: SimpleTweenMain(),
+      home: SimpleTweenMain(),
 //      home: DemoSvgIconsMain(),
-      home: SimpleInteractionsMain(),
+//      home: SimpleInteractionsMain(),
     ),
   );
 }

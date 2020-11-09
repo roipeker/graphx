@@ -1,5 +1,3 @@
-part of gtween;
-
 class CallbackParams {
   List<dynamic> positional;
 
@@ -19,29 +17,5 @@ class CallbackParams {
       return CallbackParams(null, args);
     }
     return CallbackParams([args]);
-  }
-
-  static const String selfTweenKey = '{self}';
-
-  void _setTween(GTween twn) {
-    if (named != null) {
-      if (named.containsValue(selfTweenKey)) {
-        for (var e in named.entries) {
-          if (e.value == selfTweenKey) {
-            named[e.key] = twn;
-          }
-        }
-      }
-    }
-    if (positional != null) {
-      if (positional.contains(selfTweenKey)) {
-        positional = positional.map((e) {
-          if (e == selfTweenKey) {
-            return twn;
-          }
-          return e;
-        }).toList();
-      }
-    }
   }
 }

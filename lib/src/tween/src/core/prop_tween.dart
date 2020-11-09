@@ -10,7 +10,7 @@ class PropTween {
   /// start value
   double s;
 
-  /// amuont to change, diff between end and start.
+  /// amount to change, diff between end and start.
   double c;
 
   /// original target object.
@@ -19,12 +19,12 @@ class PropTween {
   /// is function
   bool f;
 
-  /// prority in render queue.
+  /// priority in render queue.
   int pr;
 
   /// target is tween plugin?
   bool pg;
-  // name of original target property. typicall same as `t`
+  // name of original target property. Typically same as `t`
   String n;
 
   /// rounded
@@ -41,11 +41,11 @@ class PropTween {
     PropTween next,
     int priority = 0,
   }) {
-    this.t = target;
-    this.p = property;
-    this.s = start;
-    this.c = change;
-    this.n = name;
+    t = target;
+    p = property;
+    s = start;
+    c = change;
+    n = name;
 //    this.f = this.t[p] is Function;
     if (next != null) {
       next._prev = this;

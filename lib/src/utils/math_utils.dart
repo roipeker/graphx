@@ -14,12 +14,14 @@ abstract class MathUtils {
   static int getNextPowerOfTwo(num value) {
     if (value is int &&
         value > 0 &&
-        (value.toInt() & (value.toInt() - 1)) == 0) // see: http://goo.gl/D9kPj
+        (value.toInt() & (value.toInt() - 1)) == 0) {
       return value;
-    else {
-      int result = 1;
+    } else {
+      var result = 1;
       value -= 0.000000001; // avoid floating point rounding errors
-      while (result < value) result <<= 1;
+      while (result < value) {
+        result <<= 1;
+      }
       return result;
     }
   }
@@ -34,18 +36,18 @@ abstract class MathUtils {
   static bool isPointInTriangle(GxPoint p, GxPoint a, GxPoint b, GxPoint c) {
     // This algorithm is described well in this article:
     // http://www.blackpawn.com/texts/pointinpoly/default.html
-    double v0x = c.x - a.x;
-    double v0y = c.y - a.y;
-    double v1x = b.x - a.x;
-    double v1y = b.y - a.y;
-    double v2x = p.x - a.x;
-    double v2y = p.y - a.y;
+    var v0x = c.x - a.x;
+    var v0y = c.y - a.y;
+    var v1x = b.x - a.x;
+    var v1y = b.y - a.y;
+    var v2x = p.x - a.x;
+    var v2y = p.y - a.y;
 
-    double dot00 = v0x * v0x + v0y * v0y;
-    double dot01 = v0x * v1x + v0y * v1y;
-    double dot02 = v0x * v2x + v0y * v2y;
-    double dot11 = v1x * v1x + v1y * v1y;
-    double dot12 = v1x * v2x + v1y * v2y;
+    var dot00 = v0x * v0x + v0y * v0y;
+    var dot01 = v0x * v1x + v0y * v1y;
+    var dot02 = v0x * v2x + v0y * v2y;
+    var dot11 = v1x * v1x + v1y * v1y;
+    var dot12 = v1x * v2x + v1y * v2y;
 
     final invDen = 1.0 / (dot00 * dot11 - dot01 * dot01);
     final u = (dot11 * dot02 - dot01 * dot12) * invDen;

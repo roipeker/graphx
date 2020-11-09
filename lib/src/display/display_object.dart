@@ -323,15 +323,6 @@ abstract class DisplayObject
   /// can be set on the Shape mask, or the maskee DisplayObject.
   bool maskInverted = false;
 
-  static final Paint _grayscaleDstInPaint = Paint()
-    ..blendMode = BlendMode.dstIn
-    ..colorFilter = const ColorFilter.matrix(<double>[
-      0, 0, 0, 0, 0, //
-      0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0,
-      0.2126, 0.7152, 0.0722, 0, 0,
-    ]);
-
   set mask(Shape value) {
     if ($mask != value) {
       if ($mask != null) $mask.$maskee = null;
@@ -544,7 +535,7 @@ abstract class DisplayObject
     /// 1 - find a common parent between this and targetSpace.
     commonParent = DisplayObject._findCommonParent(this, targetSpace);
 
-    /// 2 - moveup from this to common parent.````
+    /// 2 - move up from this to common parent.````
     currentObj = this;
     while (currentObj != commonParent) {
       out.concat(currentObj.transformationMatrix);
@@ -799,15 +790,15 @@ abstract class DisplayObject
   /// Beware to call this before applying any
   /// transformations (x, y, scale, etc) if you intend to use in it's "original"
   /// form.
-  Picture createPicture([void Function(Canvas) prepaintCallback]) {
+  Picture createPicture([void Function(Canvas) prePaintCallback]) {
     final r = PictureRecorder();
     final c = Canvas(r);
-    prepaintCallback?.call(c);
+    prePaintCallback?.call(c);
     paint(c);
     return r.endRecording();
   }
 
-  Future<GxTexture> createImageTexture([
+  Future<GxTexture> createImageGxTexture([
     bool adjustOffset = true,
     double resolution = 1,
     GxRect rect,
@@ -818,6 +809,18 @@ abstract class DisplayObject
     var tx = GxTexture(img, null, false, resolution);
     tx.anchorX = bounds.x;
     tx.anchorY = bounds.y;
+    return tx;
+  }
+
+  Future<GTexture> createImageTexture([
+    bool adjustOffset = true,
+    double resolution = 1,
+    GxRect rect,
+  ]) async {
+    final img = await createImage(adjustOffset, resolution, rect);
+    var tx = GTexture.fromImage(img, resolution);
+    tx.pivotX = bounds.x;
+    tx.pivotY = bounds.y;
     return tx;
   }
 

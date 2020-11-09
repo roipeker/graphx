@@ -172,7 +172,6 @@ class MouseInputData {
     input.captured = captured;
     input.buttonsFlags = buttonsFlags;
     input.time = time;
-//    input._stagePosition = _stagePosition;
     input._stagePosition.setTo(_stagePosition.x, _stagePosition.y);
     input.scrollDelta.setTo(scrollDelta.x, scrollDelta.y);
     input.localPosition.setTo(localPosition.x, localPosition.y);

@@ -1,6 +1,6 @@
 part of gtween;
 
-/// Base interfase used by [GTween] to animate properties.
+/// Base interface used by [GTween] to animate properties.
 /// As Flutter has no reflection, we need this class to get/set properties
 /// on target objects.
 mixin GTweenable {

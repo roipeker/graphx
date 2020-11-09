@@ -12,6 +12,7 @@ class GTweenablePoint with GTweenable {
     value = this.target = target;
   }
 
+  @override
   Map<String, List<Function>> getTweenableAccessors() => {
         'x': [() => value.x, (v) => value.x = v],
         'y': [() => value.y, (v) => value.y = v],
@@ -79,6 +80,7 @@ class GTweenableRect with GTweenable {
     value = this.target = target;
   }
 
+  @override
   Map<String, List<Function>> getTweenableAccessors() => {
         'x': [() => value.x, (v) => value.x = v],
         'y': [() => value.y, (v) => value.y = v],

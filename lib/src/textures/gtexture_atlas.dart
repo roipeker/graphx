@@ -160,7 +160,7 @@ class GTextureAtlas {
 
   void addSubTexture(String name, GSubTexture subTexture) {
     if (subTexture.root != _atlasTexture.root) {
-      throw 'Subtextures root must be atlas texture.';
+      throw 'SubTexture\'s root must be an Atlas Texture.';
     }
     _subTextures[name] = subTexture;
     _subTexturesNames = null;

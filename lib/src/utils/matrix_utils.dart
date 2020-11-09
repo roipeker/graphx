@@ -21,8 +21,6 @@ abstract class MatrixUtils {
   static GxRect getTransformedBoundsRect(GxMatrix matrix, GxRect rect,
       [GxRect out]) {
     out ??= GxRect();
-    //      out = out.getBounds(matrix);
-//      return out;
     var minX = 10000000.0;
     var maxX = -10000000.0;
     var minY = 10000000.0;

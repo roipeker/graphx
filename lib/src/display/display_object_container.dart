@@ -44,26 +44,20 @@ abstract class DisplayObjectContainer extends DisplayObject {
     } else if (len == 1) {
       return children[0].getBounds(targetSpace, out);
     } else {
-      var minx = 10000000.0;
-      var maxx = -10000000.0;
-      var miny = 10000000.0;
-      var maxy = -10000000.0;
+      var minX = 10000000.0;
+      var maxX = -10000000.0;
+      var minY = 10000000.0;
+      var maxY = -10000000.0;
       final len = numChildren;
-//      print('fits here with: $len');
       for (var i = 0; i < len; ++i) {
         children[i].getBounds(targetSpace, out);
-//        print('i $i, out: $out $this');
         if (out.isEmpty) continue;
-        if (minx > out.x) minx = out.x;
-        if (maxx < out.right) maxx = out.right;
-        if (miny > out.y) miny = out.y;
-        if (maxy < out.bottom) maxy = out.bottom;
-//        minx = minx < out.x ? minx : out.x;
-//        maxx = maxx > out.right ? maxx : out.right;
-//        miny = miny < out.y ? miny : out.y;
-//        maxy = maxy > out.bottom ? maxy : out.bottom;
+        if (minX > out.x) minX = out.x;
+        if (maxX < out.right) maxX = out.right;
+        if (minY > out.y) minY = out.y;
+        if (maxY < out.bottom) maxY = out.bottom;
       }
-      out.setTo(minx, miny, maxx - minx, maxy - miny);
+      out.setTo(minX, minY, maxX - minX, maxY - minY);
       return out;
     }
   }
@@ -253,28 +247,14 @@ abstract class DisplayObjectContainer extends DisplayObject {
       if (dispose) child.dispose();
       return child;
     }
-//    throw "Invalid child index";
-    return null;
+    throw 'Invalid child index';
   }
 
   DisplayObject removeChild(DisplayObject child, [bool dispose = false]) {
     if (child == null || child?.$parent != this) return null;
     final index = getChildIndex(child);
     if (index > -1) return removeChildAt(index, dispose);
-    return null;
-//    throw "$child belongs to another parent. Can't be removed.";
-//    child?.$onRemoved?.dispatch();
-//    if (child.stage != null) {
-//      child?.$onRemovedFromStage?.dispatch();
-//    }
-//    child.parent = null;
-//    return children.remove(child);
-  }
-
-  @override
-  void paint(c) {
-    super.paint(c);
-//    print("Paing is: $c");
+    throw 'Invalid child index';
   }
 
   @override

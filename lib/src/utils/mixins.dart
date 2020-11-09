@@ -3,11 +3,10 @@ import 'dart:ui';
 import '../../graphx.dart';
 
 mixin RenderUtilMixin {
-  Picture createPicture([void Function(Canvas) prepaintCallback]) {
+  Picture createPicture([void Function(Canvas) prePaintCallback]) {
     final r = PictureRecorder();
     final c = Canvas(r);
-    prepaintCallback?.call(c);
-    paint(c);
+    prePaintCallback?.call(c);
     return r.endRecording();
   }
 

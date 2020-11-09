@@ -121,9 +121,8 @@ class GxRect {
     return false;
   }
 
-  /// union
+  /// Like AS3 Rectangle::union
   GxRect expandToInclude(GxRect other) {
-    /// TODO: might rect calculo be wrong?
     var r = right;
     var b = bottom;
     x = math.min(left, other.left);

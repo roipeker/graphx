@@ -70,3 +70,18 @@ class GxTicker {
     _ticker = null;
   }
 }
+
+Stopwatch _stopwatch;
+
+void _initTimer() {
+  if (_stopwatch != null) return;
+  _stopwatch = Stopwatch();
+  _stopwatch.start();
+}
+
+int getTimer() {
+  if (_stopwatch == null) {
+    _initTimer();
+  }
+  return _stopwatch.elapsedMilliseconds;
+}

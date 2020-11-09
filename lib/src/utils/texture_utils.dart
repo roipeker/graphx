@@ -6,35 +6,52 @@ abstract class TextureUtils {
   static Graphics get _g => _helperShape.graphics;
   static double resolution = 1.0;
 
-  static Future<GxTexture> createCircle({
+  static Future<GTexture> createCircle({
     int color = 0xff00ff,
     double alpha = 1,
     double radius = 20,
     double x = 0,
     double y = 0,
+    String id,
   }) async {
     _g.clear()..beginFill(color, alpha).drawCircle(x, y, radius);
-    return (await _drawShape());
+    return await _drawShape(id);
   }
 
-  static Future<GxTexture> createRect({
+  static Future<GTexture> createRect({
     int color = 0xff00ff,
     double alpha = 1,
     double x = 0,
     double y = 0,
     double w = 20,
     double h = 20,
+    String id,
   }) async {
     _g.clear()..beginFill(color, alpha).drawRect(x, y, w, h);
-    return (await _drawShape());
+    return (await _drawShape(id));
   }
 
-  static Future<GxTexture> createTriangle({
+  static Future<GTexture> createRoundRect({
+    int color = 0xff00ff,
+    double alpha = 1,
+    double x = 0,
+    double y = 0,
+    double w = 20,
+    double h = 20,
+    double r = 8,
+    String id,
+  }) async {
+    _g.clear()..beginFill(color, alpha).drawRoundRect(x, y, w, h, r);
+    return (await _drawShape(id));
+  }
+
+  static Future<GTexture> createTriangle({
     int color = 0xff00ff,
     double alpha = 1,
     double w = 20,
     double h = 20,
     double rotation = 0,
+    String id,
   }) async {
     _g
         .clear()
@@ -43,16 +60,21 @@ abstract class TextureUtils {
         .endFill();
     var heightScale = h / w;
     _helperShape.scaleY = heightScale;
-    var tx = await _drawShape();
+    var tx = await _drawShape(id);
     _helperShape.scaleY = 1;
     return tx;
   }
 
-  static Future<GxTexture> _drawShape() {
-    return _helperShape.createImageTexture(true, TextureUtils.resolution);
+  static Future<GTexture> _drawShape([String id]) async {
+    final tx =
+        await _helperShape.createImageTexture(true, TextureUtils.resolution);
+    if (id != null) {
+      AssetLoader.textures[id] = tx;
+    }
+    return tx;
   }
 
-  static List<GxTexture> getRectAtlasFromTexture(
+  static List<GxTexture> getRectAtlasFromGxTexture(
     GxTexture base,
     int w, {
     int h,
@@ -61,7 +83,7 @@ abstract class TextureUtils {
   }) {
     h ??= w;
 
-    /// create subtextures from the main texture.
+    /// create SubTextures from the main Texture.
     var cols = base.sourceRect.width / w;
     var rows = base.sourceRect.height / h;
     var total = cols * rows;
@@ -71,8 +93,8 @@ abstract class TextureUtils {
     for (var i = 0; i < total; ++i) {
       final px = (i % cols) * _w;
       final py = (i ~/ cols) * _h;
-      var subrect = GxRect(px, py, _w, _h);
-      var texture = GxTexture(base.source, subrect, true, scale);
+      var subRect = GxRect(px, py, _w, _h);
+      var texture = GxTexture(base.source, subRect, true, scale);
       texture.base = base;
       output.add(texture);
     }

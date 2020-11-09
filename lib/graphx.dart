@@ -13,7 +13,7 @@ export 'src/gameutils/gameutils.dart';
 export 'src/geom/geom.dart';
 export 'src/input/input.dart';
 export 'src/render/render.dart';
-export 'src/text/text_format.dart';
+//export 'src/text/text_format.dart';//not implemented
 export 'src/textures/textures.dart';
 export 'src/ticker/gx_ticker.dart';
 export 'src/utils/utils.dart';

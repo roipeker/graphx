@@ -69,7 +69,7 @@ class ScenePainter with EventDispatcherMixin {
   /// access to SceneController defined in the Widget side.
   SceneController core;
 
-  /// acccess to the `root` DisplayObject that will initialize
+  /// Access to the `root` DisplayObject that will initialize
   /// the Scene layer.
   SceneRoot root;
 
@@ -117,7 +117,9 @@ class ScenePainter with EventDispatcherMixin {
   EventSignal<double> get onUpdate => _onUpdate ??= EventSignal<double>();
 
   ui.Picture _canvasPicture;
-  ui.Image _canvasImage;
+
+  /// might be useful later to share an Image capture from the current Scene.
+//  ui.Image _canvasImage;
 
   ScenePainter(this.core, this.root) {
     _stage = Stage(this);
@@ -278,7 +280,7 @@ class ScenePainter with EventDispatcherMixin {
 
   /// Direct way to ask painter invalidation.
   /// Can be called manually, without the need for a `tick()` event.
-  /// Might be useful for repain the `CustomPainter` on keyboard on pointer
+  /// Might be useful for re-paint the `CustomPainter` on keyboard on pointer
   /// signals.
   void requestRender() {
     notify();

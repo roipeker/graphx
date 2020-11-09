@@ -118,18 +118,8 @@ class SceneController {
   void _onTick(double elapsed) {
     Graphx.juggler.update(elapsed);
     // _makeCurrent();
-//    _juggler.tick(elapsed);
-//    print('elapsed:: $elapsed');
-//    var ts = elapsed.inMilliseconds;
-//    double diff = (ts - _lastElapsed) / 1000;
-//    print("Elappsed!: $diff");
     front?.tick(elapsed);
     back?.tick(elapsed);
-//    _lastElapsed = ts;
-  }
-
-  void _makeCurrent() {
-    current = this;
   }
 
   void resumeTicker() {
@@ -142,9 +132,6 @@ class SceneController {
     back?.dispose();
     _ticker?.dispose();
     _ticker = null;
-//    _ticker?.stop(canceled: true);
-//    _ticker?.dispose();
-//    _ticker = null;
   }
 
   CustomPainter buildBackPainter() => back?.buildPainter();
@@ -153,7 +140,6 @@ class SceneController {
 
   void _initInput() {
     if (_config.useKeyboard) {
-//      _keyboardFocusNode = FocusNode();
       _keyboard ??= KeyboardManager();
     }
     if (_config.usePointer) {

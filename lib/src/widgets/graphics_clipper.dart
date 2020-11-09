@@ -7,7 +7,7 @@ import '../../graphx.dart';
 /// Custom Clipper that uses [Graphics] API instead of [Path].
 /// For ClipPath() Widget.
 abstract class GraphicsClipper extends CustomClipper<Path> {
-  bool reclip = false;
+  bool reClip = false;
   double x = 0,
       y = 0,
       rotation = 0,
@@ -51,5 +51,5 @@ abstract class GraphicsClipper extends CustomClipper<Path> {
   void draw(Graphics g, Size size);
 
   @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => reclip;
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => reClip;
 }

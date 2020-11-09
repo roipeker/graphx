@@ -40,7 +40,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
         // save objects cause they might be changed from event.
         var $callback = target;
 
-        /// during callback, people might wanna call [reset] and readd this to the
+        /// during callback, people might wanna call [reset] and read this to the
         /// juggler, so the signal has to be dispatched *before* executing the
         /// callback.
         onRemovedFromJuggler.dispatch(_eventData);
@@ -50,7 +50,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
   }
 
   void complete() {
-    double restTime = _totalTime - _currentTime;
+    var restTime = _totalTime - _currentTime;
     if (restTime > 0) update(restTime);
   }
 
@@ -63,7 +63,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
     return this;
   }
 
-  static List<GxDelayedCall> _pool = [];
+  static final List<GxDelayedCall> _pool = [];
 
   static void toPool(GxDelayedCall obj) {
     /// reset all references to make sure is garbage collected.

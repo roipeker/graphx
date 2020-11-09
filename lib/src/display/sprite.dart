@@ -9,7 +9,6 @@ class Sprite extends DisplayObjectContainer {
   }
 
   static final _sHelperMatrix = GxMatrix();
-  static final _sHelperPoint = GxPoint();
 
   Graphics _graphics;
 
