@@ -13,12 +13,12 @@ mixin RenderUtilMixin {
   void paint(Canvas canvas);
   GxRect getBounds();
 
-  Future<GxTexture> createImageTexture([
+  Future<GTexture> createImageTexture([
     bool adjustOffset = true,
     double resolution = 1,
   ]) async {
     final img = await createImage(adjustOffset, resolution);
-    return GxTexture(img);
+    return GTexture.fromImage(img, resolution);
   }
 
   Future<Image> createImage([

@@ -44,7 +44,7 @@ class GxRect {
     y = value;
   }
 
-  GxRect([this.x = 0, this.y = 0, this.width = 0, this.height = 0]);
+  GxRect([this.x = 0.0, this.y = 0.0, this.width = 0.0, this.height = 0.0]);
 
   GxRect setTo(double x, double y, double width, double height) {
     this.x = x;

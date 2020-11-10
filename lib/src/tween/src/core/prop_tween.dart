@@ -24,6 +24,7 @@ class PropTween {
 
   /// target is tween plugin?
   bool pg;
+
   // name of original target property. Typically same as `t`
   String n;
 

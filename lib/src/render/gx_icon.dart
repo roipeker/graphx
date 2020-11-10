@@ -60,7 +60,11 @@ class GxIcon extends DisplayObject {
     requiresRedraw();
   }
 
-  GxIcon(data, [color = 0xffffff, size = 24.0]) {
+  GxIcon(
+    widgets.IconData data, [
+    int color = 0xffffff,
+    double size = 24.0,
+  ]) {
     _data = data;
     _color = color;
     this.size = size;

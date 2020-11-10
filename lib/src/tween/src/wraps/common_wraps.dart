@@ -3,6 +3,7 @@ part of gtween;
 /// Common tweenable wrappers for GraphX
 abstract class CommonTweenWraps {
   /// TODO: check performance to use a Custom mapping type.
+  /// Lerps (like Color) are managed separately.
   static Map<String, List<Function>> displayObject(DisplayObject o) {
     return {
       'x': [() => o.x, (v) => o.x = v],

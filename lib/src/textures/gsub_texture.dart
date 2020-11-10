@@ -40,7 +40,8 @@ class GSubTexture extends GTexture {
     if (region != null) {
       _region.copyFrom(region);
     } else {
-      _region.setTo(0, 0, parent.width, parent.height);
+      /// used (parent.width)
+      _region.setTo(0, 0, parent.nativeWidth, parent.nativeHeight);
     }
     if (frame != null) {
       if (this.frame != null) {
@@ -61,8 +62,10 @@ class GSubTexture extends GTexture {
 
     /// cache.
     _sourceRegionRect = _sourceRegion.toNative();
-    _destRect = Rect.fromLTWH(0, 0, width, height);
-    sourceRect = GxRect(0, 0, width, height);
+
+    /// used width, height
+    _destRect = Rect.fromLTWH(0, 0, nativeWidth, nativeHeight);
+    sourceRect = GxRect(0, 0, nativeWidth, nativeHeight);
 //    updateMatrices();
   }
 

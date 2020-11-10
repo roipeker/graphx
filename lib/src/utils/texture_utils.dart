@@ -6,6 +6,30 @@ abstract class TextureUtils {
   static Graphics get _g => _helperShape.graphics;
   static double resolution = 1.0;
 
+  static void scale9Rect(GTexture tx, double x,
+      {double y, double w, double h, bool adjustScale = false}) {
+    y ??= x;
+    w ??= -x;
+    h ??= -y;
+    if (adjustScale) {
+      x *= tx.scale;
+      y *= tx.scale;
+      w *= tx.scale;
+      h *= tx.scale;
+    }
+    if (w < 0) {
+      w = tx.width + w * 2;
+    }
+    if (h < 0) {
+      h = tx.height + h * 2;
+    }
+    var out = GxRect(x, y, w, h);
+    // if (scaleToTexture) {
+    //   out *= tx.scale;
+    // }
+    tx.scale9Grid = out;
+  }
+
   static Future<GTexture> createCircle({
     int color = 0xff00ff,
     double alpha = 1,
@@ -74,8 +98,8 @@ abstract class TextureUtils {
     return tx;
   }
 
-  static List<GxTexture> getRectAtlasFromGxTexture(
-    GxTexture base,
+  static List<GTexture> getRectAtlasFromGTexture(
+    GTexture base,
     int w, {
     int h,
     int padding = 0,
@@ -87,15 +111,17 @@ abstract class TextureUtils {
     var cols = base.sourceRect.width / w;
     var rows = base.sourceRect.height / h;
     var total = cols * rows;
-    var output = <GxTexture>[];
+    var output = <GTexture>[];
     final _w = w.toDouble();
     final _h = h.toDouble();
     for (var i = 0; i < total; ++i) {
       final px = (i % cols) * _w;
       final py = (i ~/ cols) * _h;
       var subRect = GxRect(px, py, _w, _h);
-      var texture = GxTexture(base.source, subRect, true, scale);
-      texture.base = base;
+//      var texture = GxTexture(base.source, subRect, true, scale);
+      var texture = GSubTexture(base,
+          region: subRect, scaleModifier: scale, rotated: false);
+//      texture.base = base;
       output.add(texture);
     }
     return output;

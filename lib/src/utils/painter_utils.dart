@@ -10,4 +10,7 @@ abstract class PainterUtils {
     alphaPaint.color = alphaPaint.color.withOpacity(alpha);
     return alphaPaint;
   }
+
+  static ColorFilter getColorize(Color color) =>
+      ColorFilter.mode(color, BlendMode.srcATop);
 }

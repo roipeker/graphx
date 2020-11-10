@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../graphx.dart';
 import 'display_object_container.dart';
@@ -19,6 +20,18 @@ abstract class DisplayObject
   DisplayObject $mouseOverObj;
 
   double $lastClickTime = -1;
+
+  bool useCursor = false;
+
+  Color $colorize = Color(0x0);
+  bool get $hasColorize => $colorize != null && $colorize.alpha > 0;
+
+  Color get colorize => $colorize;
+  set colorize(Color value) {
+    if ($colorize == value) return;
+    $colorize = value;
+    requiresRedraw();
+  }
 
   /// capture context mouse inputs.
   void captureMouseInput(MouseInputData input) {
@@ -83,10 +96,16 @@ abstract class DisplayObject
           break;
         case MouseInputType.over:
           $mouseOverObj = object;
+          if (useCursor && GMouse.isShowing()) {
+            GMouse.cursor = SystemMouseCursors.click;
+          }
           $onMouseOver?.dispatch(mouseInput);
           break;
         case MouseInputType.out:
           $mouseOverObj = null;
+          if (useCursor && GMouse.isShowing()) {
+            GMouse.cursor = null;
+          }
           $onMouseOut?.dispatch(mouseInput);
           break;
         default:
@@ -667,19 +686,34 @@ abstract class DisplayObject
         _hasSkew ||
         _is3D;
 
+    // final hasColorize = $colorize?.alpha > 0 ?? false;
     var _saveLayer = this is DisplayObjectContainer &&
         (this as DisplayObjectContainer).hasChildren &&
-        $alpha != 1;
+        ($alpha != 1 || $hasColorize);
 
     final hasMask = mask != null;
+    final showDebugBounds =
+        DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
+            ($debugBounds || DisplayBoundsDebugger.debugAll);
+
+    Rect _cacheLocalBoundsRect;
+    if (showDebugBounds || _saveLayer) {
+      _cacheLocalBoundsRect = bounds.toNative();
+    }
 
     if (_saveLayer) {
 //       TODO: static painter seems to have some issues, try local var later.
       final alphaPaint = PainterUtils.getAlphaPaint($alpha);
-      final rect = getBounds(this).toNative();
-      canvas.saveLayer(rect, alphaPaint);
+
+      /// check colorize if it needs a unique Paint instead.
+      alphaPaint.colorFilter = null;
+      if ($hasColorize) {
+        alphaPaint.colorFilter = ColorFilter.mode($colorize, BlendMode.srcATop);
+      }
+      canvas.saveLayer(_cacheLocalBoundsRect, alphaPaint);
     }
     if (needSave) {
+      // onPreTransform.dispatch();
       canvas.save();
       var m = transformationMatrix.toNative();
       canvas.transform(m.storage);
@@ -705,12 +739,11 @@ abstract class DisplayObject
     $applyPaint(canvas);
     $onPostPaint?.dispatch(canvas);
 
-    if (DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
-        ($debugBounds || DisplayBoundsDebugger.debugAll)) {
+    if (showDebugBounds) {
       final _paint = $debugBoundsPaint ?? _debugPaint;
       final linePaint = _paint.clone();
       linePaint.color = linePaint.color.withOpacity(.3);
-      final rect = getBounds(this).toNative();
+      final rect = _cacheLocalBoundsRect;
       canvas.drawLine(rect.topLeft, rect.bottomRight, linePaint);
       canvas.drawLine(rect.topRight, rect.bottomLeft, linePaint);
       canvas.drawRect(rect, _paint);
@@ -796,20 +829,6 @@ abstract class DisplayObject
     prePaintCallback?.call(c);
     paint(c);
     return r.endRecording();
-  }
-
-  Future<GxTexture> createImageGxTexture([
-    bool adjustOffset = true,
-    double resolution = 1,
-    GxRect rect,
-  ]) async {
-    final img = await createImage(adjustOffset, resolution, rect);
-
-    /// get transformation.
-    var tx = GxTexture(img, null, false, resolution);
-    tx.anchorX = bounds.x;
-    tx.anchorY = bounds.y;
-    return tx;
   }
 
   Future<GTexture> createImageTexture([

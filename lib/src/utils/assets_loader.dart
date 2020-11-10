@@ -23,14 +23,6 @@ abstract class AssetLoader {
     return gifs[cacheId];
   }
 
-  static Future<GxTexture> loadImageTexture(
-    String path, [
-    double resolution,
-  ]) async {
-    final img = await loadImage(path);
-    return GxTexture(img, null, false, resolution ?? TextureUtils.resolution);
-  }
-
   static Future<GifAtlas> loadGif(
     String path, [
     double resolution = 1.0,

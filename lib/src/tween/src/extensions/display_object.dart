@@ -19,6 +19,7 @@ extension GTweenDiplayObjectExt on DisplayObject {
       Object height,
       Object skewX,
       Object skewY,
+      Color colorize,
       Object alpha,
       EaseFunction ease,
       double delay,
@@ -50,6 +51,7 @@ extension GTweenDiplayObjectExt on DisplayObject {
       if (skewX != null) 'skewX': skewX,
       if (skewY != null) 'skewY': skewY,
       if (alpha != null) 'alpha': alpha,
+      if (colorize != null) 'colorize': colorize,
     };
 
     return GTween.to(

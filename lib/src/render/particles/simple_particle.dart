@@ -30,7 +30,7 @@ class SimpleParticle {
   SimpleParticle $nextInstance;
   int id = 0;
 
-  GxTexture texture;
+  GTexture texture;
   static SimpleParticle $availableInstance;
   static int $instanceCount = 0;
 

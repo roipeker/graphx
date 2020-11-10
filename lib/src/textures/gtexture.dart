@@ -2,6 +2,9 @@ import 'package:graphx/graphx.dart';
 
 class GTexture {
   GxRect frame;
+  // set from the outside.
+  GxRect scale9Grid;
+  GxRect scale9GridDest;
 
   double get width => nativeWidth;
 
@@ -14,9 +17,10 @@ class GTexture {
   /// when the texture is plain color.
   Color color;
 
-  double get frameWidth => frame?.width ?? width;
+  /// used width.
+  double get frameWidth => frame?.width ?? nativeWidth;
 
-  double get frameHeight => frame?.height ?? height;
+  double get frameHeight => frame?.height ?? nativeHeight;
 
   /// set this by hand.
   double actualWidth, actualHeight;
@@ -75,8 +79,24 @@ class GTexture {
     if (scale != 1) {
       canvas.save();
       canvas.scale(1 / scale);
-      canvas.drawImage(root, Offset.zero, paint);
+      // canvas.drawImage(root, Offset.zero, paint);
+      _drawImage(canvas, paint);
       canvas.restore();
+    } else {
+      _drawImage(canvas, paint);
+    }
+  }
+
+  void _drawImage(Canvas canvas, Paint paint) {
+    if (scale9Grid != null) {
+      // print('src: $scale9Grid, dst: $scale9GridDest');
+      canvas.drawImageNine(
+        root,
+        scale9Grid.toNative(),
+        scale9GridDest.toNative(),
+        // sourceRect.toNative(),
+        paint,
+      );
     } else {
       canvas.drawImage(root, Offset.zero, paint);
     }

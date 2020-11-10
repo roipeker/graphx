@@ -8,6 +8,14 @@ class GTweenableDisplayObject with GTweenable {
 
   GTweenableDisplayObject(DisplayObject target) {
     this.target = target;
+
+    _addLerp(
+      'colorize',
+      GTweenLerpColor(
+        setProp: (Color value) => target.colorize = value,
+        getProp: () => target.colorize,
+      ),
+    );
   }
 
   @override

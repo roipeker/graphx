@@ -75,7 +75,7 @@ class SimpleParticleSystem extends DisplayObject {
   double dispersionAngle = 0;
   double dispersionAngleVariance = 0;
   bool paused = false;
-  GxTexture texture;
+  GTexture texture;
 
   int get initialColor {
     final r = (initialRed * 0xff).toInt() << 16;
@@ -152,8 +152,9 @@ class SimpleParticleSystem extends DisplayObject {
   }
 
   void _setPivot() {
-    particlePivotX = texture.width.toDouble() * .5;
-    particlePivotY = texture.height.toDouble() * .5;
+    /// used (texture.width)...
+    particlePivotX = texture.nativeWidth.toDouble() * .5;
+    particlePivotY = texture.nativeHeight.toDouble() * .5;
   }
 
   double particlePivotX;
@@ -265,7 +266,7 @@ class SimpleParticleSystem extends DisplayObject {
         drawCallback(canvas, nativePaint);
 //        $canvas.drawImage(texture.source, Offset.zero, nativePaint);
       } else {
-        canvas.drawImage(texture.source, Offset.zero, nativePaint);
+        canvas.drawImage(texture.root, Offset.zero, nativePaint);
       }
       // $canvas.drawImage(texture.source, Offset(tx, ty), nativePaint);
       canvas.restore();

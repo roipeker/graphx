@@ -12,6 +12,7 @@ part 'src/wraps/display_object.dart';
 part 'src/extensions/display_object.dart';
 
 part 'src/gtween.dart';
+part 'src/lerps/common_lerps.dart';
 part 'src/wraps/common_wraps.dart';
 part 'src/wraps/geom_wraps.dart';
 part 'src/extensions/common_types.dart';

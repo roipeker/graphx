@@ -20,33 +20,27 @@ class MovieClip extends Bitmap {
   Bitmap bitmap;
 
   Signal _onFramesComplete;
-
   Signal get onFramesComplete => _onFramesComplete ??= Signal();
 
-  Bitmap getBitmap() {
-    return this;
-  }
+//  Bitmap2 getBitmap() => this;
+//  Bitmap2 resolveBitmap() => getBitmap();
 
   double get fps => 1 / speed;
 
   set fps(double value) => speed = 1 / value;
 
-  MovieClip({List<GxTexture> frames, double fps = 30}) {
+  MovieClip({List<GTexture> frames, double fps = 30}) {
     setFrameTextures(frames);
     this.fps = fps;
   }
 
-  List<GxTexture> _frameTextures;
+  List<GTexture> _frameTextures;
 
-  List<GxTexture> setFrameTextures(List<GxTexture> list) {
+  List<GTexture> setFrameTextures(List<GTexture> list) {
     _frameTextures = list ?? [];
     frameCount = list?.length ?? 0;
     currentFrame = 0;
-    if (list.isNotEmpty) {
-      getBitmap()?.texture = list[0];
-    } else {
-      getBitmap().texture = null;
-    }
+    texture = list.isNotEmpty ? list[0] : null;
     return list;
   }
 
@@ -54,7 +48,7 @@ class MovieClip extends Bitmap {
     if (_frameTextures == null) return;
     currentFrame = frame;
     currentFrame %= frameCount;
-    getBitmap().texture = _frameTextures[currentFrame];
+    texture = _frameTextures[currentFrame];
   }
 
   void gotoAndPlay(int frame) {
@@ -79,7 +73,6 @@ class MovieClip extends Bitmap {
   void update(double delta) {
     if (playing && frameCount > 1) {
       accumulatedTime += delta * timeDilation;
-      // print(accumulatedTime);
       if (accumulatedTime >= speed) {
         currentFrame +=
             reversed ? -(accumulatedTime ~/ speed) : accumulatedTime ~/ speed;
@@ -100,17 +93,10 @@ class MovieClip extends Bitmap {
             return;
           }
         }
-        bitmap ??= resolveBitmap();
-        if (bitmap != null) {
-          bitmap.texture = _frameTextures[currentFrame];
-        }
+        texture = _frameTextures[currentFrame];
       }
       accumulatedTime %= speed;
     }
-  }
-
-  Bitmap resolveBitmap() {
-    return getBitmap();
   }
 
   @override

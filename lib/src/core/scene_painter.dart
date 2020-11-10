@@ -7,6 +7,10 @@ import '../../graphx.dart';
 class SceneRoot extends Sprite {
   ScenePainter scene;
 
+  static SceneRoot get current {
+    return ScenePainter.current.root;
+  }
+
   bool _ready = false;
 
   bool get isReady => _ready;
