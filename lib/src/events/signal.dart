@@ -65,6 +65,10 @@ class Signal {
 typedef EventSignalCallback<T> = void Function(T);
 
 class EventSignal<T> {
+  void call(EventSignalCallback<T> callback) {
+    add(callback);
+  }
+
   final _listenersOnce = <EventSignalCallback<T>>[];
   final _listeners = <EventSignalCallback<T>>[];
   int _iterDispatchers = 0;

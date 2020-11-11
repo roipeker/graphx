@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:graphx/src/render/filters/blur_filter.dart';
 
 import '../../graphx.dart';
 import 'display_object_container.dart';
@@ -16,6 +17,10 @@ abstract class DisplayObject
   bool $debugBounds = false;
   bool mouseUseShape = false;
 
+  List<BaseFilter> $filters;
+  List<BaseFilter> get filters => $filters;
+  set filters(List<BaseFilter> value) => $filters = value;
+
   DisplayObject $mouseDownObj;
   DisplayObject $mouseOverObj;
 
@@ -24,9 +29,11 @@ abstract class DisplayObject
   bool useCursor = false;
 
   Color $colorize = Color(0x0);
+
   bool get $hasColorize => $colorize != null && $colorize.alpha > 0;
 
   Color get colorize => $colorize;
+
   set colorize(Color value) {
     if ($colorize == value) return;
     $colorize = value;
@@ -163,6 +170,7 @@ abstract class DisplayObject
   double get rotationX => _rotationX;
 
   double get rotationY => _rotationY;
+
   double get z => _z;
 
   double get x => _x;
@@ -285,6 +293,7 @@ abstract class DisplayObject
   }
 
   static bool _3dWarned = false;
+
   void _warn3d() {
     print('Warning: 3d transformations still not properly supported');
     _3dWarned = true;
@@ -337,6 +346,7 @@ abstract class DisplayObject
   bool $hasVisibleArea = true;
 
   bool get isMask => $maskee != null;
+
   Shape get mask => $mask;
 
   /// can be set on the Shape mask, or the maskee DisplayObject.
@@ -669,6 +679,9 @@ abstract class DisplayObject
 
   void update(double delta) {}
 
+  bool get hasFilters => filters?.isNotEmpty ?? false;
+  GxRect $debugLastLayerBounds;
+
   /// Do not override this method as it applies the basic transformations.
   /// override $applyPaint() if you wanna use `Canvas` directly.
   void paint(Canvas canvas) {
@@ -686,31 +699,48 @@ abstract class DisplayObject
         _hasSkew ||
         _is3D;
 
+    final $hasFilters = hasFilters;
     // final hasColorize = $colorize?.alpha > 0 ?? false;
     var _saveLayer = this is DisplayObjectContainer &&
         (this as DisplayObjectContainer).hasChildren &&
-        ($alpha != 1 || $hasColorize);
+        ($alpha != 1 || $hasColorize || $hasFilters);
 
     final hasMask = mask != null;
     final showDebugBounds =
         DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
             ($debugBounds || DisplayBoundsDebugger.debugAll);
 
-    Rect _cacheLocalBoundsRect;
+    GxRect _cacheLocalBoundsRect;
     if (showDebugBounds || _saveLayer) {
-      _cacheLocalBoundsRect = bounds.toNative();
+      // _cacheLocalBoundsRect = bounds.toNative();
+      _cacheLocalBoundsRect = bounds;
     }
 
     if (_saveLayer) {
 //       TODO: static painter seems to have some issues, try local var later.
       final alphaPaint = PainterUtils.getAlphaPaint($alpha);
+      var layerBounds = getBounds($parent);
 
       /// check colorize if it needs a unique Paint instead.
       alphaPaint.colorFilter = null;
+      alphaPaint.imageFilter = null;
+      alphaPaint.maskFilter = null;
       if ($hasColorize) {
         alphaPaint.colorFilter = ColorFilter.mode($colorize, BlendMode.srcATop);
       }
-      canvas.saveLayer(_cacheLocalBoundsRect, alphaPaint);
+      if ($hasFilters) {
+        layerBounds = layerBounds.clone();
+        GxRect resultBounds;
+        $filters.forEach((filter) {
+          resultBounds ??= layerBounds.clone();
+          filter.update();
+          filter.expandBounds(layerBounds, resultBounds);
+          filter.resolvePaint(alphaPaint);
+        });
+        layerBounds = resultBounds;
+      }
+      $debugLastLayerBounds = layerBounds;
+      canvas.saveLayer(layerBounds.toNative(), alphaPaint);
     }
     if (needSave) {
       // onPreTransform.dispatch();
@@ -743,12 +773,11 @@ abstract class DisplayObject
       final _paint = $debugBoundsPaint ?? _debugPaint;
       final linePaint = _paint.clone();
       linePaint.color = linePaint.color.withOpacity(.3);
-      final rect = _cacheLocalBoundsRect;
+      final rect = _cacheLocalBoundsRect.toNative();
       canvas.drawLine(rect.topLeft, rect.bottomRight, linePaint);
       canvas.drawLine(rect.topRight, rect.bottomLeft, linePaint);
       canvas.drawRect(rect, _paint);
     }
-
     if (needSave) {
       canvas.restore();
     }

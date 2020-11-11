@@ -84,6 +84,16 @@ class Bitmap extends DisplayObject {
   }
 
   @override
+  set filters(List<BaseFilter> value) {
+    if ($filters == value) return;
+    $filters = value;
+    if ($filters == null) {
+      _paint.imageFilter = null;
+      _paint.maskFilter = null;
+    }
+  }
+
+  @override
   void paint(Canvas canvas) {
     if (texture == null) return;
     _hasScale9Grid = texture.scale9Grid != null;
@@ -95,6 +105,13 @@ class Bitmap extends DisplayObject {
 
   @override
   void $applyPaint(Canvas canvas) {
+    if (hasFilters) {
+      filters.forEach((filter) {
+        filter.update();
+        filter.resolvePaint(_paint);
+      });
+    }
+
     texture?.render(canvas, _paint);
     if (_hasScale9Grid) {
       setScale(_buffScaleX, _buffScaleY);
@@ -105,6 +122,7 @@ class Bitmap extends DisplayObject {
   bool _hasScale9Grid;
   double _buffScaleX, _buffScaleY;
   final GxRect _cachedBounds = GxRect();
+
   void _adjustScaleGrid() {
     _buffScaleX = scaleX;
     _buffScaleY = scaleY;
