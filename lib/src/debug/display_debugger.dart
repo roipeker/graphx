@@ -1,4 +1,4 @@
-import 'package:graphx/graphx.dart';
+import '../../graphx.dart';
 
 enum DebugBoundsMode {
   /// renders the bounding box transformed, inside the current object [paint()]

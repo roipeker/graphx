@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
-import 'package:graphx/graphx.dart';
 
 import '../geom/geom.dart';
 import '../utils/utils.dart';

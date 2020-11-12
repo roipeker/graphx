@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:graphx/graphx.dart';
+import '../../../graphx.dart';
 
 class BaseFilter {
   void resolvePaint(Paint paint) {}

@@ -4,9 +4,9 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
-import 'package:graphx/src/render/filters/blur_filter.dart';
 
 import '../../graphx.dart';
+import '../render/filters/blur_filter.dart';
 import 'display_object_container.dart';
 import 'stage.dart';
 
