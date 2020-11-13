@@ -17,7 +17,7 @@ class SvgUtils {
     bool clipCanvas = true,
     Size scaleCanvasSize,
   }) async {
-    final DrawableRoot svgRoot = await svg.fromSvgString(rawSvg, rawSvg);
+    final svgRoot = await svg.fromSvgString(rawSvg, rawSvg);
     if (scaleCanvas) {
       svgRoot.scaleCanvasToViewBox(canvas, scaleCanvasSize);
     }
@@ -28,7 +28,7 @@ class SvgUtils {
   }
 
   static Future<SvgData> svgDataFromString(String rawSvg) async {
-    final DrawableRoot svgRoot = await svg.fromSvgString(rawSvg, rawSvg);
+    final svgRoot = await svg.fromSvgString(rawSvg, rawSvg);
     var obj = SvgData();
     obj.hasContent = svgRoot.hasDrawableContent;
     obj.picture = svgRoot.toPicture();

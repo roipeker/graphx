@@ -101,7 +101,8 @@ class GTweenableMap with GTweenable {
 
     targetMap.removeWhere((k, v) => !value.containsKey(k));
     if (targetMap.isEmpty) {
-      throw "tween(targetMap) Map can't be empty. Or there are no matching keys with the tweenable target.";
+      throw '''
+tween(targetMap) Map can't be empty. Or there are no matching keys with the tweenable target.''';
     }
 
     return GTween.to(
@@ -169,7 +170,8 @@ class GTweenableList with GTweenable {
     assert(targetList != null);
     targetList.removeWhere((element) => element is! num);
     if (targetList.isEmpty) {
-      throw "tween(targetList) List can't be empty. Or values inside of it where not a number type";
+      throw '''
+tween(targetList) List can't be empty. Or values inside of it where not a number type''';
     }
     final targetMap = {};
     for (var i = 0; i < targetList.length; ++i) {

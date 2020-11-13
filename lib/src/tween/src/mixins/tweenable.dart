@@ -40,7 +40,7 @@ mixin GTweenable {
   final Map<String, GTweenLerpProp> _lerps = {};
 
   @override
-  String toString() => '[GTweenable] ' + target?.toString();
+  String toString() => '[GTweenable] $target';
 
   Map<Object, List<Function>> _accessors;
 

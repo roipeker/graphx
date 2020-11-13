@@ -1,6 +1,6 @@
-import 'package:exampleGraphx/demos/simple_tween/simple_tween_scene.dart';
-import 'package:exampleGraphx/demos/simple_tween/tween_controller.dart';
-import 'package:exampleGraphx/utils/utils.dart';
+import '../../utils/utils.dart';
+import 'simple_tween_scene.dart';
+import 'tween_controller.dart';
 
 class SimpleTweenMain extends StatelessWidget {
   final controller = TweenSceneController();

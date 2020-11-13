@@ -1,4 +1,4 @@
-import 'package:exampleGraphx/utils/utils.dart';
+import '../../utils/utils.dart';
 
 import 'simple_interactions_scene.dart';
 

@@ -38,7 +38,8 @@ class GTweenablePoint with GTweenable {
     Map startAt,
   }) {
     if ((x != null || y != null) && to != null) {
-      throw "GTween Can't use 'x, y' AND 'to' arguments for GxPoint tween. Choose one";
+      throw '''
+GTween Can't use 'x, y' AND 'to' arguments for GxPoint tween. Choose one''';
     }
     x = to?.x ?? x;
     y = to?.y ?? y;

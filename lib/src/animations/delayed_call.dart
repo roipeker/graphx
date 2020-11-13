@@ -40,9 +40,9 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
         // save objects cause they might be changed from event.
         var $callback = target;
 
-        /// during callback, people might wanna call [reset] and read this to the
-        /// juggler, so the signal has to be dispatched *before* executing the
-        /// callback.
+        /// during callback, people might wanna call [reset] and read
+        /// this to the juggler, so the signal has to be dispatched *before*
+        ///  executing the callback.
         onRemovedFromJuggler.dispatch(_eventData);
         $callback?.call();
       }
