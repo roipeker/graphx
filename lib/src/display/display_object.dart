@@ -682,6 +682,12 @@ abstract class DisplayObject
   bool get hasFilters => filters?.isNotEmpty ?? false;
   GxRect $debugLastLayerBounds;
 
+  /// quick and dirty way to toggle saveLayer() feature for common
+  /// display objects as well.
+  /// Rendereables DisplayObjects like Shape/Bitmap have their own
+  /// Paint() so no need to use an expensive saveLayer().
+  bool allowSaveLayer = false;
+
   /// Do not override this method as it applies the basic transformations.
   /// override $applyPaint() if you wanna use `Canvas` directly.
   void paint(Canvas canvas) {
@@ -701,9 +707,14 @@ abstract class DisplayObject
 
     final $hasFilters = hasFilters;
     // final hasColorize = $colorize?.alpha > 0 ?? false;
-    var _saveLayer = this is DisplayObjectContainer &&
-        (this as DisplayObjectContainer).hasChildren &&
-        ($alpha != 1 || $hasColorize || $hasFilters);
+    // var _saveLayer = this is DisplayObjectContainer &&
+    //     (this as DisplayObjectContainer).hasChildren &&
+    //     ($alpha != 1 || $hasColorize || $hasFilters);
+    var _saveLayer =
+        allowSaveLayer && $alpha != 1 || $hasColorize || $hasFilters;
+    // if (this is DisplayObjectContainer &&
+    //     (this as DisplayObjectContainer).hasChildren) {
+    // }
 
     final hasMask = mask != null;
     final showDebugBounds =

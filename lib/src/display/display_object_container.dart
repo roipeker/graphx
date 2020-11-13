@@ -6,6 +6,10 @@ typedef SortChildrenCallback = int Function(
 abstract class DisplayObjectContainer extends DisplayObject {
   final children = <DisplayObject>[];
 
+  DisplayObjectContainer() {
+    allowSaveLayer = true;
+  }
+
   @override
   String toString() {
     final msg = name != null ? ' {name: $name}' : '';

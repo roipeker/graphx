@@ -457,7 +457,9 @@ class GTween {
 
   static void _updateRoot(double delta) {
     _frame += 1;
-    _time = getTimer() * .001;
+    // _time = getTimer() * .001;
+    if(delta<=0) delta = .016;
+    _time += delta;
     var tween = _first;
     while (tween != null) {
       var next = tween._next;

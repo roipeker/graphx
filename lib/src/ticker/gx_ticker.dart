@@ -25,11 +25,14 @@ class GxTicker {
   bool get isTicking => _ticker?.isTicking ?? false;
 
   bool get isActive => _ticker?.isActive ?? false;
+  double get currentDeltaTime => _currentDeltaTime;
+  double get currentDeltaRatio => _currentDeltaRatio;
 
   void resume() {
     if (isTicking) return;
     _createTicker();
     _ticker?.muted = false;
+    _expectedDelta = 1.0/frameRate;
   }
 
   void pause() {
@@ -40,8 +43,11 @@ class GxTicker {
   /// process timeframe in integer MS
   double _currentTime = 0;
   double _currentDeltaTime = 0;
+  // 0-100%
+  double _currentDeltaRatio = 0.0;
 
   double frameRate = 60.0;
+  double _expectedDelta;
 
   /// enterframe ticker
   void _onTick(Duration elapsed) {
@@ -50,7 +56,9 @@ class GxTicker {
     _currentTime = now;
 
     /// avoid overloading frames (happens per scene).
-//    _currentDeltaTime = _currentDeltaTime.clamp(1.0 / frameRate, 1.0);
+   _currentDeltaTime = _currentDeltaTime.clamp(1.0 / frameRate, 1.0);
+   _currentDeltaRatio = _currentDeltaTime/_expectedDelta;
+
     if (_nextFrameCallback != null) {
       var callback = _nextFrameCallback;
       _nextFrameCallback = null;
