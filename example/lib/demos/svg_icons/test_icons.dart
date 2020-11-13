@@ -15,7 +15,7 @@ class TestIcons extends Sprite {
     final icon1 = GxIcon(Icons.account_circle, Colors.purple.value, 32.0);
     iconsContainer.addChild(icon1);
 
-    final icon2 = GxIcon(Icons.attach_email, 0xffffff, 18.0);
+    final icon2 = GxIcon(Icons.email, 0xffffff, 18.0);
     iconsContainer.addChild(icon2);
     icon2.x = 32;
     icon2.alignPivot();

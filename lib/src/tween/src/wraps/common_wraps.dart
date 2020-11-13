@@ -80,21 +80,23 @@ class GTweenableMap with GTweenable {
     return convertToDouble(value[prop]);
   }
 
-  GTween tween(Map targetMap,
-      {@required double duration,
-      EaseFunction ease,
-      double delay,
-      bool useFrames,
-      int overwrite,
-      Function onStart,
-      Object onStartParams,
-      Function onComplete,
-      Object onCompleteParams,
-      Function onUpdate,
-      Object onUpdateParams,
-      bool runBackwards,
-      bool immediateRender,
-      Map startAt}) {
+  GTween tween(
+    Map targetMap, {
+    @required double duration,
+    EaseFunction ease,
+    double delay,
+    bool useFrames,
+    int overwrite,
+    VoidCallback onStart,
+    Object onStartParams,
+    VoidCallback onComplete,
+    Object onCompleteParams,
+    VoidCallback onUpdate,
+    Object onUpdateParams,
+    bool runBackwards,
+    bool immediateRender,
+    Map startAt,
+  }) {
     assert(targetMap != null);
 
     targetMap.removeWhere((k, v) => !value.containsKey(k));
@@ -147,21 +149,23 @@ class GTweenableList with GTweenable {
     return convertToDouble(value[int.parse('$prop')]);
   }
 
-  GTween tween(List targetList,
-      {@required double duration,
-      EaseFunction ease,
-      double delay,
-      bool useFrames,
-      int overwrite,
-      Function onStart,
-      Object onStartParams,
-      Function onComplete,
-      Object onCompleteParams,
-      Function onUpdate,
-      Object onUpdateParams,
-      bool runBackwards,
-      bool immediateRender,
-      Map startAt}) {
+  GTween tween(
+    List targetList, {
+    @required double duration,
+    EaseFunction ease,
+    double delay,
+    bool useFrames,
+    int overwrite,
+    VoidCallback onStart,
+    Object onStartParams,
+    VoidCallback onComplete,
+    Object onCompleteParams,
+    VoidCallback onUpdate,
+    Object onUpdateParams,
+    bool runBackwards,
+    bool immediateRender,
+    Map startAt,
+  }) {
     assert(targetList != null);
     targetList.removeWhere((element) => element is! num);
     if (targetList.isEmpty) {
@@ -216,21 +220,23 @@ double convertToDouble(val) {
 mixin SingleValueTweenMixin {
   Object getValue;
 
-  GTween tween(Object value,
-      {@required double duration,
-      EaseFunction ease,
-      double delay,
-      bool useFrames,
-      int overwrite,
-      Function onStart,
-      Object onStartParams,
-      Function onComplete,
-      Object onCompleteParams,
-      Function onUpdate,
-      Object onUpdateParams,
-      bool runBackwards,
-      bool immediateRender,
-      Map startAt}) {
+  GTween tween(
+    Object value, {
+    @required double duration,
+    EaseFunction ease,
+    double delay,
+    bool useFrames,
+    int overwrite,
+    VoidCallback onStart,
+    Object onStartParams,
+    VoidCallback onComplete,
+    Object onCompleteParams,
+    VoidCallback onUpdate,
+    Object onUpdateParams,
+    bool runBackwards,
+    bool immediateRender,
+    Map startAt,
+  }) {
     assert(value != null);
     return GTween.to(
         this,

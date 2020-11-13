@@ -5,11 +5,11 @@ class GVars {
   double delay;
   bool useFrames;
   int overwrite;
-  Function onStart;
+  VoidCallback onStart;
   CallbackParams onStartParams;
   Function onComplete;
   CallbackParams onCompleteParams;
-  Function onUpdate;
+  VoidCallback onUpdate;
   CallbackParams onUpdateParams;
   bool runBackwards;
   bool immediateRender;

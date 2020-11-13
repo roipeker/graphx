@@ -1,5 +1,6 @@
-import 'package:graphx/graphx.dart';
 import 'package:xml/xml.dart' as xml;
+
+import '../../graphx.dart';
 
 class GTextureAtlas {
   GTexture _atlasTexture;

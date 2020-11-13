@@ -1,4 +1,4 @@
-import 'package:graphx/graphx.dart';
+import '../../graphx.dart';
 
 class GSubTexture extends GTexture {
   GTexture _parent;

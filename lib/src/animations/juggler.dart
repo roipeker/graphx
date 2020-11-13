@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import '../../graphx.dart';
 
 class Juggler {
@@ -32,7 +34,7 @@ class Juggler {
   bool contains(IUpdatable obj) => objectsIds.containsKey(obj);
 
   int remove(IUpdatable obj) {
-    int objId = 0;
+    var objId = 0;
     if (obj != null && objectsIds.containsKey(obj)) {
       /// check if it has events.
       if (obj is JugglerSignalMixin) {
@@ -48,7 +50,7 @@ class Juggler {
 
   int removeById(int objId) {
     for (var i = 0; i < objects.length; ++i) {
-      IUpdatable obj = objects[i];
+      final obj = objects[i];
       if (objectsIds[obj] == objId) {
         remove(obj);
         return objId;
@@ -98,7 +100,7 @@ class Juggler {
 //  }
 
   /// checks if the juggler contains one or more delayed calls with the certain target.
-  bool containsDelayedCalls(Function callback) {
+  bool containsDelayedCalls(VoidCallback callback) {
     if (callback == null) return false;
     for (var i = 0; i < objects.length; ++i) {
       var obj = objects[i];
@@ -119,14 +121,14 @@ class Juggler {
     }
   }
 
-  int delayedCall(Function callback, double delay) {
+  int delayedCall(VoidCallback callback, double delay) {
     if (callback == null) throw 'callback can not be null';
-    GxDelayedCall obj = GxDelayedCall.fromPool(callback, delay);
+    final obj = GxDelayedCall.fromPool(callback, delay);
     obj.onRemovedFromJuggler.add(_onPoolDelayedCallComplete);
     return add(obj);
   }
 
-  int repeatCall(Function callback, double delay, [int repeatCount = 0]) {
+  int repeatCall(VoidCallback callback, double delay, [int repeatCount = 0]) {
     if (callback == null) throw 'callback can not be null';
     var obj = GxDelayedCall.fromPool(callback, delay)
       ..repeatCount = repeatCount

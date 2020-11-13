@@ -4,7 +4,7 @@ import '../../graphx.dart';
 import 'updatable.dart';
 
 class GxDelayedCall with IUpdatable, JugglerSignalMixin {
-  Function target;
+  VoidCallback target;
   double duration;
   double _currentTime;
   double _totalTime;
@@ -17,7 +17,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
 
   bool get isComplete => repeatCount == 1 && _currentTime >= _totalTime;
 
-  GxDelayedCall(Function callback, double delay) {
+  GxDelayedCall(VoidCallback callback, double delay) {
     _eventData = JugglerObjectEventData(this);
     reset(callback, delay);
   }
@@ -54,7 +54,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
     if (restTime > 0) update(restTime);
   }
 
-  GxDelayedCall reset(Function callback, double delay) {
+  GxDelayedCall reset(VoidCallback callback, double delay) {
     _currentTime = 0;
     target = callback;
     duration = delay;
@@ -72,7 +72,7 @@ class GxDelayedCall with IUpdatable, JugglerSignalMixin {
     _pool.add(obj);
   }
 
-  static GxDelayedCall fromPool(Function callback, double delay) {
+  static GxDelayedCall fromPool(VoidCallback callback, double delay) {
     if (_pool.isNotEmpty) return _pool.removeLast().reset(callback, delay);
     return GxDelayedCall(callback, delay);
   }

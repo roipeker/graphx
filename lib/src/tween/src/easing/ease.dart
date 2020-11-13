@@ -1,7 +1,7 @@
 part of gtween;
 
-typedef EaseDef = double Function(double);
-typedef EaseFunction = double Function(double);
+typedef EaseDef = double Function(double e);
+typedef EaseFunction = double Function(double e);
 
 abstract class GEase {
   static EaseFunction defaultEasing = decelerate;

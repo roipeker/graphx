@@ -1,6 +1,7 @@
 import 'package:flutter/rendering.dart';
 
 import '../../graphx.dart';
+
 export 'package:flutter/rendering.dart' show SystemMouseCursor;
 
 /// also accessible from `pointer_manager.dart`
