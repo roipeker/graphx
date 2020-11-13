@@ -1,9 +1,20 @@
-# GraphX™
+<div align="center">
+    <a>
+        <h3>🎨</h3>
+        <h1>GraphX™</h1>
+    </a>
 
-GraphX™ rendering lib, 
- prototype code with a prototype lib
+[![pub package](https://img.shields.io/pub/v/graphx.svg?label=graphx&color=blue)](https://pub.dev/packages/graphx)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-> *WARNING:* this is WIP code, based on a few days of experimentation.
+| rendering | prototype  | design  |
+
+
+
+Making drawings and animations in Flutter extremely simple.
+
+
+> *WARNING:* this lib is on alfa stage, the api can change.
 
 > *NOTE:* GraphX™ uses the `$` prefix convention to all "internal/private" members (properties and methods). __DO NOT__ call them in your code... is meant to be consumed internally by the lib.
 > until I cleanup and organize the code for an alpha version, then will probably moved all as part of the package. 
