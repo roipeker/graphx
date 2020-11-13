@@ -5,7 +5,9 @@
     </a>
 
 [![pub package](https://img.shields.io/pub/v/graphx.svg?label=graphx&color=blue)](https://pub.dev/packages/graphx)
+[![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 
 | rendering | prototype  | design  |
 
@@ -27,7 +29,10 @@ To get some extended, boring explanations, and eventually some sample codes, che
 
 <div align="left">
     
-## background.
+
+
+    
+## Background.
 
 GraphX™ is here to help you build custom drawing in your Flutter apps. Providing an amazing versatility to power those screen pixels to a different level.
 
@@ -42,7 +47,7 @@ It can be used to simple draw a line, a circle, a custom button, some splash eff
 
 So, let your imagination fly.    
    
-## concept.
+## Concept.
 
 
 This repo is just a very early WIP to put something online... 
@@ -65,7 +70,7 @@ GraphX™ drives a CustomPainter inside, the idea is to simplify the usage of Fl
 
 GraphX™ has it's own rendering cycle (no AnimationController), and input capture, even if it runs on the Widget tree, you can enable the flags to capture mouse/touch input (through the `stage.pointer`), or keystrokes events (if u wanna do some simple game).
    
-### sample code.
+### Sample code.
 
 ```dart
   body: Center(
@@ -182,7 +187,7 @@ They all emit a `MouseInputData` with all the needed info inside, like stage coo
 
 *I will keep adding further explanation in the upcoming days.* 
 
-### demos.
+### Demos.
 
 _Some demos are only using **GraphX™** partially, and might have big CPU impact_
 
