@@ -25,6 +25,8 @@ ___
 
 To get some extended, boring explanations, and eventually some sample codes, check the [GraphX™ Wiki](https://github.com/roipeker/graphx/wiki/GraphX-tips-and-random%5BnextInt()%5D-stuffs.#graphx-general-tips) 
 
+<div align="left">
+    
 ## background.
 
 GraphX™ is here to help you build custom drawing in your Flutter apps. Providing an amazing versatility to power those screen pixels to a different level.
@@ -42,7 +44,7 @@ So, let your imagination fly.
    
 ## concept.
 
-<div align="left">
+
 This repo is just a very early WIP to put something online... 
 still lacks support for loading remote images, 2.5D and some other nicities.
 
@@ -54,8 +56,6 @@ AssetLoader.loadJson(assetId)
 ```
 
 And some basic "raw" support for Text rendering with the `StaticText` class.
-</div>
-
 
 
 
@@ -66,8 +66,6 @@ GraphX™ drives a CustomPainter inside, the idea is to simplify the usage of Fl
 GraphX™ has it's own rendering cycle (no AnimationController), and input capture, even if it runs on the Widget tree, you can enable the flags to capture mouse/touch input (through the `stage.pointer`), or keystrokes events (if u wanna do some simple game).
    
 ### sample code.
-
-<div align="left">
 
 ```dart
   body: Center(
