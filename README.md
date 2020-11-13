@@ -15,7 +15,7 @@
 
 Making drawings and animations in Flutter extremely simple.
 
-
+___
 > *WARNING:* this lib is on alfa stage, the api can change.
 
 > *NOTE:* GraphX™ uses the `$` prefix convention to all "internal/private" members (properties and methods). __DO NOT__ call them in your code... is meant to be consumed internally by the lib.
@@ -26,13 +26,14 @@ ___
 ### wiki-tips.
 
 To get some extended, boring explanations, and eventually some sample codes, check the [GraphX™ Wiki](https://github.com/roipeker/graphx/wiki/GraphX-tips-and-random%5BnextInt()%5D-stuffs.#graphx-general-tips) 
-
+___
 <div align="left">
     
 
 
     
 ## Background.
+___
 
 GraphX™ is here to help you build custom drawing in your Flutter apps. Providing an amazing versatility to power those screen pixels to a different level.
 
@@ -48,7 +49,7 @@ It can be used to simple draw a line, a circle, a custom button, some splash eff
 So, let your imagination fly.    
    
 ## Concept.
-
+___
 
 This repo is just a very early WIP to put something online... 
 still lacks support for loading remote images, 2.5D and some other nicities.
@@ -71,7 +72,7 @@ GraphX™ drives a CustomPainter inside, the idea is to simplify the usage of Fl
 GraphX™ has it's own rendering cycle (no AnimationController), and input capture, even if it runs on the Widget tree, you can enable the flags to capture mouse/touch input (through the `stage.pointer`), or keystrokes events (if u wanna do some simple game).
    
 ### Sample code.
-
+___
 ```dart
   body: Center(
     child: SceneBuilderWidget( /// wrap any Widget with SceneBuilderWidget
@@ -228,6 +229,7 @@ SKIA is pretty powerful!
 -------------
 
 #### Donation
+___
 You can [buymeacoffee](https://www.buymeacoffee.com/roipeker) or support **GraphX™** via [Paypal](https://www.paypal.me/roipeker/)
 
 [![Donate via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/roipeker/)
