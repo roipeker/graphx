@@ -32,7 +32,9 @@ ___
 ![charts pie color 2](https://media.giphy.com/media/pQdeurUOAqWdZuxxUK/giphy.gif)
 ![simple particles](https://media.giphy.com/media/VYSJF6uUO323FV0Nhh/giphy.gif)
 ![drawing api playful v1](https://media.giphy.com/media/HdJmgzVYLK8jUxX437/giphy.gif)
-... jump to [other gifs samples](#-screencast-demos) ...
+
+
+... jump to [other gifs samples](#screencast-demos) ...
 
 <div align="left">
     
