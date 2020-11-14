@@ -55,14 +55,14 @@ class SimpleInteractionsScene extends SceneRoot {
   /// And also access the `rawEvent` dispatched by Flutter if we need to.
   /// Most of the times you are ok using `LogicalKeyboardKey` to check
   /// for the keyboard's keys constants.
-  /// Usually [onDown] fires keystrokes in constantly, although it depends on the
-  /// OS and keyboard, while you keep it pressed.
+  /// Usually [onDown] fires keystrokes in constantly, although it depends 
+  /// on the OS and keyboard, while you keep it pressed.
   void _onKeyboardDown(KeyboardEventData event) {
     var pixelsToMove = 10.0;
 
     /// for access modifiers keys, is better to check the raw event itself.
-    /// as multiple physical keys have the same behaviour (shift, command, alt, etc)
-    /// but different key codes.
+    /// as multiple physical keys have the same behaviour (shift, command, 
+    /// alt, etc) but different key codes.
     if (event.rawEvent.isShiftPressed) {
       pixelsToMove = 30.0;
     }
@@ -85,9 +85,9 @@ class SimpleInteractionsScene extends SceneRoot {
     }
   }
 
-  /// [onUp], unlike [onDown], dispatches only once, when you release a keystroke.
-  /// use the A for scale down the ball, and S to scale it up by 20% on each
-  /// event.
+  /// [onUp], unlike [onDown], dispatches only once, when you release a 
+  /// keystroke. use the A for scale down the ball, and S to scale it up 
+  /// by 20% on each event.
   void _onKeyboardUp(KeyboardEventData event) {
     if (event.isKey(LogicalKeyboardKey.keyS)) {
       ball.scale += .2;

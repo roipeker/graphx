@@ -40,7 +40,7 @@ mixin RenderUtilMixin {
     final picture = createPicture(
       !needsAdjust
           ? null
-          : (Canvas c) {
+          : (c) {
               if (adjustOffset) {
                 c.translate(-rect.left, -rect.top);
               }

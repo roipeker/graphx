@@ -283,7 +283,7 @@ class GTween {
       return v - start;
     } else if (val is String) {
       if (val.length > 2 && val[1] == '=') {
-        var multiplier = double.tryParse(val[0] + '1') ?? 1;
+        var multiplier = double.tryParse('${val[0]}1') ?? 1;
         var factor = double.tryParse(val.substring(2));
         return multiplier * factor;
       } else {

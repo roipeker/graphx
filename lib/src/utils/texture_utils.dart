@@ -1,6 +1,6 @@
 import '../../graphx.dart';
 
-abstract class TextureUtils {
+mixin TextureUtils {
   static final Shape _helperShape = Shape();
 
   static Graphics get _g => _helperShape.graphics;

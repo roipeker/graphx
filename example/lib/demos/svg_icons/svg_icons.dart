@@ -1,4 +1,4 @@
-import 'package:exampleGraphx/utils/utils.dart';
+import '../../utils/utils.dart';
 import 'svg_icons_scene.dart';
 
 class DemoSvgIconsMain extends StatelessWidget {

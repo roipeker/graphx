@@ -186,7 +186,7 @@ class MyButton extends Sprite {
     /// height
     textY = textY.clamp(0.0, h - textH);
     _fillText.y = textY;
-    _fillText.text = (_fillPercent * 100).toStringAsFixed(0) + '%';
+    _fillText.text = '${(_fillPercent * 100).toStringAsFixed(0)}%';
     _fillText.alpha = _fillPercent.clamp(.3, 1.0);
   }
 }

@@ -1,6 +1,6 @@
 import '../../graphx.dart';
 
-abstract class Pool {
+mixin Pool {
   static final _points = <GxPoint>[];
   static final _rectangles = <GxRect>[];
   static final _matrices = <GxMatrix>[];

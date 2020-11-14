@@ -1,20 +1,39 @@
-# GraphX™
+<div align="center">
+    <a>
+        <h3>🎨</h3>
+        <h1>GraphX™</h1>
+    </a>
 
-GraphX™ rendering lib, 
- prototype code with a prototype lib
+[![pub package](https://img.shields.io/pub/v/graphx.svg?label=graphx&color=blue)](https://pub.dev/packages/graphx)
+[![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-> *WARNING:* this is WIP code, based on a few days of experimentation.
 
-> *NOTE:* GraphX™ uses the `$` prefix convention to all "internal/private" members (properties and methods). __DO NOT__ call them in your code... is meant to be consumed internally by the lib.
-> until I cleanup and organize the code for an alpha version, then will probably moved all as part of the package. 
+| rendering | prototype  | design  |
+
+
+
+Making drawings and animations in Flutter extremely simple.
+
+___
+ *WARNING:* this lib is on alfa stage, the api can change.
+
+ *NOTE:* GraphX™ uses the `$` prefix convention to all "internal/private" members (properties and methods). __DO NOT__ call them in your code... is meant to be consumed internally by the lib.
+ until I cleanup and organize the code for an alpha version, then will probably moved all as part of the package. 
 ___
 
 
 ### wiki-tips.
 
 To get some extended, boring explanations, and eventually some sample codes, check the [GraphX™ Wiki](https://github.com/roipeker/graphx/wiki/GraphX-tips-and-random%5BnextInt()%5D-stuffs.#graphx-general-tips) 
+___
+<div align="left">
+    
 
-## background.
+
+    
+## Background.
+
 
 GraphX™ is here to help you build custom drawing in your Flutter apps. Providing an amazing versatility to power those screen pixels to a different level.
 
@@ -29,7 +48,7 @@ It can be used to simple draw a line, a circle, a custom button, some splash eff
 
 So, let your imagination fly.    
    
-## concept.
+## Concept.
 
 This repo is just a very early WIP to put something online... 
 still lacks support for loading remote images, 2.5D and some other nicities.
@@ -43,13 +62,15 @@ AssetLoader.loadJson(assetId)
 
 And some basic "raw" support for Text rendering with the `StaticText` class.
 
+
+
 -----------
 
 GraphX™ drives a CustomPainter inside, the idea is to simplify the usage of Flutter's `Canvas`, plus adding the DisplayList concept, so you can manage and create more complex "scenes".
 
 GraphX™ has it's own rendering cycle (no AnimationController), and input capture, even if it runs on the Widget tree, you can enable the flags to capture mouse/touch input (through the `stage.pointer`), or keystrokes events (if u wanna do some simple game).
    
-### sample code.
+### Sample code.
 
 ```dart
   body: Center(
@@ -166,7 +187,7 @@ They all emit a `MouseInputData` with all the needed info inside, like stage coo
 
 *I will keep adding further explanation in the upcoming days.* 
 
-### demos.
+### Demos.
 
 _Some demos are only using **GraphX™** partially, and might have big CPU impact_
 
@@ -203,10 +224,11 @@ _Some demos are only using **GraphX™** partially, and might have big CPU impac
 Feel free to play around with the current API, even if it's still rough on edges and unoptimized, it might help you do things quicker.  
 
 SKIA is pretty powerful!
-
+</div>
 -------------
 
 #### Donation
+
 You can [buymeacoffee](https://www.buymeacoffee.com/roipeker) or support **GraphX™** via [Paypal](https://www.paypal.me/roipeker/)
 
 [![Donate via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/roipeker/)

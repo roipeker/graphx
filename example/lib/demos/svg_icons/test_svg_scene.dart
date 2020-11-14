@@ -1,7 +1,8 @@
-import 'package:exampleGraphx/assets/svg_icons.dart';
-import 'package:exampleGraphx/utils/svg_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
+
+import '../../assets/svg_icons.dart';
+import '../../utils/svg_utils.dart';
 
 class TestSvgScene extends Sprite {
   final groundHeight = 100.0;
