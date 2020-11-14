@@ -235,7 +235,7 @@ SKIA is pretty powerful!
 
 ---
 
-###Other screencast demos
+### Screencast Demos.
 
 (Some demos uses GraphX's only for ticker, input events or initial scene graph, making usage of
 direct `Canvas` calls)._
