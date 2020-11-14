@@ -190,8 +190,11 @@ class StaticText extends DisplayObject {
     _invalidSize = false;
   }
 
+  /// Warning: Internal method.
+  /// applies the painting after the DisplayObject transformations.
+  /// Should be overriden by subclasses.
   @override
-  void $applyPaint(canvas) {
+  void $applyPaint(Canvas canvas) {
     super.$applyPaint(canvas);
     if (_text == '') return;
     validate();

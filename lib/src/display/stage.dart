@@ -77,14 +77,16 @@ class Stage extends DisplayObjectContainer
 
   KeyboardManager get keyboard {
     if (scene?.core?.keyboard == null) {
-      throw 'You need to enable keyboard capture, define useKeyboard=true in your SceneController';
+      throw 'You need to enable keyboard capture, define useKeyboard=true '
+          'in your SceneController';
     }
     return scene?.core?.keyboard;
   }
 
   PointerManager get pointer {
     if (scene?.core?.pointer == null) {
-      throw 'You need to enable pointer capture, define usePointer=true in your SceneController';
+      throw 'You need to enable pointer capture, define usePointer=true '
+          'in your SceneController';
     }
     return scene?.core?.pointer;
   }

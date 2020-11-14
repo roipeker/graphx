@@ -40,7 +40,8 @@ class SceneRoot extends Sprite {
   void _applyConfig() {
     if (scene == null) return;
     if (_ready) {
-      throw 'You can not initScene() after ready() has happened. Is only allowed during (or before) init().';
+      throw 'You can not initScene() after ready() has happened. '
+          'Is only allowed during (or before) init().';
     }
 //    scene.shouldRepaint = needsRepaint;
     scene.autoUpdateAndRender = _autoUpdateAndRender ?? false;
@@ -115,7 +116,8 @@ class ScenePainter with EventDispatcherMixin {
   double $currentFrameDeltaTime = 0;
   double $accumulatedFrameDeltaTime = 0;
 
-  /// Ticker callback, to access the current frame delta timestamp (in millisecond).
+  /// Ticker callback, to access the current frame delta timestamp
+  /// (in millisecond).
   EventSignal<double> _onUpdate;
 
   EventSignal<double> get onUpdate => _onUpdate ??= EventSignal<double>();
@@ -131,15 +133,16 @@ class ScenePainter with EventDispatcherMixin {
     makeCurrent();
   }
 
+  // ignore: use_to_and_as_if_applicable
   CustomPainter buildPainter() => _GraphicsPainter(this);
 
   /// Actual rendering from the `CustomPaint`.
-  void _paint(Canvas p_canvas, Size p_size) {
-    if (size != p_size) {
-      size = p_size;
-      _stage.$initFrameSize(p_size);
+  void _paint(Canvas canvas, Size size) {
+    if (this.size != size) {
+      this.size = size;
+      _stage.$initFrameSize(size);
     }
-    $canvas = p_canvas;
+    $canvas = canvas;
     if (!_isReady) {
       _isReady = true;
       _initMouseInput();
@@ -191,7 +194,7 @@ class ScenePainter with EventDispatcherMixin {
 //    _createImage();
   }
 
-  /// The main `enterFrame`, called from the `SceneController` unique `GxTicker`.
+  /// The main `enterFrame`, called from the `SceneController` unique `GxTicker`
   /// only valid when there's a GxTicker running.
   /// Manages the `update()` and can request redraw the CustomPainter.
   void tick(double time) {
@@ -332,8 +335,10 @@ class ScenePainter with EventDispatcherMixin {
       _ownCanvasNeedsRepaint = false;
       _createPicture();
     }
+
+    /// experimental usage of image rendering from the painter.
 //      if (_canvasImage != null) {
-//        p_canvas.drawImage(_canvasImage, Offset.zero, PainterUtils.emptyPaint);
+//        canvas.drawImage(_canvasImage, Offset.zero, PainterUtils.emptyPaint);
 //      }
     if (_canvasPicture != null) {
       $canvas.drawPicture(_canvasPicture);

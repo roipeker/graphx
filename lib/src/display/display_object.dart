@@ -684,7 +684,7 @@ abstract class DisplayObject
 
   /// quick and dirty way to toggle saveLayer() feature for common
   /// display objects as well.
-  /// Rendereables DisplayObjects like Shape/Bitmap have their own
+  /// Childless DisplayObjects, like [Shape] and [Bitmap], have their own
   /// Paint() so no need to use an expensive saveLayer().
   bool allowSaveLayer = false;
 
@@ -742,12 +742,12 @@ abstract class DisplayObject
       if ($hasFilters) {
         layerBounds = layerBounds.clone();
         GxRect resultBounds;
-        $filters.forEach((filter) {
+        for (var filter in $filters) {
           resultBounds ??= layerBounds.clone();
           filter.update();
           filter.expandBounds(layerBounds, resultBounds);
           filter.resolvePaint(alphaPaint);
-        });
+        }
         layerBounds = resultBounds;
       }
       $debugLastLayerBounds = layerBounds;
@@ -898,12 +898,12 @@ abstract class DisplayObject
     final picture = createPicture(
       !needsAdjust
           ? null
-          : (Canvas c) {
+          : (canvas) {
               if (adjustOffset) {
-                c.translate(-rect.left, -rect.top);
+                canvas.translate(-rect.left, -rect.top);
               }
               if (resolution != 1) {
-                c.scale(resolution);
+                canvas.scale(resolution);
               }
             },
     );

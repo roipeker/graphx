@@ -27,6 +27,13 @@ ___
 
 To get some extended, boring explanations, and eventually some sample codes, check the [GraphX™ Wiki](https://github.com/roipeker/graphx/wiki/GraphX-tips-and-random%5BnextInt()%5D-stuffs.#graphx-general-tips) 
 ___
+![artificial horizon](https://media.giphy.com/media/NMG8gfpJxFiu1eALZo/giphy.gif)
+![parallax game](https://media.giphy.com/media/RIrvhfZoDtal41Tb4e/giphy-downsized.gif)
+![charts pie color 2](https://media.giphy.com/media/pQdeurUOAqWdZuxxUK/giphy.gif)
+![simple particles](https://media.giphy.com/media/VYSJF6uUO323FV0Nhh/giphy.gif)
+![drawing api playful v1](https://media.giphy.com/media/HdJmgzVYLK8jUxX437/giphy.gif)
+... jump to [other gifs samples](#other-screencast-demos) ...
+
 <div align="left">
     
 
@@ -191,31 +198,31 @@ They all emit a `MouseInputData` with all the needed info inside, like stage coo
 
 _Some demos are only using **GraphX™** partially, and might have big CPU impact_
 
-[Flutter widget mix](http://roi-graphx-widgetmix.surge.sh)
+[Flutter widget mix](https://roi-graphx-widgetmix.surge.sh)
 
-[Split RGB](http://roi-graphx-rgbsplit.surge.sh)
+[Split RGB](https://roi-graphx-rgbsplit.surge.sh)
 
-[Input Text particles](http://roi-graphx-particles-input.surge.sh)
+[Input Text particles](https://roi-graphx-particles-input.surge.sh)
 
-[FishEye particles](http://roi-graphx-fisheyeparticles.surge.sh/)
+[FishEye particles](https://roi-graphx-fisheyeparticles.surge.sh/)
 
-[FishEye particles (basic)](http://roi-graphx-fisheyetext.surge.sh)
+[FishEye particles (basic)](https://roi-graphx-fisheyetext.surge.sh)
 
-[Particles emitter](http://roi-graphx-particles2.surge.sh)
+[Particles emitter](https://roi-graphx-particles2.surge.sh)
 
-[ShapeMaker clone](http://roi-graphx-shapemaker.surge.sh)
+[ShapeMaker clone](https://roi-graphx-shapemaker.surge.sh)
 
-[Mouse follower](http://roi-graphx-dotchain.surge.sh)
+[Mouse follower](https://roi-graphx-dotchain.surge.sh)
 
-[basic hit test](http://roi-graphx-hittest.surge.sh)
+[basic hit test](https://roi-graphx-hittest.surge.sh)
 
-[SpriteSheet rendering](http://roi-graphx-spritesheet.surge.sh)
+[SpriteSheet rendering](https://roi-graphx-spritesheet.surge.sh)
 
-[DisplayObject Pivot](http://roi-graphx-textpivot.surge.sh)
+[DisplayObject Pivot](https://roi-graphx-textpivot.surge.sh)
 
-[Simple solo-ping-pong game](http://roi-graphx-pingpong.surge.sh/)
+[Simple solo-ping-pong game](https://roi-graphx-pingpong.surge.sh/)
 
-[First Experimentation with rendering](http://roi-graphx-cells.surge.sh/)
+[First Experimentation with rendering](https://roi-graphx-cells.surge.sh/)
 
 
 ----
@@ -225,6 +232,51 @@ Feel free to play around with the current API, even if it's still rough on edges
 
 SKIA is pretty powerful!
 </div>
+
+---
+
+###Other screencast demos
+
+(Some demos uses GraphX's only for ticker, input events or initial scene graph, making usage of
+direct `Canvas` calls)._
+
+![charts bezier + gradient](https://media.giphy.com/media/QWHufIK9GyEAIM4Dcn/giphy.gif)
+![svg sample demo](https://media.giphy.com/media/OtGpmd1fAVzw3pK7kD/giphy.gif)
+![charts lines](https://media.giphy.com/media/uVFvFOTUICAsYqb13r/giphy.gif)
+![charts pie color 1](https://media.giphy.com/media/z1aIQzYSSGVKeWbabJ/giphy.gif)
+![mouse cursor support](https://media.giphy.com/media/MjXTKJpen8vIN34rfW/giphy.gif)
+![debug objects bounds](https://media.giphy.com/media/F7Wnsw3kUjk0L4CDfu/giphy.gif)
+![demo sample tween](https://media.giphy.com/media/EY4RhVoqHTKVBJUNzW/giphy.gif)
+![directional blur filter](https://media.giphy.com/media/a4Rzda8uvFxCPvfI22/giphy.gif)
+![hand drawing v1](https://media.giphy.com/media/uliHRVWVW5IlliliIi/giphy-downsized.gif)
+![hand drawing v2](https://media.giphy.com/media/f6UJj36HqFYJuejz5M/giphy.gif)
+![drawing api playful v2](https://media.giphy.com/media/Ld3XIYErKsoyCQtzcg/giphy.gif)
+![elastic band](https://media.giphy.com/media/KiSrFNYQ7kED1HzSlJ/giphy.gif)
+![Flare playback](https://media.giphy.com/media/t0ZcOUPdCtg8aPtL2B/giphy-downsized.gif)
+![Flip child scenes](https://media.giphy.com/media/siMNzfRWTaKK9Pw0n2/giphy.gif)
+![Mix with Flutter widgets](https://media.giphy.com/media/YfzNLmfE1hutWI176e/giphy-downsized.gif)
+![icon painter gradient](https://media.giphy.com/media/gC94IOdu6v1GoWJZWY/giphy.gif)
+![inverted masks](https://media.giphy.com/media/1tsbaO28YXXxc1lvsd/giphy-downsized.gif)
+![isometric demo](https://media.giphy.com/media/EInY3MKZ2xvmYNl3fm/giphy.gif)
+![light button](https://media.giphy.com/media/4Sspuw3R8Rdr2tsE4T/giphy.gif)
+![marquesina de texto](https://media.giphy.com/media/Q2cIsU34CbzZHfNA2z/giphy.gif)
+![menu mask](https://media.giphy.com/media/xaEN62vmEQxTR1zFpy/giphy.gif)
+![menu mouse](https://media.giphy.com/media/d9cQT0mOwgbRJ2fbyd/giphy.gif)
+![nested transform touch](https://media.giphy.com/media/HLdqEQze3LUDlDCTBo/giphy.gif)
+![particles with alpha](https://media.giphy.com/media/Z9D7bpWqjX8KJMTMMc/giphy-downsized.gif)
+![particles blend](https://media.giphy.com/media/roD1B1diHxT9A61msb/giphy-downsized-large.gif)
+![progress panel](https://media.giphy.com/media/uygZcQPIe7Dp4RHHrB/giphy.gif)
+![rive playback](https://media.giphy.com/media/lVBkZ6o1qBqnek92Qj/giphy-downsized.gif)
+![rotation 3d](https://media.giphy.com/media/7T3hqnHc7cRrqEjE4a/giphy.gif)
+![spiral](https://media.giphy.com/media/z9FFwt6sPQSqrVuMyF/giphy-downsized.gif)
+![spritesheet explosion](https://media.giphy.com/media/Ldj7i8XiPZpYZ92WNN/giphy.gif)
+![star effect](https://media.giphy.com/media/LFAhCww7vVItef78v9/giphy.gif)
+![text rainbow](https://media.giphy.com/media/wk8s7jJnwfdBQfbdvb/giphy.gif)
+![tween animation](https://media.giphy.com/media/XNO5QpJCyctdLZYMCS/giphy.gif)
+![tween behaviour](https://media.giphy.com/media/DWbutR01h9LpschVDA/giphy.gif)
+![tween colo](https://media.giphy.com/media/1tjXlWG1ImPhI3eij4/giphy.gif)
+
+
 -------------
 
 #### Donation

@@ -35,6 +35,7 @@ class SceneConfig {
     this.painterWillChange,
   });
 
+  /// Quick method to set the object properties.
   void setTo({
     bool useTicker,
     bool useKeyboard,
@@ -47,6 +48,7 @@ class SceneConfig {
     if (sceneIsComplex != null) painterIsComplex = sceneIsComplex;
   }
 
+  /// Copy the values from another [SceneConfig] instance.
   void copyFrom(SceneConfig other) {
     useKeyboard = other.useKeyboard;
     usePointer = other.usePointer;
@@ -56,6 +58,8 @@ class SceneConfig {
     isPersistent = other.isPersistent;
   }
 
+  /// Utility method used by the [SceneBuilderWidget] to set the flag
+  /// `CustomPaint.willChange`
   bool painterMightChange() {
     if (useTicker || usePointer || useKeyboard) {
       return true;
@@ -64,12 +68,21 @@ class SceneConfig {
   }
 }
 
+/// Entry point of GraphX world.
+/// A [SceneController] manages (up to) 2 [SceneRoot]s: `back` and `front`
+/// which correlates to [CustomPainter.painter] and [CustomPainter.foregroundPainter]
+/// It takes care of the initialization and holding the references of the Painters
+/// used by [SceneBuilderWidget].
 class SceneController {
-  static SceneController current;
+  /// Eventually, might be a global access point to the current rendering
+  /// Scene, it should be in sync with the repainting process, so is safe
+  /// to assume that it will point to the proper SceneController reference.
+  // static SceneController current;
 
   ScenePainter back;
   ScenePainter front;
 
+  /// Access the `ticker` (if any) created by this SceneController.
   GxTicker get ticker {
     if (_ticker == null) {
       throw 'You need to enable ticker usage with SceneBuilderWidget( useTicker=true ) or RootScene::setup(useTicker: true), or RootScene::setup(autoUpdateAndRender: true)';
@@ -77,8 +90,10 @@ class SceneController {
     return _ticker;
   }
 
+  /// Access the keyboard manager instance associated with this [SceneController].
   KeyboardManager get keyboard => _keyboard;
 
+  /// Access the pointer manager instance associated with this [SceneController].
   PointerManager get pointer => _pointer;
 
   KeyboardManager _keyboard;
@@ -92,6 +107,8 @@ class SceneController {
   int id = -1;
   bool _isInited = false;
 
+  /// WARNING: Internal method
+  /// starts from the `SceneBuilderWidget`.
   void $init() {
     if (_isInited) return;
     setup();
