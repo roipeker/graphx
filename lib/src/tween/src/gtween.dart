@@ -255,13 +255,14 @@ class GTween {
     _inited = true;
   }
 
-  void _initProps(p_target) {
-    if (p_target == null) return;
+  /// initialiazes the PropTween to be used in the target Object.
+  void _initProps(Object target) {
+    if (target == null) return;
     for (final key in vars.keys) {
       final prop = '$key';
       if (!_reservedProps.containsKey(prop)) {
-        _firstPT = PropTween(target: p_target, property: key, next: _firstPT);
-        var startVal = _getStartValue(p_target, key);
+        _firstPT = PropTween(target: target, property: key, next: _firstPT);
+        var startVal = _getStartValue(target, key);
         _firstPT.s = startVal;
         var endValue = _getEndValue(vars, key, _firstPT.s);
         _firstPT.cObj = vars[key];
@@ -348,7 +349,7 @@ class GTween {
 
   void _signal(Function callback, CallbackParams params) {
     if (callback != null) {
-      /// SLOW
+      /// It's a very slow approach.
       Function.apply(callback, params?.positional, params?.named);
     }
   }
@@ -423,11 +424,14 @@ class GTween {
     }
   }
 
+  /// Shortcut to start a tween on an `target`.
   static GTween to(Object target, double duration, Map vars, [GVars nanoVars]) {
     nanoVars ??= GVars();
     return GTween(target, duration, vars, nanoVars);
   }
 
+  /// Shortcut to start a tween on an `target`, start from the end values
+  /// to the start values, this option flips the tweens.
   static GTween from(Object target, double duration, Map vars,
       [GVars nanoVars]) {
     nanoVars ??= GVars();
@@ -436,6 +440,9 @@ class GTween {
     return GTween(target, duration, vars, nanoVars);
   }
 
+  /// Similar to Future.delayed(), but `GTween.delayedCall` runs with the `Ticker`
+  /// provider used by GTween, and also allows you to kill the delay in the
+  /// `target Function`.
   static GTween delayedCall(
     double delay,
     Function callback, {
@@ -455,10 +462,11 @@ class GTween {
     );
   }
 
+  /// Main ticker function that updates all the Tweens pool
   static void _updateRoot(double delta) {
     _frame += 1;
     // _time = getTimer() * .001;
-    if(delta<=0) delta = .016;
+    if (delta <= 0) delta = .016;
     _time += delta;
     var tween = _first;
     while (tween != null) {
@@ -471,6 +479,7 @@ class GTween {
     }
   }
 
+  /// Removes a Tween based on the the target object.
   static void killTweensOf(Object target) {
     var t = _first;
     while (t != null) {

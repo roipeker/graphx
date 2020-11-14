@@ -288,15 +288,15 @@ abstract class DisplayObject
     }
     if (_rotationX == value) return;
     _rotationX = value ?? 0.0;
-    if (!_3dWarned) _warn3d();
+    if (!_isWarned3d) _warn3d();
     $setTransformationChanged();
   }
 
-  static bool _3dWarned = false;
+  static bool _isWarned3d = false;
 
   void _warn3d() {
     print('Warning: 3d transformations still not properly supported');
-    _3dWarned = true;
+    _isWarned3d = true;
   }
 
   set rotationY(double value) {
@@ -305,7 +305,7 @@ abstract class DisplayObject
     }
     if (_rotationY == value) return;
     _rotationY = value ?? 0.0;
-    if (!_3dWarned) _warn3d();
+    if (!_isWarned3d) _warn3d();
     $setTransformationChanged();
   }
 
@@ -315,7 +315,7 @@ abstract class DisplayObject
     }
     if (_z == value) return;
     _z = value ?? 0.0;
-    if (!_3dWarned) _warn3d();
+    if (!_isWarned3d) _warn3d();
     $setTransformationChanged();
   }
 
