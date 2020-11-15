@@ -5,8 +5,10 @@ enum DebugBoundsMode {
   /// method process.
   internal,
 
-  /// renders the bounding box from the [Stage] itself, translating into each object's coordinate
-  /// system. This represents visually the actual bounding boxes without any matrix
+  /// renders the bounding box from the [Stage] itself, translating into each
+  /// object's coordinate
+  /// system. This represents visually the actual bounding boxes without any
+  /// matrix
   /// transformations.
   stage,
 }

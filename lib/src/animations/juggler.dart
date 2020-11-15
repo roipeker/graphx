@@ -99,7 +99,8 @@ class Juggler {
 //    return false;
 //  }
 
-  /// checks if the juggler contains one or more delayed calls with the certain target.
+  /// Checks if the juggler contains one or more delayed calls with certain
+  /// target.
   bool containsDelayedCalls(VoidCallback callback) {
     if (callback == null) return false;
     for (var i = 0; i < objects.length; ++i) {
@@ -224,7 +225,7 @@ class Juggler {
   }
 
   void _onRemove(JugglerObjectEventData data) {
-    int objId = remove(data.target);
+    var objId = remove(data.target);
     if (objId != 0) {}
   }
 }

@@ -310,7 +310,6 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       ),
     );
     return this;
-//    drawRoundRectComplex (x:Float, y:Float, width:Float, height:Float, topLeftRadius:Float, topRightRadius:Float, bottomLeftRadius:Float, bottomRightRadius:Float):Void
   }
 
   Graphics drawRoundRect(
@@ -348,7 +347,6 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     }
   }
 
-//  public arc(cx: number, cy: number, radius: number, startAngle: number, endAngle: number, anticlockwise = false): this
   Graphics arcOval(
     double cx,
     double cy,
@@ -432,9 +430,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   /// finishes the current `beginHole()` command.
   /// When `applyToCurrentQueue` is true, the drawing commands of the "hole"
-  /// will be applied to the current elements of the drawing queue (not including
-  /// future ones), when `applyToCurrentQueue` is false, it will only cut the
-  /// "holes" in the last drawing command.
+  /// will be applied to the current elements of the drawing queue (not
+  /// including future ones), when `applyToCurrentQueue` is false, it will
+  /// only cut the "holes" in the last drawing command.
   Graphics endHole([bool applyToCurrentQueue = false]) {
     _holeMode = false;
     // apply to previous elements.
@@ -536,7 +534,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// When set `asCurrent` to `true`, it will be used as the current
   /// `GraphicsDrawingData` and you can keep modifying the internal path
   /// with `Graphics` commands.
-  /// This should be used only if you are operating with `Path` and `Paint` directly.
+  /// This should be used only if you are operating with `Path` and `Paint`
+  /// directly.
   /// `x` and `y` can shift the Path coordinates.
   void pushData(
     GraphicsDrawingData data, [
@@ -552,14 +551,16 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   /// removes the last `GraphicsDrawingData` from the drawing queue...
-  /// This should be used only if you are operating with `Path` and `Paint` directly.
+  /// This should be used only if you are operating with `Path` and `Paint`
+  /// directly.
   GraphicsDrawingData popData() {
     return _drawingQueue.removeLast();
   }
 
   /// removes, if enqueued, the specified `GraphicsDrawingData` instance from
   /// the drawing queue list.
-  /// This should be used only if you are operating with `Path` and `Paint` directly.
+  /// This should be used only if you are operating with `Path` and `Paint`
+  /// directly.
   void removeData(GraphicsDrawingData data) {
     _drawingQueue.remove(data);
   }

@@ -9,8 +9,9 @@ class SceneConfig {
   /// If this GraphX SceneController will use pointer (touch/mouse) events.
   bool usePointer;
 
-  /// Will be overwritten to `true` if [autoUpdateAndRender] is set on any [ScenePainter] layer.
-  /// Can be initialized on [SceneBuilderWidget()] or [ScenePainter::setupScene()].
+  /// Will be overwritten to `true` if [autoUpdateAndRender] is set on any
+  /// [ScenePainter] layer. Can be initialized on [SceneBuilderWidget()] or
+  /// [ScenePainter::setupScene()].
   /// Warning: [setupScene()] takes priority over Widget initialization.
   bool useTicker;
 
@@ -70,9 +71,9 @@ class SceneConfig {
 
 /// Entry point of GraphX world.
 /// A [SceneController] manages (up to) 2 [SceneRoot]s: `back` and `front`
-/// which correlates to [CustomPainter.painter] and [CustomPainter.foregroundPainter]
-/// It takes care of the initialization and holding the references of the Painters
-/// used by [SceneBuilderWidget].
+/// which correlates to [CustomPainter.painter] and
+/// [CustomPainter.foregroundPainter]. It takes care of the initialization
+/// and holding the references of the Painters used by [SceneBuilderWidget].
 class SceneController {
   /// Eventually, might be a global access point to the current rendering
   /// Scene, it should be in sync with the repainting process, so is safe
@@ -85,15 +86,20 @@ class SceneController {
   /// Access the `ticker` (if any) created by this SceneController.
   GxTicker get ticker {
     if (_ticker == null) {
-      throw 'You need to enable ticker usage with SceneBuilderWidget( useTicker=true ) or RootScene::setup(useTicker: true), or RootScene::setup(autoUpdateAndRender: true)';
+      throw 'You need to enable ticker usage with '
+          'SceneBuilderWidget( useTicker=true ) or '
+          'RootScene::setup(useTicker: true), or '
+          'RootScene::setup(autoUpdateAndRender: true)';
     }
     return _ticker;
   }
 
-  /// Access the keyboard manager instance associated with this [SceneController].
+  /// Access the keyboard manager instance associated with this
+  /// [SceneController].
   KeyboardManager get keyboard => _keyboard;
 
-  /// Access the pointer manager instance associated with this [SceneController].
+  /// Access the pointer manager instance associated with this
+  /// [SceneController].
   PointerManager get pointer => _pointer;
 
   KeyboardManager _keyboard;

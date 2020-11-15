@@ -1,7 +1,7 @@
 library gtween;
 
 import 'package:flutter/material.dart';
-import 'package:graphx/graphx.dart';
+import '../../graphx.dart';
 
 part 'src/core/prop_tween.dart';
 part 'src/easing/ease.dart';

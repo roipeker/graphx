@@ -16,10 +16,10 @@ mixin EventDispatcherMixin implements Listenable {
   }
 
   @override
-  void addListener(listener) => _updaters.add(listener);
+  void addListener(VoidCallback listener) => _updaters.add(listener);
 
   @override
-  void removeListener(listener) => _updaters.remove(listener);
+  void removeListener(VoidCallback listener) => _updaters.remove(listener);
 
   void dispose() {
     _updaters.clear();

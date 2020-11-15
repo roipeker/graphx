@@ -65,14 +65,15 @@ class BlurFilter extends BaseFilter {
 
   @override
   void buildFilter() {
-    double maxBlur = maskSigma;
+    var maxBlur = maskSigma;
     if (maxBlur == -1) {
       maxBlur = max(_blurX, _blurY) / 2;
       if (maxBlur < 1) maxBlur = 1;
     }
 
     /// if it goes under a threshold (I tried .2 and lower), it flickers.
-    /// idk which logic uses, but 1.0 seems like a stable min number for the mask
+    /// idk which logic uses, but 1.0 seems like a stable min number for the
+    /// mask.
     _maskFilter = MaskFilter.blur(style ?? BlurStyle.inner, maxBlur);
     _imageFilter = ImageFilter.blur(sigmaX: _blurX, sigmaY: _blurY);
   }

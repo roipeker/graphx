@@ -57,13 +57,13 @@ linter:
     # DESIGN
     use_to_and_as_if_applicable: true # prefer
     one_member_abstracts: true # avoid
-    avoid_classes_with_only_static_members: true # avoid
+    avoid_classes_with_only_static_members: false # avoid
     prefer_mixin: true
     prefer_final_fields: true # prefer
     use_setters_to_change_properties: true
     avoid_setters_without_getters: true
     avoid_returning_null: true # avoid
-    avoid_returning_this: true # avoid
+    avoid_returning_this: false # avoid
     type_annotate_public_apis: true # prefer
     #- prefer_typing_uninitialized_variables # consider
     omit_local_variable_types: true # avoid

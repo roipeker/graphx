@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import '../../graphx.dart';
 
 abstract class AssetLoader {
-  static var textures = <String, GTexture>{};
-  static var atlases = <String, GTextureAtlas>{};
-  static var gifs = <String, GifAtlas>{};
+  static Map<String, GTexture> textures = <String, GTexture>{};
+  static Map<String, GTextureAtlas> atlases = <String, GTextureAtlas>{};
+  static Map<String, GifAtlas> gifs = <String, GifAtlas>{};
 
   static GTexture getTexture(String cacheId) {
     return textures[cacheId];

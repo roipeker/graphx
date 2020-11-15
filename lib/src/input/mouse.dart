@@ -4,7 +4,7 @@ import '../../graphx.dart';
 
 export 'package:flutter/rendering.dart' show SystemMouseCursor;
 
-/// also accessible from `pointer_manager.dart`
+/// Accessible from `pointer_manager.dart`
 abstract class GMouse {
   static SystemMouseCursor _cursor;
   static SystemMouseCursor _lastCursor;

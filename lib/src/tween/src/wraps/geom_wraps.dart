@@ -112,7 +112,8 @@ class GTweenableRect with GTweenable {
       Map startAt}) {
     if ((x != null || y != null || width != null || height != null) &&
         to != null) {
-      throw "GTween Can't use 'x, y, width, height' AND 'to' arguments to tween a [GxRect]. Choose one";
+      throw "GTween Can't use 'x, y, width, height' AND 'to' arguments to "
+          "tween a [GxRect]. Choose one";
     }
     x = to?.x ?? x;
     y = to?.y ?? y;

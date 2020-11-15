@@ -58,7 +58,13 @@ class PointerEventData {
 
   @override
   String toString() {
-    return 'PointerEventData{type: $type, stageX: $stageX, stageY: $stageY, localX: $localX, localY: $localY';
+    return 'PointerEventData{'
+        'type: $type, '
+        'stageX: $stageX, '
+        'stageY: $stageY, '
+        'localX: $localX, '
+        'localY: $localY'
+        '}';
   }
 
   /// new properties.
@@ -107,7 +113,18 @@ class MouseInputData {
 
   @override
   String toString() {
-    return 'MouseInputData{captured: $captured, target: $target, dispatcher: $dispatcher, type: $type, buttonDown: $buttonDown, mouseOut: $mouseOut, time: $time, buttonsFlags: $buttonsFlags, localPosition: $localPosition, stagePosition: $_stagePosition, scrollDelta: $scrollDelta}';
+    return 'MouseInputData{'
+        'captured: $captured, '
+        'target: $target, '
+        'dispatcher: $dispatcher, '
+        'type: $type, '
+        'buttonDown: $buttonDown, '
+        'mouseOut: $mouseOut, '
+        'time: $time, '
+        'buttonsFlags: $buttonsFlags, '
+        'localPosition: $localPosition, '
+        'stagePosition: $_stagePosition, '
+        'scrollDelta: $scrollDelta}';
   }
 
   /// display objects

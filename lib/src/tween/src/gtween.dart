@@ -440,9 +440,9 @@ class GTween {
     return GTween(target, duration, vars, nanoVars);
   }
 
-  /// Similar to Future.delayed(), but `GTween.delayedCall` runs with the `Ticker`
-  /// provider used by GTween, and also allows you to kill the delay in the
-  /// `target Function`.
+  /// Similar to Future.delayed(), but `GTween.delayedCall` runs with the
+  /// `Ticker` provider used by GTween, and also allows you to kill the delay
+  /// in the `target` Function.
   static GTween delayedCall(
     double delay,
     Function callback, {

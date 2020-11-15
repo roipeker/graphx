@@ -11,6 +11,7 @@ class GxTicker {
 
   VoidCallback _nextFrameCallback;
 
+  // ignore: use_setters_to_change_properties
   void callNextFrame(VoidCallback callback) {
     _nextFrameCallback = callback;
   }
@@ -32,7 +33,7 @@ class GxTicker {
     if (isTicking) return;
     _createTicker();
     _ticker?.muted = false;
-    _expectedDelta = 1.0/frameRate;
+    _expectedDelta = 1.0 / frameRate;
   }
 
   void pause() {
@@ -56,8 +57,8 @@ class GxTicker {
     _currentTime = now;
 
     /// avoid overloading frames (happens per scene).
-   _currentDeltaTime = _currentDeltaTime.clamp(1.0 / frameRate, 1.0);
-   _currentDeltaRatio = _currentDeltaTime/_expectedDelta;
+    _currentDeltaTime = _currentDeltaTime.clamp(1.0 / frameRate, 1.0);
+    _currentDeltaRatio = _currentDeltaTime / _expectedDelta;
 
     if (_nextFrameCallback != null) {
       var callback = _nextFrameCallback;

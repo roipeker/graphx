@@ -55,8 +55,8 @@ abstract class MathUtils {
     return (u >= 0) && (v >= 0) && (u + v < 1);
   }
 
-  /// Calculates the intersection point between the xy-plane and an infinite line
-  /// that is defined by two 3D points in the same coordinate system.
+  /// Calculates the intersection point between the xy-plane and an infinite
+  /// line that is defined by two 3D points in the same coordinate system.
   static GxPoint intersectLineWithXYPlane(Vector3 pointA, Vector3 pointB,
       [GxPoint out]) {
     out ??= GxPoint();

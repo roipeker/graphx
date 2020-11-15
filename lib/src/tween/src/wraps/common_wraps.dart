@@ -55,7 +55,7 @@ class GTweenableInt with GTweenable, SingleValueTweenMixin {
   Map<String, List<Function>> getTweenableAccessors() => {
         'value': [
           () => value + .0,
-          (double v) => value = v.round(),
+          (v) => value = v.round(),
         ],
       };
 }
@@ -200,7 +200,7 @@ tween(targetList) List can't be empty. Or values inside of it where not a number
   }
 }
 
-Object convertFromDouble(originalValue, double val) {
+Object convertFromDouble(Object originalValue, double val) {
   if (originalValue is int) {
     return val.toInt();
   } else if (originalValue is String) {
@@ -210,7 +210,7 @@ Object convertFromDouble(originalValue, double val) {
   }
 }
 
-double convertToDouble(val) {
+double convertToDouble(Object val) {
   if (val is int) {
     return val + .0;
   } else if (val is String) {
