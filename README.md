@@ -4,9 +4,9 @@
         <h1>GraphX™</h1>
     </a>
 
-[![pub package](https://img.shields.io/pub/v/graphx.svg?label=graphx&color=blue)](https://pub.dev/packages/graphx)
-[![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![pub package](https://img.shields.io/pub/v/graphx.svg?label=graphx&style=for-the-badge&color=blue)](https://pub.dev/packages/graphx)
+[![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg?style=for-the-badge&color=blue)](https://pub.dev/packages/effective_dart)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge&color=blue)](https://opensource.org/licenses/MIT)
 
 
 | rendering | prototype  | design  |
@@ -243,8 +243,7 @@ SKIA is pretty powerful!
 
 | **Discord**                                                                                                                 | **Telegram**                                                                                                          |
 | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
-| [![Discord Shield](https://img.shields.io/discord/722900883784073290.svg?logo=discord)](https://discord.com/invite/ed5szwuK) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/joinchat/Mbc7jBxxAm4K1uhaVPIR-Q)|
-
+| [![Discord Shield](https://img.shields.io/discord/777232130991718440.svg?style=for-the-badge&logo=discord)](https://discord.com/invite/ed5szwuK) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg?style=for-the-badge&logo=telegram)](https://t.me/joinchat/Mbc7jBxxAm4K1uhaVPIR-Q)|
 
 ---
 
