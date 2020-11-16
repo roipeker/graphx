@@ -9,3 +9,9 @@
 - Another improve to the README.md, gifs have links to videos, to check screencasts in better quality.
 - Added help & social links.
 - cleanup more code.
+
+## [0.0.1+4]
+- code clean up and minor fixes in the readme.
+- adds `trace()` global function, as an option to `print()`. It allows you to pass up to 10 arguments, 
+and configure stack information to show through `traceConfig()`. So it can print _caller_ name (method name), 
+_caller object_ (instance / class name where caller is), filename and line number with some custom format.
