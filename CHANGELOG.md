@@ -15,3 +15,8 @@
 - adds `trace()` global function, as an option to `print()`. It allows you to pass up to 10 arguments, 
 and configure stack information to show through `traceConfig()`. So it can print _caller_ name (method name), 
 _caller object_ (instance / class name where caller is), filename and line number with some custom format.
+
+## [0.0.1+5]
+- added missing export in graphx.
+- testing discord integration.
+- GTween changed VoidCallback to Function to avoid linting errors.
