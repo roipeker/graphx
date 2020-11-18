@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/rendering.dart';
-
 import '../../graphx.dart';
 
 /// Custom Clipper that uses [Graphics] API instead of [Path].

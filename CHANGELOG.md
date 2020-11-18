@@ -20,3 +20,7 @@ _caller object_ (instance / class name where caller is), filename and line numbe
 - added missing export in graphx.
 - testing discord integration.
 - GTween changed VoidCallback to Function to avoid linting errors.
+
+## [0.0.1+6]
+- exported back graphics_clipper
+- added experimental startDrag()/stopDrag() methods.

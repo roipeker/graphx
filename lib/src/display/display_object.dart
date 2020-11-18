@@ -14,6 +14,70 @@ abstract class DisplayObject
     with DisplayListSignalsMixin, RenderSignalMixin, MouseSignalsMixin {
   DisplayObjectContainer $parent;
 
+  static DisplayObject $currentDrag;
+  static GxRect $currentDragBounds;
+
+  GxPoint _dragCenterOffset;
+
+  /// Lets the user drag the specified sprite.
+  /// The sprite remains draggable until explicitly stopped through a call to
+  /// the Sprite.stopDrag() method, or until another sprite is made draggable.
+  /// Only one sprite is draggable at a time.
+  /// [lockCenter] (false) Specifies whether the draggable sprite is locked to
+  /// the center of the pointer position (true), or locked to the point where
+  /// the user first clicked the sprite (false).
+  /// [bounds] Value relative to the coordinates of the Sprite's parent that
+  /// specify a constraint rectangle for the Sprite.
+  void startDrag([bool lockCenter = false, GxRect bounds]) {
+    if (!inStage || !$hasVisibleArea) {
+      throw 'to drag an object, it has to be visible in the stage.';
+    }
+    $currentDrag?.stopDrag();
+    $currentDrag = this;
+    $currentDragBounds = bounds;
+    _dragCenterOffset = GxPoint();
+    if (lockCenter) {
+      _dragCenterOffset.setTo(x - parent.mouseX, y - parent.mouseY);
+    }
+    stage.onMouseMove.add(_handleDrag);
+  }
+
+  DisplayObject get dropTarget {
+    if ($parent == null) return null;
+    if (!$hasVisibleArea || !inStage) return null;
+    if ($parent.children.length > 1) {
+      GxRect rect;
+      $parent.children.forEach((child) {
+        child.getBounds($parent, rect);
+      });
+    }
+  }
+
+  void _handleDrag(MouseInputData input) {
+    if (this != $currentDrag) {
+      stage?.onMouseMove?.remove(_handleDrag);
+    }
+    if ($currentDrag == null) {
+      $currentDragBounds = null;
+      return;
+    }
+    var tx = $currentDrag.parent.mouseX + _dragCenterOffset.x;
+    var ty = $currentDrag.parent.mouseY + _dragCenterOffset.y;
+    final rect = $currentDragBounds;
+    if (rect != null) {
+      tx = tx.clamp(rect.left, rect.right);
+      ty = ty.clamp(rect.top, rect.bottom);
+    }
+    setPosition(tx, ty);
+  }
+
+  void stopDrag() {
+    if (this == $currentDrag) {
+      stage.onMouseMove.remove(_handleDrag);
+      $currentDrag = null;
+    }
+  }
+
   bool $debugBounds = false;
   bool mouseUseShape = false;
 
