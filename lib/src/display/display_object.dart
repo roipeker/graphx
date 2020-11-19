@@ -718,6 +718,9 @@ abstract class DisplayObject
 
   Stage get stage => base is Stage ? base : null;
 
+  double get centerX => stage.stageWidth / 2;
+  double get centerY => stage.stageHeight / 2;
+
   DisplayObject get root {
     var current = this;
     while (current.$parent != null) {
