@@ -62,7 +62,7 @@ class Signal {
 
 /// --- EVENT SIGNAL
 
-typedef EventSignalCallback<T> = void Function(T);
+typedef EventSignalCallback<T> = void Function(T event);
 
 class EventSignal<T> {
   void call(EventSignalCallback<T> callback) {

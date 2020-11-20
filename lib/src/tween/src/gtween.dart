@@ -6,11 +6,11 @@ class GVars {
   bool useFrames;
   int overwrite;
   Function onStart;
-  CallbackParams onStartParams;
+  CallBackParams onStartParams;
   Function onComplete;
-  CallbackParams onCompleteParams;
+  CallBackParams onCompleteParams;
   Function onUpdate;
-  CallbackParams onUpdateParams;
+  CallBackParams onUpdateParams;
   bool runBackwards;
   bool immediateRender;
 
@@ -19,26 +19,26 @@ class GVars {
   /// TODO: maybe in future use vars from this object.
 //  Map vars;
 
-  GVars(
-      {this.ease,
-      this.delay,
-      this.useFrames,
-      this.overwrite,
-      this.onStart,
-      this.onComplete,
-      this.onUpdate,
-      onStartParams,
-      onCompleteParams,
-      onUpdateParams,
-//      this.vars,
-      this.runBackwards,
-      this.immediateRender,
-      this.startAt}) {
+  GVars({
+    this.ease,
+    this.delay,
+    this.useFrames,
+    this.overwrite,
+    this.onStart,
+    this.onComplete,
+    this.onUpdate,
+    Object onStartParams,
+    Object onCompleteParams,
+    Object onUpdateParams,
+    this.runBackwards,
+    this.immediateRender,
+    this.startAt,
+  }) {
     /// For easy of use, you can send any Object to be parsed as function
     /// arguments...
-    this.onStartParams = CallbackParams.parse(onStartParams);
-    this.onCompleteParams = CallbackParams.parse(onCompleteParams);
-    this.onUpdateParams = CallbackParams.parse(onUpdateParams);
+    this.onStartParams = CallBackParams.parse(onStartParams);
+    this.onCompleteParams = CallBackParams.parse(onCompleteParams);
+    this.onUpdateParams = CallBackParams.parse(onUpdateParams);
   }
 
   void defaults() {
@@ -64,7 +64,7 @@ class GVars {
   }
 
   static const String selfTweenKey = '{self}';
-  void _setCallbackParams(GTween twn, CallbackParams params) {
+  void _setCallbackParams(GTween twn, CallBackParams params) {
     final named = params.named;
     final positional = params.positional;
     if (named != null) {
@@ -347,7 +347,7 @@ class GTween {
     }
   }
 
-  void _signal(Function callback, CallbackParams params) {
+  void _signal(Function callback, CallBackParams params) {
     if (callback != null) {
       /// It's a very slow approach.
       Function.apply(callback, params?.positional, params?.named);
@@ -453,7 +453,7 @@ class GTween {
       ..delay = delay
       ..useFrames = useFrames
       ..onComplete = callback
-      ..onCompleteParams = CallbackParams.parse(params);
+      ..onCompleteParams = CallBackParams.parse(params);
     return GTween(
       callback,
       0,

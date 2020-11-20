@@ -109,6 +109,7 @@ class SceneController {
   InputConverter $inputConverter;
 
   SceneConfig get config => _config;
+
   final _config = SceneConfig();
   int id = -1;
   bool _isInited = false;
@@ -157,6 +158,15 @@ class SceneController {
     _ticker = null;
   }
 
+  set config(SceneConfig sceneConfig) {
+    _config.setTo(
+      sceneIsComplex: sceneConfig.painterIsComplex,
+      useKeyboard: sceneConfig.useKeyboard,
+      usePointer: sceneConfig.usePointer,
+      useTicker: sceneConfig.useTicker,
+    );
+  }
+
   CustomPainter buildBackPainter() => back?.buildPainter();
 
   CustomPainter buildFrontPainter() => front?.buildPainter();
@@ -175,14 +185,25 @@ class SceneController {
 
   SceneController._();
 
-  static SceneController withLayers({SceneRoot back, SceneRoot front}) {
+  static SceneController withLayers({
+    SceneRoot back,
+    SceneRoot front,
+    SceneConfig backConfig,
+    SceneConfig frontConfig,
+  }) {
     assert(back != null || front != null);
     final controller = SceneController._();
     if (back != null) {
       controller.back = ScenePainter(controller, back);
+      if (backConfig != null) {
+        back.scene.core.config = backConfig;
+      }
     }
     if (front != null) {
       controller.front = ScenePainter(controller, front);
+      if (frontConfig != null) {
+        front.scene.core.config = frontConfig;
+      }
     }
     return controller;
   }
