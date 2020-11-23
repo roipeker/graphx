@@ -31,7 +31,6 @@ extension GTweenDiplayObjectExt on DisplayObject {
     Object onCompleteParams,
     Function onUpdate,
     Object onUpdateParams,
-//      Map vars,
     bool runBackwards,
     bool immediateRender,
     Map startAt,
@@ -56,24 +55,24 @@ extension GTweenDiplayObjectExt on DisplayObject {
     };
 
     return GTween.to(
-        this,
-        duration,
-        targetValues,
-        GVars(
-          ease: ease,
-          delay: delay,
-          useFrames: useFrames,
-          overwrite: overwrite,
-          onStart: onStart,
-          onStartParams: onStartParams,
-          onComplete: onComplete,
-          onCompleteParams: onCompleteParams,
-          onUpdate: onUpdate,
-          onUpdateParams: onUpdateParams,
-//          vars: vars,
-          runBackwards: runBackwards,
-          immediateRender: immediateRender,
-          startAt: startAt,
-        ));
+      this,
+      duration,
+      targetValues,
+      GVars(
+        ease: ease,
+        delay: delay,
+        useFrames: useFrames,
+        overwrite: overwrite,
+        onStart: onStart,
+        onStartParams: onStartParams,
+        onComplete: onComplete,
+        onCompleteParams: onCompleteParams,
+        onUpdate: onUpdate,
+        onUpdateParams: onUpdateParams,
+        runBackwards: runBackwards,
+        immediateRender: immediateRender,
+        startAt: startAt,
+      ),
+    );
   }
 }

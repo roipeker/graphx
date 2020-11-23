@@ -12,6 +12,7 @@ import 'stage.dart';
 
 abstract class DisplayObject
     with DisplayListSignalsMixin, RenderSignalMixin, MouseSignalsMixin {
+
   DisplayObjectContainer $parent;
 
   static DisplayObject $currentDrag;
