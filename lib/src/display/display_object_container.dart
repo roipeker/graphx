@@ -96,6 +96,12 @@ abstract class DisplayObjectContainer extends DisplayObject {
     if (!$hasVisibleArea || !mouseEnabled || !hitTestMask(localPoint)) {
       return null;
     }
+
+    /// optimization.
+    if (!mouseChildren) {
+      return super.hitTest(localPoint, useShape);
+    }
+
     final numChild = children.length;
     for (var i = numChild - 1; i >= 0; --i) {
       var child = children[i];

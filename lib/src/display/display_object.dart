@@ -42,16 +42,15 @@ abstract class DisplayObject
     stage.onMouseMove.add(_handleDrag);
   }
 
-  DisplayObject get dropTarget {
-    if ($parent == null) return null;
-    if (!$hasVisibleArea || !inStage) return null;
-    if ($parent.children.length > 1) {
-      GxRect rect;
-      $parent.children.forEach((child) {
-        child.getBounds($parent, rect);
-      });
-    }
-  }
+  // DisplayObject get dropTarget {
+  //   if ($parent == null || !$hasVisibleArea || !inStage) return null;
+  //   if ($parent.children.length > 1) {
+  //     GxRect rect;
+  //     $parent.children.forEach((child) {
+  //       child.getBounds($parent, rect);
+  //     });
+  //   }
+  // }
 
   void _handleDrag(MouseInputData input) {
     if (this != $currentDrag) {
