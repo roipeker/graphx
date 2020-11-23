@@ -262,7 +262,8 @@ class ScenePainter with EventDispatcherMixin {
     input.time = $accumulatedFrameDeltaTime;
 
     /// process it.
-    if (input.type == MouseInputType.move) {
+    if (input.type == MouseInputType.move ||
+        input.type == MouseInputType.exit) {
       _mouseMoveInputDetected = true;
       _lastMouseX = input.stageX;
       _lastMouseY = input.stageY;
@@ -323,6 +324,9 @@ class ScenePainter with EventDispatcherMixin {
     input.scrollDelta.setTo(e.scrollDelta?.dx ?? 0, e.scrollDelta?.dy ?? 0);
     input.stagePosition.setTo(e.stagePosition.x, e.stagePosition.y);
     input.uid = ++MouseInputData.uniqueId;
+    if (input.type == MouseInputType.exit) {
+      input.mouseOut = true;
+    }
     _mouseInputHandler(input);
   }
 

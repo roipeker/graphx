@@ -94,6 +94,7 @@ enum MouseInputType {
   out,
   move,
   down,
+  exit,
   up,
   click,
   still,
@@ -214,6 +215,8 @@ class MouseInputData {
     } else if (nativeType == PointerEventType.hover ||
         nativeType == PointerEventType.move) {
       return MouseInputType.move;
+    } else if (nativeType == PointerEventType.exit) {
+      return MouseInputType.exit;
     } else if (nativeType == PointerEventType.scroll) {
       return MouseInputType.wheel;
     }
