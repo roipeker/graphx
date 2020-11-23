@@ -27,3 +27,4 @@ _caller object_ (instance / class name where caller is), filename and line numbe
 
 ## [0.0.1+7]
 - fix for mouse exit event not being detected when the scene is way too small and the pointer event happens too fast over the target.
+- An improved README.md
