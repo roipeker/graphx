@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-class SimpleShapesScene extends SceneRoot {
+class SimpleShapesScene extends Sprite {
   Shape triangle;
 
   @override
   void addedToStage() {
+    /// For example:
+    /// If you pass a [SceneConfig] with [useTicker] or [autoUpdate],
+    /// this is how you can turn off the update/rendering process for this
+    /// scene layer.
+    // stage.scene.autoUpdateAndRender = false;
+
     final rect = Shape();
     rect.graphics.lineStyle(2, Colors.red.value, 1.0);
     rect.graphics.drawRect(40, 40, 40, 40);

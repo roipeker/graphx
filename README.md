@@ -115,36 +115,26 @@ This controller is the "initializer" of the Scenes layers, which can be:
  - `front` (foreground painter), 
  - or both.
 
-Each "Scene Layer" has to extend `SceneRoot`, which represents the starting point of that particular scene hierarchy. Think of it as `MaterialApp` widget is to all other children Widgets in the tree.  
+Also takes a `SceneConfig()`, so you can configure what you need from the Widget's side.
+You can make use of some predefined Scene configurators:
+ - `SceneConfig.static`: If you plan to only use this scene to draw some graphics, like a background.
+ - `SceneConfig.games`: Activates all GraphX features, auto render and update, pointers and keyboard support.
+ - `SceneConfig.tools`: Shortcut of _games_, helpful if you wanna use it in some custom drawing editor, or similar with keyboard shortcuts.
+ - `SceneConfig.interactive` (_default_): Probably the most common setup for mobile, enables all features except keyboard support.
+ - `SceneConfig.autoRender`: Allows you to have a ticker running, and auto update the scene, with NO inputs (mouse/touch/keyboard), if you wanna have an animated Widget, or maybe if you wanna control it externally. 
+ 
+
+Each "Scene Layer" has to `Sprite`, this root class represents the starting point of that particular scene hierarchy. Think of it as `MaterialApp` widget is to all other children Widgets in the tree.  
 
 Here we get into **GraphX™** world, no more Widgets Trees or immutable properties.
+According to the SceneConfig you pass down, you will have different capabilities.
+You can make custom UI widgets, games, or make use of GraphX to create a static drawing, like curved backgrounds, or complex shapes.
 
-In order to setup your GraphX scene, for now, you should do it in your SceneRoot class constructor,
-calling the `config()` method.
-
-- If you plan to make use of animations, transitions, etc, then set `autoUpdateAndRender=true`,
-- If you need mouse/touch input detection in your GraphX scene, set `usePointer=true`,
-- If you are making a game, or some desktop/web tool that requires keyboard access `useKeyboard=true`.
+Is a good practice to override `addedToStage()` as your entry point, here the Scene engine is ready, the `root` class has been added to the stage, so the glorified `Stage` will be available to use:
 
 ```dart
-config(
-      autoUpdateAndRender: true,
-      usePointer: true,
-      useKeyboard: true,
-);
-```
-You can use this basic configuration for most of your Scenes.
-
-But you can also make use of GraphX to create a static drawing, like curved backgrounds, or complex shapes. In that case, you don't have to call `config()`, as GraphX will render 1 time the Scene (_docs will be updated in the future to reflect how GraphX can run the render invalidation manually on demand_).
-
-Override `addedToStage()` as your entry point, here the Scene engine is set up, the root is added to the stage, and the glorified `Stage` is available to use:
-
-```dart
-class GameScene extends SceneRoot {
-  GameScene(){
-    config(autoUpdateAndRender: true, usePointer: true, useKeyboard: true);
-  }
-
+class GameScene extends Sprite {
+  
   @override
   void addedToStage() {
     /// Here you can access the `stage`, get the size of the
@@ -157,7 +147,7 @@ class GameScene extends SceneRoot {
 For now, GraphX™ has a few classes for rendering in the "display list":
 Like `Shape` (for "pen" drawings commands through it's `graphics` property), `Sprite` (create hierarchies of rendering objects), `StaticText` (for Texts), `GxIcon` (for Flutter icons), `Bitmap` (for Images), `MovieClip`(for Spritesheet and Gif support), `SvgShape` (dependency for `svg` package not included), `SimpleParticleSystem` (to create optimized particles for games), and Flare/Rive render objects which will live in another package/utility to avoid dependencies.
 
-By the way, `SceneRoot` is a Sprite as well!, and it's your `root` node in the display tree, kinda where all starts to render, and where you need to add your own objects.
+By the way, in the previous example, `GameScene` is the `root` node in the _display tree_, the entry point where DisplayObjects renders, and where you need to add your own objects.
 
 For instance, to create a simple purple circle:
 
@@ -172,7 +162,7 @@ void addedToStage(){
 }
 ```
 
-`SceneRoot` is a `Sprite` (which is a `DisplayObjectContainer`) and can have children inside, yet `Shape` is a `DisplayObject`, and can't have children. But it makes it a little bit more performant on each painter step.
+`Sprite` internally extends from the abstract class `DisplayObjectContainer`, and as the name implies, can have other children inside, yet `Shape` is a `DisplayObject`, and can't have children. That makes it a bit more performant on each painter step.
 
 We could also use our root scene to draw things:
 
@@ -185,20 +175,8 @@ addedToStage(){
 ...
 }
 ```
-
-Scene setup sample in your `SceneRoot` (in your constructor):
-```dart
-config(
-  autoUpdateAndRender: true,
-  usePointer: true,
-  useTicker: true,
-  useKeyboard: false,
-  sceneIsComplex: true,
-);
-```
-
 Pointer signals has been "simplified" as Mouse events now... as it's super easy to work with single touch / mouse interactions in `DisplayObject`s.
-There're a bunch of signals to listen on each element... taken from AS3, and JS.
+There are a bunch of signals to listen on each object... taken from AS3, and JS.
 - onMouseDoubleClick
 - onMouseClick
 - onMouseDown

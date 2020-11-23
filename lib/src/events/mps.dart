@@ -13,7 +13,7 @@ class MPS {
   final _cache = <String, List<Function>>{};
   final _cacheOnce = <String, List<Function>>{};
 
-  void publishParams(String topic, CallBackParams args) {
+  void publishParams(String topic, CallbackParams args) {
 //    final subs = _cache[topic];
 //    subs?.forEach((fn) => Function.apply(fn, args?.positional, args?.named));
 
@@ -158,7 +158,7 @@ class MPS {
     _cacheOnce.remove(topic);
   }
 
-  void emitParams(String topic, CallBackParams args) {
+  void emitParams(String topic, CallbackParams args) {
     void _send(Function fn) =>
         Function.apply(fn, args?.positional, args?.named);
     _cache[topic]?.forEach(_send);

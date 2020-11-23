@@ -4,16 +4,8 @@ import 'package:graphx/graphx.dart';
 
 import 'ui/my_button.dart';
 
-class SimpleInteractionsScene extends SceneRoot {
+class SimpleInteractionsScene extends Sprite {
   Shape ball;
-
-  SimpleInteractionsScene() {
-    config(
-      useKeyboard: true,
-      usePointer: true,
-      autoUpdateAndRender: true,
-    );
-  }
 
   @override
   void addedToStage() {
@@ -22,9 +14,9 @@ class SimpleInteractionsScene extends SceneRoot {
     button.alignPivot();
     button.mouseUseShape = true;
 
-    /// We can listen for the same signals the button is listening
+    /// We can listen for the same Signals the button is listening
     /// internally.
-//    button.onMouseDown.add((e) => print("mouse down on button! $e"));
+    // button.onMouseDown.add((e) => print("mouse down on button! $e"));
 
     stage.onResized.add(() {
       button.x = stage.stageWidth / 2;
@@ -55,13 +47,13 @@ class SimpleInteractionsScene extends SceneRoot {
   /// And also access the `rawEvent` dispatched by Flutter if we need to.
   /// Most of the times you are ok using `LogicalKeyboardKey` to check
   /// for the keyboard's keys constants.
-  /// Usually [onDown] fires keystrokes in constantly, although it depends 
+  /// Usually [onDown] fires keystrokes in constantly, although it depends
   /// on the OS and keyboard, while you keep it pressed.
   void _onKeyboardDown(KeyboardEventData event) {
     var pixelsToMove = 10.0;
 
     /// for access modifiers keys, is better to check the raw event itself.
-    /// as multiple physical keys have the same behaviour (shift, command, 
+    /// as multiple physical keys have the same behaviour (shift, command,
     /// alt, etc) but different key codes.
     if (event.rawEvent.isShiftPressed) {
       pixelsToMove = 30.0;
@@ -85,8 +77,8 @@ class SimpleInteractionsScene extends SceneRoot {
     }
   }
 
-  /// [onUp], unlike [onDown], dispatches only once, when you release a 
-  /// keystroke. use the A for scale down the ball, and S to scale it up 
+  /// [onUp], unlike [onDown], dispatches only once, when you release a
+  /// keystroke. use the A for scale down the ball, and S to scale it up
   /// by 20% on each event.
   void _onKeyboardUp(KeyboardEventData event) {
     if (event.isKey(LogicalKeyboardKey.keyS)) {

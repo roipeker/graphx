@@ -27,4 +27,9 @@ _caller object_ (instance / class name where caller is), filename and line numbe
 
 ## [0.0.1+7]
 - fix for mouse exit event not being detected when the scene is way too small and the pointer event happens too fast over the target.
-- An improved README.md
+- an improved README.md
+
+## [0.0.1+8]
+- big refactor to initialize SceneController(), now it takes the [SceneConfig] from the constructor (`withLayers()` was removed).
+- cleanup docs to reflect the change.
+- no more [SceneRoot], now you can use [Sprite] directly as the root layer Scene!

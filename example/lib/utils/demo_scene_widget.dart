@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class DemoSingleSceneWidget extends StatelessWidget {
-  final SceneRoot sceneRoot;
+  final Sprite root;
   final String title;
   final Widget child;
+  final SceneConfig config;
 
   const DemoSingleSceneWidget({
     Key key,
-    @required this.sceneRoot,
+    @required this.root,
     @required this.title,
+    this.config,
     this.child,
   }) : super(key: key);
 
@@ -23,7 +25,10 @@ class DemoSingleSceneWidget extends StatelessWidget {
       /// takes the entire body area.
       body: Center(
         child: SceneBuilderWidget(
-          builder: () => SceneController.withLayers(back: sceneRoot),
+          builder: () => SceneController(
+            back: root,
+            config: config ?? SceneConfig.interactive,
+          ),
           child: child,
         ),
       ),

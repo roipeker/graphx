@@ -9,7 +9,7 @@ class SimpleTweenMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return DemoSingleSceneWidget(
       title: 'simple tweens',
-      sceneRoot: SimpleTweenScene(controller),
+      root: SimpleTweenScene(controller),
       child: _TweenMenu(controller),
     );
   }

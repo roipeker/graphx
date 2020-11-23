@@ -4,19 +4,13 @@ import 'package:graphx/graphx.dart';
 import 'my_box.dart';
 import 'tween_controller.dart';
 
-class SimpleTweenScene extends SceneRoot {
+class SimpleTweenScene extends Sprite {
   final TweenSceneController controller;
 
   MyBox box;
   Sprite centeredContainer;
 
-  SimpleTweenScene(this.controller) {
-    /// This is required to have a Ticker running,
-    /// automatically redrawing the screen and give us an "enterFrame" or
-    /// an "update()" method to override. Is required for the GraphX Tween
-    /// engine as well.
-    config(autoUpdateAndRender: true);
-  }
+  SimpleTweenScene(this.controller);
 
   @override
   void addedToStage() {

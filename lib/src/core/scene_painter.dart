@@ -4,69 +4,6 @@ import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
 
-// class SceneRoot extends Sprite {
-//   ScenePainter scene;
-
-//   static SceneRoot get current {
-//     return ScenePainter.current.root;
-//   }
-
-//   bool _ready = false;
-
-//   bool get isReady => _ready;
-
-//   bool _autoUpdateAndRender;
-//   bool _useTicker;
-//   bool _useKeyboard;
-//   bool _usePointer;
-//   bool _sceneIsComplex;
-
-//   /// You can config the scene in [init()] or in your class constructor.
-//   void config({
-//     bool autoUpdateAndRender = false,
-//     bool useTicker,
-//     bool useKeyboard,
-//     bool usePointer,
-//     bool sceneIsComplex,
-//   }) {
-//     _autoUpdateAndRender = autoUpdateAndRender;
-//     _useTicker = useTicker;
-//     _useKeyboard = useKeyboard;
-//     _usePointer = usePointer;
-//     _sceneIsComplex = sceneIsComplex;
-//     _applyConfig();
-//   }
-
-//   void _applyConfig() {
-//     if (scene == null) return;
-//     if (_ready) {
-//       throw 'You can not initScene() after ready() has happened. '
-//           'Is only allowed during (or before) init().';
-//     }
-// //    scene.shouldRepaint = needsRepaint;
-//     scene.autoUpdateAndRender = _autoUpdateAndRender ?? false;
-//     if (scene.autoUpdateAndRender) {
-//       _useTicker = true;
-//     }
-//     scene.core.config.setTo(
-//       useTicker: _useTicker,
-//       useKeyboard: _useKeyboard,
-//       usePointer: _usePointer,
-//       sceneIsComplex: _sceneIsComplex,
-//     );
-//   }
-
-//   /// Use to initialize engine properties.
-//   @protected
-//   void init() {
-//     _applyConfig();
-//   }
-
-//   /// Called when stage is ready.
-//   @protected
-//   void ready() {}
-// }
-
 class ScenePainter with EventDispatcherMixin {
   /// Current painter being processed.
   static ScenePainter current;
@@ -106,7 +43,7 @@ class ScenePainter with EventDispatcherMixin {
   bool get isReady => _isReady;
 
   /// Automatically manage the `tick()` and `render()` requests.
-  /// Overrides [SceneConfig.useTicker] and [needsRepaint].
+  /// Overrides [needsRepaint].
   bool autoUpdateAndRender = false;
 
   int $currentFrameId = 0;
@@ -124,12 +61,15 @@ class ScenePainter with EventDispatcherMixin {
 
   ui.Picture _canvasPicture;
 
-  /// might be useful later to share an Image capture from the current Scene.
-//  ui.Image _canvasImage;
+  var _mouseMoveInputDetected = false;
+  var _lastMouseX = -1000000.0;
+  var _lastMouseY = -1000000.0;
+  var _lastMouseOut = false;
+  MouseInputData _lastMouseInput;
 
+  /// constructor.
   ScenePainter(this.core, this.root) {
     _stage = Stage(this);
-    // root.scene = this;
     makeCurrent();
   }
 
@@ -147,13 +87,8 @@ class ScenePainter with EventDispatcherMixin {
       _isReady = true;
       _initMouseInput();
       _stage.addChild(root);
-      root._ready = true;
-      root.ready();
-
-      /// notify children that the stage resized.
       _stage?.$onResized?.dispatch();
     }
-
     if (useOwnCanvas) {
       _pictureFromCanvas();
     } else {
@@ -164,41 +99,23 @@ class ScenePainter with EventDispatcherMixin {
   void $setup() {
     makeCurrent();
     GTween.registerCommonWraps();
-    root._applyConfig();
-    root.init();
-  }
 
-//  final stopWatch = Stopwatch();
-//  List _pendingDisposedImages = <ui.Image>[];
-//  Future<void> _createImage() async {
-//    print(_pendingDisposedImages.length);
-//    if (_canvasImage != null) {
-//      _pendingDisposedImages.add(_canvasImage);
-//    }
-//    _canvasImage =
-//        await _canvasPicture.toImage(size.width.toInt(), size.height.toInt());
-//  }
-//
-//  void _disposePendingImages() {
-//    _pendingDisposedImages.forEach((e) {
-//      e.dispose();
-//    });
-//    _pendingDisposedImages.clear();
-//  }
+    /// If needed, can be overridden later by the [root].
+    autoUpdateAndRender = core.config.autoUpdateRender;
+  }
 
   void _createPicture() {
     final _recorder = ui.PictureRecorder();
     final _canvas = Canvas(_recorder);
     _stage.paint(_canvas);
     _canvasPicture = _recorder.endRecording();
-//    _createImage();
   }
 
   /// The main `enterFrame`, called from the `SceneController` unique `GxTicker`
   /// only valid when there's a GxTicker running.
-  /// Manages the `update()` and can request redraw the CustomPainter.
+  /// Manages the `update()` and can request to redraw the CustomPainter.
   void tick(double time) {
-    // makeCurrent();
+    makeCurrent();
     if (autoUpdateAndRender || time != null) {
       $currentFrameId++;
       $runTime += time;
@@ -208,7 +125,6 @@ class ScenePainter with EventDispatcherMixin {
     $render();
     if (useOwnCanvas) {
       _ownCanvasNeedsRepaint = true;
-//      _disposePendingImages();
     }
   }
 
@@ -219,22 +135,12 @@ class ScenePainter with EventDispatcherMixin {
     }
     $currentFrameDeltaTime = deltaTime;
     $accumulatedFrameDeltaTime += $currentFrameDeltaTime;
-
-    /// TODO: make current GxTween.
     GTween.ticker.dispatch(deltaTime);
-    // GxTween.update(deltaTime);
     _stage.$tick(deltaTime);
     if (_hasPointer) {
       _detectMouseMove();
     }
   }
-
-  /// temporal
-  var _mouseMoveInputDetected = false;
-  var _lastMouseX = -1000000.0;
-  var _lastMouseY = -1000000.0;
-  var _lastMouseOut = false;
-  MouseInputData _lastMouseInput;
 
   void _detectMouseMove() {
     // If there was no mouse move dispatch a still event this handles static mouse OVER/OUT for moving/hiding objects
@@ -275,12 +181,10 @@ class ScenePainter with EventDispatcherMixin {
     }
     _lastMouseInput = input;
     stage.captureMouseInput(input);
-//    onMouseInput.dispatch(input);
   }
 
   /// Requests a new frame.
   void $render() {
-//    makeCurrent();
     if (autoUpdateAndRender || needsRepaint) {
       requestRender();
     }
@@ -293,19 +197,6 @@ class ScenePainter with EventDispatcherMixin {
   void requestRender() {
     notify();
   }
-
-  bool shouldRepaint() => needsRepaint;
-
-  @override
-  void dispose() {
-    _stage?.dispose();
-    core?.pointer?.onInput?.remove(_onInputHandler);
-    _onUpdate?.removeAll();
-    _onUpdate = null;
-    super.dispose();
-  }
-
-  bool get _hasPointer => core?.pointer?.onInput != null;
 
   void _initMouseInput() {
     core?.pointer?.onInput?.add(_onInputHandler);
@@ -339,15 +230,22 @@ class ScenePainter with EventDispatcherMixin {
       _ownCanvasNeedsRepaint = false;
       _createPicture();
     }
-
-    /// experimental usage of image rendering from the painter.
-//      if (_canvasImage != null) {
-//        canvas.drawImage(_canvasImage, Offset.zero, PainterUtils.emptyPaint);
-//      }
     if (_canvasPicture != null) {
       $canvas.drawPicture(_canvasPicture);
     }
   }
+
+  @override
+  void dispose() {
+    _stage?.dispose();
+    core?.pointer?.onInput?.remove(_onInputHandler);
+    _onUpdate?.removeAll();
+    _onUpdate = null;
+    super.dispose();
+  }
+
+  bool get _hasPointer => core?.pointer?.onInput != null;
+  bool shouldRepaint() => needsRepaint;
 }
 
 class _GraphicsPainter extends CustomPainter {

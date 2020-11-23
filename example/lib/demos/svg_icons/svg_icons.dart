@@ -6,7 +6,7 @@ class DemoSvgIconsMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return DemoSingleSceneWidget(
       title: 'svg & icon support',
-      sceneRoot: SvgIconsScene(),
+      root: SvgIconsScene(),
     );
   }
 }

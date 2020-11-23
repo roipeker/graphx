@@ -1,3 +1,5 @@
+import 'package:graphx/graphx.dart';
+
 import '../../utils/utils.dart';
 
 import 'simple_interactions_scene.dart';
@@ -7,7 +9,12 @@ class SimpleInteractionsMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return DemoSingleSceneWidget(
       title: 'simple interactivity demo (pointer & keyboard support)',
-      sceneRoot: SimpleInteractionsScene(),
+      root: SimpleInteractionsScene(),
+      config: SceneConfig(
+        autoUpdateRender: true,
+        useKeyboard: true,
+        usePointer: true,
+      ),
     );
   }
 }
