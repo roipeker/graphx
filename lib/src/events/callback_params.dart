@@ -1,4 +1,4 @@
-class CallbackParams {
+class CallBackParams {
   List<dynamic> positional;
 
   /// Symbol is represented by the literal # in Dart.
@@ -6,16 +6,19 @@ class CallbackParams {
   /// You'd use {#name: 'roi', #count: 10}.
   Map<Symbol, dynamic> named;
 
-  CallbackParams([this.positional, this.named]);
+  CallBackParams([this.positional, this.named]);
 
-  static CallbackParams parse(Object args) {
+  static CallBackParams parse(Object args) {
     if (args == null) return null;
-    if (args is CallbackParams) return args;
+
+    if (args is CallBackParams) return args;
+
     if (args is List) {
-      return CallbackParams(args);
+      return CallBackParams(args);
     } else if (args is Map) {
-      return CallbackParams(null, args);
+      return CallBackParams(null, args);
     }
-    return CallbackParams([args]);
+
+    return CallBackParams([args]);
   }
 }

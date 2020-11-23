@@ -8,6 +8,7 @@ class Sprite extends DisplayObjectContainer {
     return '$runtimeType (Sprite)$msg';
   }
 
+  
   static final _sHelperMatrix = GxMatrix();
 
   Graphics _graphics;
@@ -44,7 +45,6 @@ class Sprite extends DisplayObjectContainer {
 
   @override
   void $applyPaint(Canvas canvas) {
-//    print("Apply paint!");
     if (!$hasVisibleArea) return;
     _graphics?.alpha = worldAlpha;
     _graphics?.paint(canvas);

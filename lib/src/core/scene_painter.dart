@@ -4,68 +4,68 @@ import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
 
-class SceneRoot extends Sprite {
-  ScenePainter scene;
+// class SceneRoot extends Sprite {
+//   ScenePainter scene;
 
-  static SceneRoot get current {
-    return ScenePainter.current.root;
-  }
+//   static SceneRoot get current {
+//     return ScenePainter.current.root;
+//   }
 
-  bool _ready = false;
+//   bool _ready = false;
 
-  bool get isReady => _ready;
+//   bool get isReady => _ready;
 
-  bool _autoUpdateAndRender;
-  bool _useTicker;
-  bool _useKeyboard;
-  bool _usePointer;
-  bool _sceneIsComplex;
+//   bool _autoUpdateAndRender;
+//   bool _useTicker;
+//   bool _useKeyboard;
+//   bool _usePointer;
+//   bool _sceneIsComplex;
 
-  /// You can config the scene in [init()] or in your class constructor.
-  void config({
-    bool autoUpdateAndRender = false,
-    bool useTicker,
-    bool useKeyboard,
-    bool usePointer,
-    bool sceneIsComplex,
-  }) {
-    _autoUpdateAndRender = autoUpdateAndRender;
-    _useTicker = useTicker;
-    _useKeyboard = useKeyboard;
-    _usePointer = usePointer;
-    _sceneIsComplex = sceneIsComplex;
-    _applyConfig();
-  }
+//   /// You can config the scene in [init()] or in your class constructor.
+//   void config({
+//     bool autoUpdateAndRender = false,
+//     bool useTicker,
+//     bool useKeyboard,
+//     bool usePointer,
+//     bool sceneIsComplex,
+//   }) {
+//     _autoUpdateAndRender = autoUpdateAndRender;
+//     _useTicker = useTicker;
+//     _useKeyboard = useKeyboard;
+//     _usePointer = usePointer;
+//     _sceneIsComplex = sceneIsComplex;
+//     _applyConfig();
+//   }
 
-  void _applyConfig() {
-    if (scene == null) return;
-    if (_ready) {
-      throw 'You can not initScene() after ready() has happened. '
-          'Is only allowed during (or before) init().';
-    }
-//    scene.shouldRepaint = needsRepaint;
-    scene.autoUpdateAndRender = _autoUpdateAndRender ?? false;
-    if (scene.autoUpdateAndRender) {
-      _useTicker = true;
-    }
-    scene.core.config.setTo(
-      useTicker: _useTicker,
-      useKeyboard: _useKeyboard,
-      usePointer: _usePointer,
-      sceneIsComplex: _sceneIsComplex,
-    );
-  }
+//   void _applyConfig() {
+//     if (scene == null) return;
+//     if (_ready) {
+//       throw 'You can not initScene() after ready() has happened. '
+//           'Is only allowed during (or before) init().';
+//     }
+// //    scene.shouldRepaint = needsRepaint;
+//     scene.autoUpdateAndRender = _autoUpdateAndRender ?? false;
+//     if (scene.autoUpdateAndRender) {
+//       _useTicker = true;
+//     }
+//     scene.core.config.setTo(
+//       useTicker: _useTicker,
+//       useKeyboard: _useKeyboard,
+//       usePointer: _usePointer,
+//       sceneIsComplex: _sceneIsComplex,
+//     );
+//   }
 
-  /// Use to initialize engine properties.
-  @protected
-  void init() {
-    _applyConfig();
-  }
+//   /// Use to initialize engine properties.
+//   @protected
+//   void init() {
+//     _applyConfig();
+//   }
 
-  /// Called when stage is ready.
-  @protected
-  void ready() {}
-}
+//   /// Called when stage is ready.
+//   @protected
+//   void ready() {}
+// }
 
 class ScenePainter with EventDispatcherMixin {
   /// Current painter being processed.
@@ -76,7 +76,7 @@ class ScenePainter with EventDispatcherMixin {
 
   /// Access to the `root` DisplayObject that will initialize
   /// the Scene layer.
-  SceneRoot root;
+  Sprite root;
 
   /// Allows to re-paint the internal CustomPainter on every tick()
   /// The flags allow the $render() `tick` process to know if it has to
@@ -129,7 +129,7 @@ class ScenePainter with EventDispatcherMixin {
 
   ScenePainter(this.core, this.root) {
     _stage = Stage(this);
-    root.scene = this;
+    // root.scene = this;
     makeCurrent();
   }
 
