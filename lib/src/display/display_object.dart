@@ -12,6 +12,7 @@ import 'stage.dart';
 
 abstract class DisplayObject
     with DisplayListSignalsMixin, RenderSignalMixin, MouseSignalsMixin {
+
   DisplayObjectContainer $parent;
 
   static DisplayObject $currentDrag;
@@ -42,6 +43,8 @@ abstract class DisplayObject
     stage.onMouseMove.add(_handleDrag);
   }
 
+
+  // TODO what this do
   DisplayObject get dropTarget {
     if ($parent == null) return null;
     if (!$hasVisibleArea || !inStage) return null;

@@ -186,8 +186,8 @@ class SceneController {
   SceneController._();
 
   static SceneController withLayers({
-    SceneRoot back,
-    SceneRoot front,
+    Sprite back,
+    Sprite front,
     SceneConfig backConfig,
     SceneConfig frontConfig,
   }) {
@@ -196,13 +196,13 @@ class SceneController {
     if (back != null) {
       controller.back = ScenePainter(controller, back);
       if (backConfig != null) {
-        back.scene.core.config = backConfig;
+        controller.back.core.config = backConfig;
       }
     }
     if (front != null) {
       controller.front = ScenePainter(controller, front);
       if (frontConfig != null) {
-        front.scene.core.config = frontConfig;
+        controller.back.core.config = frontConfig;
       }
     }
     return controller;

@@ -1,3 +1,7 @@
+/// --- EVENT SIGNAL
+
+typedef EventSignalCallback<T> = void Function(T event);
+
 class Signal {
   final _listenersOnce = <Function>[];
   final _listeners = <Function>[];
@@ -59,10 +63,6 @@ class Signal {
     }
   }
 }
-
-/// --- EVENT SIGNAL
-
-typedef EventSignalCallback<T> = void Function(T event);
 
 class EventSignal<T> {
   void call(EventSignalCallback<T> callback) {
