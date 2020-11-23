@@ -35,6 +35,10 @@ class Stage extends DisplayObjectContainer
 
   Juggler get juggler => Graphx.juggler;
 
+  /// Debug stage/scene canvas area.
+  /// Drawing a black 2px line square around it.
+  bool showBoundsRect = false;
+
   double get stageWidth => _size?.width ?? 0;
 
   double get stageHeight => _size?.height ?? 0;
@@ -59,7 +63,16 @@ class Stage extends DisplayObjectContainer
       _boundsDebugger.canvas = canvas;
       _boundsDebugger.render();
     }
+    if(showBoundsRect){
+      canvas.drawPath(_stageBoundsRectPath, _stageBoundsRectPaint);
+    }
   }
+
+  Path _stageBoundsRectPath = Path();
+  static final Paint _stageBoundsRectPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..color = Color(0xff000000)
+    ..strokeWidth = 2;
 
   final GxRect _stageRect = GxRect();
   GxRect get stageRect => _stageRect;
@@ -70,8 +83,15 @@ class Stage extends DisplayObjectContainer
       _size = value;
       _stageRectNative =
           _stageRect.setTo(0, 0, _size.width, _size.height).toNative();
+
+      _stageBoundsRectPath??=Path();
+      _stageBoundsRectPath.reset();
+      _stageBoundsRectPath.addRect(_stageRectNative);
+      _stageBoundsRectPath.close();
+
       Graphics.updateStageRect(_stageRect);
       $onResized?.dispatch();
+
     }
   }
 
