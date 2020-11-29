@@ -462,12 +462,14 @@ class GTween {
     );
   }
 
+  static double timeScale = 1;
+
   /// Main ticker function that updates all the Tweens pool
   static void _updateRoot(double delta) {
     _frame += 1;
     // _time = getTimer() * .001;
     if (delta <= 0) delta = .016;
-    _time += delta;
+    _time += delta * timeScale;
     var tween = _first;
     while (tween != null) {
       var next = tween._next;

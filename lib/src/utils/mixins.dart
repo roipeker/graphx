@@ -57,3 +57,16 @@ mixin RenderUtilMixin {
     return output;
   }
 }
+
+mixin DisplayMasking {
+  GxRect maskRect;
+  bool maskRectInverted = false;
+
+  void $applyMaskRect(Canvas c) {
+    c.clipRect(
+      maskRect.toNative(),
+      clipOp: maskRectInverted ? ClipOp.difference : ClipOp.intersect,
+      doAntiAlias: true,
+    );
+  }
+}

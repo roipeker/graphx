@@ -53,6 +53,17 @@ class GxMatrix {
     this.ty = 0,
   ]);
 
+  GxMatrix clone() {
+    return GxMatrix(
+      a,
+      b,
+      c,
+      d,
+      tx,
+      ty,
+    );
+  }
+
   GxMatrix copyFrom(GxMatrix from) {
     a = from.a;
     b = from.b;

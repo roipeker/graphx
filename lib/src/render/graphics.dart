@@ -1,7 +1,9 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
+import 'package:graphx/graphx.dart';
 
 import '../geom/geom.dart';
 import '../utils/utils.dart';
@@ -16,6 +18,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   GraphicsDrawingData _currentDrawing = GraphicsDrawingData(null, Path());
   double alpha = 1;
 
+  static final GxMatrix _helperMatrix = GxMatrix();
+
   Graphics mask;
 
   bool isMask = false;
@@ -23,6 +27,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   Path get _path => _currentDrawing.path;
 
   static final Path stageRectPath = Path();
+
   static void updateStageRect(GxRect rect) {
     stageRectPath.reset();
     stageRectPath.addRect(rect.toNative());
@@ -35,6 +40,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   List<GraphicsDrawingData> get drawingQueue => _drawingQueue;
+
   void copyFrom(Graphics other, [bool deepClone = false]) {
     _drawingQueue.clear();
     for (final command in other._drawingQueue) {
@@ -107,6 +113,29 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  Graphics beginBitmapFill(
+    GTexture texture, [
+    GxMatrix matrix,
+    bool repeat = false,
+    bool smooth = false,
+  ]) {
+    if (_holeMode) return this;
+    final fill = Paint();
+    fill.style = PaintingStyle.fill;
+    fill.isAntiAlias = smooth;
+    var tileMode = !repeat ? TileMode.clamp : TileMode.repeated;
+    matrix ??= _helperMatrix;
+    fill.shader = ImageShader(
+      texture.root,
+      tileMode,
+      tileMode,
+      matrix.toNative().storage,
+    );
+    _addFill(fill);
+    _currentDrawing.shaderTexture = texture;
+    return this;
+  }
+
   Graphics beginFill(int color, [double alpha = 1]) {
     if (_holeMode) return this;
     final fill = Paint();
@@ -122,7 +151,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  void drawImage(Image img) {}
+  // void drawImage(Image img) {}
 
   Graphics endFill() {
     if (_holeMode) {
@@ -134,7 +163,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Graphics lineStyle([
     double thickness = 0.0,
-    int color,
+    int color = 0x0,
     double alpha = 1.0,
     bool pixelHinting = true,
     StrokeCap caps,
@@ -155,6 +184,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  /// For [GradientType.radial], `end` is used for [RadialGradient.focal], check
+  /// the [RadialGradient] docs to understand the relation with [focalRadius]
   Graphics beginGradientFill(
     GradientType type,
     List<int> colors, [
@@ -166,11 +197,17 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     Rect gradientBox,
 
     /// only radial
-    double focalRadius = 1.0,
+    double radius = 0.5,
+    double focalRadius = 0.0,
   ]) {
     final _colors = _GraphUtils.colorsFromHex(colors, alphas);
-    begin ??= Alignment.topLeft;
-    end ??= Alignment.topRight;
+    if (type == GradientType.radial) {
+      begin ??= Alignment.center;
+      // end ??= Alignment.topRight;
+    } else {
+      begin ??= Alignment.topLeft;
+      end ??= Alignment.topRight;
+    }
     Gradient _gradient;
     if (type == GradientType.linear) {
       _gradient = LinearGradient(
@@ -185,7 +222,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       _gradient = RadialGradient(
         center: begin,
         focal: end,
-        radius: 0.5,
+        radius: radius,
         colors: _colors,
         stops: ratios,
         tileMode: TileMode.clamp,
@@ -227,6 +264,29 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     } else {
       _currentDrawing.gradient = gradient;
     }
+    return this;
+  }
+
+  Graphics lineBitmapStyle(
+    GTexture texture, [
+    GxMatrix matrix,
+    bool repeat = true,
+    bool smooth = false,
+  ]) {
+    /// actual paint must be stroke.
+    assert(_currentDrawing.fill.style == PaintingStyle.stroke);
+    if (_holeMode) return this;
+    final fill = _currentDrawing.fill;
+    fill.isAntiAlias = smooth;
+    var tileMode = !repeat ? TileMode.clamp : TileMode.repeated;
+    matrix ??= _helperMatrix;
+    fill.shader = ImageShader(
+      texture.root,
+      tileMode,
+      tileMode,
+      matrix.toNative().storage,
+    );
+    // _addFill(fill);
     return this;
   }
 
@@ -489,9 +549,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       });
       return;
     }
-
     _constrainAlpha();
     if (!_isVisible) return;
+
     _drawingQueue.forEach((graph) {
       if (graph.hasPicture) {
         canvas.drawPicture(graph.picture);
@@ -503,14 +563,28 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
       /// calculate gradient.
       if (graph.hasGradient) {
-        final _bounds = graph.path.getBounds();
+        Rect _bounds;
+        if (graph.hasVertices) {
+          _bounds = graph.vertices.getBounds();
+        } else {
+          _bounds = graph.path.getBounds();
+        }
         fill.shader = graph.gradient.createShader(_bounds);
       } else {
         if (alpha != 1) {
           fill.color = baseColor.withOpacity(baseColor.opacity * alpha);
         }
       }
-      canvas.drawPath(graph.path, fill);
+
+      if (graph.hasVertices) {
+        if (graph.vertices.uvtData != null && graph.shaderTexture != null) {
+          graph.vertices.calculateUvt(graph.shaderTexture);
+        }
+        canvas.drawVertices(graph.vertices.rawData, graph.blendMode, fill);
+      } else {
+        canvas.drawPath(graph.path, fill);
+      }
+
       fill.color = baseColor;
     });
   }
@@ -581,6 +655,28 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     );
     return this;
   }
+
+  /// Draw a bunch of triangles in the Canvas, only supports
+  /// solid fill or image (not a stroke).
+  /// Doesn't use a Path(), but drawVertices()...
+  Graphics drawTriangles(
+    List<double> vertices, [
+    List<int> indices,
+    List<double> uvtData,
+    List<int> colors,
+  ]) {
+    /// will only work if it has a fill.
+    assert(_currentDrawing != null);
+    assert(_currentDrawing.fill != null);
+    _currentDrawing.vertices = _GraphVertices(
+      VertexMode.triangles,
+      vertices,
+      indices,
+      uvtData,
+      colors,
+    );
+    return this;
+  }
 }
 
 class GraphicsDrawingData {
@@ -591,6 +687,15 @@ class GraphicsDrawingData {
   Picture picture;
   bool isHole = false;
 
+  /// for drawVertices()
+  BlendMode blendMode = BlendMode.src;
+  _GraphVertices vertices;
+
+  /// temporal storage to use with _GraphVertices
+  GTexture shaderTexture;
+
+  bool get hasVertices => vertices != null;
+
   GraphicsDrawingData([this.fill, this.path]);
 
   bool get hasPicture => picture != null;
@@ -600,12 +705,18 @@ class GraphicsDrawingData {
   /// When cloning, we can pass fill and path by reference or make a deep copy.
   /// Mostly intended for direct `Graphics.pushData` and `Graphics.removeData`
   /// manipulation.
-  GraphicsDrawingData clone([bool cloneFill = false, bool clonePath = false]) {
+  GraphicsDrawingData clone([
+    bool cloneFill = false,
+    bool clonePath = false,
+  ]) {
     final _fill = cloneFill ? fill?.clone() : fill;
     final _path = clonePath ? (path != null ? Path.from(path) : null) : path;
+    final _vertices = vertices;
     return GraphicsDrawingData(_fill, _path)
       ..gradient = gradient
-      ..picture = picture;
+      ..picture = picture
+      ..blendMode = blendMode
+      ..vertices = _vertices;
   }
 
   bool isSameType(Paint otherFill) {
@@ -635,6 +746,90 @@ extension ExtSkiaPaintCustom on Paint {
   }
 }
 
+class _GraphVertices {
+  List<double> vertices, uvtData;
+  List<double> adjustedUvtData;
+  List<int> colors, indices;
+  VertexMode mode;
+  Path _path;
+  Rect _bounds;
+  bool _normalizedUvt;
+
+  /// check if uvt requires normalization.
+  _GraphVertices(this.mode, this.vertices,
+      [this.indices, this.uvtData, this.colors]) {
+    _normalizedUvt = false;
+    if (uvtData != null && uvtData.length > 6) {
+      for (var i = 0; i < 6; ++i) {
+        if (uvtData[i] <= 2.0) {
+          _normalizedUvt = true;
+        }
+      }
+      if (uvtData[uvtData.length - 2] <= 2.0 ||
+          uvtData[uvtData.length - 1] <= 2.0) {
+        _normalizedUvt = true;
+      }
+    }
+  }
+
+  void reset() {
+    _path?.reset();
+    _rawData = null;
+    _bounds = null;
+  }
+
+  Rect getBounds() {
+    if (_bounds != null) return _bounds;
+    _bounds = computePath().getBounds();
+    return _bounds;
+  }
+
+  Path computePath() {
+    _path ??= _GraphUtils.getPathFromVertices(this);
+    return _path;
+  }
+
+  Vertices _rawData;
+
+  Vertices get rawData {
+    if (_rawData != null) {
+      return _rawData;
+    }
+    Float32List _textureCoordinates;
+    Int32List _colors;
+    Uint16List _indices;
+    if (uvtData != null) {
+      _textureCoordinates = Float32List.fromList(adjustedUvtData);
+    }
+    if (colors != null) _colors = Int32List.fromList(colors);
+    if (indices != null) _indices = Uint16List.fromList(indices);
+    _rawData = Vertices.raw(
+      VertexMode.triangles,
+      Float32List.fromList(vertices),
+      textureCoordinates: _textureCoordinates,
+      colors: _colors,
+      indices: _indices,
+    );
+    return _rawData;
+  }
+
+  void calculateUvt(GTexture shaderTexture) {
+    if (uvtData == null) return;
+    if (!_normalizedUvt) {
+      adjustedUvtData = uvtData;
+    } else {
+      /// make a ratio of the image size
+      var imgW = shaderTexture.width;
+      var imgH = shaderTexture.height;
+      adjustedUvtData = List<double>(uvtData.length);
+      for (var i = 0; i < uvtData.length; i += 2) {
+        adjustedUvtData[i] = uvtData[i] * imgW;
+        adjustedUvtData[i + 1] = uvtData[i + 1] * imgH;
+      }
+    }
+  }
+}
+
 class _GraphUtils {
   static List<Color> colorsFromHex(List<int> colors, List<double> alphas) {
     final _colors = List<Color>(colors.length); //<Color>[];
@@ -643,5 +838,20 @@ class _GraphUtils {
       _colors[i] = Color(colors[i]).withOpacity(a);
     }
     return _colors;
+  }
+
+  static final Path _helperPath = Path();
+
+  static Path getPathFromVertices(_GraphVertices v) {
+    var path = _helperPath;
+    path.reset();
+    var pos = v.vertices;
+    var len = pos.length;
+    final points = <Offset>[];
+    for (var i = 0; i < len; i += 2) {
+      points.add(Offset(pos[i], pos[i + 1]));
+    }
+    path.addPolygon(points, true);
+    return path;
   }
 }

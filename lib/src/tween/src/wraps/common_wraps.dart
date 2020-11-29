@@ -36,7 +36,8 @@ class GTweenableDouble with GTweenable, SingleValueTweenMixin {
   }
 
   @override
-  Map<String, List<Function>> getTweenableAccessors() => {
+  Map<String, List<Function>> getTweenableAccessors() =>
+      {
         'value': [() => value, (v) => value = v],
       };
 }
@@ -52,10 +53,11 @@ class GTweenableInt with GTweenable, SingleValueTweenMixin {
   }
 
   @override
-  Map<String, List<Function>> getTweenableAccessors() => {
+  Map<String, List<Function>> getTweenableAccessors() =>
+      {
         'value': [
-          () => value + .0,
-          (v) => value = v.round(),
+              () => value + .0,
+              (v) => value = v.round(),
         ],
       };
 }
@@ -80,8 +82,7 @@ class GTweenableMap with GTweenable {
     return convertToDouble(value[prop]);
   }
 
-  GTween tween(
-    Map targetMap, {
+  GTween tween(Map targetMap, {
     @required double duration,
     EaseFunction ease,
     double delay,
@@ -135,6 +136,7 @@ class GTweenableList with GTweenable {
   }
 
   List value;
+
   GTweenableList(List target) {
     value = this.target = target;
   }
@@ -150,8 +152,7 @@ class GTweenableList with GTweenable {
     return convertToDouble(value[int.parse('$prop')]);
   }
 
-  GTween tween(
-    List targetList, {
+  GTween tween(List targetList, {
     @required double duration,
     EaseFunction ease,
     double delay,
@@ -222,18 +223,17 @@ double convertToDouble(Object val) {
 mixin SingleValueTweenMixin {
   Object getValue;
 
-  GTween tween(
-    Object value, {
+  GTween tween(Object value, {
     @required double duration,
     EaseFunction ease,
     double delay,
     bool useFrames,
     int overwrite,
-    VoidCallback onStart,
+    Function onStart,
     Object onStartParams,
-    VoidCallback onComplete,
+    Function onComplete,
     Object onCompleteParams,
-    VoidCallback onUpdate,
+    Function onUpdate,
     Object onUpdateParams,
     bool runBackwards,
     bool immediateRender,

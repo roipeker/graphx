@@ -11,8 +11,11 @@ import 'display_object_container.dart';
 import 'stage.dart';
 
 abstract class DisplayObject
-    with DisplayListSignalsMixin, RenderSignalMixin, MouseSignalsMixin {
-
+    with
+        DisplayListSignalsMixin,
+        RenderSignalMixin,
+        MouseSignalsMixin,
+        DisplayMasking {
   DisplayObjectContainer $parent;
 
   static DisplayObject $currentDrag;
@@ -670,8 +673,12 @@ abstract class DisplayObject
   }
 
   bool hitTestMask(GxPoint localPoint) {
-    if ($mask == null) {
+    if ($mask == null && maskRect == null) {
       return true;
+    }
+    if (maskRect != null) {
+      final isHit = maskRect.containsPoint(localPoint);
+      return maskRectInverted ? !isHit : isHit;
     }
     if ($mask.inStage) {
       getTransformationMatrix($mask, _sHelperMatrixAlt);
@@ -679,8 +686,10 @@ abstract class DisplayObject
       _sHelperMatrixAlt.copyFrom($mask.transformationMatrix);
       _sHelperMatrixAlt.invert();
     }
+
     var helperPoint = localPoint == _sHelperPoint ? GxPoint() : _sHelperPoint;
     _sHelperMatrixAlt.transformPoint(localPoint, helperPoint);
+
     final isHit = mask.hitTest(helperPoint) != null;
 //    return maskInverted ? !isHit : isHit;
     return maskInverted ? !isHit : isHit;
@@ -695,7 +704,7 @@ abstract class DisplayObject
     if (!$hasVisibleArea || !mouseEnabled) {
       return null;
     }
-    if ($mask != null && !hitTestMask(localPoint)) {
+    if (($mask != null || maskRect != null) && !hitTestMask(localPoint)) {
       return null;
     }
     if (getBounds(this, _sHelperRect).containsPoint(localPoint)) {
@@ -780,7 +789,7 @@ abstract class DisplayObject
     //     (this as DisplayObjectContainer).hasChildren) {
     // }
 
-    final hasMask = mask != null;
+    final hasMask = mask != null || maskRect != null;
     final showDebugBounds =
         DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
             ($debugBounds || DisplayBoundsDebugger.debugAll);
@@ -822,7 +831,6 @@ abstract class DisplayObject
       canvas.save();
       var m = transformationMatrix.toNative();
       canvas.transform(m.storage);
-
       if (_is3D) {
         /// TODO: experimental, just transforms
         m = GxMatrix().toNative();
@@ -837,7 +845,11 @@ abstract class DisplayObject
     }
 
     if (hasMask) {
-      mask.$applyPaint(canvas);
+      if (maskRect != null) {
+        $applyMaskRect(canvas);
+      } else {
+        mask.$applyPaint(canvas);
+      }
     }
 
     $onPrePaint?.dispatch(canvas);
