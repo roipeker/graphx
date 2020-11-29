@@ -580,7 +580,20 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         if (graph.vertices.uvtData != null && graph.shaderTexture != null) {
           graph.vertices.calculateUvt(graph.shaderTexture);
         }
-        canvas.drawVertices(graph.vertices.rawData, graph.blendMode, fill);
+        var myPaint = Paint();
+        myPaint.strokeWidth = 2;
+        myPaint.color = Color(0xffff00ff);
+        myPaint.style = PaintingStyle.stroke;
+
+        if (fill.style == PaintingStyle.stroke) {
+          canvas.drawRawPoints(PointMode.lines, graph.vertices.rawPoints, fill);
+        } else {
+          canvas.drawVertices(
+            graph.vertices.rawData,
+            graph.vertices.blendMode ?? BlendMode.src,
+            fill,
+          );
+        }
       } else {
         canvas.drawPath(graph.path, fill);
       }
@@ -664,17 +677,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     List<int> indices,
     List<double> uvtData,
     List<int> colors,
+    BlendMode blendMode = BlendMode.src,
+    Culling culling = Culling.positive,
   ]) {
     /// will only work if it has a fill.
     assert(_currentDrawing != null);
     assert(_currentDrawing.fill != null);
-    _currentDrawing.vertices = _GraphVertices(
-      VertexMode.triangles,
-      vertices,
-      indices,
-      uvtData,
-      colors,
-    );
+    _currentDrawing.vertices = _GraphVertices(VertexMode.triangles, vertices,
+        indices, uvtData, colors, blendMode, culling);
     return this;
   }
 }
@@ -750,14 +760,32 @@ class _GraphVertices {
   List<double> vertices, uvtData;
   List<double> adjustedUvtData;
   List<int> colors, indices;
+  BlendMode blendMode;
   VertexMode mode;
   Path _path;
   Rect _bounds;
   bool _normalizedUvt;
 
+  Float32List _rawPoints;
+  Float32List get rawPoints {
+    if (_rawPoints != null) return _rawPoints;
+    var points = _GraphUtils.getTrianglePoints(this);
+    _rawPoints = Float32List.fromList(points);
+    return _rawPoints;
+  }
+
+  Culling culling;
+
   /// check if uvt requires normalization.
-  _GraphVertices(this.mode, this.vertices,
-      [this.indices, this.uvtData, this.colors]) {
+  _GraphVertices(
+    this.mode,
+    this.vertices, [
+    this.indices,
+    this.uvtData,
+    this.colors,
+    this.blendMode = BlendMode.src,
+    this.culling = Culling.positive,
+  ]) {
     _normalizedUvt = false;
     if (uvtData != null && uvtData.length > 6) {
       for (var i = 0; i < 6; ++i) {
@@ -795,10 +823,13 @@ class _GraphVertices {
     if (_rawData != null) {
       return _rawData;
     }
+
+    // calculateCulling();
+
     Float32List _textureCoordinates;
     Int32List _colors;
     Uint16List _indices;
-    if (uvtData != null) {
+    if (uvtData != null && adjustedUvtData != null) {
       _textureCoordinates = Float32List.fromList(adjustedUvtData);
     }
     if (colors != null) _colors = Int32List.fromList(colors);
@@ -828,9 +859,67 @@ class _GraphVertices {
       }
     }
   }
+
+  void calculateCulling() {
+    var i = 0;
+    var offsetX = 0.0, offsetY = 0.0;
+    var ind = indices;
+    var v = vertices;
+    var l = indices.length;
+    while (i < l) {
+      var a_ = i;
+      var b_ = i + 1;
+      var c_ = i + 2;
+
+      var iax = ind[a_] * 2;
+      var iay = ind[a_] * 2 + 1;
+      var ibx = ind[b_] * 2;
+      var iby = ind[b_] * 2 + 1;
+      var icx = ind[c_] * 2;
+      var icy = ind[c_] * 2 + 1;
+
+      var x1 = v[iax] - offsetX;
+      var y1 = v[iay] - offsetY;
+      var x2 = v[ibx] - offsetX;
+      var y2 = v[iby] - offsetY;
+      var x3 = v[icx] - offsetX;
+      var y3 = v[icy] - offsetY;
+
+      switch (culling) {
+        case Culling.positive:
+          if (!_GraphUtils.isCCW(x1, y1, x2, y2, x3, y3)) {
+            i += 3;
+            continue;
+          }
+          break;
+
+        case Culling.negative:
+          if (_GraphUtils.isCCW(x1, y1, x2, y2, x3, y3)) {
+            i += 3;
+            continue;
+          }
+          break;
+        default:
+          break;
+      }
+
+      /// todo: finish implementation.
+      i += 3;
+    }
+  }
 }
 
 class _GraphUtils {
+  static bool isCCW(
+    double x1,
+    double y1,
+    double x2,
+    double y2,
+    double x3,
+    double y3,
+  ) =>
+      ((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) < 0;
+
   static List<Color> colorsFromHex(List<int> colors, List<double> alphas) {
     final _colors = List<Color>(colors.length); //<Color>[];
     for (var i = 0; i < colors.length; ++i) {
@@ -854,4 +943,58 @@ class _GraphUtils {
     path.addPolygon(points, true);
     return path;
   }
+
+  static List<double> getTrianglePoints(_GraphVertices v) {
+    final output = <double>[];
+    var ver = v.vertices;
+    var ind = v.indices;
+    if (ind == null) {
+      /// calculate
+      var len = ver.length;
+      var out = List<double>(len * 2);
+      var j = 0;
+      for (var i = 0; i < len; i += 6) {
+        out[j++] = ver[i + 0];
+        out[j++] = ver[i + 1];
+        out[j++] = ver[i + 2];
+        out[j++] = ver[i + 3];
+        out[j++] = ver[i + 2];
+        out[j++] = ver[i + 3];
+        out[j++] = ver[i + 4];
+        out[j++] = ver[i + 5];
+        out[j++] = ver[i + 4];
+        out[j++] = ver[i + 5];
+        out[j++] = ver[i + 0];
+        out[j++] = ver[i + 1];
+      }
+      return out;
+    } else {
+      var len = ind.length;
+      var out = List<double>(len * 4);
+      var j = 0;
+      for (var i = 0; i < len; i += 3) {
+        var i0 = ind[i + 0];
+        var i1 = ind[i + 1];
+        var i2 = ind[i + 2];
+        var v0 = i0 * 2;
+        var v1 = i1 * 2;
+        var v2 = i2 * 2;
+        out[j++] = ver[v0];
+        out[j++] = ver[v0 + 1];
+        out[j++] = ver[v1];
+        out[j++] = ver[v1 + 1];
+        out[j++] = ver[v1];
+        out[j++] = ver[v1 + 1];
+        out[j++] = ver[v2];
+        out[j++] = ver[v2 + 1];
+        out[j++] = ver[v2];
+        out[j++] = ver[v2 + 1];
+        out[j++] = ver[v0];
+        out[j++] = ver[v0 + 1];
+      }
+      return out;
+    }
+  }
 }
+
+enum Culling { negative, positive }
