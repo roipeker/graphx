@@ -107,7 +107,8 @@ class GxIcon extends DisplayObject {
       foreground: _paint,
       shadows: _shadow != null ? [_shadow] : null,
     );
-    _builder.pop();
+    _builder = ParagraphBuilder(ParagraphStyle());
+    // _builder.pop();
     _builder.pushStyle(_style);
     final charCode = String.fromCharCode(_data.codePoint);
     _builder.addText(charCode);
@@ -126,7 +127,6 @@ class GxIcon extends DisplayObject {
   }
 
   void _setup() {
-    _builder = ParagraphBuilder(ParagraphStyle());
     _updateStyle();
   }
 

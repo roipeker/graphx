@@ -85,7 +85,9 @@ abstract class DisplayObject
   bool mouseUseShape = false;
 
   List<BaseFilter> $filters;
+
   List<BaseFilter> get filters => $filters;
+
   set filters(List<BaseFilter> value) => $filters = value;
 
   DisplayObject $mouseDownObj;
@@ -761,6 +763,32 @@ abstract class DisplayObject
   /// Paint() so no need to use an expensive saveLayer().
   bool allowSaveLayer = false;
 
+  GxRect getFilterBounds([GxRect layerBounds, Paint alphaPaint]) {
+    layerBounds ??= getBounds($parent);
+    if ($filters == null || $filters.isEmpty) {
+      return layerBounds;
+    }
+    layerBounds = layerBounds.clone();
+    GxRect resultBounds;
+    for (var filter in $filters) {
+      resultBounds ??= layerBounds.clone();
+      if (alphaPaint != null) {
+        filter.update();
+      }
+      filter.expandBounds(layerBounds, resultBounds);
+      if (alphaPaint != null) {
+        filter.resolvePaint(alphaPaint);
+      }
+    }
+    return resultBounds;
+  }
+
+  Paint filterPaint = Paint();
+
+  /// to create the rectangle to save the layer and optimize rendering.
+  /// active by default.
+  bool $useSaveLayerBounds = true;
+
   /// Do not override this method as it applies the basic transformations.
   /// override $applyPaint() if you wanna use `Canvas` directly.
   void paint(Canvas canvas) {
@@ -802,8 +830,11 @@ abstract class DisplayObject
 
     if (_saveLayer) {
 //       TODO: static painter seems to have some issues, try local var later.
-      final alphaPaint = PainterUtils.getAlphaPaint($alpha);
-      var layerBounds = getBounds($parent);
+      /// using local Painter now to avoid problems.
+      final alphaPaint = filterPaint;
+      if (alpha < 1) {
+        alphaPaint.color = const Color(0xff000000).withOpacity(alpha);
+      }
 
       /// check colorize if it needs a unique Paint instead.
       alphaPaint.colorFilter = null;
@@ -812,7 +843,12 @@ abstract class DisplayObject
       if ($hasColorize) {
         alphaPaint.colorFilter = ColorFilter.mode($colorize, BlendMode.srcATop);
       }
+      Rect nativeLayerBounds;
+
+      var layerBounds = getBounds($parent);
       if ($hasFilters) {
+        /// TODO: Find a common implementation for filter bounds.
+        // layerBounds = getFilterBounds(layerBounds, alphaPaint);
         layerBounds = layerBounds.clone();
         GxRect resultBounds;
         for (var filter in $filters) {
@@ -824,7 +860,11 @@ abstract class DisplayObject
         layerBounds = resultBounds;
       }
       $debugLastLayerBounds = layerBounds;
-      canvas.saveLayer(layerBounds.toNative(), alphaPaint);
+      // canvas.saveLayer(layerBounds.toNative(), alphaPaint);
+      if ($useSaveLayerBounds) {
+        nativeLayerBounds = layerBounds.toNative();
+      }
+      canvas.saveLayer(nativeLayerBounds, alphaPaint);
     }
     if (needSave) {
       // onPreTransform.dispatch();
@@ -845,6 +885,7 @@ abstract class DisplayObject
     }
 
     if (hasMask) {
+      canvas.save();
       if (maskRect != null) {
         $applyMaskRect(canvas);
       } else {
@@ -856,6 +897,9 @@ abstract class DisplayObject
     $applyPaint(canvas);
     $onPostPaint?.dispatch(canvas);
 
+    if (hasMask) {
+      canvas.restore();
+    }
     if (showDebugBounds) {
       final _paint = $debugBoundsPaint ?? _debugPaint;
       final linePaint = _paint.clone();
@@ -939,11 +983,14 @@ abstract class DisplayObject
   /// Beware to call this before applying any
   /// transformations (x, y, scale, etc) if you intend to use in it's "original"
   /// form.
-  Picture createPicture([void Function(Canvas) prePaintCallback]) {
+  Picture createPicture(
+      [void Function(Canvas) prePaintCallback,
+      void Function(Canvas) postPaintCallback]) {
     final r = PictureRecorder();
     final c = Canvas(r);
     prePaintCallback?.call(c);
     paint(c);
+    postPaintCallback?.call(c);
     return r.endRecording();
   }
 
@@ -964,29 +1011,47 @@ abstract class DisplayObject
     double resolution = 1,
     GxRect rect,
   ]) async {
-    rect ??= getBounds($parent);
+    rect ??= getFilterBounds(); //getBounds($parent);
     if (resolution != 1) {
       rect *= resolution;
     }
     final needsAdjust =
         (rect.left != 0 || rect.top != 0) && adjustOffset || resolution != 1;
-
-    final picture = createPicture(
-      !needsAdjust
-          ? null
-          : (canvas) {
-              if (adjustOffset) {
-                canvas.translate(-rect.left, -rect.top);
-              }
-              if (resolution != 1) {
-                canvas.scale(resolution);
-              }
-            },
-    );
+    Picture picture;
+    if (needsAdjust) {
+      final precall = (Canvas canvas) {
+        if (adjustOffset) {
+          canvas.translate(-rect.left, -rect.top);
+        }
+        if (resolution != 1) {
+          canvas.scale(resolution);
+        }
+      };
+      final postcall = (Canvas canvas) {
+        if (adjustOffset) canvas.restore();
+        if (resolution != 1) canvas.restore();
+      };
+      picture = createPicture(precall, postcall);
+    } else {
+      picture = createPicture();
+    }
+    //
+    // final picture = createPicture(
+    //   !needsAdjust
+    //       ? null
+    //       : (canvas) {
+    //     if (adjustOffset) {
+    //       canvas.translate(-rect.left, -rect.top);
+    //     }
+    //     if (resolution != 1) {
+    //       canvas.scale(resolution);
+    //     }
+    //   },
+    // );
     final width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
     final height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
     final output = await picture.toImage(width, height);
-    picture?.dispose();
+    // picture?.dispose();
     return output;
   }
 }

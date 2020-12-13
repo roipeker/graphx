@@ -1,3 +1,7 @@
+## [0.9.1]
+- GxIcon recreates `ParagraphBuilder` on each style change (otherwise throws an exception in latest builds with web-skia in dev channel).
+- each DisplayObject has its own Painter now for `saveLayer`, the bounding rect can't be skipped by `$useSaveLayerBounds=true`.
+
 ## [0.9.0]
 - GraphX moves to RC1!
 - new `maskRect` and `maskRectInverted` as an alternative to `mask` for masking DisplayObjects but makes scissor clipping with `GxRect`.

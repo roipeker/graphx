@@ -24,7 +24,7 @@ extension GTweenDiplayObjectExt on DisplayObject {
     EaseFunction ease,
     double delay,
     bool useFrames,
-    int overwrite,
+    int overwrite=1,
     Function onStart,
     Object onStartParams,
     Function onComplete,

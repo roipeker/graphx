@@ -36,10 +36,12 @@ class GTweenableDouble with GTweenable, SingleValueTweenMixin {
   }
 
   @override
-  Map<String, List<Function>> getTweenableAccessors() =>
-      {
+  Map<String, List<Function>> getTweenableAccessors() => {
         'value': [() => value, (v) => value = v],
       };
+
+  @override
+  String toString() => '[GTweenableDouble] $value';
 }
 
 class GTweenableInt with GTweenable, SingleValueTweenMixin {
@@ -53,13 +55,15 @@ class GTweenableInt with GTweenable, SingleValueTweenMixin {
   }
 
   @override
-  Map<String, List<Function>> getTweenableAccessors() =>
-      {
+  Map<String, List<Function>> getTweenableAccessors() => {
         'value': [
-              () => value + .0,
-              (v) => value = v.round(),
+          () => value + .0,
+          (v) => value = v.round(),
         ],
       };
+
+  @override
+  String toString() => '[GTweenableInt] $value';
 }
 
 class GTweenableMap with GTweenable {
@@ -82,7 +86,8 @@ class GTweenableMap with GTweenable {
     return convertToDouble(value[prop]);
   }
 
-  GTween tween(Map targetMap, {
+  GTween tween(
+    Map targetMap, {
     @required double duration,
     EaseFunction ease,
     double delay,
@@ -152,7 +157,8 @@ class GTweenableList with GTweenable {
     return convertToDouble(value[int.parse('$prop')]);
   }
 
-  GTween tween(List targetList, {
+  GTween tween(
+    List targetList, {
     @required double duration,
     EaseFunction ease,
     double delay,
@@ -223,7 +229,8 @@ double convertToDouble(Object val) {
 mixin SingleValueTweenMixin {
   Object getValue;
 
-  GTween tween(Object value, {
+  GTween tween(
+    Object value, {
     @required double duration,
     EaseFunction ease,
     double delay,
