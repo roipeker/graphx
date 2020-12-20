@@ -43,6 +43,10 @@ class SceneController {
 
   final _config = SceneConfig();
 
+  /// gets widget's global coordinates.
+  /// useful to compute interactions with children Widgets that gets
+  GxRect Function() resolveWindowBounds;
+
   int id = -1;
 
   bool _isInited = false;

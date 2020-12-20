@@ -1012,6 +1012,7 @@ abstract class DisplayObject
     GxRect rect,
   ]) async {
     rect ??= getFilterBounds(); //getBounds($parent);
+    rect = rect.clone();
     if (resolution != 1) {
       rect *= resolution;
     }

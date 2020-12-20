@@ -2,6 +2,7 @@ import '../../graphx.dart';
 
 class GTexture {
   GxRect frame;
+
   // set from the outside.
   GxRect scale9Grid;
   GxRect scale9GridDest;
@@ -25,11 +26,24 @@ class GTexture {
   /// set this by hand.
   double actualWidth, actualHeight;
 
-  double pivotX = 0, pivotY = 0;
+  double pivotX = 0,
+      pivotY = 0;
   GxRect sourceRect;
 
   double scale = 1;
   Image root;
+
+  /// copy Image data, and properties from other GTexture instance.
+  void copyFrom(GTexture other) {
+    root = other.root;
+    color = other.color;
+    actualWidth = other.actualWidth;
+    actualHeight = other.actualHeight;
+    sourceRect = other.sourceRect;
+    pivotX = other.pivotX;
+    pivotY = other.pivotY;
+    scale = other.scale;
+  }
 
   GxRect getBounds() {
     return sourceRect;
@@ -42,12 +56,11 @@ class GTexture {
     return texture;
   }
 
-  static GTexture fromImage(
-    Image data, [
+  static GTexture fromImage(Image data, [
     double scale = 1,
   ]) {
     var texture =
-        GTexture.empty(data.width / scale, data.height / scale, scale);
+    GTexture.empty(data.width / scale, data.height / scale, scale);
     texture.root = data;
     texture.actualWidth = data.width.toDouble();
     texture.actualHeight = data.height.toDouble();
@@ -110,7 +123,7 @@ class GTexture {
     frame = null;
   }
 
-  /// TODO: all matrix calculation to map textures into vertices
+/// TODO: all matrix calculation to map textures into vertices
 //  GxPoint getTexCoords(VertexData vertex, int id, [GxPoint out]) {
 //    out ??= GxPoint();
 //  }

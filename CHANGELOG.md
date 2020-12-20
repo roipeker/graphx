@@ -1,3 +1,7 @@
+## [0.9.2]
+- added `SceneController::resolveWindowsBounds()` to get a GxRect in global coordinates, to calculate the screen offsets between GraphX scenes and other Widgets at different locations in the Widget tree.
+- StaticText now listens to systemFonts, to detect when fonts loaded at runtime (useful when using GoogleFonts package).
+
 ## [0.9.1]
 - GxIcon recreates `ParagraphBuilder` on each style change (otherwise throws an exception in latest builds with web-skia in dev channel).
 - each DisplayObject has its own Painter now for `saveLayer`, the bounding rect can't be skipped by `$useSaveLayerBounds=true`.

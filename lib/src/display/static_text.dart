@@ -1,9 +1,13 @@
 import 'dart:ui';
+import 'package:flutter/painting.dart' as painting;
 
 import '../../graphx.dart';
 
 class StaticText extends DisplayObject {
   Paragraph _paragraph;
+
+  Signal _onFontLoaded;
+  Signal get onFontLoaded => _onFontLoaded ??= Signal();
 
   static final _sHelperMatrix = GxMatrix();
 
@@ -146,12 +150,26 @@ class StaticText extends DisplayObject {
     TextStyle textStyle,
     double width = double.infinity,
   }) {
+    painting.PaintingBinding.instance.systemFonts.addListener(_fontLoaded);
     this.text = text;
     _width = width ?? double.infinity;
     _invalidBuilder = true;
     _invalidSize = true;
     setTextStyle(textStyle ?? defaultTextStyle);
     setParagraphStyle(paragraphStyle ?? defaultParagraphStyle);
+  }
+
+  void _fontLoaded() {
+    _invalidBuilder = true;
+    _invalidateBuilder();
+    _onFontLoaded?.dispatch();
+  }
+
+  @override
+  void dispose() {
+    painting.PaintingBinding.instance.systemFonts.removeListener(_fontLoaded);
+    _onFontLoaded?.removeAll();
+    _onFontLoaded = null;
   }
 
   void setTextStyle(TextStyle style) {
@@ -201,7 +219,8 @@ class StaticText extends DisplayObject {
     if (backgroundColor != null && backgroundColor.alpha > 0) {
       canvas.drawRect(
         Rect.fromLTWH(0, 0, intrinsicWidth, textHeight),
-        Paint()..color = backgroundColor,
+        Paint()
+          ..color = backgroundColor,
       );
     }
     if (_paragraph != null) {
