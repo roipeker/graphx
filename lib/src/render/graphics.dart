@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
-import 'package:graphx/graphx.dart';
+import '../../graphx.dart';
 
 import '../geom/geom.dart';
 import '../utils/utils.dart';
@@ -867,16 +867,16 @@ class _GraphVertices {
     var v = vertices;
     var l = indices.length;
     while (i < l) {
-      var a_ = i;
-      var b_ = i + 1;
-      var c_ = i + 2;
+      var _a = i;
+      var _b = i + 1;
+      var _c = i + 2;
 
-      var iax = ind[a_] * 2;
-      var iay = ind[a_] * 2 + 1;
-      var ibx = ind[b_] * 2;
-      var iby = ind[b_] * 2 + 1;
-      var icx = ind[c_] * 2;
-      var icy = ind[c_] * 2 + 1;
+      var iax = ind[_a] * 2;
+      var iay = ind[_a] * 2 + 1;
+      var ibx = ind[_b] * 2;
+      var iby = ind[_b] * 2 + 1;
+      var icx = ind[_c] * 2;
+      var icy = ind[_c] * 2 + 1;
 
       var x1 = v[iax] - offsetX;
       var y1 = v[iay] - offsetY;
