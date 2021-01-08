@@ -1,4 +1,11 @@
-## [0.9.2]
+## [0.9.4]
+- fixes TextureAtlas XML parsing (some formarts were not readed properly).
+- added support for hot-reload: Now you can use `SceneConfig.rebuildOnHotReload` and `stage.onHotReload` to manage your own logic.
+- fixed some issues with dispose() not cleaning up vars (useful for hotReload).
+- added SceneController access to the stage (`stage.controller`).
+- Basic support for Flutter Web (no SKIA target needed!), will have to check all the APIs. New `SystemUtils.usingSkia` to check the compilation.
+
+## [0.9.2] - [0.9.3]
 - added `SceneController::resolveWindowsBounds()` to get a GxRect in global coordinates, to calculate the screen offsets between GraphX scenes and other Widgets at different locations in the Widget tree.
 - StaticText now listens to systemFonts, to detect when fonts loaded at runtime (useful when using GoogleFonts package).
 

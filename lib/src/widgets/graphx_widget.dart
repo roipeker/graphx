@@ -57,6 +57,18 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
   }
 
   @override
+  void reassemble() {
+    super.reassemble();
+    _controller.reassembleWidget();
+  }
+
+  // @override
+  // void didChangeDependencies() {}
+
+  // @override
+  // void didUpdateWidget(SceneBuilderWidget oldWidget) {}
+
+  @override
   Widget build(BuildContext context) {
     Widget child = CustomPaint(
       painter: _controller.buildBackPainter(),

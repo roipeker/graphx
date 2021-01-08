@@ -179,7 +179,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     paint.isAntiAlias = pixelHinting;
     paint.strokeCap = caps ?? StrokeCap.butt;
     paint.strokeJoin = joints ?? StrokeJoin.miter;
-    paint.strokeMiterLimit = miterLimit;
+    if (SystemUtils.usingSkia) {
+      paint.strokeMiterLimit = miterLimit;
+    }
     _addFill(paint);
     return this;
   }
@@ -750,7 +752,9 @@ extension ExtSkiaPaintCustom on Paint {
     out.shader = shader;
     out.strokeCap = strokeCap;
     out.strokeJoin = strokeJoin;
-    out.strokeMiterLimit = strokeMiterLimit;
+    if (SystemUtils.usingSkia) {
+      out.strokeMiterLimit = strokeMiterLimit;
+    }
     out.strokeWidth = strokeWidth;
     return out;
   }

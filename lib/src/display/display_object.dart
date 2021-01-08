@@ -1006,6 +1006,7 @@ abstract class DisplayObject
     return tx;
   }
 
+
   Future<Image> createImage([
     bool adjustOffset = true,
     double resolution = 1,

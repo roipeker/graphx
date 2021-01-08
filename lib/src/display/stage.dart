@@ -22,8 +22,12 @@ class Stage extends DisplayObjectContainer
   Paint _backgroundPaint;
   DisplayBoundsDebugger _boundsDebugger;
 
-  int get color => _backgroundPaint?.color?.value;
+  /// shorcut to access the SceneController.
+  SceneController get controller => scene.core;
+  /// shorcut for onHotReload Signal.
+  Signal get onHotReload => controller.onHotReload;
 
+  int get color => _backgroundPaint?.color?.value;
   set color(int value) {
     if (value == null) {
       _backgroundPaint = null;

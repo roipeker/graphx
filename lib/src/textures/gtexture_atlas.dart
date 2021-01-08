@@ -23,6 +23,7 @@ class GTextureAtlas {
   }
 
   double _atlasXmlRatio;
+
   GTextureAtlas(
     GTexture texture, [
     Object data,
@@ -51,13 +52,13 @@ class GTextureAtlas {
     }
   }
 
+  /// Parse the XML tree and defines all SubTextures areas.
   void parseAtlasXml(xml.XmlDocument atlasXml) {
     var scale = _atlasTexture.scale;
     var region = GxRect();
     var frame = GxRect();
     final pivots = <String, GxPoint>{};
-    final nodeList = atlasXml.firstChild.findElements('SubTexture');
-
+    final nodeList = atlasXml.findAllElements('SubTexture');
     for (var subTexture in nodeList) {
       var name = subTexture.getAttribute('name');
       var x = attrDouble(subTexture, 'x') / scale * _atlasXmlRatio;

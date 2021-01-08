@@ -49,6 +49,10 @@ class SceneConfig {
 
   static SceneConfig defaultConfig = interactive;
 
+  /// re-builds the SceneController (the ScenePainter and the scene class).
+  /// disposes and initializes all the scene.
+  bool rebuildOnHotReload;
+
   /// If the GraphX [SceneController] will use keyboard events.
   bool useKeyboard;
 
@@ -90,6 +94,7 @@ class SceneConfig {
   bool autoUpdateRender = true;
 
   SceneConfig({
+    this.rebuildOnHotReload = true,
     this.useKeyboard = false,
     this.usePointer = false,
     this.useTicker = false,

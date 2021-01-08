@@ -1,6 +1,6 @@
 name: graphx
 description: Render API on top of CustomPainter to power-up your Flutter apps to the next level.
-version: 0.9.3
+version: 0.9.4
 homepage: https://github.com/roipeker/graphx
 
 environment:

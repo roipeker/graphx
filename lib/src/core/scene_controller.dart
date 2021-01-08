@@ -8,6 +8,20 @@ import '../../graphx.dart';
 /// [CustomPainter.foregroundPainter]. It takes care of the initialization
 /// and holding the references of the Painters used by [SceneBuilderWidget].
 class SceneController {
+  /// This Signal will be dispatched when the Stateful Widget gets reassembled.
+  /// Which usually means we are running the app in debug mode, and using
+  /// hot-reload. If you run any logic during this rebuild phase, you can
+  /// use this signal in any `DisplayObject` as long as it has access to the
+  /// stage (.onAddedToStage).
+  /// See also: [SceneConfig.rebuildOnHotReload] to set if this SceneController
+  /// should rebuild itself on hot-reload.
+  ///
+  /// `stage.onHotReload.add((){
+  ///   // your logic here
+  ///  });`
+  Signal _onHotReload;
+  Signal get onHotReload => _onHotReload ??= Signal();
+
   ScenePainter backScene;
 
   ScenePainter frontScene;
@@ -52,6 +66,7 @@ class SceneController {
   bool _isInited = false;
 
   set config(SceneConfig sceneConfig) {
+    _config.rebuildOnHotReload = sceneConfig.rebuildOnHotReload ?? true;
     _config.autoUpdateRender = sceneConfig.autoUpdateRender ?? true;
     _config.isPersistent = sceneConfig.isPersistent ?? false;
     _config.painterWillChange = sceneConfig.painterWillChange ?? true;
@@ -117,10 +132,12 @@ class SceneController {
     if (_config.isPersistent) {
       return;
     }
+    _onHotReload?.removeAll();
     frontScene?.dispose();
     backScene?.dispose();
     _ticker?.dispose();
     _ticker = null;
+    _isInited = false;
   }
 
   CustomPainter buildBackPainter() => backScene?.buildPainter();
@@ -136,6 +153,16 @@ class SceneController {
     }
     if (_config.useKeyboard || _config.usePointer) {
       $inputConverter ??= InputConverter(_pointer, _keyboard);
+    }
+  }
+
+  void reassembleWidget() {
+    _onHotReload?.dispatch();
+    if (_config.rebuildOnHotReload) {
+      dispose();
+
+      /// TODO: check if we need to delay the reinitialization.
+      $init();
     }
   }
 
