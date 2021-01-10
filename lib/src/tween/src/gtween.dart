@@ -212,7 +212,11 @@ class GTween {
     _startTime = (_useFrames ? _frame : _time) + (nanoVars.delay ?? 0);
 
     if (nanoVars.overwrite == 1) {
-      killTweensOf(this.target);
+      if (_animatableTarget != null) {
+        killTweensOf(_animatableTarget);
+      } else {
+        killTweensOf(this.target);
+      }
     }
     _prev = _last;
     if (_last != null) {

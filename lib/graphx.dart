@@ -14,6 +14,7 @@ export 'src/gameutils/gameutils.dart';
 export 'src/geom/geom.dart';
 export 'src/input/input.dart';
 export 'src/log/trace.dart';
+export 'src/render/filters/filters.dart';
 export 'src/render/render.dart';
 export 'src/textures/textures.dart';
 export 'src/ticker/gx_ticker.dart';

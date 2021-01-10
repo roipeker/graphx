@@ -1,4 +1,5 @@
 export 'assets_loader.dart';
+export 'color_utils.dart';
 export 'context_utils.dart';
 export 'interfases.dart';
 export 'list_utils.dart';
@@ -8,5 +9,5 @@ export 'mixins.dart';
 export 'painter_utils.dart';
 export 'pools.dart';
 export 'string_utils.dart';
-export 'texture_utils.dart';
 export 'system_utils.dart';
+export 'texture_utils.dart';

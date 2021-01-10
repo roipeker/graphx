@@ -536,9 +536,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Path getPaths() {
     var output = Path();
-    _drawingQueue.forEach((graph) {
-      output = Path.combine(PathOperation.union, output, graph.path);
-    });
+    if (SystemUtils.usingSkia) {
+      _drawingQueue.forEach((graph) {
+        /// unsupported on web.
+        output = Path.combine(PathOperation.union, output, graph.path);
+      });
+    } else {
+      trace('Graphics.getPaths() is unsupported in the current platform.');
+    }
     return output;
   }
 

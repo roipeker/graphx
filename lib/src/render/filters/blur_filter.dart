@@ -17,8 +17,10 @@ class BaseFilter {
 
   void buildFilter() {}
   bool get isValid => true;
-
-  void expandBounds(GxRect layerBounds, GxRect outputBounds) {}
+  GxRect layerBounds;
+  void expandBounds(GxRect layerBounds, GxRect outputBounds) {
+    this.layerBounds = layerBounds;
+  }
 }
 
 class BlurFilter extends BaseFilter {
@@ -81,6 +83,7 @@ class BlurFilter extends BaseFilter {
   @override
   void resolvePaint(Paint paint) {
     if (!isValid) return;
+    paint.filterQuality = FilterQuality.low;
     paint.imageFilter = _imageFilter;
     paint.maskFilter = _maskFilter;
   }

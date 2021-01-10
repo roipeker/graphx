@@ -24,7 +24,7 @@ extension GTweenDiplayObjectExt on DisplayObject {
     EaseFunction ease,
     double delay,
     bool useFrames,
-    int overwrite=1,
+    int overwrite = 1,
     Function onStart,
     Object onStartParams,
     Function onComplete,
@@ -73,6 +73,55 @@ extension GTweenDiplayObjectExt on DisplayObject {
         immediateRender: immediateRender,
         startAt: startAt,
       ),
+    );
+  }
+
+  /// Shortcut to assign multiple properties and render immeditatly.
+  /// Doesn't wait for the next tick update.
+  void setProps({
+    Object x,
+    Object y,
+    Object scaleX,
+    Object scaleY,
+    Object scale,
+    Object rotation,
+    Object pivotX,
+    Object pivotY,
+    Object width,
+    Object height,
+    Object skewX,
+    Object skewY,
+    Object rotationX,
+    Object rotationY,
+    Object alpha,
+    Color colorize,
+    double delay = 0,
+    bool visible,
+    bool immediateRender = true,
+  }) {
+    if (visible != null) {
+      this.visible = visible;
+    }
+    tween(
+      duration: 0,
+      delay: delay,
+      immediateRender: immediateRender ?? true,
+      x: x,
+      y: y,
+      scaleX: scaleX,
+      scaleY: scaleY,
+      scale: scale,
+      rotation: rotation,
+      pivotX: pivotX,
+      pivotY: pivotY,
+      width: width,
+      colorize: colorize,
+      height: height,
+      skewX: skewX,
+      skewY: skewY,
+      alpha: alpha,
+        rotationX:rotationX,
+        rotationY:rotationY,
     );
   }
 }

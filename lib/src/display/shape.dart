@@ -80,9 +80,13 @@ class Shape extends DisplayObject {
 //        var invPath = Graphics.stageRectPath;
 //        var rect = $maskee.bounds;
 //        invPath = invPath.shift(Offset(rect.x, rect.y));
-        clipPath =
-            Path.combine(PathOperation.difference, _inverseHugePath, clipPath);
-        canvas.clipPath(clipPath);
+        if (SystemUtils.usingSkia) {
+          clipPath = Path.combine(
+              PathOperation.difference, _inverseHugePath, clipPath);
+          canvas.clipPath(clipPath);
+        } else {
+          trace('Shape.maskInverted is unsupported in the current platform');
+        }
       } else {
         canvas.clipPath(clipPath);
       }

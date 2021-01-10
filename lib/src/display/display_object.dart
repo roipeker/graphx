@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:graphx/src/render/filters/composer_filter.dart';
+import 'package:graphx/src/render/filters/filters.dart';
 
 import '../../graphx.dart';
 import '../render/filters/blur_filter.dart';
@@ -260,8 +262,38 @@ abstract class DisplayObject
 
   double get rotation => _rotation;
 
+  /// Indicates the width of the display object, in dp.
+  /// The `width` is calculated based on the bounds of the content of the
+  /// display object.
+  /// When you set the `width` property, the `scaleX` property is adjusted
+  /// accordingly, as shown in the following code:
+  /// ```dart
+  ///   var rect:Shape = new Shape();
+  ///   rect.graphics.beginFill(0xFF0000);
+  ///   rect.graphics.drawRect(0, 0, 100, 100);
+  ///   trace(rect.scaleX) // 1;
+  ///   rect.width = 200;
+  ///   trace(rect.scaleX) // 2;
+  /// ```
+  /// A display object with no content (such as an empty sprite) has a width
+  /// of 0, even if you try to set width to a different value.
   double get width => getBounds($parent, _sHelperRect).width;
 
+  /// Indicates the height of the display object, in dp.
+  /// The `height` is calculated based on the bounds of the content of the
+  /// display object.
+  /// When you set the `height` property, the `scaleX` property is adjusted
+  /// accordingly, as shown in the following code:
+  /// ```dart
+  ///   var rect:Shape = new Shape();
+  ///   rect.graphics.beginFill(0xFF0000);
+  ///   rect.graphics.drawRect(0, 0, 100, 100);
+  ///   trace(rect.scaleY) // 1;
+  ///   rect.height = 200;
+  ///   trace(rect.scaleY) // 2;
+  /// ```
+  /// A display object with no content (such as an empty sprite) has a height
+  /// of 0, even if you try to set height to a different value.
   double get height => getBounds($parent, _sHelperRect).height;
 
   set width(double value) {
@@ -457,7 +489,20 @@ abstract class DisplayObject
   double get worldX => x - pivotX * scaleX + ($parent?.worldX ?? 0);
 
   double get worldY => y - pivotY * scaleY + ($parent?.worldY ?? 0);
-  bool visible = true;
+
+  /// Toggles the visibility state of the object.
+  /// Whether or not the display object is visible.
+  /// Display objects that are not visible are disabled.
+  /// For example, if visible=false it cannot be clicked and it will not be
+  /// rendered.
+  bool _visible = true;
+  bool get visible => _visible;
+  set visible(bool flag) {
+    if (_visible != flag) {
+      _visible = flag;
+      requiresRedraw();
+    }
+  }
 
   DisplayObject() {
     _x = _y = 0.0;
@@ -789,7 +834,7 @@ abstract class DisplayObject
   /// active by default.
   bool $useSaveLayerBounds = true;
 
-  /// Do not override this method as it applies the basic transformations.
+  /// Do not override this requiresRedrawmethod as it applies the basic transformations.
   /// override $applyPaint() if you wanna use `Canvas` directly.
   void paint(Canvas canvas) {
     if (!$hasVisibleArea || !visible) {
@@ -828,6 +873,8 @@ abstract class DisplayObject
       _cacheLocalBoundsRect = bounds;
     }
 
+    List<ComposerFilter> _composerFilters;
+    var filterHidesObject = false;
     if (_saveLayer) {
 //       TODO: static painter seems to have some issues, try local var later.
       /// using local Painter now to avoid problems.
@@ -844,7 +891,6 @@ abstract class DisplayObject
         alphaPaint.colorFilter = ColorFilter.mode($colorize, BlendMode.srcATop);
       }
       Rect nativeLayerBounds;
-
       var layerBounds = getBounds($parent);
       if ($hasFilters) {
         /// TODO: Find a common implementation for filter bounds.
@@ -855,7 +901,12 @@ abstract class DisplayObject
           resultBounds ??= layerBounds.clone();
           filter.update();
           filter.expandBounds(layerBounds, resultBounds);
-          filter.resolvePaint(alphaPaint);
+          if (filter is ComposerFilter) {
+            _composerFilters ??= <ComposerFilter>[];
+            _composerFilters.add(filter);
+          } else {
+            filter.resolvePaint(alphaPaint);
+          }
         }
         layerBounds = resultBounds;
       }
@@ -874,7 +925,7 @@ abstract class DisplayObject
       if (_is3D) {
         /// TODO: experimental, just transforms
         m = GxMatrix().toNative();
-        m.setEntry(3, 2, 0.002);
+        m.setEntry(3, 2, 0.004);
         m.rotateX(_rotationX);
         m.rotateY(_rotationY);
         if (z != 0) {
@@ -894,7 +945,18 @@ abstract class DisplayObject
     }
 
     $onPrePaint?.dispatch(canvas);
-    $applyPaint(canvas);
+
+    if (_composerFilters != null) {
+      for (var filter in _composerFilters) {
+        if (filter.hideObject) {
+          filterHidesObject = true;
+        }
+        filter.process(canvas, $applyPaint);
+      }
+    }
+    if (!filterHidesObject) {
+      $applyPaint(canvas);
+    }
     $onPostPaint?.dispatch(canvas);
 
     if (hasMask) {
@@ -1005,7 +1067,6 @@ abstract class DisplayObject
     tx.pivotY = bounds.y;
     return tx;
   }
-
 
   Future<Image> createImage([
     bool adjustOffset = true,

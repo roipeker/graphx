@@ -1,3 +1,21 @@
+## [0.9.5]
+- Fixes `DisplayObject.visible` not being updated on rendering.
+- Added `display object.setProps()` as a shortcut to assign basic properties using GTween and immediate render.
+- Added `GlowFilter`, `DropShadowFilter` and `ColorMatrixFilter`.
+- Added `GTween` extension support to filters, can easily create tweens like:
+  ```dart
+  var glow = GlowFilter(4, 4, Colors.blue);
+  box.filters = [glow];
+  stage.onMouseDown.add((event) {
+  glow.tween(duration: .3, blurX: 12, color: Colors.green);
+  });
+  stage.onMouseUp.add((event) {
+  glow.tween(duration: .3, blurX: 4, color: Colors.blue);
+  });
+  ```
+- Added `SystemUtils.usingSkia` to restrict unsoported operations in regular Flutter web.
+- Fixed `GTween.overwrite=1` so it finds the proper target object.
+
 ## [0.9.4]
 - fixes TextureAtlas XML parsing (some formarts were not readed properly).
 - added support for hot-reload: Now you can use `SceneConfig.rebuildOnHotReload` and `stage.onHotReload` to manage your own logic.

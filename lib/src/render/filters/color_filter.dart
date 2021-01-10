@@ -1,5 +1,9 @@
 import 'dart:ui';
 
+import 'package:graphx/src/geom/gxrect.dart';
+
+import 'blur_filter.dart';
+
 class ColorFilters {
   static const ColorFilter invert = ColorFilter.matrix(<double>[
     -1,
@@ -69,4 +73,23 @@ class ColorFilters {
     1,
     0,
   ]);
+}
+
+class ColorMatrixFilter extends BaseFilter {
+  ColorFilter colorFilter;
+  ColorMatrixFilter(ColorFilter colorFilter) {
+    this.colorFilter = colorFilter;
+  }
+
+  final _rect = GxRect();
+  GxRect get filterRect => _rect;
+
+  @override
+  bool get isValid => colorFilter != null;
+
+  @override
+  void resolvePaint(Paint paint) {
+    if (!isValid) return;
+    paint.colorFilter = colorFilter;
+  }
 }
