@@ -55,8 +55,8 @@ class SimpleShapesScene extends Sprite {
     triangle.graphics.beginGradientFill(
       GradientType.linear,
       [Colors.blue.value, Colors.red.value],
-      [1, 1],
-      [0, 1],
+      alphas: [1, 1],
+      ratios: [0, 1],
     );
     triangle.graphics.drawPolygonFaces(0, 0, 40, 3).endFill();
     triangle.rotation = -pi / 2;

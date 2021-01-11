@@ -50,21 +50,40 @@ Mix and match with Flutter as you please, as **GraphX**™ uses `CustomPainter`,
 
 ## Concept.
 
-This repo is a very early WIP ... the library still lacks of support for loading remote assets, 2.5 transformation and some other niceties.
+The repo is in early stages. You can check the changelog to get the latest updates.
 
-Yet, it has a ver basic support for loading `rootBundle` assets:
+GraphX has support for loading `rootBundle` assets:
 
 ```dart
-AssetLoader.loadBinary(assetId)
-AssetLoader.loadGif(assetId)
-AssetLoader.loadTextureAtlas(imagePath, xmlPath)
-AssetLoader.loadTexture(assetId)
-AssetLoader.loadImage(assetId)
-AssetLoader.loadString(assetId)
-AssetLoader.loadJson(assetId)
+ResourceLoader.loadBinary(assetId)
+ResourceLoader.loadGif(assetId)
+ResourceLoader.loadTextureAtlas(imagePath, xmlPath)
+ResourceLoader.loadTexture(assetId)
+ResourceLoader.loadImage(assetId)
+ResourceLoader.loadString(assetId)
+ResourceLoader.loadJson(assetId)
+ResourceLoader.loadSvg(assetId)
 ```
 
-GraphX™ also provides basic "raw" support for Text rendering, using the `StaticText` class.
+As well as network images (SVG is not supported on non-SKIA targets):
+```dart
+ResourceLoader.loadNetworkTexture(url);
+ResourceLoader.loadNetworkSvg(url);
+```
+
+ResourceLoader also stores in cache based on the `assetId` or `url` provided. You can pass `cacheId` in most methods
+to override that, once the resources loaded, you can access them with:
+
+```dart
+ResourceLoader.getTexture(id);
+ResourceLoader.getSvg(id);
+ResourceLoader.getAtlas(id);
+ResourceLoader.getGif(id);
+```
+
+
+
+GraphX™ also provides "raw" support for Text rendering, using the `StaticText` class.
 
 ---
 
@@ -99,8 +118,8 @@ The library has its own rendering cycle using Flutter's `Ticker` (pretty much li
   ),
 ```
 
-GraphX™ is based on "Scenes" layers, each `SceneBuilderWidget` requires a `SceneController`.
-This controller is the "initializer" of the Scenes layers, which can be:
+GraphX™ is based on "Scenes", each `SceneBuilderWidget` requires a `SceneController`.
+This controller is the initializer of the Scenes layers, which can be:
 
 - `back` (background painter),
 - `front` (foreground painter),
@@ -115,13 +134,13 @@ You can make use of some predefined Scene configurators:
 - `SceneConfig.interactive` (_default_): Probably the most common setup for mobile, enables all features except keyboard support.
 - `SceneConfig.autoRender`: Allows you to have a ticker running, and auto update the scene, with NO inputs (mouse/touch/keyboard), if you wanna have an animated Widget, or maybe if you wanna control it externally.
 
-Each "Scene Layer" has to extends `Sprite`, this root class represents the starting point of that particular scene hierarchy. Think of it as `MaterialApp` widget is to all other children Widgets in the tree.
+Each "Scene" has to extend `Sprite`, this root class represents the starting point of that particular scene hierarchy. Think of it as `MaterialApp` widget is to all other children Widgets in the tree.
 
 Here we get into **GraphX™** world, no more Widgets trees or immutable properties.
 
 You can make custom UI widgets, games, or make use of GraphX to create a static drawing, like curved backgrounds, or complex shapes.
 
-Is a good practice to override `addedToStage()` as your entry point, here the Scene is ready, the `root` class has been added to the _glorified_ stage, so you can access the Canvas size through `stage.stageWidth` and `stage.stageHeight`, the keyboard manager (if available), and lots of other properties, up to the `SceneController` that owns the scene (`stage.scene.core`, although, that's irrelevant for now):
+Is a good practice to override `addedToStage()` as your entry point, here the Scene is ready, the `root` class has been added to the _glorified stage_, so you can access the Canvas size through `stage.stageWidth` and `stage.stageHeight`, the keyboard manager (if available), and lots of other properties, up to the `SceneController` that owns the scene (`stage.scene.core`, although, that's irrelevant for now):
 
 ```dart
 class GameScene extends Sprite {
@@ -190,12 +209,32 @@ They all emit a `MouseInputData` with all the needed info inside, like stage coo
 
 ---
 
-_I will keep adding further explanation in the upcoming days._
-
 ### Demos.
 
 _Some demos are only using **GraphX™** partially_
 
+- [snake game ⇢](https://graphx-snake-game.surge.sh/)
+  
+- [breakout game ⇢](https://graphx-breakout-v4.surge.sh/)
+
+- [3d card with shadow ⇢](https://graphx-dropshadow-card.surge.sh/)
+  
+- [rating ⇢](https://graphx-star-rating.surge.sh/) ([dribbble design](https://dribbble.com/shots/12287144-Rating))
+
+- [drawpad ⇢](https://graphx-drawpad3.surge.sh/) // [creepy version ⇢](https://graphx-drawpad2.surge.sh/) 
+
+- [node garden ⇢](https://graphx-node-garden.surge.sh/) 
+
+- [fb reactions ⇢](https://graphx-fb-reactions.surge.sh/) 
+
+- [puzzle pieces ⇢](https://roi-puzzle-v2.surge.sh/)
+
+- [lines repulsion ⇢](https://roi-graphx-mouse-repulsion.surge.sh/)
+  
+- [liquify dog ⇢](http://roi-graphx-liquify-dog.surge.sh/)
+  
+- [image transform triangles ⇢](https://roi-graphx-image-transform-triangles.surge.sh/)
+  
 - [jelly green ⇢](https://roi-graphx-jelly-green.surge.sh/) ([source](https://gist.github.com/roipeker/dbf792b862ad8dfb526c227c2e1d4ad9))
 
 - [drawing-ball collision ⇢](https://roi-graphx-balls-collision.surge.sh/) ([source](https://gist.github.com/roipeker/d0fbbb1fa5409594f18c8e280ac39d93))
@@ -269,11 +308,71 @@ direct `Canvas` calls).\_
 
   [![charts bezier + gradient](https://media.giphy.com/media/QWHufIK9GyEAIM4Dcn/giphy.gif)](https://media.giphy.com/media/QWHufIK9GyEAIM4Dcn/source.mp4)
 
+- neumorphic button
+
+  [![neumorphic button](https://media.giphy.com/media/tX24wynwPRVm6cymjy/giphy.gif)](https://media.giphy.com/media/tX24wynwPRVm6cymjy/source.mov)
+
+- 3d card shadow
+  
+  [![3d card shadow](https://media.giphy.com/media/18XFI8lY9Uj6cgoF66/giphy-downsized.gif)](https://media.giphy.com/media/18XFI8lY9Uj6cgoF66/source.mp4)
+
+- 3d pizza box
+  
+  [![3d pizza box](https://media.giphy.com/media/8OUnKDJ2ujT9pBpylj/giphy.gif)](https://media.giphy.com/media/8OUnKDJ2ujT9pBpylj/source.mp4)
+
+- pendulum
+  
+  [![pendulum](https://media.giphy.com/media/6D946gz1PkF0zZV697/giphy.gif)](https://media.giphy.com/media/6D946gz1PkF0zZV697/source.mp4)
+  
+- rating stars
+  
+  [![rating stars](https://media.giphy.com/media/2ZK44FneclymOpyEXR/giphy.gif)](https://media.giphy.com/media/2ZK44FneclymOpyEXR/source.mov)
+
+- rotating dial
+  
+  [![rotating dial](https://media.giphy.com/media/xC8rB3jR9nXDJDMwQM/giphy.gif)](https://media.giphy.com/media/xC8rB3jR9nXDJDMwQM/source.mp4)
+
+- intro "universo flutter"
+  
+  [![intro "universo flutter"](https://media.giphy.com/media/ZyVw45nnrQ49Ig3NCb/giphy.gif)](https://media.giphy.com/media/ZyVw45nnrQ49Ig3NCb/source.mp4)
+  
+- 3d spiral loader
+  
+  [![3d spiral loader](https://media.giphy.com/media/eT1pePI6NqpEg3rBmA/giphy.gif)](https://media.giphy.com/media/eT1pePI6NqpEg3rBmA/source.mov)
+
+- breakout game
+  
+  [![breakout game](https://media.giphy.com/media/roLsn44mOUpbOhV0Da/giphy.gif)](https://media.giphy.com/media/roLsn44mOUpbOhV0Da/source.mov)
+
+- gauges
+  
+  [![gauges](https://media.giphy.com/media/rWF1Sc4CGLf3zfYlXn/giphy-downsized.gif)](https://media.giphy.com/media/rWF1Sc4CGLf3zfYlXn/source.mp4)
+
+- bubble loader
+  
+  [![bubble loader](https://media.giphy.com/media/pKXa68pcv2H1dSjxYX/giphy.gif)](https://media.giphy.com/media/pKXa68pcv2H1dSjxYX/source.mp4)
+  
+- xmas counter
+  
+  [![xmas counter](https://media.giphy.com/media/yTNXKR5BHbQKOKpfrS/giphy-downsized.gif)](https://media.giphy.com/media/yTNXKR5BHbQKOKpfrS/source.mp4)
+
+- google fonts
+  
+  [![google fonts](https://media.giphy.com/media/oUoYS87SzOldcI5itX/giphy.gif)](https://media.giphy.com/media/oUoYS87SzOldcI5itX/source.mp4)
+
+- graphics.drawTriangles
+  
+  [![graphics.drawTriangles](https://media.giphy.com/media/Dh7i3D5z1kbWpc4bn3/giphy-downsized.gif)](https://media.giphy.com/media/Dh7i3D5z1kbWpc4bn3/source.mp4)
+  
+- image transform
+  
+  [![image transform](https://media.giphy.com/media/s9BcsLdSGMU0ARvOQX/giphy.gif)](https://media.giphy.com/media/s9BcsLdSGMU0ARvOQX/source.mp4)
+  
 - svg sample demo
 
   [![svg sample demo](https://media.giphy.com/media/OtGpmd1fAVzw3pK7kD/giphy.gif)](https://media.giphy.com/media/wLuFm9xlXXmkllWJQt/source.mp4)
 
-- charts lines
+- chart lines
 
   [![charts lines](https://media.giphy.com/media/uVFvFOTUICAsYqb13r/giphy.gif)](https://media.giphy.com/media/uVFvFOTUICAsYqb13r/source.mp4)
 
@@ -281,7 +380,7 @@ direct `Canvas` calls).\_
 
   [![charts pie color 1](https://media.giphy.com/media/z1aIQzYSSGVKeWbabJ/giphy.gif)](https://media.giphy.com/media/z1aIQzYSSGVKeWbabJ/source.mp4)
 
-- mouse cursos support
+- mouse cursor support
 
   [![mouse cursor support](https://media.giphy.com/media/MjXTKJpen8vIN34rfW/giphy.gif)](https://media.giphy.com/media/MjXTKJpen8vIN34rfW/source.mp4)
 

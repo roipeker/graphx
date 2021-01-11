@@ -152,6 +152,7 @@ class StaticText extends DisplayObject {
   }) {
     painting.PaintingBinding.instance.systemFonts.addListener(_fontLoaded);
     this.text = text;
+
     _width = width ?? double.infinity;
     _invalidBuilder = true;
     _invalidSize = true;
@@ -203,8 +204,12 @@ class StaticText extends DisplayObject {
     _invalidSize = true;
   }
 
+  static const double _maxTextWidthForWeb = 10000;
+
   void _layout() {
-    _paragraph?.layout(ParagraphConstraints(width: _width));
+    //// Web has a bug for double.infinity for text layout.
+    var paragraphWidth = !SystemUtils.usingSkia ? _maxTextWidthForWeb : _width;
+    _paragraph?.layout(ParagraphConstraints(width: paragraphWidth));
     _invalidSize = false;
   }
 
@@ -219,8 +224,7 @@ class StaticText extends DisplayObject {
     if (backgroundColor != null && backgroundColor.alpha > 0) {
       canvas.drawRect(
         Rect.fromLTWH(0, 0, intrinsicWidth, textHeight),
-        Paint()
-          ..color = backgroundColor,
+        Paint()..color = backgroundColor,
       );
     }
     if (_paragraph != null) {
@@ -261,6 +265,70 @@ class StaticText extends DisplayObject {
     }
   }
 
+  /// Factory method to simplify the initialization of a StaticText instance.
+  /// You can pass the parent object directly in the `doc` parameter.
+  static StaticText build({
+    String text,
+    DisplayObjectContainer doc,
+    Color color,
+    double w = double.infinity,
+    TextDecoration decoration,
+    Color decorationColor,
+    TextDecorationStyle decorationStyle,
+    double decorationThickness,
+    FontWeight fontWeight,
+    FontStyle fontStyle,
+    TextBaseline textBaseline,
+    String fontFamily,
+    List<String> fontFamilyFallback,
+    double fontSize,
+    double letterSpacing,
+    double wordSpacing,
+    double height,
+    Locale locale,
+    Paint background,
+    Paint foreground,
+    List<Shadow> shadows,
+    List<FontFeature> fontFeatures,
+    TextAlign textAlign = TextAlign.left,
+    TextDirection direction = TextDirection.ltr,
+  }) {
+    w ??= double.infinity;
+    if (w == double.infinity && textAlign != TextAlign.left) {
+      throw "[StaticText] To use $textAlign you need to specify the width";
+    }
+    final tf = StaticText(
+      text: text,
+      width: w,
+      textStyle: StaticText.getStyle(
+        color: color,
+        decoration: decoration,
+        decorationColor: decorationColor,
+        decorationStyle: decorationStyle,
+        decorationThickness: decorationThickness,
+        fontWeight: fontWeight,
+        fontStyle: fontStyle,
+        textBaseline: textBaseline,
+        fontFamily: fontFamily,
+        fontFamilyFallback: fontFamilyFallback,
+        fontSize: fontSize,
+        letterSpacing: letterSpacing,
+        wordSpacing: wordSpacing,
+        height: height,
+        locale: locale,
+        background: background,
+        foreground: foreground,
+        shadows: shadows,
+        fontFeatures: fontFeatures,
+      ),
+      paragraphStyle: ParagraphStyle(
+        textAlign: textAlign,
+        textDirection: direction,
+      ),
+    );
+    doc?.addChild(tf);
+    return tf;
+  }
 //  @override
 //  Future<GTexture> createImageTexture([
 //    bool adjustOffset = true,

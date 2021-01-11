@@ -5,14 +5,20 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 
 import '../../graphx.dart';
+import 'network_image_loader.dart';
 
-abstract class AssetLoader {
+abstract class ResourceLoader {
+  static Map<String, SvgData> svgs = <String, SvgData>{};
   static Map<String, GTexture> textures = <String, GTexture>{};
   static Map<String, GTextureAtlas> atlases = <String, GTextureAtlas>{};
   static Map<String, GifAtlas> gifs = <String, GifAtlas>{};
 
   static GTexture getTexture(String cacheId) {
     return textures[cacheId];
+  }
+
+  static SvgData getSvg(String cacheId) {
+    return svgs[cacheId];
   }
 
   static GTextureAtlas getAtlas(String cacheId) {
@@ -48,6 +54,50 @@ abstract class AssetLoader {
     return atlas;
   }
 
+  static Future<SvgData> loadNetworkSvg(
+    String url, {
+    String cacheId,
+    Function(NetworkImageEvent) onComplete,
+    Function(NetworkImageEvent) onProgress,
+    Function(NetworkImageEvent) onError,
+  }) async {
+    final response = await NetworkImageLoader.loadSvg(
+      url,
+      onComplete: onComplete,
+      onProgress: onProgress,
+      onError: onError,
+    );
+    if (response.isSvg) {
+      svgs[cacheId] = response.svgData;
+    }
+    return response.svgData;
+  }
+
+  static Future<GTexture> loadNetworkTexture(
+    String url, {
+    int width,
+    int height,
+    double resolution = 1.0,
+    String cacheId,
+    Function(NetworkImageEvent) onComplete,
+    Function(NetworkImageEvent) onProgress,
+    Function(NetworkImageEvent) onError,
+  }) async {
+    final response = await NetworkImageLoader.load(
+      url,
+      width: width,
+      height: height,
+      scale: resolution,
+      onComplete: onComplete,
+      onProgress: onProgress,
+      onError: onError,
+    );
+    if (response.isImage) {
+      textures[cacheId] = response.texture;
+    }
+    return response.texture;
+  }
+
   static Future<GTexture> loadTexture(
     String path, [
     double resolution = 1.0,
@@ -56,6 +106,15 @@ abstract class AssetLoader {
     cacheId ??= path;
     textures[cacheId] = GTexture.fromImage(await loadImage(path), resolution);
     return textures[cacheId];
+  }
+
+  static Future<SvgData> loadSvg(
+    String path, [
+    String cacheId,
+  ]) async {
+    cacheId ??= path;
+    svgs[cacheId] = await SvgUtils.svgDataFromString(await loadString(path));
+    return svgs[cacheId];
   }
 
   static Future<GTextureAtlas> loadTextureAtlas(String imagePath,
@@ -70,8 +129,8 @@ abstract class AssetLoader {
       dataPath = '$basePath.xml';
       print('Warning: using default xml data: $dataPath');
     }
-    var texture = await AssetLoader.loadTexture(imagePath, resolution);
-    var xmlData = await AssetLoader.loadString(dataPath);
+    var texture = await ResourceLoader.loadTexture(imagePath, resolution);
+    var xmlData = await ResourceLoader.loadString(dataPath);
     cacheId ??= imagePath;
     atlases[cacheId] = GTextureAtlas(texture, xmlData);
     return atlases[cacheId];

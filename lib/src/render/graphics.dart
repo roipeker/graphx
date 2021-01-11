@@ -11,6 +11,7 @@ import '../utils/utils.dart';
 enum GradientType {
   linear,
   radial,
+  sweep,
 }
 
 class Graphics with RenderUtilMixin implements GxRenderable {
@@ -190,76 +191,190 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// the [RadialGradient] docs to understand the relation with [focalRadius]
   Graphics beginGradientFill(
     GradientType type,
-    List<int> colors, [
+    List<int> colors, {
     List<double> alphas,
     List<double> ratios,
     Alignment begin,
     Alignment end,
-    GradientTransform transform,
+    double rotation = 0,
+    TileMode tileMode = TileMode.clamp,
     Rect gradientBox,
 
     /// only radial
     double radius = 0.5,
     double focalRadius = 0.0,
-  ]) {
-    final _colors = _GraphUtils.colorsFromHex(colors, alphas);
-    if (type == GradientType.radial) {
-      begin ??= Alignment.center;
-      // end ??= Alignment.topRight;
-    } else {
-      begin ??= Alignment.topLeft;
-      end ??= Alignment.topRight;
-    }
-    Gradient _gradient;
-    if (type == GradientType.linear) {
-      _gradient = LinearGradient(
-        colors: _colors,
-        stops: ratios,
-        begin: begin,
-        end: end,
-        tileMode: TileMode.clamp,
-        transform: transform,
-      );
-    } else {
-      _gradient = RadialGradient(
-        center: begin,
-        focal: end,
-        radius: radius,
-        colors: _colors,
-        stops: ratios,
-        tileMode: TileMode.clamp,
-        focalRadius: focalRadius,
-        transform: transform,
-      );
-    }
+
+    /// only sweep
+    double sweepStartAngle = 0.0,
+    double sweepEndAngle = 6.2832,
+  }) {
+    final gradient = _createGradient(
+      type,
+      colors,
+      alphas,
+      ratios,
+      begin,
+      end,
+      rotation,
+      radius,
+      focalRadius,
+      sweepStartAngle,
+      sweepEndAngle,
+      tileMode,
+    );
+
+    // final _colors = _GraphUtils.colorsFromHex(colors, alphas);
+    // if (type == GradientType.radial) {
+    //   begin ??= Alignment.center;
+    //   // end ??= Alignment.topRight;
+    // } else {
+    //   begin ??= Alignment.topLeft;
+    //   end ??= Alignment.topRight;
+    // }
+    // Gradient _gradient;
+    // final transform = GradientRotation(rotation);
+    // if (type == GradientType.linear) {
+    //   _gradient = LinearGradient(
+    //     colors: _colors,
+    //     stops: ratios,
+    //     begin: begin,
+    //     end: end,
+    //     tileMode: TileMode.clamp,
+    //     transform: transform,
+    //   );
+    // } else if (type == GradientType.radial) {
+    //   _gradient = RadialGradient(
+    //     center: begin,
+    //     focal: end,
+    //     radius: radius,
+    //     colors: _colors,
+    //     stops: ratios,
+    //     tileMode: TileMode.clamp,
+    //     focalRadius: focalRadius,
+    //     transform: transform,
+    //   );
+    // } else if (type == GradientType.sweep) {
+    //   _gradient = SweepGradient(
+    //     center: begin,
+    //     colors: _colors,
+    //     stops: ratios,
+    //     tileMode: TileMode.clamp,
+    //     transform: transform,
+    //     startAngle: sweepStartAngle,
+    //     endAngle: sweepEndAngle,
+    //   );
+    // }
 
     final paint = Paint();
     paint.style = PaintingStyle.fill;
 //    paint.isAntiAlias = true;
     _addFill(paint);
     if (gradientBox != null) {
-      _currentDrawing.fill.shader = _gradient.createShader(gradientBox);
+      _currentDrawing.fill.shader = gradient.createShader(gradientBox);
     } else {
-      _currentDrawing.gradient = _gradient;
+      _currentDrawing.gradient = gradient;
     }
     return this;
   }
 
-  Graphics lineGradientStyle(
+  Gradient _createGradient(
+    GradientType type,
     List<int> colors, [
     List<double> alphas,
     List<double> ratios,
-    GradientTransform transform,
-    Rect gradientBox,
+    Alignment begin,
+    Alignment end,
+    double rotation = 0,
+
+    /// only radial
+    double radius = 0.5,
+    double focalRadius = 0.0,
+
+    /// only sweep
+    double sweepStartAngle = 0.0,
+    double sweepEndAngle = 6.2832,
+    TileMode tileMode = TileMode.clamp,
   ]) {
-    /// actual paint must be stroke.
-    assert(_currentDrawing.fill.style == PaintingStyle.stroke);
     final _colors = _GraphUtils.colorsFromHex(colors, alphas);
-    final gradient = LinearGradient(
+    final transform = GradientRotation(rotation);
+    if (type == GradientType.radial) {
+      return RadialGradient(
+        center: begin ?? Alignment.center,
+        focal: end,
+        radius: radius,
+        colors: _colors,
+        stops: ratios,
+        tileMode: tileMode,
+        focalRadius: focalRadius,
+        transform: transform,
+      );
+    } else if (type == GradientType.sweep) {
+      return SweepGradient(
+        center: begin ?? Alignment.center,
+        colors: _colors,
+        stops: ratios,
+        tileMode: tileMode,
+        transform: transform,
+        startAngle: sweepStartAngle,
+        endAngle: sweepEndAngle,
+      );
+    }
+    return LinearGradient(
       colors: _colors,
       stops: ratios,
-      tileMode: TileMode.clamp,
+      begin: begin ?? Alignment.centerLeft,
+      end: end ?? Alignment.centerRight,
+      tileMode: tileMode,
       transform: transform,
+    );
+  }
+
+  /// Uses a gradient shader for the current `lineStyle`.
+  /// For `GradientType.linear`, `Alignment begin` represents the start, for
+  /// `GradientType.radial` and `GradientType.sweep` represents the center.
+  /// Also for `GradientType.radial`, `Alignment end` represents the focalPoint.
+  /// So make sure to increase the `radius` if you use a focalPoint alignment
+  /// different than the center (meaning `begin!=end`).
+  Graphics lineGradientStyle(
+    GradientType type,
+    List<int> colors, {
+    List<double> alphas,
+    List<double> ratios,
+    Alignment begin,
+    Alignment end,
+    double rotation = 0,
+
+    /// only `GradientType.radial`
+    double radius = 0.5,
+    double focalRadius = 0.0,
+
+    /// only `GradientType.sweep`
+    double sweepStartAngle = 0.0,
+    double sweepEndAngle = 6.2832,
+
+    /// manually define the bounding box of the Gradient shader.
+    Rect gradientBox,
+
+    /// when the gradient box is different than the object bounds, you can
+    /// see the `tileMode` behaviour.
+    TileMode tileMode = TileMode.clamp,
+  }) {
+    /// actual paint must be stroke.
+    assert(_currentDrawing.fill.style == PaintingStyle.stroke);
+
+    final gradient = _createGradient(
+      type,
+      colors,
+      alphas,
+      ratios,
+      begin,
+      end,
+      rotation,
+      radius,
+      focalRadius,
+      sweepStartAngle,
+      sweepEndAngle,
+      tileMode,
     );
     if (gradientBox != null) {
       _currentDrawing.fill.shader = gradient.createShader(gradientBox);
@@ -776,6 +891,7 @@ class _GraphVertices {
   bool _normalizedUvt;
 
   Float32List _rawPoints;
+
   Float32List get rawPoints {
     if (_rawPoints != null) return _rawPoints;
     var points = _GraphUtils.getTrianglePoints(this);
@@ -954,7 +1070,6 @@ class _GraphUtils {
   }
 
   static List<double> getTrianglePoints(_GraphVertices v) {
-    final output = <double>[];
     var ver = v.vertices;
     var ind = v.indices;
     if (ind == null) {

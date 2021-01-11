@@ -11,7 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^0.19.1
   flutter_icons: ^1.1.0
   graphx:
     path: ../

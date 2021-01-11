@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../../graphx.dart';
 import 'display_object.dart';
 
@@ -8,7 +10,6 @@ class Sprite extends DisplayObjectContainer {
     return '$runtimeType (Sprite)$msg';
   }
 
-  
   static final _sHelperMatrix = GxMatrix();
 
   Graphics _graphics;
@@ -54,6 +55,7 @@ class Sprite extends DisplayObjectContainer {
   }
 
   @override
+  @mustCallSuper
   void dispose() {
     _graphics?.dispose();
     _graphics = null;

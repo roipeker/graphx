@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../../graphx.dart';
 
 typedef SortChildrenCallback = int Function(
@@ -293,6 +295,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
   }
 
   @override
+  @mustCallSuper
   void dispose() {
     for (final child in children) {
       child?.dispose();
