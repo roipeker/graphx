@@ -5,6 +5,26 @@ import '../core/scene_painter.dart';
 import '../events/mixins.dart';
 import 'display_object.dart';
 
+/// The Stage class represents the main drawing area.
+/// The Stage represents the entire area where a GraphX `ScenePainter` content
+/// is shown.
+/// Each `ScenePainter` object has a corresponding `Stage` object, owned by a
+/// `SceneController`, which can contain a `back` and `front` SceneLayers.
+///
+/// The `Stage` object is not globally accessible.
+/// You need to access it through the `stage` property of a `DisplayObject`
+/// instance.
+///
+/// The `Stage` class has several ancestor classes — DisplayObjectContainer,
+/// DisplayObject — from which it inherits properties and methods.
+/// Many of these properties and methods are either to the `Stage` object
+/// usually to keep a common API with Flash.
+///
+/// In addition, the following inherited properties are inapplicable to `Stage`
+/// objects. If you try to set them, an Error is thrown.
+/// These properties may always be read, but since they cannot be set,
+/// they will always contain default values:
+/// x, y, width, height, stageWidth, stageHeight, mask, name, filter.
 class Stage extends DisplayObjectContainer
     with ResizeSignalMixin, TickerSignalMixin {
   final ScenePainter scene;
@@ -22,12 +42,17 @@ class Stage extends DisplayObjectContainer
   Paint _backgroundPaint;
   DisplayBoundsDebugger _boundsDebugger;
 
-  /// shorcut to access the SceneController.
+  /// Shortcut to access the owner [SceneController].
   SceneController get controller => scene.core;
-  /// shorcut for onHotReload Signal.
+
+  /// Shortcut for `onHotReload` Signal.
   Signal get onHotReload => controller.onHotReload;
 
+  /// The `backgroundPaint` hex color.
   int get color => _backgroundPaint?.color?.value;
+
+  /// Sets the `backgroundPaint` Color via a hex value. Must be 24bit
+  /// (alpha included).
   set color(int value) {
     if (value == null) {
       _backgroundPaint = null;
@@ -37,16 +62,17 @@ class Stage extends DisplayObjectContainer
     }
   }
 
-  Juggler get juggler => Graphx.juggler;
-
   /// Debug stage/scene canvas area.
   /// Drawing a black 2px line square around it.
   bool showBoundsRect = false;
 
+  /// The current width of the Stage.
   double get stageWidth => _size?.width ?? 0;
 
+  /// The current height of the Stage.
   double get stageHeight => _size?.height ?? 0;
 
+  /// Should only be initialized by the `ScenePainter`.
   Stage(this.scene) {
 //    $stage = this;
     $parent = null;
@@ -67,7 +93,7 @@ class Stage extends DisplayObjectContainer
       _boundsDebugger.canvas = canvas;
       _boundsDebugger.render();
     }
-    if(showBoundsRect){
+    if (showBoundsRect) {
       canvas.drawPath(_stageBoundsRectPath, _stageBoundsRectPaint);
     }
   }
@@ -88,17 +114,18 @@ class Stage extends DisplayObjectContainer
       _stageRectNative =
           _stageRect.setTo(0, 0, _size.width, _size.height).toNative();
 
-      _stageBoundsRectPath??=Path();
+      _stageBoundsRectPath ??= Path();
       _stageBoundsRectPath.reset();
       _stageBoundsRectPath.addRect(_stageRectNative);
       _stageBoundsRectPath.close();
 
       Graphics.updateStageRect(_stageRect);
       $onResized?.dispatch();
-
     }
   }
 
+  /// Access the keyboard instance of the owner `SceneController`,
+  /// Only available when [SceneConfig.useKeyboard] is true.
   KeyboardManager get keyboard {
     if (scene?.core?.keyboard == null) {
       throw 'You need to enable keyboard capture, define useKeyboard=true '
@@ -107,6 +134,9 @@ class Stage extends DisplayObjectContainer
     return scene?.core?.keyboard;
   }
 
+  /// Access the pointer (mouse or touch info) instance of the
+  /// owner `SceneController`,
+  /// Only available when [SceneConfig.usePointer] is true.
   PointerManager get pointer {
     if (scene?.core?.pointer == null) {
       throw 'You need to enable pointer capture, define usePointer=true '
@@ -162,6 +192,12 @@ class Stage extends DisplayObjectContainer
     $disposeTickerSignals();
     super.dispose();
   }
+
+  @override
+  double get width => throw 'Use `stage.stageWidth` instead.';
+
+  @override
+  double get height => throw 'Use `stage.stageHeight` instead.';
 
   @override
   set width(double value) => throw 'Cannot set width of stage';

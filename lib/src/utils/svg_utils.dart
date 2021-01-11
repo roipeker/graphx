@@ -1,11 +1,15 @@
 import 'dart:ui';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:graphx/graphx.dart';
 
-/// Utility functions to work with flutter_svg.
-/// copy and paste in your project.
+import '../../graphx.dart';
+
+/// Utilities to work with `flutter_svg`.
 class SvgUtils {
-  static Future<Picture> svgStringToPicutre(String rawSvg) async {
+  static Future<DrawableRoot> svgStringToSvgDrawable(String rawSvg) async {
+    return await svg.fromSvgString(rawSvg, rawSvg);
+  }
+
+  static Future<Picture> svgStringToPicture(String rawSvg) async {
     final svgRoot = await svg.fromSvgString(rawSvg, rawSvg);
     return svgRoot.toPicture();
   }

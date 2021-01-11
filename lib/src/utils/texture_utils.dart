@@ -93,7 +93,7 @@ mixin TextureUtils {
     final tx =
         await _helperShape.createImageTexture(true, TextureUtils.resolution);
     if (id != null) {
-      AssetLoader.textures[id] = tx;
+      ResourceLoader.textures[id] = tx;
     }
     return tx;
   }

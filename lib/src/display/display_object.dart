@@ -797,6 +797,7 @@ abstract class DisplayObject
 
   void addedToStage() {}
 
+  @mustCallSuper
   void update(double delta) {}
 
   bool get hasFilters => filters?.isNotEmpty ?? false;

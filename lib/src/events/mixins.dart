@@ -38,12 +38,6 @@ mixin TickerSignalMixin {
   }
 }
 
-mixin JugglerSignalMixin {
-  EventSignal<JugglerObjectEventData> $onRemovedFromJuggler;
-  EventSignal<JugglerObjectEventData> get onRemovedFromJuggler =>
-      $onRemovedFromJuggler ??= EventSignal<JugglerObjectEventData>();
-}
-
 mixin ResizeSignalMixin {
   Signal $onResized;
   Signal get onResized => $onResized ??= Signal();

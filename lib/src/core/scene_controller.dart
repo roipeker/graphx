@@ -75,8 +75,6 @@ class SceneController {
     _config.useTicker = sceneConfig.useTicker ?? false;
   }
 
-  Juggler get juggler => Graphx.juggler;
-
   /// constructor.
   SceneController({
     Sprite back,
@@ -119,7 +117,6 @@ class SceneController {
   /// [GxTicker] that runs the `enterFrame`.
   /// Is independent from the rendering pipeline.
   void _onTick(double elapsed) {
-    Graphx.juggler.update(elapsed);
     frontScene?.tick(elapsed);
     backScene?.tick(elapsed);
   }

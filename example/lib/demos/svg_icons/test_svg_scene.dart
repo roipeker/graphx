@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import '../../assets/svg_icons.dart';
-import '../../utils/svg_utils.dart';
 
 class TestSvgScene extends Sprite {
   final groundHeight = 100.0;
@@ -49,9 +48,9 @@ class TestSvgScene extends Sprite {
       var tree = getSvgIcon(treeId);
       tree.alignPivot(Alignment.bottomCenter);
       tree.x = currentObjectX;
-      tree.scale = GameUtils.rndRange(.4, 1.4);
+      tree.scale = Math.randomRange(.4, 1.4);
       trees.addChild(tree);
-      currentObjectX += GameUtils.rndRange(20, 80);
+      currentObjectX += Math.randomRange(20, 80);
 
       /// let's skew the tree so it seems the wind is moving it.
       _tweenTree(tree, 1);
@@ -59,8 +58,8 @@ class TestSvgScene extends Sprite {
   }
 
   void _tweenTree(DisplayObject tree, int dir) {
-    var dur = GameUtils.rndRange(.5, .7);
-    var delay = GameUtils.rndRange(.08, .1);
+    var dur = Math.randomRange(.5, .7);
+    var delay = Math.randomRange(.08, .1);
     tree.tween(
       duration: dur,
       delay: delay,
@@ -85,9 +84,9 @@ class TestSvgScene extends Sprite {
       final objectId = i.isOdd ? SvgId.mushroom : SvgId.snail;
       var obj = getSvgIcon(objectId);
       obj.alignPivot(Alignment.bottomCenter);
-      obj.y = GameUtils.rndRange(20, groundHeight);
-      obj.x = GameUtils.rndRange(20, stage.stageWidth - 20);
-      obj.scale = GameUtils.rndRange(.8, 1.5);
+      obj.y = Math.randomRange(20, groundHeight);
+      obj.x = Math.randomRange(20, stage.stageWidth - 20);
+      obj.scale = Math.randomRange(.8, 1.5);
       if (objectId == SvgId.snail) {
         /// DisplayObjects has a userData property so u can save custom stuffs
         /// in it, lets save the scale so we can "tween"  a bouncing while the
@@ -105,7 +104,7 @@ class TestSvgScene extends Sprite {
   }
 
   void _tweenSnail(DisplayObject snail) {
-    final delay = GameUtils.rndRange(.2, .6);
+    final delay = Math.randomRange(.2, .6);
 
     /// if the snail is outside the stage area... move it to the
     /// other side of the screen.
@@ -144,12 +143,12 @@ class TestSvgScene extends Sprite {
 
       addChild(leaf);
 
-      var px = GameUtils.rndRange(10, stage.stageWidth - 10);
+      var px = Math.randomRange(10, stage.stageWidth - 10);
       leaf.setPosition(px, -10);
       final rndPivot =
-          GameUtils.rndBool() ? Alignment.bottomCenter : Alignment.topCenter;
+          Math.randomBool() ? Alignment.bottomCenter : Alignment.topCenter;
       leaf.alignPivot(rndPivot);
-      leaf.scale = GameUtils.rndRange(.4, 1);
+      leaf.scale = Math.randomRange(.4, 1);
 
       /// delayCall acts like Future.delay(), but works with the GTween
       /// update cycle. it expects the delay in seconds, the callback, and
@@ -160,7 +159,7 @@ class TestSvgScene extends Sprite {
         i * .05,
         _tweenLeaf,
         params: {
-          #dir: GameUtils.rndBool() ? -1 : 1,
+          #dir: Math.randomBool() ? -1 : 1,
           #leaf: leaf,
         },
       );
@@ -168,9 +167,9 @@ class TestSvgScene extends Sprite {
   }
 
   void _tweenLeaf({int dir, DisplayObject leaf}) {
-    final randomRotation = GameUtils.rndRange(10, 45.0) * dir;
-    final randomDuration = GameUtils.rndRange(.75, 1);
-    final randomSkew = GameUtils.rndRange(.1, .3) * -dir;
+    final randomRotation = Math.randomRange(10, 45.0) * dir;
+    final randomDuration = Math.randomRange(.75, 1);
+    final randomSkew = Math.randomRange(.1, .3) * -dir;
     leaf.tween(
       duration: randomDuration,
       rotation: deg2rad(randomRotation),
@@ -186,8 +185,8 @@ class TestSvgScene extends Sprite {
       },
       ease: GEase.decelerate,
     );
-    final randomX = GameUtils.rndRange(5, 40) * dir;
-    final randomY = GameUtils.rndRange(5, 30);
+    final randomX = Math.randomRange(5, 40) * dir;
+    final randomY = Math.randomRange(5, 30);
     leaf.tween(
         duration: randomDuration * .9,
         x: '$randomX',

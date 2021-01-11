@@ -1,3 +1,19 @@
+## [0.9.6]
+- Improved docs.
+- Removed animations.dart, GTween is used in favor of Juggler.
+- Changed [GameUtils] to [Math], class to keep consistency with ActionScript/JS API.
+- Improved gradient support in `Graphics`. For the sake of representing all the options for different Gradient Shaders in GraphX, uncommon positional parameters where replaced by named parameters for `lineGradientStyle()` and `beginGradientFill()`.
+- Fixed a bug with [StaticText.width] when using by default `double.infinity`, unsupported in Flutter web non-SKIA target.
+- Minor bugfixes.
+- Added package `http` and `flutter_svg` dependencies to facilitate some GraphX features.
+- Added [SvgUtils] with basic methods to work with svg data.
+- Renamed [AssetsLoader] to [ResourceLoader], and moved to the `io` namespace; to avoid confusion with Flutter concepts where asset reference a local resource.
+- Added [NetworkImageLoader] class, to provide the ability to load remote images. Can be used with [ResourceLoader.loadNetworkTexture] and [ResourceLoader.loadNetworkSvg]. WARNING: no CORS workaround for web targets.
+- Added cache capabilities to network images, and some new methods on [ResourceLoader]: loadNetworkSvg(), loadNetworkTexture(), loadSvg(), getSvgData().
+- Added [StaticText.build()] to simplify the initialization and styling of [StaticText].
+- Added [Keyboard], utility class to simplify interactions with `stage.keyboard` during `update()` phase [stage.onEnterFrame].
+
+
 ## [0.9.5]
 - Fixes `DisplayObject.visible` not being updated on rendering.
 - Added `display object.setProps()` as a shortcut to assign basic properties using GTween and immediate render.
