@@ -1,3 +1,6 @@
+## [0.9.6+2]
+- change `flutter_svg` version to be compatible with stable branch.
+
 ## [0.9.6]
 - Improved docs.
 - Removed animations.dart, GTween is used in favor of Juggler.
