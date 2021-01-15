@@ -26,7 +26,7 @@ import 'display_object.dart';
 /// they will always contain default values:
 /// x, y, width, height, stageWidth, stageHeight, mask, name, filter.
 class Stage extends DisplayObjectContainer
-    with ResizeSignalMixin, TickerSignalMixin {
+    with ResizeSignalMixin, TickerSignalMixin, StageMouseSignalsMixin {
   final ScenePainter scene;
 
   static final _sMatrix = GxMatrix();
@@ -162,6 +162,27 @@ class Stage extends DisplayObjectContainer
     return super.hitTest(localPoint) ?? this;
   }
 
+  bool _isMouseInside = false;
+
+  /// tells if the pointer is inside the stage area (available to detect
+  /// events).
+  bool get isMouseInside => _isMouseInside;
+
+  /// capture context mouse inputs.
+  @override
+  void captureMouseInput(MouseInputData input) {
+    if (input.type == MouseInputType.exit) {
+      _isMouseInside = false;
+      var mouseInput = input.clone(this, this, input.type);
+      $onMouseLeave?.dispatch(mouseInput);
+    } else if (input.type == MouseInputType.unknown && !_isMouseInside) {
+      _isMouseInside = true;
+      $onMouseEnter?.dispatch(input.clone(this, this, MouseInputType.enter));
+    } else {
+      super.captureMouseInput(input);
+    }
+  }
+
   GxRect getStageBounds(DisplayObject targetSpace, [GxRect out]) {
     out ??= GxRect();
     out.setTo(0, 0, stageWidth, stageHeight);
@@ -190,6 +211,7 @@ class Stage extends DisplayObjectContainer
     $disposeDisplayListSignals();
     $disposeResizeSignals();
     $disposeTickerSignals();
+    $disposeStagePointerSignals();
     super.dispose();
   }
 

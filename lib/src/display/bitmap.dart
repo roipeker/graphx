@@ -65,7 +65,7 @@ class Bitmap extends DisplayObject {
     return out;
   }
 
-  final _paint = Paint();
+  final _paint = Paint()..filterQuality = FilterQuality.high;
 
   Paint get nativePaint => _paint;
 

@@ -166,7 +166,9 @@ class ScenePainter with EventDispatcherMixin {
 
   void _mouseInputHandler(MouseInputData input) {
     input.time = $accumulatedFrameDeltaTime;
-
+    // if (input.type != MouseInputType.still) {
+    //   trace(input.type);
+    // }
     /// process it.
     if (input.type == MouseInputType.move ||
         input.type == MouseInputType.exit) {
@@ -180,6 +182,7 @@ class ScenePainter with EventDispatcherMixin {
       _lastMouseY = input.stageY;
     }
     _lastMouseInput = input;
+
     stage.captureMouseInput(input);
   }
 

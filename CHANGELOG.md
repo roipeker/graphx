@@ -1,3 +1,9 @@
+## [0.9.7]
+- added `MovieClip.gotoAndPlay` lastFrame for animation.
+- exposed the `GifAtlas::textureFrames` so they can be used in MovieClips.
+- added several methods from Flutters Path in `Graphics`... (conicCurveTo(), arcToPoint(), arc()) with some new optional parameters for relative drawing.
+- added new signals for `stage.onMouseEnter`, `stage.onMouseLeave` to detect touch positions when it leaves the Widget area... ( useful for scene with buttons).
+
 ## [0.9.6+2]
 - change `flutter_svg` version to be compatible with stable branch.
 

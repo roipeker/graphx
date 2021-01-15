@@ -434,6 +434,17 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  Graphics conicCurveTo(double controlX, double controlY, double anchorX,
+      double anchorY, double weight,
+      [bool relative = false]) {
+    if (!relative) {
+      _path.conicTo(controlX, controlY, anchorX, anchorY, weight);
+    } else {
+      _path.relativeConicTo(controlX, controlY, anchorX, anchorY, weight);
+    }
+    return this;
+  }
+
   Graphics drawCircle(double x, double y, double radius) {
     final pos = Offset(x, y);
     final circ = Rect.fromCircle(center: pos, radius: radius);
@@ -541,15 +552,56 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics arc(double cx, double cy, double radius, double startAngle,
-      double sweepAngle) {
+  Graphics arc(
+      double cx, double cy, double radius, double startAngle, double sweepAngle,
+      [bool moveTo = false]) {
     if (sweepAngle == 0) return this;
-//    _path.arcToPoint(arcEnd)
-    _path.addArc(
-      Rect.fromCircle(center: Offset(cx, cy), radius: radius),
-      startAngle,
-      sweepAngle,
-    );
+    if (!moveTo) {
+      _path.arcTo(
+        Rect.fromCircle(center: Offset(cx, cy), radius: radius),
+        startAngle,
+        sweepAngle,
+        false,
+      );
+    } else {
+      _path.addArc(
+        Rect.fromCircle(center: Offset(cx, cy), radius: radius),
+        startAngle,
+        sweepAngle,
+      );
+    }
+
+    return this;
+  }
+
+  Graphics arcToPoint(
+    double endX,
+    double endY,
+    double radius, [
+    double rotation = 0.0,
+    bool largeArc = false,
+    bool clockwise = true,
+    bool relativeMoveTo = false,
+  ]) {
+    if (radius == 0) return this;
+    if (relativeMoveTo) {
+      _path.arcToPoint(
+        Offset(endX, endY),
+        radius: Radius.circular(radius),
+        clockwise: clockwise,
+        largeArc: largeArc,
+        rotation: rotation,
+      );
+    } else {
+      _path.relativeArcToPoint(
+        Offset(endX, endY),
+        radius: Radius.circular(radius),
+        clockwise: clockwise,
+        largeArc: largeArc,
+        rotation: rotation,
+      );
+    }
+
     return this;
   }
 
