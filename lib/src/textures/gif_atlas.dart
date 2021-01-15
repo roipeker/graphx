@@ -9,6 +9,10 @@ class GifFrame {
 class GifAtlas extends GTexture {
   final List<GifFrame> _frames = [];
 
+  List<GTexture> get textureFrames {
+    return _frames.map((e) => e.texture).toList();
+  }
+
   void addFrame(GifFrame frame) {
     _frames.add(frame);
     if (_frames.length == 1) {

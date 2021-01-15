@@ -95,6 +95,7 @@ enum MouseInputType {
   move,
   down,
   exit,
+  enter,
   up,
   click,
   still,

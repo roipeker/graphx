@@ -17,6 +17,9 @@ class MovieClip extends Bitmap {
   /// render into what
   int frameCount = 0;
   int currentFrame = -1;
+
+  /// stops the playback when reaching this frame.
+  int targetFrame = -1;
   Bitmap bitmap;
 
   Signal _onFramesComplete;
@@ -51,8 +54,14 @@ class MovieClip extends Bitmap {
     texture = _frameTextures[currentFrame];
   }
 
-  void gotoAndPlay(int frame) {
+  void gotoAndPlay(int frame, {int lastFrame = -1}) {
     gotoFrame(frame);
+    if (lastFrame > frameCount) {
+      lastFrame %= frameCount;
+    } else if (lastFrame > -1 && lastFrame < frame) {
+      /// TODO: add repeatable logic?
+    }
+    targetFrame = lastFrame;
     play();
   }
 
@@ -92,6 +101,9 @@ class MovieClip extends Bitmap {
             _onFramesComplete?.dispatch();
             return;
           }
+        }
+        if (targetFrame > -1 && currentFrame == targetFrame) {
+          playing = false;
         }
         texture = _frameTextures[currentFrame];
       }

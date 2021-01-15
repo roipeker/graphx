@@ -94,7 +94,7 @@ class GxRect {
 
   GxRect intersection(GxRect rect) {
     GxRect result;
-    var x0 = x < rect.x ? rect.x : 0;
+    var x0 = x < rect.x ? rect.x : 0.0;
     var x1 = right > rect.right ? rect.right : right;
     if (x1 <= 0) {
       result = GxRect();

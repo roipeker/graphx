@@ -99,6 +99,22 @@ mixin RenderSignalMixin {
 }
 
 /// use mouse signal for now.
+mixin StageMouseSignalsMixin<T extends MouseInputData> {
+  EventSignal<T> $onMouseLeave;
+  EventSignal<T> $onMouseEnter;
+
+  EventSignal<T> get onMouseLeave => $onMouseLeave ??= EventSignal();
+  EventSignal<T> get onMouseEnter => $onMouseEnter ??= EventSignal();
+
+  void $disposeStagePointerSignals() {
+    $onMouseLeave?.removeAll();
+    $onMouseLeave = null;
+    $onMouseEnter?.removeAll();
+    $onMouseEnter = null;
+  }
+}
+
+/// use mouse signal for now.
 mixin MouseSignalsMixin<T extends MouseInputData> {
   EventSignal<T> $onRightMouseDown;
   EventSignal<T> $onMouseDoubleClick;
