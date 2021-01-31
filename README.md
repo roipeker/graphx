@@ -20,6 +20,8 @@ To get some extended, boring explanations, and eventually some sample codes, che
 
 ---
 
+[Try Graphx on Dart Pad](https://dartpad.dev/21b6670a42d32e37440192e19279e71b?)
+
 #### prototyping
 
 GraphX is all about visuals, here you have some screen captures of random prototypes I've been doing, while developing and testing graphx.
