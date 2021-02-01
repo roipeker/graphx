@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math_64.dart';
 
 import 'geom.dart';
 
-class GxMatrix {
+class GMatrix {
   double a, b, c, d, tx, ty;
 
   Matrix4 _native;
@@ -21,8 +21,8 @@ class GxMatrix {
     return _native;
   }
 
-  static GxMatrix fromNative(Matrix4 m) {
-    return GxMatrix(
+  static GMatrix fromNative(Matrix4 m) {
+    return GMatrix(
       m.storage[0],
       m.storage[4],
       m.storage[1],
@@ -32,19 +32,19 @@ class GxMatrix {
     );
   }
 
-  GxMatrix zoomAroundPoint(GxPoint center, double zoomFactor) {
-    var t1 = GxMatrix();
+  GMatrix zoomAroundPoint(GPoint center, double zoomFactor) {
+    var t1 = GMatrix();
     t1.translate(-center.x, -center.y);
-    var sc = GxMatrix();
+    var sc = GMatrix();
     sc.scale(zoomFactor, zoomFactor);
-    var t2 = GxMatrix();
+    var t2 = GMatrix();
     t2.translate(center.x, center.y);
-    var zoom = GxMatrix();
+    var zoom = GMatrix();
     zoom.concat(t1).concat(sc).concat(t2);
     return concat(zoom);
   }
 
-  GxMatrix([
+  GMatrix([
     this.a = 1,
     this.b = 0,
     this.c = 0,
@@ -53,8 +53,8 @@ class GxMatrix {
     this.ty = 0,
   ]);
 
-  GxMatrix clone() {
-    return GxMatrix(
+  GMatrix clone() {
+    return GMatrix(
       a,
       b,
       c,
@@ -64,7 +64,7 @@ class GxMatrix {
     );
   }
 
-  GxMatrix copyFrom(GxMatrix from) {
+  GMatrix copyFrom(GMatrix from) {
     a = from.a;
     b = from.b;
     c = from.c;
@@ -74,7 +74,7 @@ class GxMatrix {
     return this;
   }
 
-  GxMatrix setTo(double a, double b, double c, double d, double tx, double ty) {
+  GMatrix setTo(double a, double b, double c, double d, double tx, double ty) {
     this.a = a;
     this.b = b;
     this.c = c;
@@ -84,7 +84,7 @@ class GxMatrix {
     return this;
   }
 
-  GxMatrix.fromList(List<double> value) {
+  GMatrix.fromList(List<double> value) {
     a = value[0];
     b = value[1];
     c = value[3];
@@ -93,7 +93,7 @@ class GxMatrix {
     ty = value[5];
   }
 
-  GxMatrix identity() {
+  GMatrix identity() {
     a = 1;
     b = 0;
     c = 0;
@@ -103,7 +103,7 @@ class GxMatrix {
     return this;
   }
 
-  GxMatrix setTransform(
+  GMatrix setTransform(
     double x,
     double y,
     double pivotX,
@@ -123,7 +123,7 @@ class GxMatrix {
     return this;
   }
 
-  GxMatrix append(GxMatrix matrix) {
+  GMatrix append(GMatrix matrix) {
     final a1 = a;
     final b1 = b;
     final c1 = c;
@@ -146,7 +146,7 @@ class GxMatrix {
     return this;
   }
 
-  GxMatrix concat(GxMatrix matrix) {
+  GMatrix concat(GMatrix matrix) {
     double a1, c1, tx1;
     a1 = a * matrix.a + b * matrix.c;
     b = a * matrix.b + b * matrix.d;
@@ -190,7 +190,7 @@ class GxMatrix {
 //  tx = tx1;
 //}
 
-  GxMatrix invert() {
+  GMatrix invert() {
     var n = a * d - b * c;
     if (n == 0) {
       a = b = c = d = 0;
@@ -210,7 +210,7 @@ class GxMatrix {
     return this;
   }
 
-  GxMatrix scale(double scaleX, [double scaleY]) {
+  GMatrix scale(double scaleX, [double scaleY]) {
     scaleY ??= scaleX;
     a *= scaleX;
     b *= scaleY;
@@ -256,30 +256,30 @@ class GxMatrix {
     tx = tx1;
   }
 
-  GxMatrix translate(double x, double y) {
+  GMatrix translate(double x, double y) {
     tx += x;
     ty += y;
     return this;
   }
 
-  GxPoint transformPoint(GxPoint point, [GxPoint out]) {
+  GPoint transformPoint(GPoint point, [GPoint out]) {
     return transformCoords(point.x, point.y, out);
   }
 
-  GxPoint transformInversePoint(GxPoint point, [GxPoint out]) {
+  GPoint transformInversePoint(GPoint point, [GPoint out]) {
     return transformInverseCoords(point.x, point.y, out);
   }
 
-  GxPoint transformInverseCoords(double x, double y, [GxPoint out]) {
-    out ??= GxPoint();
+  GPoint transformInverseCoords(double x, double y, [GPoint out]) {
+    out ??= GPoint();
     final id = 1 / ((a * d) + (c * -b));
     out.x = (d * id * x) + (-c * id * y) + (((ty * c) - (tx * d)) * id);
     out.y = (a * id * y) + (-b * id * x) + (((-ty * a) + (tx * b)) * id);
     return out;
   }
 
-  GxPoint transformCoords(double x, double y, [GxPoint out]) {
-    out ??= GxPoint();
+  GPoint transformCoords(double x, double y, [GPoint out]) {
+    out ??= GPoint();
     out.x = a * x + c * y + tx;
     out.y = d * y + b * x + ty;
     return out;

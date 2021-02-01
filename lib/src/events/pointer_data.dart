@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/gestures.dart';
-
 import '../../graphx.dart';
 
 /// over, out are mouse
@@ -24,7 +21,7 @@ class PointerEventData {
   final PointerEvent rawEvent;
 
   /// local position in DisplayObject
-  GxPoint localPosition;
+  GPoint localPosition;
 
   double get localX => localPosition.x;
 
@@ -38,7 +35,7 @@ class PointerEventData {
   PointerEventData({this.type, this.rawEvent})
       : stageX = rawEvent.localPosition.dx,
         stageY = rawEvent.localPosition.dy {
-    localPosition = GxPoint(stageX, stageY);
+    localPosition = GPoint(stageX, stageY);
   }
 
   int get time => rawEvent.timeStamp.inMilliseconds;
@@ -50,9 +47,9 @@ class PointerEventData {
     return null;
   }
 
-  GxPoint get windowPosition => GxPoint.fromNative(rawEvent.original.position);
+  GPoint get windowPosition => GPoint.fromNative(rawEvent.original.position);
 
-  GxPoint get stagePosition => GxPoint.fromNative(rawEvent.localPosition);
+  GPoint get stagePosition => GPoint.fromNative(rawEvent.localPosition);
 
 //  Offset get position => rawEvent.localPosition;
 
@@ -69,15 +66,15 @@ class PointerEventData {
 
   /// new properties.
   /// TODO: decide how to name mouse/pointer events.
-  DisplayObject target;
-  DisplayObject dispatcher;
+  GDisplayObject target;
+  GDisplayObject dispatcher;
 
   bool captured = false;
   bool mouseOut = false;
 
   PointerEventData clone(
-    DisplayObject target,
-    DisplayObject dispatcher,
+    GDisplayObject target,
+    GDisplayObject dispatcher,
     PointerEventType type,
   ) {
     var i = PointerEventData(type: type, rawEvent: rawEvent);
@@ -130,8 +127,8 @@ class MouseInputData {
   }
 
   /// display objects
-  DisplayObject target;
-  DisplayObject dispatcher;
+  GDisplayObject target;
+  GDisplayObject dispatcher;
   MouseInputType type;
   bool buttonDown = false;
   bool mouseOut = false;
@@ -148,11 +145,11 @@ class MouseInputData {
 
   bool get isTertiaryDown => buttonsFlags & 0x04 == 0x04;
 
-  GxPoint get stagePosition => _stagePosition;
-  final GxPoint _stagePosition = GxPoint();
-  GxPoint localPosition = GxPoint();
-  GxPoint scrollDelta = GxPoint();
-  static final GxPoint _localDelta = GxPoint();
+  GPoint get stagePosition => _stagePosition;
+  final GPoint _stagePosition = GPoint();
+  GPoint localPosition = GPoint();
+  GPoint scrollDelta = GPoint();
+  static final GPoint _localDelta = GPoint();
 
   double get localX => localPosition.x;
 
@@ -166,7 +163,7 @@ class MouseInputData {
 
   double get stageY => _stagePosition?.y ?? 0;
 
-  GxPoint get localDelta {
+  GPoint get localDelta {
     final d = rawEvent?.rawEvent?.localDelta;
     if (d == null) {
       return _localDelta.setEmpty();
@@ -179,7 +176,7 @@ class MouseInputData {
   MouseInputData({this.target, this.dispatcher, this.type});
 
   MouseInputData clone(
-      DisplayObject target, DisplayObject dispatcher, MouseInputType type) {
+      GDisplayObject target, GDisplayObject dispatcher, MouseInputType type) {
     var input = MouseInputData(
       target: target,
       dispatcher: dispatcher,

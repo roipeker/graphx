@@ -70,8 +70,8 @@ class _TweenMenu extends StatelessWidget {
   }
 
   Widget _addButton({String label, IconData icon, VoidCallback onPressed}) {
-    return FlatButton(
-      color: Colors.red,
+    return TextButton(
+      // color: Colors.red,
       child: Row(
         children: [
           Icon(icon),

@@ -15,7 +15,7 @@ class SimpleTweenScene extends Sprite {
   @override
   void addedToStage() {
     /// we can colorize the background of the scene.
-    stage.color = Colors.grey.shade300.value;
+    stage.color = Colors.grey.shade300;
 
     /// by default the Canvas drawing in Flutter has no "masking", you can paint
     /// anywhere on the screen (outside the stage size ).
@@ -49,7 +49,7 @@ class SimpleTweenScene extends Sprite {
     stage.onResized.add(_onStageResize);
   }
 
-  StaticText counterText;
+  GText counterText;
 
   /// There's support for several native types in GTween.
   /// double, int, Map, List, DisplayObject, GxPoint, GxRect..
@@ -58,8 +58,8 @@ class SimpleTweenScene extends Sprite {
   final counterValue = 0.twn;
 
   void _initCounter() {
-    counterText = StaticText(
-      textStyle: StaticText.getStyle(
+    counterText = GText(
+      textStyle: GText.getStyle(
         color: Colors.black,
         fontWeight: FontWeight.bold,
         fontSize: 20,
@@ -127,7 +127,7 @@ class SimpleTweenScene extends Sprite {
 
     box.tween(
       duration: 1.5,
-      rotation: pi * 2, // radians, or use `deg2rad(360)`
+      rotation: Math.PI_2, // radians, or use `deg2rad(360)`
       ease: GEase.easeInOutExpo,
       onComplete: () {
         box.tween(

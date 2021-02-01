@@ -1,14 +1,16 @@
+import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
-
 import '../../graphx.dart';
 
 typedef SortChildrenCallback = int Function(
-    DisplayObject object1, DisplayObject object2);
+  GDisplayObject object1,
+  GDisplayObject object2,
+);
 
-abstract class DisplayObjectContainer extends DisplayObject {
-  final children = <DisplayObject>[];
+abstract class GDisplayObjectContainer extends GDisplayObject {
+  final children = <GDisplayObject>[];
 
-  DisplayObjectContainer() {
+  GDisplayObjectContainer() {
     allowSaveLayer = true;
   }
 
@@ -18,17 +20,17 @@ abstract class DisplayObjectContainer extends DisplayObject {
     return '$runtimeType (DisplayObjectContainer)$msg';
   }
 
-  static final _sHitTestMatrix = GxMatrix();
-  static final _sHitTestPoint = GxPoint();
-  static GxMatrix $sBoundsMatrix = GxMatrix();
-  static GxPoint $sBoundsPoint = GxPoint();
+  static final _sHitTestMatrix = GMatrix();
+  static final _sHitTestPoint = GPoint();
+  static GMatrix $sBoundsMatrix = GMatrix();
+  static GPoint $sBoundsPoint = GPoint();
 
   bool mouseChildren = true;
 
   /// capture context mouse inputs.
   @override
   void captureMouseInput(MouseInputData input) {
-    if (!$hasVisibleArea) return;
+    if (!$hasTouchableArea) return;
     if (mouseChildren) {
       /// from last child to the bottom to capture the input.
       for (var i = children.length - 1; i >= 0; --i) {
@@ -39,8 +41,8 @@ abstract class DisplayObjectContainer extends DisplayObject {
   }
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
-    out ??= GxRect();
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+    out ??= GRect();
     final len = children.length;
     if (len == 0) {
       getTransformationMatrix(targetSpace, $sBoundsMatrix);
@@ -68,21 +70,24 @@ abstract class DisplayObjectContainer extends DisplayObject {
     }
   }
 
-  List<DisplayObject> getObjectsUnderPoint(GxPoint localPoint) {
-    final result = <DisplayObject>[];
-    if (!$hasVisibleArea || !mouseEnabled || !hitTestMask(localPoint)) {
+  List<GDisplayObject> getObjectsUnderPoint(GPoint localPoint) {
+    final result = <GDisplayObject>[];
+    if (!$hasTouchableArea || !mouseEnabled || !hitTestMask(localPoint)) {
       return result;
     }
     final numChild = children.length;
-    DisplayObject target;
+    GDisplayObject target;
     for (var i = numChild - 1; i >= 0; --i) {
       var child = children[i];
       if (child.isMask) continue;
       _sHitTestMatrix.copyFrom(child.transformationMatrix);
       _sHitTestMatrix.invert();
       _sHitTestMatrix.transformCoords(
-          localPoint.x, localPoint.y, _sHitTestPoint);
-      if (child is DisplayObjectContainer) {
+        localPoint.x,
+        localPoint.y,
+        _sHitTestPoint,
+      );
+      if (child is GDisplayObjectContainer) {
         result.addAll(child.getObjectsUnderPoint(_sHitTestPoint));
       }
       target = child.hitTest(_sHitTestPoint);
@@ -94,8 +99,8 @@ abstract class DisplayObjectContainer extends DisplayObject {
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!$hasVisibleArea || !mouseEnabled || !hitTestMask(localPoint)) {
+  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
+    if (!$hasTouchableArea || !mouseEnabled || !hitTestMask(localPoint)) {
       return null;
     }
 
@@ -123,11 +128,11 @@ abstract class DisplayObjectContainer extends DisplayObject {
     return null;
   }
 
-  DisplayObject addChild(DisplayObject child) {
+  GDisplayObject addChild(GDisplayObject child) {
     return addChildAt(child, children.length);
   }
 
-  DisplayObject addChildAt(DisplayObject child, int index) {
+  GDisplayObject addChildAt(GDisplayObject child, int index) {
     if (child == null) throw "::child can't be null";
     if (index < 0 || index > children.length) {
       throw RangeError('Invalid child index');
@@ -142,7 +147,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
       child.$onAdded?.dispatch();
       if (stage != null) {
         child.$onAddedToStage?.dispatch();
-        if (child is DisplayObjectContainer) {
+        if (child is GDisplayObjectContainer) {
           _broadcastChildrenAddedToStage(child);
         }
         child.addedToStage();
@@ -156,9 +161,9 @@ abstract class DisplayObjectContainer extends DisplayObject {
 //    if (child is DisplayObjectContainer) {}
   }
 
-  int getChildIndex(DisplayObject child) => children.indexOf(child);
+  int getChildIndex(GDisplayObject child) => children.indexOf(child);
 
-  void setChildIndex(DisplayObject child, int index) {
+  void setChildIndex(GDisplayObject child, int index) {
     final old = getChildIndex(child);
     if (old == index) return;
     if (old == -1) {
@@ -169,7 +174,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
     requiresRedraw();
   }
 
-  void swapChildren(DisplayObject child1, DisplayObject child2) {
+  void swapChildren(GDisplayObject child1, GDisplayObject child2) {
     final idx1 = getChildIndex(child1);
     final idx2 = getChildIndex(child2);
     if (idx1 == -1 || idx2 == -1) {
@@ -197,14 +202,14 @@ abstract class DisplayObjectContainer extends DisplayObject {
     requiresRedraw();
   }
 
-  DisplayObject getChildAt(int index) {
+  GDisplayObject getChildAt(int index) {
     final len = children.length;
     if (index < 0) index = len + index;
     if (index >= 0 && index < len) return children[index];
     throw RangeError('Invalid child index');
   }
 
-  DisplayObject getChildByName(String name) {
+  GDisplayObject getChildByName(String name) {
     for (final child in children) {
       if (child.name == name) return child;
     }
@@ -232,7 +237,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   bool get hasChildren => children.isNotEmpty;
 
-  bool contains(DisplayObject child, [bool recursive = true]) {
+  bool contains(GDisplayObject child, [bool recursive = true]) {
     if (!recursive) return children.contains(child);
     while (child != null) {
       if (child == this) return true;
@@ -241,7 +246,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
     return false;
   }
 
-  DisplayObject removeChildAt(int index, [bool dispose = false]) {
+  GDisplayObject removeChildAt(int index, [bool dispose = false]) {
     if (index >= 0 && index < children.length) {
       requiresRedraw();
       final child = children[index];
@@ -249,7 +254,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
       if (stage != null) {
         child.$onRemovedFromStage?.dispatch();
         child.removedFromStage();
-        if (child is DisplayObjectContainer) {
+        if (child is GDisplayObjectContainer) {
           _broadcastChildrenRemovedFromStage(child);
         }
       }
@@ -262,7 +267,7 @@ abstract class DisplayObjectContainer extends DisplayObject {
     throw 'Invalid child index';
   }
 
-  DisplayObject removeChild(DisplayObject child, [bool dispose = false]) {
+  GDisplayObject removeChild(GDisplayObject child, [bool dispose = false]) {
     if (child == null || child?.$parent != this) return null;
     final index = getChildIndex(child);
     if (index > -1) return removeChildAt(index, dispose);
@@ -271,13 +276,14 @@ abstract class DisplayObjectContainer extends DisplayObject {
 
   @override
   void update(double delta) {
+    super.update(delta);
     for (var child in children) {
       child.update(delta);
     }
   }
 
   @override
-  void $applyPaint(Canvas canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (!$hasVisibleArea) return;
     for (var child in children) {
       if (child.$hasVisibleArea) {
@@ -304,23 +310,27 @@ abstract class DisplayObjectContainer extends DisplayObject {
     super.dispose();
   }
 
-  static void _broadcastChildrenRemovedFromStage(DisplayObjectContainer child) {
-    child.children.forEach((e) {
+  static void _broadcastChildrenRemovedFromStage(
+    GDisplayObjectContainer child,
+  ) {
+    for (var e in child.children) {
       e.removedFromStage();
       e.$onRemovedFromStage?.dispatch();
-      if (e is DisplayObjectContainer) _broadcastChildrenRemovedFromStage(e);
-    });
+      if (e is GDisplayObjectContainer) _broadcastChildrenRemovedFromStage(e);
+    }
   }
 
-  static void _broadcastChildrenAddedToStage(DisplayObjectContainer child) {
-    child.children.forEach((e) {
+  static void _broadcastChildrenAddedToStage(
+    GDisplayObjectContainer child,
+  ) {
+    for (var e in child.children) {
       e.addedToStage();
       e.$onAddedToStage?.dispatch();
-      if (e is DisplayObjectContainer) _broadcastChildrenAddedToStage(e);
-    });
+      if (e is GDisplayObjectContainer) _broadcastChildrenAddedToStage(e);
+    }
   }
 
-  void _drawMask(DisplayObject mask, DisplayObject child) {}
+  void _drawMask(GDisplayObject mask, GDisplayObject child) {}
 
-  void _eraseMask(DisplayObject mask, DisplayObject child) {}
+  void _eraseMask(GDisplayObject mask, GDisplayObject child) {}
 }

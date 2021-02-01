@@ -1,8 +1,6 @@
 import '../../graphx.dart';
-import '../events/events.dart';
-import '../textures/textures.dart';
 
-class MovieClip extends Bitmap {
+class GMovieClip extends GBitmap {
   double timeDilation = 1;
   bool repeatable = true;
   bool reversed = false;
@@ -20,9 +18,10 @@ class MovieClip extends Bitmap {
 
   /// stops the playback when reaching this frame.
   int targetFrame = -1;
-  Bitmap bitmap;
+  GBitmap bitmap;
 
   Signal _onFramesComplete;
+
   Signal get onFramesComplete => _onFramesComplete ??= Signal();
 
 //  Bitmap2 getBitmap() => this;
@@ -32,7 +31,7 @@ class MovieClip extends Bitmap {
 
   set fps(double value) => speed = 1 / value;
 
-  MovieClip({List<GTexture> frames, double fps = 30}) {
+  GMovieClip({List<GTexture> frames, double fps = 30}) {
     setFrameTextures(frames);
     this.fps = fps;
   }
@@ -80,6 +79,7 @@ class MovieClip extends Bitmap {
 
   @override
   void update(double delta) {
+    super.update(delta);
     if (playing && frameCount > 1) {
       accumulatedTime += delta * timeDilation;
       if (accumulatedTime >= speed) {

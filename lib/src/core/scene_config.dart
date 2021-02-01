@@ -102,18 +102,14 @@ class SceneConfig {
     this.autoUpdateRender = true,
     this.painterWillChange,
   }) {
-    if (autoUpdateRender) {
-      useTicker = true;
-    }
+    if (autoUpdateRender) useTicker = true;
   }
 
   /// Utility method used by the [SceneBuilderWidget] to set the flag
   /// `CustomPaint.willChange`
   ///
   bool painterMightChange() {
-    if (useTicker || autoUpdateRender || usePointer || useKeyboard) {
-      return true;
-    }
+    if (useTicker || autoUpdateRender || usePointer || useKeyboard) return true;
     return painterWillChange ?? false;
   }
 }

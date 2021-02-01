@@ -1,12 +1,7 @@
-import 'dart:math';
 import 'dart:typed_data';
-import 'dart:ui';
-
+import 'dart:ui' as ui;
 import 'package:flutter/painting.dart';
 import '../../graphx.dart';
-
-import '../geom/geom.dart';
-import '../utils/utils.dart';
 
 enum GradientType {
   linear,
@@ -19,7 +14,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   GraphicsDrawingData _currentDrawing = GraphicsDrawingData(null, Path());
   double alpha = 1;
 
-  static final GxMatrix _helperMatrix = GxMatrix();
+  static final GMatrix _helperMatrix = GMatrix();
 
   Graphics mask;
 
@@ -29,7 +24,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   static final Path stageRectPath = Path();
 
-  static void updateStageRect(GxRect rect) {
+  static void updateStageRect(GRect rect) {
     stageRectPath.reset();
     stageRectPath.addRect(rect.toNative());
   }
@@ -57,38 +52,38 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// a bigger CPU hit.
   /// In [Graphics] "paths" are separated by [Paint] drawing commands:
   /// [beginFill()] and [lineStyle()]
-  List<GxRect> getAllBounds([List<GxRect> out]) {
-    out ??= <GxRect>[];
-    _drawingQueue.forEach((e) {
+  List<GRect> getAllBounds([List<GRect> out]) {
+    out ??= <GRect>[];
+    for (var e in _drawingQueue) {
       final pathRect = e?.path?.getBounds();
-      if (pathRect == null) return;
-      out.add(GxRect.fromNative(pathRect));
-    });
+      if (pathRect == null) break;
+      out.add(GRect.fromNative(pathRect));
+    }
     return out;
   }
 
   @override
-  GxRect getBounds([GxRect out]) {
+  GRect getBounds([GRect out]) {
     Rect r;
-    _drawingQueue.forEach((e) {
+    for (var e in _drawingQueue) {
       final pathRect = e?.path?.getBounds();
-      if (pathRect == null) return;
+      if (pathRect == null) break;
       if (r == null) {
         r = pathRect;
       } else {
         r = r.expandToInclude(pathRect);
       }
-    });
+    }
     final result = r ?? Rect.zero;
     if (out == null) {
-      out = GxRect.fromNative(result);
+      out = GRect.fromNative(result);
     } else {
       out.setTo(result.left, result.top, result.width, result.height);
     }
     return out;
   }
 
-  bool hitTest(GxPoint localPoint, [bool useShape = false]) {
+  bool hitTest(GPoint localPoint, [bool useShape = false]) {
     if (useShape) {
       final point = Offset(
         localPoint.x,
@@ -116,7 +111,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Graphics beginBitmapFill(
     GTexture texture, [
-    GxMatrix matrix,
+    GMatrix matrix,
     bool repeat = false,
     bool smooth = false,
   ]) {
@@ -137,17 +132,18 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics beginFill(int color, [double alpha = 1]) {
+  Graphics beginFill(Color color) {
     if (_holeMode) return this;
     final fill = Paint();
     fill.style = PaintingStyle.fill;
     fill.isAntiAlias = true;
-    fill.color = Color(color).withOpacity(alpha.clamp(0.0, 1.0));
+    // fill.color = Color(color).withOpacity(alpha.clamp(0.0, 1.0));
+    fill.color = color;
     _addFill(fill);
     return this;
   }
 
-  Graphics drawPicture(Picture picture) {
+  Graphics drawPicture(ui.Picture picture) {
     _drawingQueue.add(GraphicsDrawingData()..picture = picture);
     return this;
   }
@@ -164,8 +160,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Graphics lineStyle([
     double thickness = 0.0,
-    int color = 0x0,
-    double alpha = 1.0,
+    Color color = kColorBlack,
     bool pixelHinting = true,
     StrokeCap caps,
     StrokeJoin joints,
@@ -175,7 +170,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     alpha = alpha.clamp(0.0, 1.0);
     final paint = Paint();
     paint.style = PaintingStyle.stroke;
-    paint.color = Color(color).withOpacity(alpha);
+    paint.color = color;
+    // paint.color = Color(color).withOpacity(alpha);
     paint.strokeWidth = thickness;
     paint.isAntiAlias = pixelHinting;
     paint.strokeCap = caps ?? StrokeCap.butt;
@@ -191,8 +187,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// the [RadialGradient] docs to understand the relation with [focalRadius]
   Graphics beginGradientFill(
     GradientType type,
-    List<int> colors, {
-    List<double> alphas,
+    List<Color> colors, {
     List<double> ratios,
     Alignment begin,
     Alignment end,
@@ -211,7 +206,6 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     final gradient = _createGradient(
       type,
       colors,
-      alphas,
       ratios,
       begin,
       end,
@@ -222,52 +216,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       sweepEndAngle,
       tileMode,
     );
-
-    // final _colors = _GraphUtils.colorsFromHex(colors, alphas);
-    // if (type == GradientType.radial) {
-    //   begin ??= Alignment.center;
-    //   // end ??= Alignment.topRight;
-    // } else {
-    //   begin ??= Alignment.topLeft;
-    //   end ??= Alignment.topRight;
-    // }
-    // Gradient _gradient;
-    // final transform = GradientRotation(rotation);
-    // if (type == GradientType.linear) {
-    //   _gradient = LinearGradient(
-    //     colors: _colors,
-    //     stops: ratios,
-    //     begin: begin,
-    //     end: end,
-    //     tileMode: TileMode.clamp,
-    //     transform: transform,
-    //   );
-    // } else if (type == GradientType.radial) {
-    //   _gradient = RadialGradient(
-    //     center: begin,
-    //     focal: end,
-    //     radius: radius,
-    //     colors: _colors,
-    //     stops: ratios,
-    //     tileMode: TileMode.clamp,
-    //     focalRadius: focalRadius,
-    //     transform: transform,
-    //   );
-    // } else if (type == GradientType.sweep) {
-    //   _gradient = SweepGradient(
-    //     center: begin,
-    //     colors: _colors,
-    //     stops: ratios,
-    //     tileMode: TileMode.clamp,
-    //     transform: transform,
-    //     startAngle: sweepStartAngle,
-    //     endAngle: sweepEndAngle,
-    //   );
-    // }
-
     final paint = Paint();
     paint.style = PaintingStyle.fill;
-//    paint.isAntiAlias = true;
+    paint.isAntiAlias = true;
     _addFill(paint);
     if (gradientBox != null) {
       _currentDrawing.fill.shader = gradient.createShader(gradientBox);
@@ -279,8 +230,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Gradient _createGradient(
     GradientType type,
-    List<int> colors, [
-    List<double> alphas,
+    List<Color> colors, [
     List<double> ratios,
     Alignment begin,
     Alignment end,
@@ -295,14 +245,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double sweepEndAngle = 6.2832,
     TileMode tileMode = TileMode.clamp,
   ]) {
-    final _colors = _GraphUtils.colorsFromHex(colors, alphas);
     final transform = GradientRotation(rotation);
     if (type == GradientType.radial) {
       return RadialGradient(
         center: begin ?? Alignment.center,
         focal: end,
         radius: radius,
-        colors: _colors,
+        colors: colors,
         stops: ratios,
         tileMode: tileMode,
         focalRadius: focalRadius,
@@ -311,7 +260,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     } else if (type == GradientType.sweep) {
       return SweepGradient(
         center: begin ?? Alignment.center,
-        colors: _colors,
+        colors: colors,
         stops: ratios,
         tileMode: tileMode,
         transform: transform,
@@ -320,7 +269,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       );
     }
     return LinearGradient(
-      colors: _colors,
+      colors: colors,
       stops: ratios,
       begin: begin ?? Alignment.centerLeft,
       end: end ?? Alignment.centerRight,
@@ -337,8 +286,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// different than the center (meaning `begin!=end`).
   Graphics lineGradientStyle(
     GradientType type,
-    List<int> colors, {
-    List<double> alphas,
+    List<Color> colors, {
     List<double> ratios,
     Alignment begin,
     Alignment end,
@@ -365,7 +313,6 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     final gradient = _createGradient(
       type,
       colors,
-      alphas,
       ratios,
       begin,
       end,
@@ -386,7 +333,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Graphics lineBitmapStyle(
     GTexture texture, [
-    GxMatrix matrix,
+    GMatrix matrix,
     bool repeat = true,
     bool smooth = false,
   ]) {
@@ -422,21 +369,36 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics cubicCurveTo(double controlX1, double controlY1, double controlX2,
-      double controlY2, double anchorX, double anchorY) {
+  Graphics cubicCurveTo(
+    double controlX1,
+    double controlY1,
+    double controlX2,
+    double controlY2,
+    double anchorX,
+    double anchorY,
+  ) {
     _path.cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
     return this;
   }
 
   Graphics curveTo(
-      double controlX, double controlY, double anchorX, double anchorY) {
+    double controlX,
+    double controlY,
+    double anchorX,
+    double anchorY,
+  ) {
     _path.quadraticBezierTo(controlX, controlY, anchorX, anchorY);
     return this;
   }
 
-  Graphics conicCurveTo(double controlX, double controlY, double anchorX,
-      double anchorY, double weight,
-      [bool relative = false]) {
+  Graphics conicCurveTo(
+    double controlX,
+    double controlY,
+    double anchorX,
+    double anchorY,
+    double weight, [
+    bool relative = false,
+  ]) {
     if (!relative) {
       _path.conicTo(controlX, controlY, anchorX, anchorY, weight);
     } else {
@@ -464,7 +426,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics drawGxRect(GxRect rect) {
+  Graphics drawGxRect(GRect rect) {
     _path.addRect(rect.toNative());
     return this;
   }
@@ -508,13 +470,19 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double ellipseWidth, [
     double ellipseHeight,
   ]) {
-    final r = RRect.fromLTRBXY(x, y, x + width, y + height, ellipseWidth,
-        ellipseHeight ?? ellipseWidth);
+    final r = RRect.fromLTRBXY(
+      x,
+      y,
+      x + width,
+      y + height,
+      ellipseWidth,
+      ellipseHeight ?? ellipseWidth,
+    );
     _path.addRRect(r);
     return this;
   }
 
-  Graphics drawPoly(List<GxPoint> points, [bool closePolygon = true]) {
+  Graphics drawPoly(List<GPoint> points, [bool closePolygon = true]) {
     final len = points.length;
     final list = List<Offset>(len);
     for (var i = 0; i < len; ++i) {
@@ -527,9 +495,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   void shiftPath(double x, double y, [bool modifyPreviousPaths = false]) {
     final offset = Offset(x, y);
     if (modifyPreviousPaths) {
-      _drawingQueue.forEach((command) {
+      for (var command in _drawingQueue) {
         command?.path = command?.path?.shift(offset);
-      });
+      }
     } else {
       _currentDrawing?.path = _currentDrawing?.path?.shift(offset);
     }
@@ -545,7 +513,10 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   ) {
     _path.addArc(
       Rect.fromCenter(
-          center: Offset(cx, cy), width: radiusX * 2, height: radiusY * 2),
+        center: Offset(cx, cy),
+        width: radiusX * 2,
+        height: radiusY * 2,
+      ),
       startAngle,
       sweepAngle,
     );
@@ -553,8 +524,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   Graphics arc(
-      double cx, double cy, double radius, double startAngle, double sweepAngle,
-      [bool moveTo = false]) {
+    double cx,
+    double cy,
+    double radius,
+    double startAngle,
+    double sweepAngle, [
+    bool moveTo = false,
+  ]) {
     if (sweepAngle == 0) return this;
     if (!moveTo) {
       _path.arcTo(
@@ -570,7 +546,6 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         sweepAngle,
       );
     }
-
     return this;
   }
 
@@ -613,10 +588,10 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double rotation = 0,
   ]) {
     final points = List<Offset>(sides);
-    final rel = 2 * pi / sides;
+    final rel = 2 * Math.PI / sides;
     for (var i = 1; i <= sides; ++i) {
-      final px = x + radius * cos(i * rel + rotation);
-      final py = y + radius * sin(i * rel + rotation);
+      final px = x + radius * Math.cos(i * rel + rotation);
+      final py = y + radius * Math.sin(i * rel + rotation);
       points[i - 1] = Offset(px, py);
     }
     _path.addPolygon(points, true);
@@ -632,16 +607,16 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double rotation = 0,
   ]) {
     innerRadius ??= radius / 2;
-    final startAngle = (-1 * pi / 2) + rotation;
+    final startAngle = (-1 * Math.PI1_2) + rotation;
     final len = points * 2;
-    final delta = pi * 2 / len;
+    final delta = Math.PI_2 / len;
     final polys = <Offset>[];
     for (var i = 0; i < len; ++i) {
       final r = i.isOdd ? innerRadius : radius;
       final a = i * delta + startAngle;
       polys.add(Offset(
-        x + (r * cos(a)),
-        y + (r * sin(a)),
+        x + (r * Math.cos(a)),
+        y + (r * Math.sin(a)),
       ));
     }
     _path.addPolygon(polys, true);
@@ -692,22 +667,22 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   void paintWithFill(Canvas canvas, Paint fill) {
     if (!_isVisible) return;
-    _drawingQueue.forEach((graph) {
+    for (var graph in _drawingQueue) {
       if (graph.hasPicture) {
         canvas.drawPicture(graph.picture);
         return;
       }
       canvas.drawPath(graph.path, fill);
-    });
+    }
   }
 
   Path getPaths() {
     var output = Path();
     if (SystemUtils.usingSkia) {
-      _drawingQueue.forEach((graph) {
+      for (var graph in _drawingQueue) {
         /// unsupported on web.
         output = Path.combine(PathOperation.union, output, graph.path);
-      });
+      }
     } else {
       trace('Graphics.getPaths() is unsupported in the current platform.');
     }
@@ -718,22 +693,22 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   void paint(Canvas canvas) {
     // TODO : add mask support.
     if (isMask) {
-      _drawingQueue.forEach((graph) {
+      for (var graph in _drawingQueue) {
         canvas.clipPath(graph.path, doAntiAlias: false);
-      });
+      }
       return;
     }
     _constrainAlpha();
     if (!_isVisible) return;
 
-    _drawingQueue.forEach((graph) {
+    for (var graph in _drawingQueue) {
       if (graph.hasPicture) {
         canvas.drawPicture(graph.picture);
-        return;
+        break;
       }
       final fill = graph.fill;
       final baseColor = fill.color;
-      if (baseColor.alpha == 0) return;
+      if (baseColor.alpha == 0) break;
 
       /// calculate gradient.
       if (graph.hasGradient) {
@@ -743,24 +718,26 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         } else {
           _bounds = graph.path.getBounds();
         }
+
+        /// TODO: try if this works to change the gradient
+        /// opacity from the Shape.
+        fill.color = baseColor.withOpacity(alpha);
         fill.shader = graph.gradient.createShader(_bounds);
       } else {
         if (alpha != 1) {
           fill.color = baseColor.withOpacity(baseColor.opacity * alpha);
         }
       }
-
       if (graph.hasVertices) {
         if (graph.vertices.uvtData != null && graph.shaderTexture != null) {
           graph.vertices.calculateUvt(graph.shaderTexture);
         }
-        var myPaint = Paint();
-        myPaint.strokeWidth = 2;
-        myPaint.color = Color(0xffff00ff);
-        myPaint.style = PaintingStyle.stroke;
-
         if (fill.style == PaintingStyle.stroke) {
-          canvas.drawRawPoints(PointMode.lines, graph.vertices.rawPoints, fill);
+          canvas.drawRawPoints(
+            ui.PointMode.lines,
+            graph.vertices.rawPoints,
+            fill,
+          );
         } else {
           canvas.drawVertices(
             graph.vertices.rawData,
@@ -773,7 +750,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       }
 
       fill.color = baseColor;
-    });
+    }
   }
 
   void _addFill(Paint fill) {
@@ -833,8 +810,12 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// Appends a native `Path` to the current drawing path,
   /// `x` and `y` can offset the target position, while `transform` can be used
   /// to rotated, scale, translate, the given shape.
-  Graphics drawPath(Path path,
-      [double x = 0, double y = 0, GxMatrix transform]) {
+  Graphics drawPath(
+    Path path, [
+    double x = 0,
+    double y = 0,
+    GMatrix transform,
+  ]) {
     _path.addPath(
       path,
       Offset(x, y),
@@ -850,15 +831,22 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     List<double> vertices, [
     List<int> indices,
     List<double> uvtData,
-    List<int> colors,
+    List<int> hexColors,
     BlendMode blendMode = BlendMode.src,
     Culling culling = Culling.positive,
   ]) {
     /// will only work if it has a fill.
     assert(_currentDrawing != null);
     assert(_currentDrawing.fill != null);
-    _currentDrawing.vertices = _GraphVertices(VertexMode.triangles, vertices,
-        indices, uvtData, colors, blendMode, culling);
+    _currentDrawing.vertices = _GraphVertices(
+      ui.VertexMode.triangles,
+      vertices,
+      indices,
+      uvtData,
+      hexColors,
+      blendMode,
+      culling,
+    );
     return this;
   }
 }
@@ -868,7 +856,7 @@ class GraphicsDrawingData {
   Paint fill;
 
   Gradient gradient;
-  Picture picture;
+  ui.Picture picture;
   bool isHole = false;
 
   /// for drawVertices()
@@ -903,10 +891,7 @@ class GraphicsDrawingData {
       ..vertices = _vertices;
   }
 
-  bool isSameType(Paint otherFill) {
-    return fill?.style == otherFill?.style ?? false;
-  }
-// compute grad?
+  bool isSameType(Paint otherFill) => fill?.style == otherFill?.style ?? false;
 }
 
 extension ExtSkiaPaintCustom on Paint {
@@ -933,8 +918,7 @@ extension ExtSkiaPaintCustom on Paint {
 }
 
 class _GraphVertices {
-  List<double> vertices, uvtData;
-  List<double> adjustedUvtData;
+  List<double> vertices, uvtData, adjustedUvtData;
   List<int> colors, indices;
   BlendMode blendMode;
   VertexMode mode;
@@ -964,14 +948,14 @@ class _GraphVertices {
     this.culling = Culling.positive,
   ]) {
     _normalizedUvt = false;
-    if (uvtData != null && uvtData.length > 6) {
+    final len = uvtData.length;
+    if (uvtData != null && len > 6) {
       for (var i = 0; i < 6; ++i) {
         if (uvtData[i] <= 2.0) {
           _normalizedUvt = true;
         }
       }
-      if (uvtData[uvtData.length - 2] <= 2.0 ||
-          uvtData[uvtData.length - 1] <= 2.0) {
+      if (uvtData[len - 2] <= 2.0 || uvtData[len - 1] <= 2.0) {
         _normalizedUvt = true;
       }
     }
@@ -989,20 +973,13 @@ class _GraphVertices {
     return _bounds;
   }
 
-  Path computePath() {
-    _path ??= _GraphUtils.getPathFromVertices(this);
-    return _path;
-  }
+  Path computePath() => _path ??= _GraphUtils.getPathFromVertices(this);
 
-  Vertices _rawData;
+  ui.Vertices _rawData;
 
-  Vertices get rawData {
-    if (_rawData != null) {
-      return _rawData;
-    }
-
+  ui.Vertices get rawData {
+    if (_rawData != null) return _rawData;
     // calculateCulling();
-
     Float32List _textureCoordinates;
     Int32List _colors;
     Uint16List _indices;
@@ -1011,7 +988,7 @@ class _GraphVertices {
     }
     if (colors != null) _colors = Int32List.fromList(colors);
     if (indices != null) _indices = Uint16List.fromList(indices);
-    _rawData = Vertices.raw(
+    _rawData = ui.Vertices.raw(
       VertexMode.triangles,
       Float32List.fromList(vertices),
       textureCoordinates: _textureCoordinates,
@@ -1097,14 +1074,14 @@ class _GraphUtils {
   ) =>
       ((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) < 0;
 
-  static List<Color> colorsFromHex(List<int> colors, List<double> alphas) {
-    final _colors = List<Color>(colors.length); //<Color>[];
-    for (var i = 0; i < colors.length; ++i) {
-      final a = (alphas != null && i < alphas.length ? alphas[i] : 1.0);
-      _colors[i] = Color(colors[i]).withOpacity(a);
-    }
-    return _colors;
-  }
+  // static List<Color> colorsFromHex(List<int> colors, List<double> alphas) {
+  //   final _colors = List<Color>(colors.length); //<Color>[];
+  //   for (var i = 0; i < colors.length; ++i) {
+  //     final a = (alphas != null && i < alphas.length ? alphas[i] : 1.0);
+  //     _colors[i] = Color(colors[i]).withOpacity(a);
+  //   }
+  //   return _colors;
+  // }
 
   static final Path _helperPath = Path();
 

@@ -22,12 +22,10 @@ class SceneController {
   Signal _onHotReload;
   Signal get onHotReload => _onHotReload ??= Signal();
 
-  ScenePainter backScene;
-
-  ScenePainter frontScene;
+  ScenePainter backScene, frontScene;
 
   /// Access the `ticker` (if any) created by this SceneController.
-  GxTicker get ticker {
+  GTicker get ticker {
     if (_ticker == null) {
       throw 'You need to enable ticker usage with '
           'SceneBuilderWidget( useTicker=true ) or '
@@ -49,7 +47,7 @@ class SceneController {
 
   PointerManager _pointer;
 
-  GxTicker _ticker;
+  GTicker _ticker;
 
   InputConverter $inputConverter;
 
@@ -59,7 +57,7 @@ class SceneController {
 
   /// gets widget's global coordinates.
   /// useful to compute interactions with children Widgets that gets
-  GxRect Function() resolveWindowBounds;
+  GRect Function() resolveWindowBounds;
 
   int id = -1;
 
@@ -99,7 +97,7 @@ class SceneController {
     }
     setup();
     if (_hasTicker()) {
-      _ticker = GxTicker();
+      _ticker = GTicker();
       _ticker.onFrame.add(_onTick);
       if (_anySceneAutoUpdate()) {
         _ticker.resume();
@@ -114,7 +112,7 @@ class SceneController {
     frontScene?.$setup();
   }
 
-  /// [GxTicker] that runs the `enterFrame`.
+  /// [GTicker] that runs the `enterFrame`.
   /// Is independent from the rendering pipeline.
   void _onTick(double elapsed) {
     frontScene?.tick(elapsed);
@@ -157,7 +155,6 @@ class SceneController {
     _onHotReload?.dispatch();
     if (_config.rebuildOnHotReload) {
       dispose();
-
       /// TODO: check if we need to delay the reinitialization.
       $init();
     }

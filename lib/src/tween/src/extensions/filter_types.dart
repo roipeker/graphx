@@ -1,6 +1,6 @@
 part of gtween;
 
-extension GTweenBlurFilterExt on BlurFilter {
+extension GTweenBlurFilterExt on GBlurFilter {
   GTweenableBlur get twn => GTweenableBlur(this);
   GTween tween({
     @required double duration,
@@ -40,7 +40,7 @@ extension GTweenBlurFilterExt on BlurFilter {
       );
 }
 
-extension GTweenDropShadowFilterExt on DropShadowFilter {
+extension GTweenDropShadowFilterExt on GDropShadowFilter {
   GTweenableDropShadowFilter get twn => GTweenableDropShadowFilter(this);
   GTween tween({
     @required double duration,

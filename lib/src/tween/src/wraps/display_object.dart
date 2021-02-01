@@ -2,11 +2,11 @@ part of gtween;
 
 class GTweenableDisplayObject with GTweenable {
   static GTweenable wrap(Object target) {
-    if (target is! DisplayObject) return null;
+    if (target is! GDisplayObject) return null;
     return GTweenableDisplayObject(target);
   }
 
-  GTweenableDisplayObject(DisplayObject target) {
+  GTweenableDisplayObject(GDisplayObject target) {
     this.target = target;
 
     _addLerp(

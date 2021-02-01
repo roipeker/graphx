@@ -1,11 +1,12 @@
+import 'dart:ui' as ui;
 import '../../graphx.dart';
 
 class GTexture {
-  GxRect frame;
+  GRect frame;
 
   // set from the outside.
-  GxRect scale9Grid;
-  GxRect scale9GridDest;
+  GRect scale9Grid;
+  GRect scale9GridDest;
 
   double get width => nativeWidth;
 
@@ -16,7 +17,7 @@ class GTexture {
   double get nativeHeight => root?.height?.toDouble() ?? 0;
 
   /// when the texture is plain color.
-  Color color;
+  ui.Color color;
 
   /// used width.
   double get frameWidth => frame?.width ?? nativeWidth;
@@ -28,10 +29,10 @@ class GTexture {
 
   double pivotX = 0,
       pivotY = 0;
-  GxRect sourceRect;
+  GRect sourceRect;
 
   double scale = 1;
-  Image root;
+  ui.Image root;
 
   /// copy Image data, and properties from other GTexture instance.
   void copyFrom(GTexture other) {
@@ -45,18 +46,18 @@ class GTexture {
     scale = other.scale;
   }
 
-  GxRect getBounds() {
+  GRect getBounds() {
     return sourceRect;
   }
 
-  static GTexture fromColor(double w, double h, Color color,
+  static GTexture fromColor(double w, double h, ui.Color color,
       [double scale = 1]) {
     var texture = GTexture.empty(w, h, scale);
     texture.color = color;
     return texture;
   }
 
-  static GTexture fromImage(Image data, [
+  static GTexture fromImage(ui.Image data, [
     double scale = 1,
   ]) {
     var texture =
@@ -64,7 +65,7 @@ class GTexture {
     texture.root = data;
     texture.actualWidth = data.width.toDouble();
     texture.actualHeight = data.height.toDouble();
-    texture.sourceRect = GxRect(0, 0, data.width / scale, data.height / scale);
+    texture.sourceRect = GRect(0, 0, data.width / scale, data.height / scale);
     return texture;
   }
 
@@ -85,9 +86,9 @@ class GTexture {
     return t;
   }
 
-  static Paint sDefaultPaint = Paint();
+  static ui.Paint sDefaultPaint = ui.Paint();
 
-  void render(Canvas canvas, [Paint paint]) {
+  void render(ui.Canvas canvas, [ui.Paint paint]) {
     paint ??= sDefaultPaint;
     if (scale != 1) {
       canvas.save();
@@ -100,7 +101,7 @@ class GTexture {
     }
   }
 
-  void _drawImage(Canvas canvas, Paint paint) {
+  void _drawImage(ui.Canvas canvas, ui.Paint paint) {
     if (scale9Grid != null) {
       // print('src: $scale9Grid, dst: $scale9GridDest');
       canvas.drawImageNine(
@@ -111,7 +112,7 @@ class GTexture {
         paint,
       );
     } else {
-      canvas.drawImage(root, Offset.zero, paint);
+      canvas.drawImage(root, ui.Offset.zero, paint);
     }
   }
 

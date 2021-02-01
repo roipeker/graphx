@@ -45,7 +45,7 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
     _controller.$init();
   }
 
-  GxRect _getRenderObjectWindowBounds() {
+  GRect _getRenderObjectWindowBounds() {
     if (!mounted) return null;
     return ContextUtils.getRenderObjectBounds(context);
   }

@@ -2,13 +2,13 @@ part of gtween;
 
 class GTweenablePoint with GTweenable {
   static GTweenable wrap(Object target) {
-    if (target is! GxPoint) return null;
+    if (target is! GPoint) return null;
     return GTweenablePoint(target);
   }
 
-  GxPoint value;
+  GPoint value;
 
-  GTweenablePoint(GxPoint target) {
+  GTweenablePoint(GPoint target) {
     value = this.target = target;
   }
 
@@ -22,7 +22,7 @@ class GTweenablePoint with GTweenable {
     @required double duration,
     Object x,
     Object y,
-    GxPoint to,
+    GPoint to,
     EaseFunction ease,
     double delay,
     bool useFrames,
@@ -72,13 +72,13 @@ GTween Can't use 'x, y' AND 'to' arguments for GxPoint tween. Choose one''';
 
 class GTweenableRect with GTweenable {
   static GTweenable wrap(Object target) {
-    if (target is! GxRect) return null;
+    if (target is! GRect) return null;
     return GTweenableRect(target);
   }
 
-  GxRect value;
+  GRect value;
 
-  GTweenableRect(GxRect target) {
+  GTweenableRect(GRect target) {
     value = this.target = target;
   }
 
@@ -96,7 +96,7 @@ class GTweenableRect with GTweenable {
       Object y,
       Object width,
       Object height,
-      GxRect to,
+      GRect to,
       EaseFunction ease,
       double delay,
       bool useFrames,

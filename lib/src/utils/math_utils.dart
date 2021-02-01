@@ -1,15 +1,13 @@
-import 'dart:math' as math;
-
-import 'package:vector_math/vector_math_64.dart';
-
+// import 'dart:math' as math;
+// import 'package:vector_math/vector_math_64.dart';
 import '../../graphx.dart';
 
-double deg2rad(double deg) => deg / 180.0 * math.pi;
-double rad2deg(double rad) => rad / math.pi * 180.0;
+double deg2rad(double deg) => deg / 180.0 * Math.PI;
+double rad2deg(double rad) => rad / Math.PI * 180.0;
 
 abstract class MathUtils {
-  static const double halfPi = math.pi / 2;
-  static const double pi2 = math.pi * 2;
+  static const double halfPi = Math.PI / 2;
+  static const double pi2 = Math.PI * 2;
 
   static int getNextPowerOfTwo(num value) {
     if (value is int &&
@@ -28,12 +26,12 @@ abstract class MathUtils {
 
   static double normalizeAngle(double angle) {
     angle = angle % pi2;
-    if (angle < -math.pi) angle += pi2;
-    if (angle > math.pi) angle -= pi2;
+    if (angle < -Math.PI) angle += pi2;
+    if (angle > Math.PI) angle -= pi2;
     return angle;
   }
 
-  static bool isPointInTriangle(GxPoint p, GxPoint a, GxPoint b, GxPoint c) {
+  static bool isPointInTriangle(GPoint p, GPoint a, GPoint b, GPoint c) {
     // This algorithm is described well in this article:
     // http://www.blackpawn.com/texts/pointinpoly/default.html
     var v0x = c.x - a.x;
@@ -57,25 +55,25 @@ abstract class MathUtils {
 
   /// Calculates the intersection point between the xy-plane and an infinite
   /// line that is defined by two 3D points in the same coordinate system.
-  static GxPoint intersectLineWithXYPlane(Vector3 pointA, Vector3 pointB,
-      [GxPoint out]) {
-    out ??= GxPoint();
-    final vectorX = pointB.x - pointA.x;
-    final vectorY = pointB.y - pointA.y;
-    final vectorZ = pointB.z - pointA.z;
-    final lambda = -pointA.z / vectorZ;
-    out.x = pointA.x + lambda * vectorX;
-    out.y = pointA.y + lambda * vectorY;
-    return out;
-  }
+  // static GxPoint intersectLineWithXYPlane(Vector3 pointA, Vector3 pointB,
+  //     [GxPoint out]) {
+  //   out ??= GxPoint();
+  //   final vectorX = pointB.x - pointA.x;
+  //   final vectorY = pointB.y - pointA.y;
+  //   final vectorZ = pointB.z - pointA.z;
+  //   final lambda = -pointA.z / vectorZ;
+  //   out.x = pointA.x + lambda * vectorX;
+  //   out.y = pointA.y + lambda * vectorY;
+  //   return out;
+  // }
 
   static bool isEquivalent(double a, double b, [double epsilon = .0001]) =>
       (a - epsilon < b) && (a + epsilon > b);
 
   static double shortRotation(double rotation) {
-    if (rotation < -math.pi) {
+    if (rotation < -Math.PI) {
       rotation += pi2;
-    } else if (rotation > math.pi) {
+    } else if (rotation > Math.PI) {
       rotation -= pi2;
     }
     return rotation;

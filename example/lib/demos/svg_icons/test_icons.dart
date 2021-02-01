@@ -12,10 +12,10 @@ class TestIcons extends Sprite {
     iconsContainer.x = 100;
     iconsContainer.y = 100;
 
-    final icon1 = GxIcon(Icons.account_circle, Colors.purple.value, 32.0);
+    final icon1 = GIcon(Icons.account_circle, Colors.purple.value, 32.0);
     iconsContainer.addChild(icon1);
 
-    final icon2 = GxIcon(Icons.email, 0xffffff, 18.0);
+    final icon2 = GIcon(Icons.email, 0xffffff, 18.0);
     iconsContainer.addChild(icon2);
     icon2.x = 32;
     icon2.alignPivot();
@@ -27,7 +27,7 @@ class TestIcons extends Sprite {
         blurRadius: 8.0));
 
     /// You can go low level and add a Paint to your icon ...
-    final icon3 = GxIcon(Icons.add_location, 0x0, 18.0);
+    final icon3 = GIcon(Icons.add_location, 0x0, 18.0);
     iconsContainer.addChild(icon3);
     icon3.alignPivot();
     icon3.x = 32;

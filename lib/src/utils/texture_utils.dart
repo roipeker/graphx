@@ -1,13 +1,20 @@
+import 'dart:ui' as ui;
 import '../../graphx.dart';
 
-mixin TextureUtils {
-  static final Shape _helperShape = Shape();
+mixin GTextureUtils {
+  static final GShape _helperShape = GShape();
 
   static Graphics get _g => _helperShape.graphics;
   static double resolution = 1.0;
 
-  static void scale9Rect(GTexture tx, double x,
-      {double y, double w, double h, bool adjustScale = false}) {
+  static void scale9Rect(
+    GTexture tx,
+    double x, {
+    double y,
+    double w,
+    double h,
+    bool adjustScale = false,
+  }) {
     y ??= x;
     w ??= -x;
     h ??= -y;
@@ -23,41 +30,35 @@ mixin TextureUtils {
     if (h < 0) {
       h = tx.height + h * 2;
     }
-    var out = GxRect(x, y, w, h);
-    // if (scaleToTexture) {
-    //   out *= tx.scale;
-    // }
+    var out = GRect(x, y, w, h);
     tx.scale9Grid = out;
   }
 
   static Future<GTexture> createCircle({
-    int color = 0xff00ff,
-    double alpha = 1,
+    ui.Color color = kColorMagenta,
     double radius = 20,
     double x = 0,
     double y = 0,
     String id,
   }) async {
-    _g.clear()..beginFill(color, alpha).drawCircle(x, y, radius);
+    _g.clear()..beginFill(color).drawCircle(x, y, radius);
     return await _drawShape(id);
   }
 
   static Future<GTexture> createRect({
-    int color = 0xff00ff,
-    double alpha = 1,
+    ui.Color color = kColorMagenta,
     double x = 0,
     double y = 0,
     double w = 20,
     double h = 20,
     String id,
   }) async {
-    _g.clear()..beginFill(color, alpha).drawRect(x, y, w, h);
+    _g.clear()..beginFill(color).drawRect(x, y, w, h);
     return (await _drawShape(id));
   }
 
   static Future<GTexture> createRoundRect({
-    int color = 0xff00ff,
-    double alpha = 1,
+    ui.Color color = kColorMagenta,
     double x = 0,
     double y = 0,
     double w = 20,
@@ -65,21 +66,19 @@ mixin TextureUtils {
     double r = 8,
     String id,
   }) async {
-    _g.clear()..beginFill(color, alpha).drawRoundRect(x, y, w, h, r);
+    _g.clear()..beginFill(color).drawRoundRect(x, y, w, h, r);
     return (await _drawShape(id));
   }
 
   static Future<GTexture> createTriangle({
-    int color = 0xff00ff,
-    double alpha = 1,
+    ui.Color color = kColorMagenta,
     double w = 20,
     double h = 20,
     double rotation = 0,
     String id,
   }) async {
-    _g
-        .clear()
-        .beginFill(color, alpha)
+    _g.clear()
+        .beginFill(color)
         .drawPolygonFaces(0, 0, w / 2, 3, rotation)
         .endFill();
     var heightScale = h / w;
@@ -90,8 +89,10 @@ mixin TextureUtils {
   }
 
   static Future<GTexture> _drawShape([String id]) async {
-    final tx =
-        await _helperShape.createImageTexture(true, TextureUtils.resolution);
+    final tx = await _helperShape.createImageTexture(
+      true,
+      GTextureUtils.resolution,
+    );
     if (id != null) {
       ResourceLoader.textures[id] = tx;
     }
@@ -117,11 +118,13 @@ mixin TextureUtils {
     for (var i = 0; i < total; ++i) {
       final px = (i % cols) * _w;
       final py = (i ~/ cols) * _h;
-      var subRect = GxRect(px, py, _w, _h);
-//      var texture = GxTexture(base.source, subRect, true, scale);
-      var texture = GSubTexture(base,
-          region: subRect, scaleModifier: scale, rotated: false);
-//      texture.base = base;
+      var subRect = GRect(px, py, _w, _h);
+      var texture = GSubTexture(
+        base,
+        region: subRect,
+        scaleModifier: scale,
+        rotated: false,
+      );
       output.add(texture);
     }
     return output;

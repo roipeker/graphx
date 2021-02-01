@@ -3,8 +3,8 @@
 import '../../graphx.dart';
 
 abstract class ListUtils {
-  static void mergeSort(List<DisplayObject> input, SortChildrenCallback compare,
-      int startIndex, int len, List<DisplayObject> buffer) {
+  static void mergeSort(List<GDisplayObject> input, SortChildrenCallback compare,
+      int startIndex, int len, List<GDisplayObject> buffer) {
     if (len > 1) {
       int i,
           endIndex = startIndex + len,

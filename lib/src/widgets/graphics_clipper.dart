@@ -20,7 +20,7 @@ abstract class GraphicsClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final g = Graphics();
-    g.beginFill(0x0);
+    g.beginFill(kColorBlack);
     draw(g, size);
     return applyTransform(g.getPaths());
   }

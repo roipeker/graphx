@@ -8,19 +8,19 @@ class MyButton extends Sprite {
   double h = 80;
 
   // backwards background (black)
-  Shape bg;
+  GShape bg;
 
   // filled background that changes with [_fillPercent] (yellow)
-  Shape fillBg;
+  GShape fillBg;
 
   // the light bulb icon that toggles when clicking the button
-  GxIcon icon;
+  GIcon icon;
 
   bool _isTouching = false;
   bool _isOn = false;
   double _fillPercent = 0.0;
 
-  StaticText _fillText;
+  GText _fillText;
 
   MyButton() {
     _init();
@@ -29,13 +29,13 @@ class MyButton extends Sprite {
   /// we dont make usage of stage, so is safe to initialize all objects
   /// as soon as we instantiate [MyButton].
   void _init() {
-    bg = Shape();
+    bg = GShape();
     _dragBackground(bg.graphics, Colors.black);
 
-    fillBg = Shape();
+    fillBg = GShape();
     _dragBackground(fillBg.graphics, Colors.yellow.shade800);
 
-    icon = GxIcon(null);
+    icon = GIcon(null);
     _updateIcon();
 
     icon.alignPivot();
@@ -69,9 +69,9 @@ class MyButton extends Sprite {
   }
 
   void _initText() {
-    _fillText = StaticText(
+    _fillText = GText(
       text: '0%',
-      textStyle: StaticText.getStyle(
+      textStyle: GText.getStyle(
         color: Colors.black,
         fontSize: 24,
         fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class MyButton extends Sprite {
   void _dragBackground(Graphics g, Color color) {
     /// when you wanna redraw a Shape and not "add" to the current drawing...
     /// always clear() it first.
-    g.clear().beginFill(color.value).drawRoundRect(0, 0, w, h, 12).endFill();
+    g.clear().beginFill(color).drawRoundRect(0, 0, w, h, 12).endFill();
   }
 
   /// Toggles [_isOn] property between true/false, and updates the icon

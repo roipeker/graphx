@@ -1,10 +1,10 @@
 part of gtween;
 
-extension GTweenPointExt on GxPoint {
+extension GTweenPointExt on GPoint {
   GTweenablePoint get twn => GTweenablePoint(this);
 }
 
-extension GTweenRectExt on GxRect {
+extension GTweenRectExt on GRect {
   GTweenableRect get twn => GTweenableRect(this);
 }
 

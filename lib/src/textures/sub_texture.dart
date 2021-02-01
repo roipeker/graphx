@@ -1,23 +1,24 @@
+import 'dart:ui' as ui;
 import '../../graphx.dart';
 
 class GSubTexture extends GTexture {
   GTexture _parent;
   bool _ownsParent;
-  GxRect _region;
-  GxRect _sourceRegion;
+  GRect _region;
+  GRect _sourceRegion;
   bool _rotated;
   double _w;
   double _h;
   double _scale;
 
   /// cache rendering.
-  Rect _sourceRegionRect;
-  Rect _destRect;
+  ui.Rect _sourceRegionRect;
+  ui.Rect _destRect;
 
   GSubTexture(GTexture parent,
-      {GxRect region,
+      {GRect region,
       bool ownsParent = false,
-      GxRect frame,
+      GRect frame,
       bool rotated,
       double scaleModifier = 1}) {
     $setTo(
@@ -31,12 +32,12 @@ class GSubTexture extends GTexture {
   }
 
   void $setTo(GTexture parent,
-      {GxRect region,
+      {GRect region,
       bool ownsParent = false,
-      GxRect frame,
+      GRect frame,
       bool rotated,
       double scaleModifier = 1}) {
-    _region ??= GxRect();
+    _region ??= GRect();
     if (region != null) {
       _region.copyFrom(region);
     } else {
@@ -64,8 +65,8 @@ class GSubTexture extends GTexture {
     _sourceRegionRect = _sourceRegion.toNative();
 
     /// used width, height
-    _destRect = Rect.fromLTWH(0, 0, nativeWidth, nativeHeight);
-    sourceRect = GxRect(0, 0, nativeWidth, nativeHeight);
+    _destRect = ui.Rect.fromLTWH(0, 0, nativeWidth, nativeHeight);
+    sourceRect = GRect(0, 0, nativeWidth, nativeHeight);
 //    updateMatrices();
   }
 
@@ -82,7 +83,7 @@ class GSubTexture extends GTexture {
     super.dispose();
   }
 
-  GxRect get region => _region;
+  GRect get region => _region;
 
   bool get rotated => _rotated;
 
@@ -91,7 +92,7 @@ class GSubTexture extends GTexture {
   GTexture get parent => _parent;
 
   @override
-  Image get root => _parent.root;
+  ui.Image get root => _parent.root;
 
   @override
   double get width => _w;
@@ -112,7 +113,7 @@ class GSubTexture extends GTexture {
   void updateMatrices() {}
 
   @override
-  void render(Canvas canvas, [Paint paint]) {
+  void render(ui.Canvas canvas, [ui.Paint paint]) {
     paint ??= GTexture.sDefaultPaint;
     paint.isAntiAlias = true;
     canvas.drawImageRect(root, _sourceRegionRect, _destRect, paint);

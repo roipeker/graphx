@@ -1,9 +1,9 @@
 library graphx;
 
-export 'dart:math';
-export 'dart:ui';
-
+// export 'dart:math';
+// export 'dart:ui';
 export 'package:flutter/services.dart';
+export 'package:flutter/foundation.dart';
 
 export 'src/core/core.dart';
 export 'src/debug/debug.dart';
@@ -17,7 +17,7 @@ export 'src/math.dart';
 export 'src/render/filters/filters.dart';
 export 'src/render/render.dart';
 export 'src/textures/textures.dart';
-export 'src/ticker/gx_ticker.dart';
+export 'src/ticker/ticker.dart';
 export 'src/tween/gtween.dart';
 export 'src/utils/utils.dart';
 export 'src/widgets/widgets.dart';

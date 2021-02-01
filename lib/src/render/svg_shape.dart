@@ -3,9 +3,9 @@ import 'dart:ui';
 import '../../graphx.dart';
 import '../utils/utils.dart';
 
-class SvgShape extends DisplayObject {
-  static final GxMatrix _sHelperMatrix = GxMatrix();
-  static final GxPoint _sHelperPoint = GxPoint();
+class GSvgShape extends GDisplayObject {
+  static final GMatrix _sHelperMatrix = GMatrix();
+  static final GPoint _sHelperPoint = GPoint();
 
   Color _tint;
 
@@ -51,12 +51,12 @@ class SvgShape extends DisplayObject {
     requiresRedraw();
   }
 
-  SvgShape(SvgData data) {
+  GSvgShape(SvgData data) {
     this.data = data;
   }
 
-  SvgShape clone() {
-    var obj = SvgShape(data);
+  GSvgShape clone() {
+    var obj = GSvgShape(data);
     obj._blendMode = _blendMode;
     obj._tint = _tint;
     obj.$alpha = $alpha;
@@ -65,7 +65,7 @@ class SvgShape extends DisplayObject {
   }
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
@@ -123,8 +123,8 @@ class SvgShape extends DisplayObject {
 /// proxy class to flutter_svg
 class SvgData {
   Color color;
-  GxRect viewBox;
-  GxRect size;
+  GRect viewBox;
+  GRect size;
   Picture picture;
   bool hasContent;
 

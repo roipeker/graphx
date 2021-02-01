@@ -152,7 +152,7 @@ class GTween {
 
   bool _gc = false;
 
-  GTween(Object target, double duration, Map vars, [GVars myVars]) {
+  GTween(this.target, double duration, this.vars, [GVars myVars]) {
     if (_reservedProps == null) {
       _reservedProps = {
         'delay': 1,
@@ -173,13 +173,13 @@ class GTween {
     nanoVars = myVars ?? GVars();
     nanoVars.defaults();
     nanoVars._setTween(this);
-    this.vars = vars;
+    // this.vars = vars;
 
     _duration = duration;
-    this.target = target;
+    // this.target = target;
 
     if (target is List) {
-      var targetList = target;
+      var targetList = target as List;
       if (targetList.first is Map<String, dynamic> ||
           targetList.first is GTweenable) {
         _targets = List.of(target);
@@ -187,7 +187,7 @@ class GTween {
 
       /// TODO : add wrap support.
     } else if (target is GTweenable) {
-      _animatableTarget = target.target;
+      _animatableTarget = (target as GTweenable).target;
     } else {
       if (target is Function || target is Map) {
         /// no process.
@@ -200,11 +200,10 @@ class GTween {
             break;
           }
         }
-        target = this.target = result;
+        target = result;
         _animatableTarget = result?.target;
       }
     }
-
 //    _rawEase = nanoVars.ease;
 //    _ease = _rawEase?.getRatio;
     _ease = nanoVars.ease;
@@ -215,7 +214,7 @@ class GTween {
       if (_animatableTarget != null) {
         killTweensOf(_animatableTarget);
       } else {
-        killTweensOf(this.target);
+        killTweensOf(target);
       }
     }
     _prev = _last;
@@ -425,6 +424,16 @@ class GTween {
 //      nanoVars = null;
 //      vars = null;
       _next = _prev = null;
+    }
+  }
+
+  /// Kills all running tweens.
+  static void killAll(){
+    var t = _first;
+    while (t != null) {
+      var next = t._next;
+      t.kill();
+      t = next;
     }
   }
 

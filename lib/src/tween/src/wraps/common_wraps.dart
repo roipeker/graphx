@@ -4,7 +4,7 @@ part of gtween;
 abstract class CommonTweenWraps {
   /// TODO: check performance to use a Custom mapping type.
   /// Lerps (like Color) are managed separately.
-  static Map<String, List<Function>> displayObject(DisplayObject o) {
+  static Map<String, List<Function>> displayObject(GDisplayObject o) {
     return {
       'x': [() => o.x, (v) => o.x = v],
       'y': [() => o.y, (v) => o.y = v],

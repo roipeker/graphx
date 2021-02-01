@@ -1,9 +1,6 @@
-import 'dart:ui';
-
+import 'dart:ui' as ui;
 import '../../graphx.dart';
-import '../core/scene_painter.dart';
 import '../events/mixins.dart';
-import 'display_object.dart';
 
 /// The Stage class represents the main drawing area.
 /// The Stage represents the entire area where a GraphX `ScenePainter` content
@@ -25,11 +22,11 @@ import 'display_object.dart';
 /// These properties may always be read, but since they cannot be set,
 /// they will always contain default values:
 /// x, y, width, height, stageWidth, stageHeight, mask, name, filter.
-class Stage extends DisplayObjectContainer
+class Stage extends GDisplayObjectContainer
     with ResizeSignalMixin, TickerSignalMixin, StageMouseSignalsMixin {
   final ScenePainter scene;
 
-  static final _sMatrix = GxMatrix();
+  static final _sMatrix = GMatrix();
 
   bool maskBounds = false;
 
@@ -38,8 +35,8 @@ class Stage extends DisplayObjectContainer
     return '$runtimeType';
   }
 
-  Size _size;
-  Paint _backgroundPaint;
+  ui.Size _size;
+  ui.Paint _backgroundPaint;
   DisplayBoundsDebugger _boundsDebugger;
 
   /// Shortcut to access the owner [SceneController].
@@ -49,16 +46,15 @@ class Stage extends DisplayObjectContainer
   Signal get onHotReload => controller.onHotReload;
 
   /// The `backgroundPaint` hex color.
-  int get color => _backgroundPaint?.color?.value;
+  ui.Color get color => _backgroundPaint?.color;
 
-  /// Sets the `backgroundPaint` Color via a hex value. Must be 24bit
-  /// (alpha included).
-  set color(int value) {
+  /// Sets the `backgroundPaint` Color.
+  set color(ui.Color value) {
     if (value == null) {
       _backgroundPaint = null;
     } else {
-      _backgroundPaint ??= Paint();
-      _backgroundPaint.color = Color(value);
+      _backgroundPaint ??= ui.Paint();
+      _backgroundPaint.color = value;
     }
   }
 
@@ -80,7 +76,7 @@ class Stage extends DisplayObjectContainer
   }
 
   @override
-  void paint(Canvas canvas) {
+  void paint(ui.Canvas canvas) {
     /// scene start painting.
     if (maskBounds && _stageRectNative != null) {
       canvas.clipRect(_stageRectNative);
@@ -98,27 +94,25 @@ class Stage extends DisplayObjectContainer
     }
   }
 
-  Path _stageBoundsRectPath = Path();
-  static final Paint _stageBoundsRectPaint = Paint()
-    ..style = PaintingStyle.stroke
-    ..color = Color(0xff000000)
+  ui.Path _stageBoundsRectPath = ui.Path();
+  static final ui.Paint _stageBoundsRectPaint = ui.Paint()
+    ..style = ui.PaintingStyle.stroke
+    ..color = kColorBlack
     ..strokeWidth = 2;
 
-  final GxRect _stageRect = GxRect();
-  GxRect get stageRect => _stageRect;
-  Rect _stageRectNative;
+  final GRect _stageRect = GRect();
+  GRect get stageRect => _stageRect;
+  ui.Rect _stageRectNative;
 
-  void $initFrameSize(Size value) {
+  void $initFrameSize(ui.Size value) {
     if (value != _size) {
       _size = value;
       _stageRectNative =
           _stageRect.setTo(0, 0, _size.width, _size.height).toNative();
-
-      _stageBoundsRectPath ??= Path();
+      _stageBoundsRectPath ??= ui.Path();
       _stageBoundsRectPath.reset();
       _stageBoundsRectPath.addRect(_stageRectNative);
       _stageBoundsRectPath.close();
-
       Graphics.updateStageRect(_stageRect);
       $onResized?.dispatch();
     }
@@ -146,10 +140,10 @@ class Stage extends DisplayObjectContainer
   }
 
   @override
-  bool hitTouch(GxPoint localPoint, [bool useShape = false]) => true;
+  bool hitTouch(GPoint localPoint, [bool useShape = false]) => true;
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShapes = false]) {
+  GDisplayObject hitTest(GPoint localPoint, [bool useShapes = false]) {
     if (!visible || !mouseEnabled) return null;
 
     /// location outside stage area, is not accepted.
@@ -183,8 +177,8 @@ class Stage extends DisplayObjectContainer
     }
   }
 
-  GxRect getStageBounds(DisplayObject targetSpace, [GxRect out]) {
-    out ??= GxRect();
+  GRect getStageBounds(GDisplayObject targetSpace, [GRect out]) {
+    out ??= GRect();
     out.setTo(0, 0, stageWidth, stageHeight);
     getTransformationMatrix(targetSpace, _sMatrix);
     return out.getBounds(_sMatrix, out);
@@ -208,7 +202,6 @@ class Stage extends DisplayObjectContainer
   void dispose() {
     _size = null;
     _backgroundPaint = null;
-    $disposeDisplayListSignals();
     $disposeResizeSignals();
     $disposeTickerSignals();
     $disposeStagePointerSignals();

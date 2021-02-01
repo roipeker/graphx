@@ -43,8 +43,7 @@ void traceConfig({
 /// `trace` works. It has up to 10 arguments slots so you can pass any type of
 /// object to be printed. The way trace() shows output in the console can be
 /// defined with [traceConfig()].
-void trace(
-  Object arg1, [
+void trace(Object arg1, [
   Object arg2,
   Object arg3,
   Object arg4,
@@ -82,7 +81,6 @@ void trace(
       name += ' $_stack';
     }
   }
-
   dev.log(
     msg,
     name: name,
@@ -96,9 +94,21 @@ const _anonymousMethodTag = '<anonymous closure>';
 
 String _getStack() {
   var curr = StackTrace.current.toString();
-  curr = curr.split('\n')[2];
-  curr = curr.replaceAll('#2      ', '');
-  var elements = curr.split(' (');
+  if (curr.startsWith('#0')) {
+    return _stackCommon(curr);
+  }
+  return _stackWeb(curr);
+}
+
+String _stackWeb(String stack) {
+  // TODO: add parsing of stack trace for web.
+  return '';
+}
+
+String _stackCommon(String stack) {
+  stack = stack.split('\n')[2];
+  stack = stack.replaceAll('#2      ', '');
+  var elements = stack.split(' (');
   var classnameMethod = elements[0];
   var filenameLine = elements[1];
   elements = classnameMethod.split('.');
@@ -108,7 +118,8 @@ String _getStack() {
   var callLine = locationParts[1];
   var filename = filePath.substring(
       filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
-  String methodName, className = '';
+  String methodName,
+      className = '';
   var output = ''; //ˇ
   if (_showFilename) {
     output += '$filename ';
@@ -127,7 +138,7 @@ String _getStack() {
     className = elements.removeAt(0);
     methodName = elements.join('.');
     methodName =
-        '${methodName.replaceAll(_anonymousMethodTag, '<⁕>')}$_sufixCall';
+    '${methodName.replaceAll(_anonymousMethodTag, '<⁕>')}$_sufixCall';
     if (_showClassname) {
       output += '‣ $className ';
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-class MyBox extends Shape {
+class MyBox extends GShape {
   final double size;
 
   MyBox({this.size = 40}) {
@@ -9,11 +9,11 @@ class MyBox extends Shape {
   }
 
   void _init() {
-    graphics.beginFill(Colors.brown.shade300.value);
+    graphics.beginFill(Colors.brown.shade300);
 
     /// we draw the rectangle from TOP LEFT (x=0,y=0).
     graphics.drawRect(0, 0, size, size).endFill();
-    graphics.lineStyle(2, Colors.brown.shade500.value);
+    graphics.lineStyle(2, Colors.brown.shade500);
     // make 4 lines.
     var numLines = 4;
     var lineSep = size / numLines;

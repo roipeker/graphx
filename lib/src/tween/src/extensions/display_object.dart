@@ -1,6 +1,6 @@
 part of gtween;
 
-extension GTweenDiplayObjectExt on DisplayObject {
+extension GTweenDiplayObjectExt on GDisplayObject {
   GTweenableDisplayObject get twn => GTweenableDisplayObject(this);
 
   GTween tween({

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class SimpleShapesScene extends Sprite {
-  Shape triangle;
+  GShape triangle;
 
   @override
   void addedToStage() {
@@ -12,35 +12,35 @@ class SimpleShapesScene extends Sprite {
     /// scene layer.
     // stage.scene.autoUpdateAndRender = false;
 
-    final rect = Shape();
-    rect.graphics.lineStyle(2, Colors.red.value, 1.0);
+    final rect = GShape();
+    rect.graphics.lineStyle(2, Colors.red);
     rect.graphics.drawRect(40, 40, 40, 40);
     rect.graphics.endFill();
     addChild(rect);
 
-    var circ = Shape();
-    circ.graphics.beginFill(0x0).drawCircle(80, 40, 20).endFill();
+    var circ = GShape();
+    circ.graphics.beginFill(Colors.black).drawCircle(80, 40, 20).endFill();
     addChild(circ);
 
     /// multiple commands in 1 shape.
-    var face = Shape();
+    var face = GShape();
 
     /// head
     face.graphics
-        .beginFill(Colors.yellow.value, .5)
+        .beginFill(Colors.yellow.withOpacity(.5))
         .drawCircle(0, 0, 60)
         .endFill();
 
     /// eyes
     face.graphics
-        .beginFill(0x0, 1)
+        .beginFill(Colors.black)
         .drawEllipse(-20, -10, 4, 8)
         .drawEllipse(20, -10, 4, 8)
         .endFill();
 
     /// mouth
     face.graphics
-        .lineStyle(2, 0x0, 1)
+        .lineStyle(2, Colors.black)
         .arc(0, 10, 20, deg2rad(45), deg2rad(90))
 
         /// sad face
@@ -50,16 +50,15 @@ class SimpleShapesScene extends Sprite {
     face.y = 100;
     addChild(face);
 
-    triangle = Shape();
+    triangle = GShape();
     addChild(triangle);
     triangle.graphics.beginGradientFill(
       GradientType.linear,
-      [Colors.blue.value, Colors.red.value],
-      alphas: [1, 1],
+      [Colors.blue, Colors.red],
       ratios: [0, 1],
     );
     triangle.graphics.drawPolygonFaces(0, 0, 40, 3).endFill();
-    triangle.rotation = -pi / 2;
+    triangle.rotation = -Math.PI / 2;
     triangle.x = face.x + face.width / 2 + triangle.width / 2;
     triangle.y = face.y;
   }

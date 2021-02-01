@@ -55,9 +55,9 @@ class GTextureAtlas {
   /// Parse the XML tree and defines all SubTextures areas.
   void parseAtlasXml(xml.XmlDocument atlasXml) {
     var scale = _atlasTexture.scale;
-    var region = GxRect();
-    var frame = GxRect();
-    final pivots = <String, GxPoint>{};
+    var region = GRect();
+    var frame = GRect();
+    final pivots = <String, GPoint>{};
     final nodeList = atlasXml.findAllElements('SubTexture');
     for (var subTexture in nodeList) {
       var name = subTexture.getAttribute('name');
@@ -87,15 +87,15 @@ class GTextureAtlas {
       }
       if (pivotX != 0 || pivotY != 0) {
         /// image bind pivot point to texture!
-        pivots[name] = GxPoint(pivotX, pivotY);
+        pivots[name] = GPoint(pivotX, pivotY);
       }
     }
 
     /// adobe animate workaround.
   }
 
-  void addRegion(String name, GxRect region,
-      [GxRect frame, bool rotated = false]) {
+  void addRegion(String name, GRect region,
+      [GRect frame, bool rotated = false]) {
     addSubTexture(
         name,
         GSubTexture(
@@ -120,7 +120,7 @@ class GTextureAtlas {
     return _subTextures[name]?.rotated ?? false;
   }
 
-  GxRect getFrame(String name) {
+  GRect getFrame(String name) {
     return _subTextures[name]?.frame;
   }
 
@@ -128,7 +128,7 @@ class GTextureAtlas {
     return _subTextures[name];
   }
 
-  GxRect getRegion(String name) {
+  GRect getRegion(String name) {
     return _subTextures[name]?.region;
   }
 

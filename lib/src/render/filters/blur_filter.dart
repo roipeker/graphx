@@ -1,9 +1,9 @@
-import 'dart:ui';
+import 'dart:ui' as ui ;
 
 import '../../../graphx.dart';
 
-class BaseFilter {
-  void resolvePaint(Paint paint) {}
+class GBaseFilter {
+  void resolvePaint(ui.Paint paint) {}
 
   bool dirty = false;
   void update() {
@@ -17,47 +17,47 @@ class BaseFilter {
 
   void buildFilter() {}
   bool get isValid => true;
-  GxRect layerBounds;
-  void expandBounds(GxRect layerBounds, GxRect outputBounds) {
+  GRect layerBounds;
+  void expandBounds(GRect layerBounds, GRect outputBounds) {
     this.layerBounds = layerBounds;
   }
 }
 
-class BlurFilter extends BaseFilter {
+class GBlurFilter extends GBaseFilter {
   double _blurX = 0;
   double _blurY = 0;
 
   /// -1 = autodetect from blur..
   double maskSigma = -1;
 
-  BlurStyle style = BlurStyle.inner;
+  ui.BlurStyle style = ui.BlurStyle.inner;
 
   double get blurX => _blurX;
   double get blurY => _blurY;
   set blurX(double value) {
     if (_blurX == value) return;
-    _blurX = max(value, 0);
+    _blurX = Math.max(value, 0);
     dirty = true;
   }
 
   set blurY(double value) {
     if (_blurY == value) return;
-    _blurY = max(value, 0);
+    _blurY = Math.max(value, 0);
     dirty = true;
   }
 
-  BlurFilter([double blurX = 0, double blurY = 0]) {
+  GBlurFilter([double blurX = 0, double blurY = 0]) {
     this.blurX = blurX;
     this.blurY = blurY;
   }
 
-  MaskFilter _maskFilter;
-  ImageFilter _imageFilter;
-  final _rect = GxRect();
-  GxRect get filterRect => _rect;
+  ui.MaskFilter _maskFilter;
+  ui.ImageFilter _imageFilter;
+  final _rect = GRect();
+  GRect get filterRect => _rect;
 
   @override
-  void expandBounds(GxRect layerBounds, GxRect outputBounds) {
+  void expandBounds(GRect layerBounds, GRect outputBounds) {
     _rect.copyFrom(layerBounds).inflate(blurX, blurY);
     outputBounds.expandToInclude(_rect);
   }
@@ -69,21 +69,21 @@ class BlurFilter extends BaseFilter {
   void buildFilter() {
     var maxBlur = maskSigma;
     if (maxBlur == -1) {
-      maxBlur = max(_blurX, _blurY) / 2;
+      maxBlur = Math.max(_blurX, _blurY) / 2;
       if (maxBlur < 1) maxBlur = 1;
     }
 
     /// if it goes under a threshold (I tried .2 and lower), it flickers.
     /// idk which logic uses, but 1.0 seems like a stable min number for the
     /// mask.
-    _maskFilter = MaskFilter.blur(style ?? BlurStyle.inner, maxBlur);
-    _imageFilter = ImageFilter.blur(sigmaX: _blurX, sigmaY: _blurY);
+    _maskFilter = ui.MaskFilter.blur(style ?? ui.BlurStyle.inner, maxBlur);
+    _imageFilter = ui.ImageFilter.blur(sigmaX: _blurX, sigmaY: _blurY);
   }
 
   @override
-  void resolvePaint(Paint paint) {
+  void resolvePaint(ui.Paint paint) {
     if (!isValid) return;
-    paint.filterQuality = FilterQuality.low;
+    paint.filterQuality = ui.FilterQuality.low;
     paint.imageFilter = _imageFilter;
     paint.maskFilter = _maskFilter;
   }

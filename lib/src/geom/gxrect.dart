@@ -3,9 +3,9 @@ import 'dart:ui';
 
 import 'geom.dart';
 
-class GxRect {
-  static GxRect fromNative(Rect nativeRect) {
-    return GxRect(
+class GRect {
+  static GRect fromNative(Rect nativeRect) {
+    return GRect(
         nativeRect.left, nativeRect.top, nativeRect.width, nativeRect.height);
   }
 
@@ -44,9 +44,9 @@ class GxRect {
     y = value;
   }
 
-  GxRect([this.x = 0.0, this.y = 0.0, this.width = 0.0, this.height = 0.0]);
+  GRect([this.x = 0.0, this.y = 0.0, this.width = 0.0, this.height = 0.0]);
 
-  GxRect setTo(double x, double y, double width, double height) {
+  GRect setTo(double x, double y, double width, double height) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -54,11 +54,11 @@ class GxRect {
     return this;
   }
 
-  static List<GxPoint> _sHelperPositions;
-  static final _sHelperPoint = GxPoint();
+  static List<GPoint> _sHelperPositions;
+  static final _sHelperPoint = GPoint();
 
-  GxRect getBounds(GxMatrix matrix, [GxRect out]) {
-    out ??= GxRect();
+  GRect getBounds(GMatrix matrix, [GRect out]) {
+    out ??= GRect();
     var minX = 10000000.0;
     var maxX = -10000000.0;
     var minY = 10000000.0;
@@ -74,10 +74,10 @@ class GxRect {
     return out.setTo(minX, minY, maxX - minX, maxY - minY);
   }
 
-  List<GxPoint> getPositions([List<GxPoint> out]) {
-    out ??= List.generate(4, (i) => GxPoint());
+  List<GPoint> getPositions([List<GPoint> out]) {
+    out ??= List.generate(4, (i) => GPoint());
     for (var i = 0; i < 4; ++i) {
-      out[i] ??= GxPoint();
+      out[i] ??= GPoint();
     }
     out[2].x = out[0].x = left;
     out[1].y = out[0].y = top;
@@ -86,31 +86,31 @@ class GxRect {
     return out;
   }
 
-  GxRect clone() => GxRect(x, y, width, height);
+  GRect clone() => GRect(x, y, width, height);
 
-  GxRect copyFrom(GxRect other) {
+  GRect copyFrom(GRect other) {
     return setTo(other.x, other.y, other.width, other.height);
   }
 
-  GxRect intersection(GxRect rect) {
-    GxRect result;
+  GRect intersection(GRect rect) {
+    GRect result;
     var x0 = x < rect.x ? rect.x : 0.0;
     var x1 = right > rect.right ? rect.right : right;
     if (x1 <= 0) {
-      result = GxRect();
+      result = GRect();
     } else {
       var y0 = y < rect.y ? rect.y : y;
       var y1 = bottom > rect.bottom ? rect.bottom : bottom;
       if (y1 <= y0) {
-        result = GxRect();
+        result = GRect();
       } else {
-        result = GxRect(x0, y0, x1 - x0, y1 - y0);
+        result = GRect(x0, y0, x1 - x0, y1 - y0);
       }
     }
     return result;
   }
 
-  bool intersects(GxRect rect) {
+  bool intersects(GRect rect) {
     var x0 = x < rect.x ? rect.x : x;
     var x1 = right > rect.right ? rect.right : right;
     if (x1 > x0) {
@@ -122,7 +122,7 @@ class GxRect {
   }
 
   /// Like AS3 Rectangle::union
-  GxRect expandToInclude(GxRect other) {
+  GRect expandToInclude(GRect other) {
     var r = right;
     var b = bottom;
     x = math.min(left, other.left);
@@ -132,19 +132,19 @@ class GxRect {
     return this;
   }
 
-  GxRect offset(double dx, double dy) {
+  GRect offset(double dx, double dy) {
     x += dx;
     y += dy;
     return this;
   }
 
-  GxRect offsetPoint(GxPoint point) {
+  GRect offsetPoint(GPoint point) {
     x += point.x;
     y += point.y;
     return this;
   }
 
-  GxRect inflate(double dx, double dy) {
+  GRect inflate(double dx, double dy) {
     x -= dx;
     y -= dy;
     width += dx * 2;
@@ -152,7 +152,7 @@ class GxRect {
     return this;
   }
 
-  GxRect setEmpty() {
+  GRect setEmpty() {
     return setTo(0, 0, 0, 0);
   }
 
@@ -161,10 +161,10 @@ class GxRect {
   bool contains(double x, double y) =>
       x >= this.x && y >= this.y && x < right && y < bottom;
 
-  bool containsPoint(GxPoint point) =>
+  bool containsPoint(GPoint point) =>
       point.x >= x && point.y >= y && point.x < right && point.y < bottom;
 
-  GxRect operator *(double scale) {
+  GRect operator *(double scale) {
     x *= scale;
     y *= scale;
     width *= scale;
@@ -172,11 +172,94 @@ class GxRect {
     return this;
   }
 
-  GxRect operator /(double scale) {
+  GRect operator /(double scale) {
     x /= scale;
     y /= scale;
     width /= scale;
     height /= scale;
     return this;
+  }
+
+  /// --- Round Rect implementation ---
+  GxRectCornerRadius _corners;
+  bool get hasCorners => _corners?.isNotEmpty ?? false;
+  GxRectCornerRadius get corners {
+    _corners ??= GxRectCornerRadius();
+    return _corners;
+  }
+
+  set corners(GxRectCornerRadius value) => _corners = value;
+
+  RRect toRoundNative() => corners.toNative(this);
+
+  /// Creates a GxRect from a `RRect` assigning the `GxRectCornerRadius`
+  /// properties from the tr, tl, br, bl radiusX axis.
+  static GRect fromRoundNative(RRect nativeRect) {
+    return GRect(
+      nativeRect.left,
+      nativeRect.top,
+      nativeRect.width,
+      nativeRect.height,
+    )..corners.setTo(
+        nativeRect.tlRadiusX,
+        nativeRect.trRadiusX,
+        nativeRect.brRadiusX,
+        nativeRect.blRadiusX,
+      );
+  }
+}
+
+class GxRectCornerRadius {
+  double topLeft, topRight, bottomRight, bottomLeft;
+  GxRectCornerRadius([
+    this.topLeft = 0,
+    this.topRight = 0,
+    this.bottomRight = 0,
+    this.bottomLeft = 0,
+  ]);
+
+  void setTo([
+    double topLeft = 0,
+    double topRight = 0,
+    double bottomRight = 0,
+    double bottomLeft = 0,
+  ]) {
+    this.topLeft = topLeft;
+    this.topRight = topRight;
+    this.bottomLeft = bottomLeft;
+    this.bottomRight = bottomRight;
+  }
+
+  void setTopBottom(double top, double bottom) {
+    topLeft = topRight = top;
+    bottomLeft = bottomRight = bottom;
+  }
+
+  void setLeftRight(double left, double right) {
+    topLeft = bottomLeft = left;
+    topRight = bottomRight = right;
+  }
+
+  void allTo(double radius) =>
+      topLeft = topRight = bottomLeft = bottomRight = radius;
+
+  bool get isNotEmpty =>
+      topLeft != 0 || topRight != 0 || bottomLeft != 0 || bottomRight != 0;
+
+  RRect toNative(GRect rect) {
+    final tl = topLeft == 0 ? Radius.zero : Radius.circular(topLeft);
+    final tr = topRight == 0 ? Radius.zero : Radius.circular(topRight);
+    final br = bottomRight == 0 ? Radius.zero : Radius.circular(bottomRight);
+    final bl = bottomLeft == 0 ? Radius.zero : Radius.circular(bottomLeft);
+    return RRect.fromLTRBAndCorners(
+      rect.left,
+      rect.top,
+      rect.right,
+      rect.bottom,
+      topLeft: tl,
+      topRight: tr,
+      bottomLeft: bl,
+      bottomRight: br,
+    );
   }
 }

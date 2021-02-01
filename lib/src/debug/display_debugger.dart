@@ -1,5 +1,6 @@
-import '../../graphx.dart';
+import 'dart:ui' as ui;
 
+import '../../graphx.dart';
 enum DebugBoundsMode {
   /// renders the bounding box transformed, inside the current object [paint()]
   /// method process.
@@ -23,30 +24,26 @@ class DisplayBoundsDebugger {
   /// current [DisplayBoundsDebugger.debugBoundsMode].
   static bool debugAll = false;
 
-  static final Paint _debugPaint = Paint()
-    ..style = PaintingStyle.stroke
-    ..color = Color(0xff00FFFF)
+  static final ui.Paint _debugPaint = ui.Paint()
+    ..style = ui.PaintingStyle.stroke
+    ..color = kColorCyan
     ..strokeWidth = 1;
 
-  final DisplayObjectContainer _root;
-  Canvas canvas;
-  static final GxRect _sHelpRect = GxRect();
+  final GDisplayObjectContainer _root;
+  ui.Canvas canvas;
+  static final GRect _sHelpRect = GRect();
 
-  DisplayBoundsDebugger(DisplayObjectContainer root) : _root = root;
+  DisplayBoundsDebugger(GDisplayObjectContainer root) : _root = root;
 
   void render() {
-    if (debugBoundsMode == DebugBoundsMode.internal || !enabled) {
-      return;
-    }
+    if (debugBoundsMode == DebugBoundsMode.internal || !enabled) return;
     _renderChildren(_root);
   }
 
-  void _renderChildren(DisplayObjectContainer obj) {
-    if (obj.$debugBounds || debugAll) {
-      _renderBounds(obj);
-    }
+  void _renderChildren(GDisplayObjectContainer obj) {
+    if (obj.$debugBounds || debugAll) _renderBounds(obj);
     for (final child in obj.children) {
-      if (child is DisplayObjectContainer) {
+      if (child is GDisplayObjectContainer) {
         _renderChildren(child);
       } else {
         if (child.$debugBounds || debugAll) {
@@ -56,13 +53,11 @@ class DisplayBoundsDebugger {
     }
   }
 
-  void _renderBounds(DisplayObject obj) {
+  void _renderBounds(GDisplayObject obj) {
     obj.getBounds(_root, _sHelpRect);
     final _paint = obj.$debugBoundsPaint ?? _debugPaint;
-//    $paintLine = _paint;
     final linePaint = _paint.clone();
     linePaint.color = linePaint.color.withOpacity(.3);
-
     final rect = _sHelpRect.toNative();
     canvas.drawLine(rect.topLeft, rect.bottomRight, linePaint);
     canvas.drawLine(rect.topRight, rect.bottomLeft, linePaint);

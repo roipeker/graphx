@@ -1,26 +1,29 @@
-import 'dart:ui';
-
+import 'dart:ui' as ui;
 import '../../../graphx.dart';
 import 'composer_filter.dart';
 
-class GlowFilter extends ComposerFilter {
+class GlowFilter extends GComposerFilter {
   double _blurX = 0;
   double _blurY = 0;
-  Color _color = kColorRed;
+  ui.Color _color = kColorRed;
+
   // todo: find a way to define the strength of the filter.
-  double _strength = 0.0;
+  // double _strength = 0.0;
 
   /// Number of iterations to apply the same filter. Bigger
   /// value, value more stressed.
   int iterations = 1;
 
   double maskSigma = -1;
-  BlurStyle style = BlurStyle.inner;
-  double get blurX => _blurX;
-  double get blurY => _blurY;
-  Color get color => _color;
+  ui.BlurStyle style = ui.BlurStyle.inner;
 
-  set color(Color value) {
+  double get blurX => _blurX;
+
+  double get blurY => _blurY;
+
+  ui.Color get color => _color;
+
+  set color(ui.Color value) {
     if (_color == value) return;
     _color = value ?? kColorBlack;
     dirty = true;
@@ -28,20 +31,20 @@ class GlowFilter extends ComposerFilter {
 
   set blurX(double value) {
     if (_blurX == value) return;
-    _blurX = max(value, 0);
+    _blurX = Math.max(value, 0);
     dirty = true;
   }
 
   set blurY(double value) {
     if (_blurY == value) return;
-    _blurY = max(value, 0);
+    _blurY = Math.max(value, 0);
     dirty = true;
   }
 
   GlowFilter([
     double blurX = 0,
     double blurY = 0,
-    Color color = kColorRed,
+    ui.Color color = kColorRed,
     bool hideObject = false,
   ]) {
     this.blurX = blurX;
@@ -50,15 +53,17 @@ class GlowFilter extends ComposerFilter {
     this.hideObject = hideObject;
   }
 
-  ColorFilter _colorFilter;
-  MaskFilter _maskFilter;
-  ImageFilter _imageFilter;
+  ui.ColorFilter _colorFilter;
+  ui.MaskFilter _maskFilter;
+  ui.ImageFilter _imageFilter;
 
-  final _rect = GxRect();
-  GxRect get filterRect => _rect;
+  final _rect = GRect();
+
+  GRect get filterRect => _rect;
+
   // GxRect _outBounds;
   @override
-  void expandBounds(GxRect layerBounds, GxRect outputBounds) {
+  void expandBounds(GRect layerBounds, GRect outputBounds) {
     super.expandBounds(layerBounds, outputBounds);
     _rect.copyFrom(layerBounds).inflate(blurX * 2, blurY * 2);
     // trace('outputBounds', outputBounds);
@@ -67,19 +72,21 @@ class GlowFilter extends ComposerFilter {
   }
 
   @override
-  bool get isValid =>
-      _blurX > 0 || _blurY > 0 && color.value != kColorTransparent.value;
+  bool get isValid => _blurX > 0 || _blurY > 0 && color != kColorTransparent;
 
   @override
   void buildFilter() {
     var maxBlur = maskSigma;
     if (maxBlur == -1) {
-      maxBlur = max(_blurX, _blurY) / 2;
+      maxBlur = Math.max(_blurX, _blurY) / 2;
       if (maxBlur < 1) maxBlur = 1;
     }
-    _maskFilter = MaskFilter.blur(style ?? BlurStyle.normal, maxBlur);
-    _imageFilter = ImageFilter.blur(sigmaX: _blurX, sigmaY: _blurY);
-    _colorFilter = ColorFilter.mode(_color.withAlpha(255), BlendMode.srcATop);
+    _maskFilter = ui.MaskFilter.blur(style ?? ui.BlurStyle.normal, maxBlur);
+    _imageFilter = ui.ImageFilter.blur(sigmaX: _blurX, sigmaY: _blurY);
+    _colorFilter = ui.ColorFilter.mode(
+      _color.withAlpha(255),
+      ui.BlendMode.srcATop,
+    );
     paint.imageFilter = _imageFilter;
     paint.maskFilter = _maskFilter;
     paint.colorFilter = _colorFilter;
@@ -91,7 +98,7 @@ class GlowFilter extends ComposerFilter {
   // var _iterations = 0;
 
   @override
-  void process(Canvas canvas, Function applyPaint, [int processCount = 1]) {
+  void process(ui.Canvas canvas, Function applyPaint, [int processCount = 1]) {
     // trace('rect is: ', _outBounds);
     // var a = GxRect(0, 0, layerBounds.width - layerBounds.x,
     //     layerBounds.height - layerBounds.y);

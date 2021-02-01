@@ -1,29 +1,18 @@
-import 'dart:math' as math;
-import 'dart:ui';
-
+import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:graphx/src/render/filters/composer_filter.dart';
-import 'package:graphx/src/render/filters/filters.dart';
-
+import 'package:flutter/painting.dart' as painting;
 import '../../graphx.dart';
-import '../render/filters/blur_filter.dart';
-import 'display_object_container.dart';
-import 'stage.dart';
 
-abstract class DisplayObject
+abstract class GDisplayObject
     with
         DisplayListSignalsMixin,
         RenderSignalMixin,
         MouseSignalsMixin,
         DisplayMasking {
-  DisplayObjectContainer $parent;
-
-  static DisplayObject $currentDrag;
-  static GxRect $currentDragBounds;
-
-  GxPoint _dragCenterOffset;
+  GDisplayObjectContainer $parent;
+  static GDisplayObject $currentDrag;
+  static GRect $currentDragBounds;
+  GPoint _dragCenterOffset;
 
   /// Lets the user drag the specified sprite.
   /// The sprite remains draggable until explicitly stopped through a call to
@@ -34,29 +23,30 @@ abstract class DisplayObject
   /// the user first clicked the sprite (false).
   /// [bounds] Value relative to the coordinates of the Sprite's parent that
   /// specify a constraint rectangle for the Sprite.
-  void startDrag([bool lockCenter = false, GxRect bounds]) {
-    if (!inStage || !$hasVisibleArea) {
-      throw 'to drag an object, it has to be visible in the stage.';
+  void startDrag([bool lockCenter = false, GRect bounds]) {
+    if (!inStage || !$hasTouchableArea) {
+      throw 'to drag an object, it has to be visible and enabled in the stage.';
     }
+
     $currentDrag?.stopDrag();
     $currentDrag = this;
     $currentDragBounds = bounds;
-    _dragCenterOffset = GxPoint();
+    _dragCenterOffset = GPoint();
     if (lockCenter) {
       _dragCenterOffset.setTo(x - parent.mouseX, y - parent.mouseY);
     }
     stage.onMouseMove.add(_handleDrag);
   }
 
-  // DisplayObject get dropTarget {
-  //   if ($parent == null || !$hasVisibleArea || !inStage) return null;
-  //   if ($parent.children.length > 1) {
-  //     GxRect rect;
-  //     $parent.children.forEach((child) {
-  //       child.getBounds($parent, rect);
-  //     });
-  //   }
-  // }
+// DisplayObject get dropTarget {
+//   if ($parent == null || !$hasVisibleArea || !inStage) return null;
+//   if ($parent.children.length > 1) {
+//     GxRect rect;
+//     $parent.children.forEach((child) {
+//       child.getBounds($parent, rect);
+//     });
+//   }
+// }
 
   void _handleDrag(MouseInputData input) {
     if (this != $currentDrag) {
@@ -86,26 +76,26 @@ abstract class DisplayObject
   bool $debugBounds = false;
   bool mouseUseShape = false;
 
-  List<BaseFilter> $filters;
+  List<GBaseFilter> $filters;
 
-  List<BaseFilter> get filters => $filters;
+  List<GBaseFilter> get filters => $filters;
 
-  set filters(List<BaseFilter> value) => $filters = value;
+  set filters(List<GBaseFilter> value) => $filters = value;
 
-  DisplayObject $mouseDownObj;
-  DisplayObject $mouseOverObj;
+  GDisplayObject $mouseDownObj;
+  GDisplayObject $mouseOverObj;
 
   double $lastClickTime = -1;
 
   bool useCursor = false;
 
-  Color $colorize = Color(0x0);
+  ui.Color $colorize = kColorTransparent;
 
   bool get $hasColorize => $colorize != null && $colorize.alpha > 0;
 
-  Color get colorize => $colorize;
+  ui.Color get colorize => $colorize;
 
-  set colorize(Color value) {
+  set colorize(ui.Color value) {
     if ($colorize == value) return;
     $colorize = value;
     requiresRedraw();
@@ -113,15 +103,18 @@ abstract class DisplayObject
 
   /// capture context mouse inputs.
   void captureMouseInput(MouseInputData input) {
-    if (!$hasVisibleArea) return;
+    if (!$hasTouchableArea) return;
     if (mouseEnabled) {
       if (input.captured && input.type == MouseInputType.up) {
         $mouseDownObj = null;
       }
       var prevCaptured = input.captured;
       globalToLocal(input.stagePosition, input.localPosition);
-      input.captured =
-          input.captured || hitTouch(input.localPosition, mouseUseShape);
+      input.captured = input.captured ||
+          hitTouch(
+            input.localPosition,
+            mouseUseShape,
+          );
       if (!prevCaptured && input.captured) {
         $dispatchMouseCallback(input.type, this, input);
         if ($mouseOverObj != this) {
@@ -135,7 +128,7 @@ abstract class DisplayObject
 
   void $dispatchMouseCallback(
     MouseInputType type,
-    DisplayObject object,
+    GDisplayObject object,
     MouseInputData input,
   ) {
     if (mouseEnabled) {
@@ -175,7 +168,7 @@ abstract class DisplayObject
         case MouseInputType.over:
           $mouseOverObj = object;
           if (useCursor && GMouse.isShowing()) {
-            GMouse.cursor = SystemMouseCursors.click;
+            GMouse.setClickCursor();
           }
           $onMouseOver?.dispatch(mouseInput);
           break;
@@ -219,7 +212,7 @@ abstract class DisplayObject
     }
   }
 
-  GxPoint get mousePosition {
+  GPoint get mousePosition {
     if (!inStage) {
       throw 'To get mousePosition, the object needs to be in the Stage.';
     }
@@ -440,20 +433,21 @@ abstract class DisplayObject
   bool $matrixDirty = true;
   bool mouseEnabled = true;
 
-  DisplayObject $maskee;
-  Shape $mask;
+  GDisplayObject $maskee;
+  GShape $mask;
 
   /// optimization.
+  bool $hasTouchableArea = true;
   bool $hasVisibleArea = true;
 
   bool get isMask => $maskee != null;
 
-  Shape get mask => $mask;
+  GShape get mask => $mask;
 
   /// can be set on the Shape mask, or the maskee DisplayObject.
   bool maskInverted = false;
 
-  set mask(Shape value) {
+  set mask(GShape value) {
     if ($mask != value) {
       if ($mask != null) $mask.$maskee = null;
       value?.$maskee = this;
@@ -474,11 +468,11 @@ abstract class DisplayObject
   }
 
   /// common parent.
-  static final List<DisplayObject> _sAncestors = [];
-  static final GxPoint _sHelperPoint = GxPoint();
-  static final GxRect _sHelperRect = GxRect();
-  static final GxMatrix _sHelperMatrix = GxMatrix();
-  static final GxMatrix _sHelperMatrixAlt = GxMatrix();
+  static final List<GDisplayObject> _sAncestors = [];
+  static final GPoint _sHelperPoint = GPoint();
+  static final GRect _sHelperRect = GRect();
+  static final GMatrix _sHelperMatrix = GMatrix();
+  static final GMatrix _sHelperMatrixAlt = GMatrix();
 
   double get worldAlpha => alpha * ($parent?.worldAlpha ?? 1);
 
@@ -496,7 +490,9 @@ abstract class DisplayObject
   /// For example, if visible=false it cannot be clicked and it will not be
   /// rendered.
   bool _visible = true;
+
   bool get visible => _visible;
+
   set visible(bool flag) {
     if (_visible != flag) {
       _visible = flag;
@@ -504,7 +500,7 @@ abstract class DisplayObject
     }
   }
 
-  DisplayObject() {
+  GDisplayObject() {
     _x = _y = 0.0;
     _rotation = 0.0;
     alpha = 1.0;
@@ -515,7 +511,7 @@ abstract class DisplayObject
     mouseEnabled = true;
   }
 
-  void alignPivot([Alignment alignment = Alignment.center]) {
+  void alignPivot([painting.Alignment alignment = painting.Alignment.center]) {
     var bounds = getBounds(this, _sHelperRect);
     if (bounds.isEmpty) return;
     var ax = 0.5 + alignment.x / 2;
@@ -526,29 +522,29 @@ abstract class DisplayObject
 
   /// local bounds
   /// todo: should be cached.
-  GxRect get bounds => getBounds(this);
+  GRect get bounds => getBounds(this);
 
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
     throw 'getBounds() is abstract in DisplayObject';
   }
 
-  GxPoint globalToLocal(GxPoint globalPoint, [GxPoint out]) {
+  GPoint globalToLocal(GPoint globalPoint, [GPoint out]) {
     getTransformationMatrix(base, _sHelperMatrixAlt);
     _sHelperMatrixAlt.invert();
     return _sHelperMatrixAlt.transformPoint(globalPoint, out);
   }
 
-  GxPoint localToGlobal(GxPoint localPoint, [GxPoint out]) {
+  GPoint localToGlobal(GPoint localPoint, [GPoint out]) {
     getTransformationMatrix(base, _sHelperMatrixAlt);
     return _sHelperMatrixAlt.transformPoint(localPoint, out);
   }
 
-  GxMatrix _transformationMatrix;
+  GMatrix _transformationMatrix;
 
-  GxMatrix get transformationMatrix {
+  GMatrix get transformationMatrix {
     if (_transformationChanged || _transformationMatrix == null) {
       _transformationChanged = false;
-      _transformationMatrix ??= GxMatrix();
+      _transformationMatrix ??= GMatrix();
 //      _transformationMatrix.setTransform(
 //        x,
 //        y,
@@ -576,23 +572,23 @@ abstract class DisplayObject
     return _transformationMatrix;
   }
 
-  set transformationMatrix(GxMatrix matrix) {
-    const pi_q = math.pi / 4.0;
+  set transformationMatrix(GMatrix matrix) {
+    const pi_q = Math.PI / 4.0;
     requiresRedraw();
     _transformationChanged = false;
-    _transformationMatrix ??= GxMatrix();
+    _transformationMatrix ??= GMatrix();
     _transformationMatrix.copyFrom(matrix);
     _pivotX = _pivotY = 0;
     _x = matrix.tx;
     _y = matrix.ty;
-    _skewX = math.atan(-matrix.c / matrix.d);
-    _skewY = math.atan(matrix.b / matrix.a);
+    _skewX = Math.atan(-matrix.c / matrix.d);
+    _skewY = Math.atan(matrix.b / matrix.a);
     _scaleY = (_skewX > -pi_q && _skewX < pi_q)
-        ? matrix.d / math.cos(_skewX)
-        : -matrix.c / math.sin(_skewX);
+        ? matrix.d / Math.cos(_skewX)
+        : -matrix.c / Math.sin(_skewX);
     _scaleX = (_skewY > -pi_q && _skewY < pi_q)
-        ? matrix.a / math.cos(_skewY)
-        : -matrix.b / math.sin(_skewY);
+        ? matrix.a / Math.cos(_skewY)
+        : -matrix.b / Math.sin(_skewY);
     if (MathUtils.isEquivalent(_skewX, _skewY)) {
       _rotation = _skewX;
       _skewX = _skewY = 0;
@@ -611,7 +607,7 @@ abstract class DisplayObject
     double skewX,
     double skewY,
     double rotation,
-    GxMatrix out,
+    GMatrix out,
   ) {
     out.identity();
     if (skewX == 0 && skewY == 0) {
@@ -626,8 +622,8 @@ abstract class DisplayObject
           y - pivotY * scaleY,
         );
       } else {
-        final cos = math.cos(rotation);
-        final sin = math.sin(rotation);
+        final cos = Math.cos(rotation);
+        final sin = Math.sin(rotation);
         final a = scaleX * cos;
         final b = scaleX * sin;
         final c = scaleY * -sin;
@@ -649,10 +645,10 @@ abstract class DisplayObject
     }
   }
 
-  GxMatrix getTransformationMatrix(DisplayObject targetSpace, [GxMatrix out]) {
-    DisplayObject commonParent, currentObj;
+  GMatrix getTransformationMatrix(GDisplayObject targetSpace, [GMatrix out]) {
+    GDisplayObject commonParent, currentObj;
     out?.identity();
-    out ??= GxMatrix();
+    out ??= GMatrix();
     if (targetSpace == this) {
       return out;
     }
@@ -676,7 +672,7 @@ abstract class DisplayObject
     }
 
     /// 1 - find a common parent between this and targetSpace.
-    commonParent = DisplayObject._findCommonParent(this, targetSpace);
+    commonParent = GDisplayObject._findCommonParent(this, targetSpace);
 
     /// 2 - move up from this to common parent.````
     currentObj = this;
@@ -701,8 +697,8 @@ abstract class DisplayObject
     return out;
   }
 
-  static DisplayObject _findCommonParent(
-      DisplayObject obj1, DisplayObject obj2) {
+  static GDisplayObject _findCommonParent(
+      GDisplayObject obj1, GDisplayObject obj2) {
     var current = obj1;
 
     /// TODO: use faster Hash access.
@@ -719,7 +715,7 @@ abstract class DisplayObject
     throw 'Object not connected to target';
   }
 
-  bool hitTestMask(GxPoint localPoint) {
+  bool hitTestMask(GPoint localPoint) {
     if ($mask == null && maskRect == null) {
       return true;
     }
@@ -734,7 +730,7 @@ abstract class DisplayObject
       _sHelperMatrixAlt.invert();
     }
 
-    var helperPoint = localPoint == _sHelperPoint ? GxPoint() : _sHelperPoint;
+    var helperPoint = localPoint == _sHelperPoint ? GPoint() : _sHelperPoint;
     _sHelperMatrixAlt.transformPoint(localPoint, helperPoint);
 
     final isHit = mask.hitTest(helperPoint) != null;
@@ -742,13 +738,13 @@ abstract class DisplayObject
     return maskInverted ? !isHit : isHit;
   }
 
-  bool hitTouch(GxPoint localPoint, [bool useShape = false]) {
+  bool hitTouch(GPoint localPoint, [bool useShape = false]) {
     return hitTest(localPoint, useShape) != null;
   }
 
   /// `useShape` is meant to be used by `Shape.graphics`.
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!$hasVisibleArea || !mouseEnabled) {
+  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
+    if (!$hasTouchableArea || !mouseEnabled) {
       return null;
     }
     if (($mask != null || maskRect != null) && !hitTestMask(localPoint)) {
@@ -760,9 +756,9 @@ abstract class DisplayObject
     return null;
   }
 
-  DisplayObjectContainer get parent => $parent;
+  GDisplayObjectContainer get parent => $parent;
 
-  DisplayObject get base {
+  GDisplayObject get base {
     var current = this;
     while (current.$parent != null) {
       current = current.$parent;
@@ -774,7 +770,7 @@ abstract class DisplayObject
 
   Stage get stage => base is Stage ? base : null;
 
-  DisplayObject get root {
+  GDisplayObject get root {
     var current = this;
     while (current.$parent != null) {
       if (current.$parent is Stage) return current;
@@ -786,6 +782,9 @@ abstract class DisplayObject
   /// rendering.
   void requiresRedraw() {
     /// TODO: notify parent the current state of this DisplayObject.
+    $hasTouchableArea =
+        visible && $maskee == null && _scaleX != 0 && _scaleY != 0;
+
     $hasVisibleArea = $alpha != 0 &&
         visible &&
         $maskee == null &&
@@ -801,21 +800,21 @@ abstract class DisplayObject
   void update(double delta) {}
 
   bool get hasFilters => filters?.isNotEmpty ?? false;
-  GxRect $debugLastLayerBounds;
+  GRect $debugLastLayerBounds;
 
   /// quick and dirty way to toggle saveLayer() feature for common
   /// display objects as well.
-  /// Childless DisplayObjects, like [Shape] and [Bitmap], have their own
+  /// Childless DisplayObjects, like [GShape] and [GBitmap], have their own
   /// Paint() so no need to use an expensive saveLayer().
   bool allowSaveLayer = false;
 
-  GxRect getFilterBounds([GxRect layerBounds, Paint alphaPaint]) {
+  GRect getFilterBounds([GRect layerBounds, ui.Paint alphaPaint]) {
     layerBounds ??= getBounds($parent);
     if ($filters == null || $filters.isEmpty) {
       return layerBounds;
     }
     layerBounds = layerBounds.clone();
-    GxRect resultBounds;
+    GRect resultBounds;
     for (var filter in $filters) {
       resultBounds ??= layerBounds.clone();
       if (alphaPaint != null) {
@@ -829,15 +828,16 @@ abstract class DisplayObject
     return resultBounds;
   }
 
-  Paint filterPaint = Paint();
+  ui.Paint filterPaint = ui.Paint();
 
   /// to create the rectangle to save the layer and optimize rendering.
   /// active by default.
   bool $useSaveLayerBounds = true;
 
-  /// Do not override this requiresRedrawmethod as it applies the basic transformations.
-  /// override $applyPaint() if you wanna use `Canvas` directly.
-  void paint(Canvas canvas) {
+  /// Do not override this method as it applies the basic
+  /// transformations. Override $applyPaint() if you wanna use
+  /// `Canvas` directly.
+  void paint(ui.Canvas canvas) {
     if (!$hasVisibleArea || !visible) {
       return;
     }
@@ -868,20 +868,20 @@ abstract class DisplayObject
         DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
             ($debugBounds || DisplayBoundsDebugger.debugAll);
 
-    GxRect _cacheLocalBoundsRect;
+    GRect _cacheLocalBoundsRect;
     if (showDebugBounds || _saveLayer) {
       // _cacheLocalBoundsRect = bounds.toNative();
       _cacheLocalBoundsRect = bounds;
     }
 
-    List<ComposerFilter> _composerFilters;
+    List<GComposerFilter> _composerFilters;
     var filterHidesObject = false;
     if (_saveLayer) {
 //       TODO: static painter seems to have some issues, try local var later.
       /// using local Painter now to avoid problems.
       final alphaPaint = filterPaint;
       if (alpha < 1) {
-        alphaPaint.color = const Color(0xff000000).withOpacity(alpha);
+        alphaPaint.color = kColorBlack.withOpacity(alpha);
       }
 
       /// check colorize if it needs a unique Paint instead.
@@ -889,21 +889,24 @@ abstract class DisplayObject
       alphaPaint.imageFilter = null;
       alphaPaint.maskFilter = null;
       if ($hasColorize) {
-        alphaPaint.colorFilter = ColorFilter.mode($colorize, BlendMode.srcATop);
+        alphaPaint.colorFilter = ui.ColorFilter.mode(
+          $colorize,
+          ui.BlendMode.srcATop,
+        );
       }
-      Rect nativeLayerBounds;
+      ui.Rect nativeLayerBounds;
       var layerBounds = getBounds($parent);
       if ($hasFilters) {
         /// TODO: Find a common implementation for filter bounds.
         // layerBounds = getFilterBounds(layerBounds, alphaPaint);
         layerBounds = layerBounds.clone();
-        GxRect resultBounds;
+        GRect resultBounds;
         for (var filter in $filters) {
           resultBounds ??= layerBounds.clone();
           filter.update();
           filter.expandBounds(layerBounds, resultBounds);
-          if (filter is ComposerFilter) {
-            _composerFilters ??= <ComposerFilter>[];
+          if (filter is GComposerFilter) {
+            _composerFilters ??= <GComposerFilter>[];
             _composerFilters.add(filter);
           } else {
             filter.resolvePaint(alphaPaint);
@@ -925,7 +928,7 @@ abstract class DisplayObject
       canvas.transform(m.storage);
       if (_is3D) {
         /// TODO: experimental, just transforms
-        m = GxMatrix().toNative();
+        m = GMatrix().toNative();
         m.setEntry(3, 2, 0.004);
         m.rotateX(_rotationX);
         m.rotateY(_rotationY);
@@ -980,16 +983,16 @@ abstract class DisplayObject
     }
   }
 
-  static final Paint _debugPaint = Paint()
-    ..style = PaintingStyle.stroke
-    ..color = Color(0xff00FFFF)
+  static final ui.Paint _debugPaint = ui.Paint()
+    ..style = ui.PaintingStyle.stroke
+    ..color = kColorMagenta
     ..strokeWidth = 1;
 
-  Paint $debugBoundsPaint = _debugPaint.clone();
+  ui.Paint $debugBoundsPaint = _debugPaint.clone();
 
   /// override this method for custom drawing using Flutter's API.
   /// Access `$canvas` from here.
-  void $applyPaint(Canvas canvas) {}
+  void $applyPaint(ui.Canvas canvas) {}
 
   @mustCallSuper
   void dispose() {
@@ -997,6 +1000,7 @@ abstract class DisplayObject
     $parent = null;
     userData = null;
     name = null;
+    $disposePointerSignals();
     $disposeDisplayListSignals();
     $disposeRenderSignals();
   }
@@ -1006,7 +1010,7 @@ abstract class DisplayObject
   }
 
   /// internal
-  void $setParent(DisplayObjectContainer value) {
+  void $setParent(GDisplayObjectContainer value) {
     var ancestor = value;
     while (ancestor != this && ancestor != null) {
       ancestor = ancestor.$parent;
@@ -1046,11 +1050,11 @@ abstract class DisplayObject
   /// Beware to call this before applying any
   /// transformations (x, y, scale, etc) if you intend to use in it's "original"
   /// form.
-  Picture createPicture(
-      [void Function(Canvas) prePaintCallback,
-      void Function(Canvas) postPaintCallback]) {
-    final r = PictureRecorder();
-    final c = Canvas(r);
+  ui.Picture createPicture(
+      [void Function(ui.Canvas) prePaintCallback,
+      void Function(ui.Canvas) postPaintCallback]) {
+    final r = ui.PictureRecorder();
+    final c = ui.Canvas(r);
     prePaintCallback?.call(c);
     paint(c);
     postPaintCallback?.call(c);
@@ -1060,7 +1064,7 @@ abstract class DisplayObject
   Future<GTexture> createImageTexture([
     bool adjustOffset = true,
     double resolution = 1,
-    GxRect rect,
+    GRect rect,
   ]) async {
     final img = await createImage(adjustOffset, resolution, rect);
     var tx = GTexture.fromImage(img, resolution);
@@ -1069,10 +1073,10 @@ abstract class DisplayObject
     return tx;
   }
 
-  Future<Image> createImage([
+  Future<ui.Image> createImage([
     bool adjustOffset = true,
     double resolution = 1,
-    GxRect rect,
+    GRect rect,
   ]) async {
     rect ??= getFilterBounds(); //getBounds($parent);
     rect = rect.clone();
@@ -1081,21 +1085,15 @@ abstract class DisplayObject
     }
     final needsAdjust =
         (rect.left != 0 || rect.top != 0) && adjustOffset || resolution != 1;
-    Picture picture;
+    ui.Picture picture;
     if (needsAdjust) {
-      final precall = (Canvas canvas) {
-        if (adjustOffset) {
-          canvas.translate(-rect.left, -rect.top);
-        }
-        if (resolution != 1) {
-          canvas.scale(resolution);
-        }
-      };
-      final postcall = (Canvas canvas) {
+      picture = createPicture((canvas) {
+        if (adjustOffset) canvas.translate(-rect.left, -rect.top);
+        if (resolution != 1) canvas.scale(resolution);
+      }, (canvas) {
         if (adjustOffset) canvas.restore();
         if (resolution != 1) canvas.restore();
-      };
-      picture = createPicture(precall, postcall);
+      });
     } else {
       picture = createPicture();
     }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/services.dart';
 
@@ -38,8 +38,8 @@ abstract class ResourceLoader {
 
     final data = await rootBundle.load(path);
     final bytes = Uint8List.view(data.buffer);
-    final codec = await instantiateImageCodec(bytes, allowUpscaling: false);
-    resolution ??= TextureUtils.resolution;
+    final codec = await ui.instantiateImageCodec(bytes, allowUpscaling: false);
+    resolution ??= GTextureUtils.resolution;
 
     final atlas = GifAtlas();
     atlas.scale = resolution;
@@ -54,24 +54,24 @@ abstract class ResourceLoader {
     return atlas;
   }
 
-  static Future<SvgData> loadNetworkSvg(
-    String url, {
-    String cacheId,
-    Function(NetworkImageEvent) onComplete,
-    Function(NetworkImageEvent) onProgress,
-    Function(NetworkImageEvent) onError,
-  }) async {
-    final response = await NetworkImageLoader.loadSvg(
-      url,
-      onComplete: onComplete,
-      onProgress: onProgress,
-      onError: onError,
-    );
-    if (response.isSvg) {
-      svgs[cacheId] = response.svgData;
-    }
-    return response.svgData;
-  }
+  // static Future<SvgData> loadNetworkSvg(
+  //   String url, {
+  //   String cacheId,
+  //   Function(NetworkImageEvent) onComplete,
+  //   Function(NetworkImageEvent) onProgress,
+  //   Function(NetworkImageEvent) onError,
+  // }) async {
+  //   final response = await NetworkImageLoader.loadSvg(
+  //     url,
+  //     onComplete: onComplete,
+  //     onProgress: onProgress,
+  //     onError: onError,
+  //   );
+  //   if (response.isSvg) {
+  //     svgs[cacheId] = response.svgData;
+  //   }
+  //   return response.svgData;
+  // }
 
   static Future<GTexture> loadNetworkTexture(
     String url, {
@@ -108,17 +108,21 @@ abstract class ResourceLoader {
     return textures[cacheId];
   }
 
-  static Future<SvgData> loadSvg(
-    String path, [
+  // static Future<SvgData> loadSvg(
+  //   String path, [
+  //   String cacheId,
+  // ]) async {
+  //   cacheId ??= path;
+  //   svgs[cacheId] = await SvgUtils.svgDataFromString(await loadString(path));
+  //   return svgs[cacheId];
+  // }
+
+  static Future<GTextureAtlas> loadTextureAtlas(
+    String imagePath, [
+    String dataPath,
+    double resolution = 1.0,
     String cacheId,
   ]) async {
-    cacheId ??= path;
-    svgs[cacheId] = await SvgUtils.svgDataFromString(await loadString(path));
-    return svgs[cacheId];
-  }
-
-  static Future<GTextureAtlas> loadTextureAtlas(String imagePath,
-      [String dataPath, double resolution = 1.0, String cacheId]) async {
     if (dataPath == null) {
       /// if no index at the end, guess it.
       var lastIndex = imagePath.lastIndexOf('.');
@@ -141,11 +145,14 @@ abstract class ResourceLoader {
   }
 
   /// load local assets.
-  static Future<Image> loadImage(String path,
-      {int targetWidth, int targetHeight}) async {
+  static Future<ui.Image> loadImage(
+    String path, {
+    int targetWidth,
+    int targetHeight,
+  }) async {
     final data = await rootBundle.load(path);
     final bytes = Uint8List.view(data.buffer);
-    final codec = await instantiateImageCodec(
+    final codec = await ui.instantiateImageCodec(
       bytes,
       allowUpscaling: false,
       targetWidth: targetWidth,

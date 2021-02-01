@@ -1,13 +1,15 @@
-import 'package:graphx/graphx.dart';
+import 'dart:ui' as ui;
 
-class ComposerFilter extends BaseFilter {
-  final Paint paint = Paint();
+import '../../../graphx.dart';
+
+class GComposerFilter extends GBaseFilter {
+  final ui.Paint paint = ui.Paint();
   bool hideObject = false;
 
   @override
-  void resolvePaint(Paint paint) {}
+  void resolvePaint(ui.Paint paint) {}
 
-  void process(Canvas canvas, Function applyPaint, [int processCount = 1]) {
+  void process(ui.Canvas canvas, Function applyPaint, [int processCount = 1]) {
     /// todo: figure the area.
     // canvas.saveLayer(null, paint);
     // canvas.translate(_dx, _dy);

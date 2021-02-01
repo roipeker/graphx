@@ -47,8 +47,7 @@ class MyCurvyPath extends GraphicsClipper {
     final curveSize = 60.0;
     final targetW = size.width;
     final targetH = size.height;
-    g
-        .moveTo(0, curveSize)
+    g.moveTo(0, curveSize)
         .curveTo(0, 0, curveSize, 0)
         .lineTo(targetW - curveSize, 0)
         .curveTo(targetW, 0, targetW, -curveSize)
@@ -61,8 +60,14 @@ class MyCurvyPath extends GraphicsClipper {
     g.drawRoundRect(30, 30, 80, 20, 8).drawCircle(80, 80, 20);
 
     // we can append other Graphics, and apply some Matrix transform.
-    final matrix = GxMatrix()..rotate(deg2rad(45));
-    final g2 = Graphics().beginFill(0x0).drawRoundRectComplex(0, 0, 50, 10, 8);
+    final matrix = GMatrix()..rotate(deg2rad(45));
+    final g2 = Graphics().beginFill(Colors.black).drawRoundRectComplex(
+          0,
+          0,
+          50,
+          10,
+          8,
+        );
     g.drawPath(g2.getPaths(), 100, 100, matrix);
 
     g.endHole(true);

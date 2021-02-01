@@ -5,7 +5,7 @@ import 'package:graphx/graphx.dart';
 import 'ui/my_button.dart';
 
 class SimpleInteractionsScene extends Sprite {
-  Shape ball;
+  GShape ball;
 
   @override
   void addedToStage() {
@@ -28,10 +28,10 @@ class SimpleInteractionsScene extends Sprite {
 
   void _initBall() {
     /// a ball to play with the keyboard
-    ball = Shape();
+    ball = GShape();
     ball.name = 'ball';
-    ball.graphics.lineStyle(6, 0x0);
-    ball.graphics.beginFill(Colors.red.value, 1);
+    ball.graphics.lineStyle(6, Colors.black);
+    ball.graphics.beginFill(Colors.red);
     ball.graphics.drawCircle(0, 0, 20);
     ball.graphics.endFill();
     addChild(ball);

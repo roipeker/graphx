@@ -2,13 +2,13 @@ part of gtween;
 
 class GTweenableBlur with GTweenable {
   static GTweenable wrap(Object target) {
-    if (target is! BlurFilter) return null;
+    if (target is! GBlurFilter) return null;
     return GTweenableBlur(target);
   }
 
-  BlurFilter value;
+  GBlurFilter value;
 
-  GTweenableBlur(BlurFilter target) {
+  GTweenableBlur(GBlurFilter target) {
     value = this.target = target;
   }
 
@@ -64,13 +64,13 @@ class GTweenableBlur with GTweenable {
 
 class GTweenableDropShadowFilter with GTweenable {
   static GTweenable wrap(Object target) {
-    if (target is! DropShadowFilter) return null;
+    if (target is! GDropShadowFilter) return null;
     return GTweenableDropShadowFilter(target);
   }
 
-  DropShadowFilter value;
+  GDropShadowFilter value;
 
-  GTweenableDropShadowFilter(DropShadowFilter target) {
+  GTweenableDropShadowFilter(GDropShadowFilter target) {
     value = this.target = target;
     _addLerp(
       'color',

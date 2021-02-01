@@ -1,13 +1,13 @@
-import 'dart:math' as math;
+// import 'dart:math' as math;
 
 import '../../graphx.dart';
 
 abstract class MatrixUtils {
-  static void skew(GxMatrix matrix, double skewX, double skewY) {
-    var sinX = math.sin(skewX);
-    var cosX = math.cos(skewX);
-    var sinY = math.sin(skewY);
-    var cosY = math.cos(skewY);
+  static void skew(GMatrix matrix, double skewX, double skewY) {
+    var sinX = Math.sin(skewX);
+    var cosX = Math.cos(skewX);
+    var sinY = Math.sin(skewY);
+    var cosY = Math.cos(skewY);
     matrix.setTo(
       matrix.a * cosY - matrix.b * sinX,
       matrix.a * sinY + matrix.b * cosX,
@@ -18,9 +18,9 @@ abstract class MatrixUtils {
     );
   }
 
-  static GxRect getTransformedBoundsRect(GxMatrix matrix, GxRect rect,
-      [GxRect out]) {
-    out ??= GxRect();
+  static GRect getTransformedBoundsRect(GMatrix matrix, GRect rect,
+      [GRect out]) {
+    out ??= GRect();
     var minX = 10000000.0;
     var maxX = -10000000.0;
     var minY = 10000000.0;

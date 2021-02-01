@@ -3,14 +3,14 @@ import 'dart:ui';
 import '../../../graphx.dart';
 import 'composer_filter.dart';
 
-class DropShadowFilter extends ComposerFilter {
+class GDropShadowFilter extends GComposerFilter {
   double _blurX = 0;
   double _blurY = 0;
   double _angle = 0;
   double _distance = 0;
   Color _color = kColorBlack;
   // todo: find a way to define the strength of the filter.
-  double _strength = 0.0;
+  // double _strength = 0.0;
 
   /// Number of iterations to apply the same filter. Bigger
   /// value, value more stressed.
@@ -35,7 +35,7 @@ class DropShadowFilter extends ComposerFilter {
 
   set angle(double value) {
     if (_angle == value) return;
-    _angle = value % (pi * 2);
+    _angle = value % Math.PI_2;
     _calculatePosition();
     dirty = true;
   }
@@ -49,23 +49,23 @@ class DropShadowFilter extends ComposerFilter {
   }
 
   void _calculatePosition() {
-    _dx = cos(_angle) * _distance;
-    _dy = sin(_angle) * _distance;
+    _dx = Math.cos(_angle) * _distance;
+    _dy = Math.sin(_angle) * _distance;
   }
 
   set blurX(double value) {
     if (_blurX == value) return;
-    _blurX = max(value, 0.02);
+    _blurX = Math.max(value, 0.02);
     dirty = true;
   }
 
   set blurY(double value) {
     if (_blurY == value) return;
-    _blurY = max(value, 0.02);
+    _blurY = Math.max(value, 0.02);
     dirty = true;
   }
 
-  DropShadowFilter([
+  GDropShadowFilter([
     double blurX = 0,
     double blurY = 0,
     double angle = 0,
@@ -85,11 +85,11 @@ class DropShadowFilter extends ComposerFilter {
   MaskFilter _maskFilter;
   ImageFilter _imageFilter;
 
-  final _rect = GxRect();
-  GxRect get filterRect => _rect;
+  final _rect = GRect();
+  GRect get filterRect => _rect;
 
   @override
-  void expandBounds(GxRect layerBounds, GxRect outputBounds) {
+  void expandBounds(GRect layerBounds, GRect outputBounds) {
     super.expandBounds(layerBounds, outputBounds);
     _rect.copyFrom(layerBounds).inflate(blurX, blurY);
     outputBounds.expandToInclude(_rect);
@@ -110,7 +110,7 @@ class DropShadowFilter extends ComposerFilter {
   void buildFilter() {
     var maxBlur = maskSigma;
     if (maxBlur == -1) {
-      maxBlur = max(_blurX, _blurY) / 2;
+      maxBlur = Math.max(_blurX, _blurY) / 2;
       if (maxBlur < 1) maxBlur = 1;
     }
 
@@ -119,8 +119,8 @@ class DropShadowFilter extends ComposerFilter {
     /// mask.
     _maskFilter = MaskFilter.blur(style ?? BlurStyle.inner, maxBlur);
     _imageFilter = ImageFilter.blur(
-      sigmaX: max(_blurX, _minBlur),
-      sigmaY: max(_blurY, _minBlur),
+      sigmaX: Math.max(_blurX, _minBlur),
+      sigmaY: Math.max(_blurY, _minBlur),
     );
     _colorFilter = ColorFilter.mode(_color.withAlpha(255), BlendMode.srcATop);
     paint.imageFilter = _imageFilter;

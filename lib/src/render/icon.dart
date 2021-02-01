@@ -1,15 +1,15 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart' as widgets;
 
 import '../../graphx.dart';
 
-class GxIcon extends DisplayObject {
-  static final _sHelperMatrix = GxMatrix();
-  final _localBounds = GxRect();
+class GIcon extends GDisplayObject {
+  static final _sHelperMatrix = GMatrix();
+  final _localBounds = GRect();
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
     _sHelperMatrix.identity();
     getTransformationMatrix(targetSpace, _sHelperMatrix);
     var r = MatrixUtils.getTransformedBoundsRect(
@@ -21,7 +21,7 @@ class GxIcon extends DisplayObject {
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
+  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
     if (!visible || !mouseEnabled) return null;
     return _localBounds.containsPoint(localPoint) ? this : null;
   }
@@ -60,7 +60,7 @@ class GxIcon extends DisplayObject {
     requiresRedraw();
   }
 
-  GxIcon(
+  GIcon(
     widgets.IconData data, [
     int color = 0xffffff,
     double size = 24.0,
@@ -79,20 +79,20 @@ class GxIcon extends DisplayObject {
     requiresRedraw();
   }
 
-  Paragraph _paragraph;
-  ParagraphBuilder _builder;
-  TextStyle _style;
+  ui.Paragraph _paragraph;
+  ui.ParagraphBuilder _builder;
+  ui.TextStyle _style;
 
-  Paint _paint;
-  Shadow _shadow;
+  ui.Paint _paint;
+  ui.Shadow _shadow;
 
-  void setPaint(Paint value) {
+  void setPaint(ui.Paint value) {
     _paint = value;
     _invalidStyle = true;
     requiresRedraw();
   }
 
-  void setShadow(Shadow value) {
+  void setShadow(ui.Shadow value) {
     _shadow = value;
     _invalidStyle = true;
     requiresRedraw();
@@ -100,20 +100,20 @@ class GxIcon extends DisplayObject {
 
   void _updateStyle() {
     if (_data == null) return;
-    _style = TextStyle(
-      color: _paint == null ? Color(color).withOpacity(alpha) : null,
+    _style = ui.TextStyle(
+      color: _paint == null ? ui.Color(color).withOpacity(alpha) : null,
       fontSize: _size,
       fontFamily: _resolveFontFamily(),
       foreground: _paint,
       shadows: _shadow != null ? [_shadow] : null,
     );
-    _builder = ParagraphBuilder(ParagraphStyle());
+    _builder = ui.ParagraphBuilder(ui.ParagraphStyle());
     // _builder.pop();
     _builder.pushStyle(_style);
     final charCode = String.fromCharCode(_data.codePoint);
     _builder.addText(charCode);
     _paragraph = _builder.build();
-    _paragraph.layout(ParagraphConstraints(width: double.infinity));
+    _paragraph.layout(ui.ParagraphConstraints(width: double.infinity));
     _invalidStyle = false;
   }
 
@@ -131,14 +131,14 @@ class GxIcon extends DisplayObject {
   }
 
   @override
-  void $applyPaint(Canvas canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (data == null) return;
     if (_invalidStyle) {
       _invalidStyle = false;
       _updateStyle();
     }
     if (_paragraph != null) {
-      canvas.drawParagraph(_paragraph, Offset.zero);
+      canvas.drawParagraph(_paragraph, ui.Offset.zero);
     }
   }
 }

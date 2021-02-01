@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import '../../assets/svg_icons.dart';
+import '../../utils/svg_utils.dart';
 
 class TestSvgScene extends Sprite {
   final groundHeight = 100.0;
@@ -9,7 +10,7 @@ class TestSvgScene extends Sprite {
 
   @override
   void addedToStage() {
-    stage.color = Colors.lightBlueAccent.shade100.value;
+    stage.color = Colors.lightBlueAccent.shade100;
     _init();
   }
 
@@ -57,7 +58,7 @@ class TestSvgScene extends Sprite {
     }
   }
 
-  void _tweenTree(DisplayObject tree, int dir) {
+  void _tweenTree(GDisplayObject tree, int dir) {
     var dur = Math.randomRange(.5, .7);
     var delay = Math.randomRange(.08, .1);
     tree.tween(
@@ -75,7 +76,7 @@ class TestSvgScene extends Sprite {
     ground.graphics
 //        .beginFill(0xFFE477)
 //        .beginFill(0xFCF2B6)
-        .beginFill(Colors.green.value)
+        .beginFill(Colors.green)
         .drawRect(0, 0, stage.stageWidth, groundHeight)
         .endFill();
 
@@ -103,7 +104,7 @@ class TestSvgScene extends Sprite {
     ground.sortChildren((object1, object2) => object1.y > object2.y ? 1 : -1);
   }
 
-  void _tweenSnail(DisplayObject snail) {
+  void _tweenSnail(GDisplayObject snail) {
     final delay = Math.randomRange(.2, .6);
 
     /// if the snail is outside the stage area... move it to the
@@ -166,7 +167,7 @@ class TestSvgScene extends Sprite {
     }
   }
 
-  void _tweenLeaf({int dir, DisplayObject leaf}) {
+  void _tweenLeaf({int dir, GDisplayObject leaf}) {
     final randomRotation = Math.randomRange(10, 45.0) * dir;
     final randomDuration = Math.randomRange(.75, 1);
     final randomSkew = Math.randomRange(.1, .3) * -dir;
@@ -205,8 +206,8 @@ class TestSvgScene extends Sprite {
     await parseSvg(SvgImages.sneal, SvgId.snail);
   }
 
-  SvgShape getSvgIcon(SvgId id) {
-    return SvgShape(_svgMap[id]);
+  GSvgShape getSvgIcon(SvgId id) {
+    return GSvgShape(_svgMap[id]);
   }
 
   /// we have to load and parse svg data.

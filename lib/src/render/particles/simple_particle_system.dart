@@ -1,29 +1,27 @@
-import 'dart:math';
-import 'dart:ui';
-
+import 'dart:ui' as ui;
 import '../../../graphx.dart';
 
-class SimpleParticleSystem extends DisplayObject {
-  static final _sHelperMatrix = GxMatrix();
-  static final _sHelperPoint = GxPoint();
-  static Random random = Random();
+class GSimpleParticleSystem extends GDisplayObject {
+  static final _sHelperMatrix = GMatrix();
+  static final _sHelperPoint = GPoint();
+  // static Random random = Random();
 
   bool useWorldSpace = false;
 
-  BlendMode particleBlendMode = BlendMode.srcATop;
+  ui.BlendMode particleBlendMode = ui.BlendMode.srcATop;
 
-  BlendMode get blendMode => nativePaint.blendMode;
-  set blendMode(BlendMode value) {
+  ui.BlendMode get blendMode => nativePaint.blendMode;
+  set blendMode(ui.BlendMode value) {
     nativePaint.blendMode = value;
   }
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
     matrix.transformCoords(0, 0, _sHelperPoint);
-    out ??= GxRect();
+    out ??= GRect();
     out.setTo(_sHelperPoint.x, _sHelperPoint.y, 0, 0);
     return out;
   }
@@ -109,27 +107,27 @@ class SimpleParticleSystem extends DisplayObject {
   int $activeParticles = 0;
   double $lastUpdateTime = 0;
 
-  SimpleParticle $firstParticle;
-  SimpleParticle $lastParticle;
+  GSimpleParticle $firstParticle;
+  GSimpleParticle $lastParticle;
 
-  void _setInitialParticlePosition(SimpleParticle p) {
+  void _setInitialParticlePosition(GSimpleParticle p) {
     p.x = useWorldSpace ? x : 0;
     if (dispersionXVariance > 0) {
       p.x +=
-          dispersionXVariance * random.nextDouble() - dispersionXVariance * .5;
+          dispersionXVariance * Math.random() - dispersionXVariance * .5;
     }
     p.y = useWorldSpace ? y : 0;
     if (dispersionYVariance > 0) {
       p.y +=
-          dispersionYVariance * random.nextDouble() - dispersionYVariance * .5;
+          dispersionYVariance * Math.random() - dispersionYVariance * .5;
     }
     p.rotation = initialAngle;
     if (initialAngleVariance > 0) {
-      p.rotation += initialAngleVariance * random.nextDouble();
+      p.rotation += initialAngleVariance * Math.random();
     }
     p.scaleX = p.scaleY = initialScale;
     if (initialScaleVariance > 0) {
-      var sd = initialScaleVariance * random.nextDouble();
+      var sd = initialScaleVariance * Math.random();
       p.scaleX += sd;
       p.scaleY += sd;
     }
@@ -162,7 +160,7 @@ class SimpleParticleSystem extends DisplayObject {
 
   void forceBurst() {
     var currentEmission =
-        (emission + emissionVariance * random.nextDouble()).toInt();
+        (emission + emissionVariance * Math.random()).toInt();
     for (var i = 0; i < currentEmission; ++i) {
       activateParticle();
     }
@@ -171,6 +169,7 @@ class SimpleParticleSystem extends DisplayObject {
 
   @override
   void update(double delta) {
+    super.update(delta);
     delta *= 1000;
     if (particlePivotX == null && texture != null) {
       _setPivot();
@@ -186,7 +185,7 @@ class SimpleParticleSystem extends DisplayObject {
         if (time <= emissionTime) {
           var updateEmission = emission.toDouble();
           if (emissionVariance > 0) {
-            updateEmission += emissionVariance * random.nextDouble();
+            updateEmission += emissionVariance * Math.random();
           }
           $accumulatedEmission += updateEmission * delta * .001;
           while ($accumulatedEmission > 0) {
@@ -205,7 +204,7 @@ class SimpleParticleSystem extends DisplayObject {
   }
 
   @override
-  void paint(Canvas canvas) {
+  void paint(ui.Canvas canvas) {
     if (!$hasVisibleArea) return;
     if (useWorldSpace) {
       render(canvas);
@@ -215,19 +214,19 @@ class SimpleParticleSystem extends DisplayObject {
   }
 
   @override
-  void $applyPaint(Canvas canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     render(canvas);
   }
 
   bool useAlphaOnColorFilter = false;
 
-  void Function(Canvas, Paint) drawCallback;
+  void Function(ui.Canvas, ui.Paint) drawCallback;
 
-  final nativePaint = Paint()
-    ..color = Color(0xff000000)
-    ..filterQuality = FilterQuality.low;
+  final nativePaint = ui.Paint()
+    ..color = kColorBlack
+    ..filterQuality = ui.FilterQuality.low;
 
-  void render(Canvas canvas) {
+  void render(ui.Canvas canvas) {
     if (texture == null) return;
     var particle = $firstParticle;
     while (particle != null) {
@@ -252,7 +251,7 @@ class SimpleParticleSystem extends DisplayObject {
 //      nativePaint.colorFilter = ColorFilter.mode(_color, BlendMode.src);
       var filterColor = useAlphaOnColorFilter ? _color : _color.withOpacity(1);
       nativePaint.colorFilter =
-          ColorFilter.mode(filterColor, particleBlendMode);
+          ui.ColorFilter.mode(filterColor, particleBlendMode);
       canvas.save();
       canvas.translate(tx, ty);
       canvas.rotate(particle.rotation);
@@ -266,7 +265,7 @@ class SimpleParticleSystem extends DisplayObject {
         drawCallback(canvas, nativePaint);
 //        $canvas.drawImage(texture.source, Offset.zero, nativePaint);
       } else {
-        canvas.drawImage(texture.root, Offset.zero, nativePaint);
+        canvas.drawImage(texture.root, ui.Offset.zero, nativePaint);
       }
       // $canvas.drawImage(texture.source, Offset(tx, ty), nativePaint);
       canvas.restore();
@@ -281,8 +280,8 @@ class SimpleParticleSystem extends DisplayObject {
     p.init(this);
   }
 
-  SimpleParticle _createParticle() {
-    var p = SimpleParticle.get();
+  GSimpleParticle _createParticle() {
+    var p = GSimpleParticle.get();
     if ($firstParticle != null) {
       p.$next = $firstParticle;
       $firstParticle.$prev = p;
@@ -294,7 +293,7 @@ class SimpleParticleSystem extends DisplayObject {
     return p;
   }
 
-  void $deactivateParticle(SimpleParticle particle) {
+  void $deactivateParticle(GSimpleParticle particle) {
     if (particle == $lastParticle) $lastParticle = $lastParticle.$prev;
     if (particle == $firstParticle) $firstParticle = $firstParticle.$next;
     particle.dispose();

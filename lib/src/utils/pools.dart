@@ -1,13 +1,13 @@
 import '../../graphx.dart';
 
 mixin Pool {
-  static final _points = <GxPoint>[];
-  static final _rectangles = <GxRect>[];
-  static final _matrices = <GxMatrix>[];
+  static final _points = <GPoint>[];
+  static final _rectangles = <GRect>[];
+  static final _matrices = <GMatrix>[];
 
   /// Get a GxPoint instance from the pool.
-  static GxPoint getPoint([double x = 0, double y = 0]) {
-    if (_points.isEmpty) return GxPoint(x, y);
+  static GPoint getPoint([double x = 0, double y = 0]) {
+    if (_points.isEmpty) return GPoint(x, y);
     return _points.removeLast()
       ..x = x
       ..y = y;
@@ -16,11 +16,11 @@ mixin Pool {
   /// Store a GxPoint in the pool.
   /// Remember to NOT KEEP any references to the object after moving it to
   /// the pool.
-  static void putPoint(GxPoint point) {
+  static void putPoint(GPoint point) {
     if (point != null) _points.add(point);
   }
 
-  static GxMatrix getMatrix([
+  static GMatrix getMatrix([
     double a = 1,
     double b = 0,
     double c = 0,
@@ -28,25 +28,25 @@ mixin Pool {
     double tx = 0,
     double ty = 0,
   ]) {
-    if (_matrices.isEmpty) return GxMatrix(a, b, c, d, tx, ty);
+    if (_matrices.isEmpty) return GMatrix(a, b, c, d, tx, ty);
     return _matrices.removeLast()..setTo(a, b, c, d, tx, ty);
   }
 
-  static void putMatrix(GxMatrix matrix) {
+  static void putMatrix(GMatrix matrix) {
     if (matrix != null) _matrices.add(matrix);
   }
 
-  static GxRect getRect([
+  static GRect getRect([
     double x = 0,
     double y = 0,
     double w = 0,
     double h = 0,
   ]) {
-    if (_rectangles.isEmpty) return GxRect(x, y, w, h);
+    if (_rectangles.isEmpty) return GRect(x, y, w, h);
     return _rectangles.removeLast()..setTo(x, y, w, h);
   }
 
-  static void putRect(GxRect rect) {
+  static void putRect(GRect rect) {
     if (rect != null) _rectangles.add(rect);
   }
 }

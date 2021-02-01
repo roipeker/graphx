@@ -1,4 +1,4 @@
-import 'gtexture.dart';
+import 'texture.dart';
 
 class GifFrame {
   Duration duration;

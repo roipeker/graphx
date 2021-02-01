@@ -1,11 +1,9 @@
-import 'dart:math';
-import 'dart:ui';
-
+import 'dart:ui' as ui ;
 import '../../../graphx.dart';
 
-class SimpleParticle {
-  SimpleParticle $next;
-  SimpleParticle $prev;
+class GSimpleParticle {
+  GSimpleParticle $next;
+  GSimpleParticle $prev;
 
   double x, y, rotation, scaleX, scaleY, alpha, red, green, blue;
 
@@ -27,21 +25,21 @@ class SimpleParticle {
   double scaleDif;
   double accumulatedEnergy = 0;
 
-  SimpleParticle $nextInstance;
+  GSimpleParticle $nextInstance;
   int id = 0;
 
   GTexture texture;
-  static SimpleParticle $availableInstance;
+  static GSimpleParticle $availableInstance;
   static int $instanceCount = 0;
 
-  Color get color {
+  ui.Color get color {
     /// TODO: cache color transition if its not used.
     final a = (alpha * 0xff).toInt() << 24;
     final r = (red * 0xff).toInt() << 16;
     final g = (green * 0xff).toInt() << 8;
     final b = (blue * 0xff).toInt();
     final rgb = a + r + g + b;
-    final _color = Color(rgb);
+    final _color = ui.Color(rgb);
     return _color;
 //    (((a & 0xff) << 24) |
 //    ((r & 0xff) << 16) |
@@ -49,7 +47,7 @@ class SimpleParticle {
 //    ((b & 0xff) << 0)) & 0xFFFFFFFF;
   }
 
-  SimpleParticle() {
+  GSimpleParticle() {
     id = $instanceCount++;
   }
 
@@ -68,47 +66,45 @@ class SimpleParticle {
     }
   }
 
-  static SimpleParticle get() {
+  static GSimpleParticle get() {
     var instance = $availableInstance;
     if (instance != null) {
       $availableInstance = instance.$nextInstance;
       instance.$nextInstance = null;
     } else {
-      instance = SimpleParticle();
+      instance = GSimpleParticle();
     }
     return instance;
   }
 
-  Random get random => SimpleParticleSystem.random;
-
-  void init(SimpleParticleSystem emitter, [bool invalidate = true]) {
+  void init(GSimpleParticleSystem emitter, [bool invalidate = true]) {
     accumulatedEnergy = 0;
     texture = emitter.texture;
     var ratioEnergy = 1000;
     energy = emitter.energy * ratioEnergy;
     if (emitter.energyVariance > 0) {
-      energy += (emitter.energyVariance * ratioEnergy) * random.nextDouble();
+      energy += (emitter.energyVariance * ratioEnergy) * Math.random();
     }
 
     initialScale = emitter.initialScale;
     if (emitter.initialScaleVariance > 0) {
-      initialScale += emitter.initialScaleVariance * random.nextDouble();
+      initialScale += emitter.initialScaleVariance * Math.random();
     }
     endScale = emitter.endScale;
     if (emitter.endScaleVariance > 0) {
-      endScale += emitter.endScaleVariance * random.nextDouble();
+      endScale += emitter.endScaleVariance * Math.random();
     }
 
     double particleVelocityX, particleVelocityY;
     var v = emitter.initialVelocity;
     if (emitter.initialVelocityVariance > 0) {
-      v += emitter.initialVelocityVariance * random.nextDouble();
+      v += emitter.initialVelocityVariance * Math.random();
     }
 
     double particleAccelerationX, particleAccelerationY;
     var a = emitter.initialAcceleration;
     if (emitter.initialAccelerationVariance > 0) {
-      a += emitter.initialAccelerationVariance * random.nextDouble();
+      a += emitter.initialAccelerationVariance * Math.random();
     }
 
     var vx = particleVelocityX = v;
@@ -117,8 +113,8 @@ class SimpleParticle {
     var ay = particleAccelerationY = 0;
     var rot = emitter.rotation;
     if (rot != 0) {
-      var _sin = sin(rot);
-      var _cos = cos(rot);
+      var _sin = Math.sin(rot);
+      var _cos = Math.cos(rot);
       vx = particleVelocityX = v * _cos;
       vy = particleVelocityY = v * _sin;
       ax = particleAccelerationX = a * _cos;
@@ -129,10 +125,10 @@ class SimpleParticle {
       var dispersionAngle = emitter.dispersionAngle;
       if (emitter.dispersionAngleVariance > 0) {
         dispersionAngle +=
-            emitter.dispersionAngleVariance * random.nextDouble();
+            emitter.dispersionAngleVariance * Math.random();
       }
-      var _sin = sin(dispersionAngle);
-      var _cos = cos(dispersionAngle);
+      var _sin = Math.sin(dispersionAngle);
+      var _cos = Math.cos(dispersionAngle);
       particleVelocityX = (vx * _cos - vy * _sin);
       particleVelocityY = (vy * _cos + vx * _sin);
       particleAccelerationX = (ax * _cos - ay * _sin);
@@ -150,42 +146,42 @@ class SimpleParticle {
     initialVelocityAngular = emitter.initialAngularVelocity;
     if (emitter.initialAngularVelocityVariance > 0) {
       initialVelocityAngular +=
-          emitter.initialAngularVelocityVariance * random.nextDouble();
+          emitter.initialAngularVelocityVariance * Math.random();
     }
 
     // print("Initial vel x: $initialVelocityX");
     initialAlpha = emitter.initialAlpha;
     if (emitter.initialAlphaVariance > 0) {
-      initialAlpha += emitter.initialAlphaVariance * random.nextDouble();
+      initialAlpha += emitter.initialAlphaVariance * Math.random();
     }
     initialRed = emitter.initialRed;
     if (emitter.initialRedVariance > 0) {
-      initialRed += emitter.initialRedVariance * random.nextDouble();
+      initialRed += emitter.initialRedVariance * Math.random();
     }
     initialGreen = emitter.initialGreen;
     if (emitter.initialGreenVariance > 0) {
-      initialGreen += emitter.initialGreenVariance * random.nextDouble();
+      initialGreen += emitter.initialGreenVariance * Math.random();
     }
     initialBlue = emitter.initialBlue;
     if (emitter.initialBlueVariance > 0) {
-      initialBlue += emitter.initialBlueVariance * random.nextDouble();
+      initialBlue += emitter.initialBlueVariance * Math.random();
     }
 
     endAlpha = emitter.endAlpha;
     if (emitter.endAlphaVariance > 0) {
-      endAlpha += emitter.endAlphaVariance * random.nextDouble();
+      endAlpha += emitter.endAlphaVariance * Math.random();
     }
     endRed = emitter.endRed;
     if (emitter.endRedVariance > 0) {
-      endRed += emitter.endRedVariance * random.nextDouble();
+      endRed += emitter.endRedVariance * Math.random();
     }
     endGreen = emitter.endGreen;
     if (emitter.endGreenVariance > 0) {
-      endGreen += emitter.endGreenVariance * random.nextDouble();
+      endGreen += emitter.endGreenVariance * Math.random();
     }
     endBlue = emitter.endBlue;
     if (emitter.endBlueVariance > 0) {
-      endBlue += emitter.endBlueVariance * random.nextDouble();
+      endBlue += emitter.endBlueVariance * Math.random();
     }
 
     redDif = endRed - initialRed;
@@ -195,7 +191,7 @@ class SimpleParticle {
     scaleDif = endScale - initialScale;
   }
 
-  void $update(SimpleParticleSystem emitter, double delta) {
+  void $update(GSimpleParticleSystem emitter, double delta) {
     accumulatedEnergy += delta;
     if (accumulatedEnergy >= energy) {
       emitter.$deactivateParticle(this);

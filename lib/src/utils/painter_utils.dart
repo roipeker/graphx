@@ -1,16 +1,16 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 abstract class PainterUtils {
-  static Paint emptyPaint = Paint();
-  static Paint alphaPaint = Paint()
-    ..color = Color(0xff000000)
-    ..blendMode = BlendMode.srcATop;
+  static ui.Paint emptyPaint = ui.Paint();
+  static ui.Paint alphaPaint = ui.Paint()
+    ..color = ui.Color(0xff000000)
+    ..blendMode = ui.BlendMode.srcATop;
 
-  static Paint getAlphaPaint(double alpha) {
+  static ui.Paint getAlphaPaint(double alpha) {
     alphaPaint.color = alphaPaint.color.withOpacity(alpha);
     return alphaPaint;
   }
 
-  static ColorFilter getColorize(Color color) =>
-      ColorFilter.mode(color, BlendMode.srcATop);
+  static ui.ColorFilter getColorize(ui.Color color) =>
+      ui.ColorFilter.mode(color, ui.BlendMode.srcATop);
 }

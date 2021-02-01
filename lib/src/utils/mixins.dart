@@ -11,7 +11,7 @@ mixin RenderUtilMixin {
   }
 
   void paint(Canvas canvas);
-  GxRect getBounds();
+  GRect getBounds();
 
   Future<GTexture> createImageTexture([
     bool adjustOffset = true,
@@ -59,14 +59,37 @@ mixin RenderUtilMixin {
 }
 
 mixin DisplayMasking {
-  GxRect maskRect;
+  GRect maskRect;
+  double maskRectCornerRadius;
   bool maskRectInverted = false;
 
+  /// Direct scissor rect masking, more optimized than using
+  /// `object.mask=DisplayObject`.
+  /// You can assign the corners of the `GxRect`.
+  /// Works on flutter web html target.
+  ///
+  /// For example:
+  ///
+  /// `myObject.maskRect = GxRect( 10, 10, 30, 30)..corners.allTo(4);`
+  ///
+  /// Will mask the object at the specified rectangle, and use a corner
+  /// radius of 4 points on every corner.
+  ///
+  /// By default GxRect has no corners, so is only implemented to make use
+  /// of `RRect` clipping.
+  ///
   void $applyMaskRect(Canvas c) {
-    c.clipRect(
-      maskRect.toNative(),
-      clipOp: maskRectInverted ? ClipOp.difference : ClipOp.intersect,
-      doAntiAlias: true,
-    );
+    if (maskRect.hasCorners) {
+      c.clipRRect(
+        maskRect.toRoundNative(),
+        doAntiAlias: true,
+      );
+    } else {
+      c.clipRect(
+        maskRect.toNative(),
+        clipOp: maskRectInverted ? ClipOp.difference : ClipOp.intersect,
+        doAntiAlias: true,
+      );
+    }
   }
 }

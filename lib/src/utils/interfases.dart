@@ -1,8 +1,8 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import '../../graphx.dart';
 
 abstract class GxRenderable {
-  void paint(Canvas canvas);
-  GxRect getBounds();
+  void paint(ui.Canvas canvas);
+  GRect getBounds();
 }

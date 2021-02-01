@@ -1,3 +1,13 @@
+## [0.9.8]
+- major code refactoring, remove svg_flutter as dependency to avoid breaking changes.
+- changed all methods that takes `int` hex colors + alphas, to `Color` (beginFill, beginGradientFill, stage.color, etc). 
+- fix `trace` for web and `dartpad` output.
+- renamed most common classes (that do not start with __G__) to follow a **G**Name pattern. 
+  - SimpleText > GText
+  - GxIcon > GIcon
+  - Sprite > GSprite
+  - GxPoint > GPoint, and so on...
+
 ## [0.9.7]
 - added `MovieClip.gotoAndPlay` lastFrame for animation.
 - exposed the `GifAtlas::textureFrames` so they can be used in MovieClips.

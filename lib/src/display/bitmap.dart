@@ -1,10 +1,9 @@
-import 'dart:ui';
-
+import 'dart:ui' as ui;
 import '../../graphx.dart';
 
-class Bitmap extends DisplayObject {
-  static final _sHelperMatrix = GxMatrix();
-  static final _sHelperPoint = GxPoint();
+class GBitmap extends GDisplayObject {
+  static final _sHelperMatrix = GMatrix();
+  static final _sHelperPoint = GPoint();
 
   @override
   String toString() {
@@ -13,11 +12,14 @@ class Bitmap extends DisplayObject {
   }
 
   GTexture _texture;
-
   GTexture get texture => _texture;
-
-  double $originalPivotX = 0;
-  double $originalPivotY = 0;
+  double $originalPivotX = 0, $originalPivotY = 0;
+  /// TODO: improve this process, make bounds work properly.
+  bool _hasScale9Grid;
+  double _buffScaleX, _buffScaleY;
+  final GRect _cachedBounds = GRect();
+  final _paint = ui.Paint()..filterQuality = ui.FilterQuality.high;
+  ui.Paint get nativePaint => _paint;
 
   @override
   set pivotX(double value) {
@@ -41,13 +43,13 @@ class Bitmap extends DisplayObject {
     requiresRedraw();
   }
 
-  Bitmap([GTexture texture]) {
+  GBitmap([GTexture texture]) {
     this.texture = texture;
   }
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
-    out ??= GxRect();
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+    out ??= GRect();
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
@@ -65,10 +67,6 @@ class Bitmap extends DisplayObject {
     return out;
   }
 
-  final _paint = Paint()..filterQuality = FilterQuality.high;
-
-  Paint get nativePaint => _paint;
-
   @override
   set alpha(double value) {
     super.alpha = value;
@@ -76,7 +74,7 @@ class Bitmap extends DisplayObject {
   }
 
   @override
-  set colorize(Color value) {
+  set colorize(ui.Color value) {
     if ($colorize == value) return;
     super.colorize = value;
     _paint.colorFilter =
@@ -84,7 +82,7 @@ class Bitmap extends DisplayObject {
   }
 
   @override
-  set filters(List<BaseFilter> value) {
+  set filters(List<GBaseFilter> value) {
     if ($filters == value) return;
     $filters = value;
     if ($filters == null) {
@@ -94,7 +92,7 @@ class Bitmap extends DisplayObject {
   }
 
   @override
-  void paint(Canvas canvas) {
+  void paint(ui.Canvas canvas) {
     if (texture == null) return;
     _hasScale9Grid = texture.scale9Grid != null;
     if (_hasScale9Grid) {
@@ -104,24 +102,16 @@ class Bitmap extends DisplayObject {
   }
 
   @override
-  void $applyPaint(Canvas canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (hasFilters) {
-      filters.forEach((filter) {
+      for( var filter in filters ){
         filter.update();
         filter.resolvePaint(_paint);
-      });
+      }
     }
-
     texture?.render(canvas, _paint);
-    if (_hasScale9Grid) {
-      setScale(_buffScaleX, _buffScaleY);
-    }
+    if (_hasScale9Grid) setScale(_buffScaleX, _buffScaleY);
   }
-
-  /// TODO: improve this process, make bounds work properly.
-  bool _hasScale9Grid;
-  double _buffScaleX, _buffScaleY;
-  final GxRect _cachedBounds = GxRect();
 
   void _adjustScaleGrid() {
     _buffScaleX = scaleX;

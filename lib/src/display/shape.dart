@@ -1,10 +1,9 @@
-import 'dart:ui';
-
+import 'dart:ui' as ui;
 import '../../graphx.dart';
 
-class Shape extends DisplayObject {
+class GShape extends GDisplayObject {
   Graphics _graphics;
-  static final _sHelperMatrix = GxMatrix();
+  static final _sHelperMatrix = GMatrix();
 
   @override
   String toString() {
@@ -15,7 +14,7 @@ class Shape extends DisplayObject {
   Graphics get graphics => _graphics ??= Graphics();
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
@@ -36,7 +35,7 @@ class Shape extends DisplayObject {
       return MatrixUtils.getTransformedBoundsRect(
           matrix, _graphics.getBounds(out), out);
     } else {
-      final pos = DisplayObjectContainer.$sBoundsPoint;
+      final pos = GDisplayObjectContainer.$sBoundsPoint;
       matrix.transformCoords(0, 0, pos);
       out.setTo(pos.x, pos.y, 0, 0);
     }
@@ -44,19 +43,19 @@ class Shape extends DisplayObject {
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
-    if (!$hasVisibleArea || !mouseEnabled) {
+  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
+    if (!$hasTouchableArea || !mouseEnabled) {
       return null;
     }
     return (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
   }
 
-  static Path _inverseHugePath;
+  static ui.Path _inverseHugePath;
   static void _initInversePath() {
     if (_inverseHugePath != null) {
       return;
     }
-    _inverseHugePath = Path();
+    _inverseHugePath = ui.Path();
     final w = 100000.0;
     var r = Pool.getRect(-w / 2, -w / 2, w, w);
     _inverseHugePath.addRect(r.toNative());
@@ -64,9 +63,9 @@ class Shape extends DisplayObject {
   }
 
   @override
-  void $applyPaint(Canvas canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (isMask && _graphics != null) {
-      GxMatrix matrix;
+      GMatrix matrix;
       var paths = _graphics.getPaths();
       if (inStage && $maskee.inStage) {
         matrix = getTransformationMatrix($maskee);
@@ -81,8 +80,8 @@ class Shape extends DisplayObject {
 //        var rect = $maskee.bounds;
 //        invPath = invPath.shift(Offset(rect.x, rect.y));
         if (SystemUtils.usingSkia) {
-          clipPath = Path.combine(
-              PathOperation.difference, _inverseHugePath, clipPath);
+          clipPath = ui.Path.combine(
+              ui.PathOperation.difference, _inverseHugePath, clipPath);
           canvas.clipPath(clipPath);
         } else {
           trace('Shape.maskInverted is unsupported in the current platform');

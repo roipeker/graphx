@@ -1,23 +1,22 @@
-import 'package:flutter/foundation.dart';
+import 'dart:ui' as ui;
 
 import '../../graphx.dart';
-import 'display_object.dart';
 
-class Sprite extends DisplayObjectContainer {
+class Sprite extends GDisplayObjectContainer {
   @override
   String toString() {
     final msg = name != null ? ' {name: $name}' : '';
     return '$runtimeType (Sprite)$msg';
   }
 
-  static final _sHelperMatrix = GxMatrix();
+  static final _sHelperMatrix = GMatrix();
 
   Graphics _graphics;
 
   Graphics get graphics => _graphics ??= Graphics();
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
     out = super.getBounds(targetSpace, out);
     if (_graphics != null) {
       _sHelperMatrix.identity();
@@ -36,7 +35,7 @@ class Sprite extends DisplayObjectContainer {
   }
 
   @override
-  DisplayObject hitTest(GxPoint localPoint, [bool useShape = false]) {
+  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
     if (!visible || !mouseEnabled) return null;
     var target = super.hitTest(localPoint);
     target ??=
@@ -45,7 +44,7 @@ class Sprite extends DisplayObjectContainer {
   }
 
   @override
-  void $applyPaint(Canvas canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (!$hasVisibleArea) return;
     _graphics?.alpha = worldAlpha;
     _graphics?.paint(canvas);

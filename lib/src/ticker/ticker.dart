@@ -1,9 +1,8 @@
 import 'package:flutter/scheduler.dart';
-
 import '../events/events.dart';
 
-class GxTicker {
-  GxTicker();
+class GTicker {
+  GTicker();
 
   Ticker _ticker;
   EventSignal<double> _onFrame;

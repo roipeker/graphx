@@ -1,23 +1,22 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/painting.dart' as painting;
-
 import '../../graphx.dart';
 
-class StaticText extends DisplayObject {
-  Paragraph _paragraph;
+class GText extends GDisplayObject {
+  ui.Paragraph _paragraph;
 
   Signal _onFontLoaded;
   Signal get onFontLoaded => _onFontLoaded ??= Signal();
 
-  static final _sHelperMatrix = GxMatrix();
+  static final _sHelperMatrix = GMatrix();
 
   /// TODO: check if Paint is required locally in every DisplayObject.
-  final _alphaPaint = Paint();
+  final _alphaPaint = ui.Paint();
 
   @override
-  GxRect getBounds(DisplayObject targetSpace, [GxRect out]) {
+  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
     validate();
-    out ??= GxRect();
+    out ??= GRect();
     out.setTo(0, 0, intrinsicWidth, textHeight);
     if (targetSpace == this) {
       /// optimization.
@@ -42,17 +41,17 @@ class StaticText extends DisplayObject {
 //    return r;
 //  }
 
-  Paragraph get paragraph => _paragraph;
-  TextStyle _style;
+  ui.Paragraph get paragraph => _paragraph;
+  ui.TextStyle _style;
   double _width;
 
-  ParagraphBuilder _builder;
-  ParagraphStyle _paragraphStyle;
+  ui.ParagraphBuilder _builder;
+  ui.ParagraphStyle _paragraphStyle;
 
   bool _invalidSize = true;
   bool _invalidBuilder = true;
   String _text;
-  Color backgroundColor;
+  ui.Color backgroundColor;
 
   /// TODO: implement this.
 //  TextFormat get format => _format;
@@ -89,39 +88,39 @@ class StaticText extends DisplayObject {
     return _paragraph?.height ?? 0;
   }
 
-  static TextStyle defaultTextStyle = TextStyle(
-    color: Color(0xff000000),
-    decorationStyle: TextDecorationStyle.solid,
+  static ui.TextStyle defaultTextStyle = ui.TextStyle(
+    color: kColorBlack,
+    decorationStyle: ui.TextDecorationStyle.solid,
   );
 
-  static ParagraphStyle defaultParagraphStyle = ParagraphStyle(
-    fontWeight: FontWeight.normal,
+  static ui.ParagraphStyle defaultParagraphStyle = ui.ParagraphStyle(
+    fontWeight: ui.FontWeight.normal,
     fontSize: 12,
-    textAlign: TextAlign.left,
+    textAlign: ui.TextAlign.left,
   );
 
-  static TextStyle getStyle({
-    Color color,
-    TextDecoration decoration,
-    Color decorationColor,
-    TextDecorationStyle decorationStyle,
+  static ui.TextStyle getStyle({
+    ui.Color color,
+    ui.TextDecoration decoration,
+    ui.Color decorationColor,
+    ui.TextDecorationStyle decorationStyle,
     double decorationThickness,
-    FontWeight fontWeight,
-    FontStyle fontStyle,
-    TextBaseline textBaseline,
+    ui.FontWeight fontWeight,
+    ui.FontStyle fontStyle,
+    ui.TextBaseline textBaseline,
     String fontFamily,
     List<String> fontFamilyFallback,
     double fontSize,
     double letterSpacing,
     double wordSpacing,
     double height,
-    Locale locale,
-    Paint background,
-    Paint foreground,
-    List<Shadow> shadows,
-    List<FontFeature> fontFeatures,
+    ui.Locale locale,
+    ui.Paint background,
+    ui.Paint foreground,
+    List<ui.Shadow> shadows,
+    List<ui.FontFeature> fontFeatures,
   }) {
-    return TextStyle(
+    return ui.TextStyle(
       color: color,
       decoration: decoration,
       decorationColor: decorationColor,
@@ -144,10 +143,10 @@ class StaticText extends DisplayObject {
     );
   }
 
-  StaticText({
+  GText({
     String text,
-    ParagraphStyle paragraphStyle,
-    TextStyle textStyle,
+    ui.ParagraphStyle paragraphStyle,
+    ui.TextStyle textStyle,
     double width = double.infinity,
   }) {
     painting.PaintingBinding.instance.systemFonts.addListener(_fontLoaded);
@@ -168,26 +167,23 @@ class StaticText extends DisplayObject {
 
   @override
   void dispose() {
+    super.dispose();
     painting.PaintingBinding.instance.systemFonts.removeListener(_fontLoaded);
     _onFontLoaded?.removeAll();
     _onFontLoaded = null;
   }
 
-  void setTextStyle(TextStyle style) {
+  void setTextStyle(ui.TextStyle style) {
     if (style == null || _style == style) return;
     _style = style;
     _invalidBuilder = true;
   }
 
-  TextStyle getTextStyle() {
-    return _style;
-  }
+  ui.TextStyle getTextStyle() => _style;
 
-  ParagraphStyle getParagraphStyle() {
-    return _paragraphStyle;
-  }
+  ui.ParagraphStyle getParagraphStyle() => _paragraphStyle;
 
-  void setParagraphStyle(ParagraphStyle style) {
+  void setParagraphStyle(ui.ParagraphStyle style) {
     if (style == null || _paragraphStyle == style) return;
     _paragraphStyle = style;
     _invalidBuilder = true;
@@ -195,7 +191,7 @@ class StaticText extends DisplayObject {
 
   void _invalidateBuilder() {
     _paragraphStyle ??= defaultParagraphStyle;
-    _builder = ParagraphBuilder(_paragraphStyle);
+    _builder = ui.ParagraphBuilder(_paragraphStyle);
     if (_style != null) _builder.pushStyle(_style);
     _builder.addText(_text ?? '');
 
@@ -209,7 +205,7 @@ class StaticText extends DisplayObject {
   void _layout() {
     //// Web has a bug for double.infinity for text layout.
     var paragraphWidth = !SystemUtils.usingSkia ? _maxTextWidthForWeb : _width;
-    _paragraph?.layout(ParagraphConstraints(width: paragraphWidth));
+    _paragraph?.layout(ui.ParagraphConstraints(width: paragraphWidth));
     _invalidSize = false;
   }
 
@@ -217,14 +213,14 @@ class StaticText extends DisplayObject {
   /// applies the painting after the DisplayObject transformations.
   /// Should be overriden by subclasses.
   @override
-  void $applyPaint(Canvas canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     super.$applyPaint(canvas);
     if (_text == '') return;
     validate();
     if (backgroundColor != null && backgroundColor.alpha > 0) {
       canvas.drawRect(
-        Rect.fromLTWH(0, 0, intrinsicWidth, textHeight),
-        Paint()..color = backgroundColor,
+        ui.Rect.fromLTWH(0, 0, intrinsicWidth, textHeight),
+        ui.Paint()..color = backgroundColor,
       );
     }
     if (_paragraph != null) {
@@ -234,10 +230,10 @@ class StaticText extends DisplayObject {
 //        final alphaPaint = _alphaPaint;
 //        var bounds = Rect.fromLTWH(0, 0, textWidth, textHeight);
         canvas.saveLayer(null, _alphaPaint);
-        canvas.drawParagraph(_paragraph, Offset.zero);
+        canvas.drawParagraph(_paragraph, ui.Offset.zero);
         canvas.restore();
       } else {
-        canvas.drawParagraph(_paragraph, Offset.zero);
+        canvas.drawParagraph(_paragraph, ui.Offset.zero);
       }
     }
   }
@@ -267,40 +263,40 @@ class StaticText extends DisplayObject {
 
   /// Factory method to simplify the initialization of a StaticText instance.
   /// You can pass the parent object directly in the `doc` parameter.
-  static StaticText build({
+  static GText build({
     String text,
-    DisplayObjectContainer doc,
-    Color color,
+    GDisplayObjectContainer doc,
+    ui.Color color,
     double w = double.infinity,
-    TextDecoration decoration,
-    Color decorationColor,
-    TextDecorationStyle decorationStyle,
+    ui.TextDecoration decoration,
+    ui.Color decorationColor,
+    ui.TextDecorationStyle decorationStyle,
     double decorationThickness,
-    FontWeight fontWeight,
-    FontStyle fontStyle,
-    TextBaseline textBaseline,
+    ui.FontWeight fontWeight,
+    ui.FontStyle fontStyle,
+    ui.TextBaseline textBaseline,
     String fontFamily,
     List<String> fontFamilyFallback,
     double fontSize,
     double letterSpacing,
     double wordSpacing,
     double height,
-    Locale locale,
-    Paint background,
-    Paint foreground,
-    List<Shadow> shadows,
-    List<FontFeature> fontFeatures,
-    TextAlign textAlign = TextAlign.left,
-    TextDirection direction = TextDirection.ltr,
+    ui.Locale locale,
+    ui.Paint background,
+    ui.Paint foreground,
+    List<ui.Shadow> shadows,
+    List<ui.FontFeature> fontFeatures,
+    ui.TextAlign textAlign = ui.TextAlign.left,
+    ui.TextDirection direction = ui.TextDirection.ltr,
   }) {
     w ??= double.infinity;
-    if (w == double.infinity && textAlign != TextAlign.left) {
+    if (w == double.infinity && textAlign != ui.TextAlign.left) {
       throw "[StaticText] To use $textAlign you need to specify the width";
     }
-    final tf = StaticText(
+    final tf = GText(
       text: text,
       width: w,
-      textStyle: StaticText.getStyle(
+      textStyle: GText.getStyle(
         color: color,
         decoration: decoration,
         decorationColor: decorationColor,
@@ -321,7 +317,7 @@ class StaticText extends DisplayObject {
         shadows: shadows,
         fontFeatures: fontFeatures,
       ),
-      paragraphStyle: ParagraphStyle(
+      paragraphStyle: ui.ParagraphStyle(
         textAlign: textAlign,
         textDirection: direction,
       ),
@@ -329,14 +325,4 @@ class StaticText extends DisplayObject {
     doc?.addChild(tf);
     return tf;
   }
-//  @override
-//  Future<GTexture> createImageTexture([
-//    bool adjustOffset = true,
-//    double resolution = 1,
-//    Rect rect,
-//  ]) async {
-//    validate();
-//    return super.createImageTexture(adjustOffset, resolution, rect);
-//  }
-
 }

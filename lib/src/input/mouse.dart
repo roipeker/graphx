@@ -11,6 +11,8 @@ abstract class GMouse {
 
   static SystemMouseCursor get cursor => _cursor;
 
+  static void setClickCursor()=> cursor = SystemMouseCursors.click;
+
   static set cursor(SystemMouseCursor value) {
     value ??= SystemMouseCursors.basic;
     if (_cursor == value) return;

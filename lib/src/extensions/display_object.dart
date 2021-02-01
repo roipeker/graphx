@@ -1,6 +1,6 @@
 import '../../graphx.dart';
 
-extension DisplayObjectHelpers on DisplayObject {
+extension DisplayObjectHelpers on GDisplayObject {
   void centerInStage() {
     if (!inStage) return;
     setPosition(stage.stageWidth / 2, stage.stageHeight / 2);
