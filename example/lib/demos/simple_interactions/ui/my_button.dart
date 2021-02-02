@@ -156,10 +156,10 @@ class MyButton extends Sprite {
   void _updateIcon() {
     if (_isOn) {
       icon.data = Feather.sun;
-      icon.color = Colors.yellow.value;
+      icon.color = Colors.yellow;
     } else {
       icon.data = Feather.moon;
-      icon.color = Colors.white.value;
+      icon.color = Colors.white;
     }
   }
 
