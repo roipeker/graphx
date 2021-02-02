@@ -28,13 +28,13 @@ class GIcon extends GDisplayObject {
 
   widgets.IconData _data;
   double _size;
-  int _color;
+  ui.Color _color;
 
   bool _invalidStyle = false;
 
-  int get color => _color;
+  ui.Color get color => _color;
 
-  set color(int value) {
+  set color(ui.Color value) {
     if (value == _color) return;
     _color = value;
     _invalidStyle = true;
@@ -62,7 +62,7 @@ class GIcon extends GDisplayObject {
 
   GIcon(
     widgets.IconData data, [
-    int color = 0xffffff,
+        ui.Color color = kColorWhite,
     double size = 24.0,
   ]) {
     _data = data;
@@ -101,7 +101,7 @@ class GIcon extends GDisplayObject {
   void _updateStyle() {
     if (_data == null) return;
     _style = ui.TextStyle(
-      color: _paint == null ? ui.Color(color).withOpacity(alpha) : null,
+      color: _paint == null ? color : null,
       fontSize: _size,
       fontFamily: _resolveFontFamily(),
       foreground: _paint,

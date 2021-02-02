@@ -1,5 +1,4 @@
 export 'callback_params.dart';
-export 'gx_callback.dart';
 export 'keyboard_data.dart';
 export 'mixins.dart';
 export 'mps.dart';

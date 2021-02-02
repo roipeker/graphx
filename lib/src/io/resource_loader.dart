@@ -54,6 +54,31 @@ abstract class ResourceLoader {
     return atlas;
   }
 
+  static Future<GTexture> loadNetworkTextureSimple(
+      String url, {
+        int width,
+        int height,
+        double resolution = 1.0,
+        String cacheId,
+      }) async {
+    Uint8List bytes;
+    try {
+      bytes = await httpGet(url);
+      final codec = await ui.instantiateImageCodec(
+        bytes,
+        allowUpscaling: false,
+        targetWidth: width,
+        targetHeight: height,
+      );
+      final image = (await codec.getNextFrame()).image;
+      final texture = GTexture.fromImage(image, resolution);
+      textures[cacheId] = texture;
+      return texture;
+    } catch(e){
+      return null ;
+    }
+  }
+
   // static Future<SvgData> loadNetworkSvg(
   //   String url, {
   //   String cacheId,
