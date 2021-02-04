@@ -1,15 +1,10 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
-
 import 'geom.dart';
 
 class GMatrix {
   double a, b, c, d, tx, ty;
-
   Matrix4 _native;
-
   @override
   String toString() {
     return 'GxMatrix {a: $a, b: $b, c: $c, d: $d, tx: $tx, ty: $ty}';
