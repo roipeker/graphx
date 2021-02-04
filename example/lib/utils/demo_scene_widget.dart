@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class DemoSingleSceneWidget extends StatelessWidget {
-  final Sprite root;
+  final GSprite root;
   final String title;
   final Widget child;
   final SceneConfig config;

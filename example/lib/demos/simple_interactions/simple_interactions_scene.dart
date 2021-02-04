@@ -4,7 +4,7 @@ import 'package:graphx/graphx.dart';
 
 import 'ui/my_button.dart';
 
-class SimpleInteractionsScene extends Sprite {
+class SimpleInteractionsScene extends GSprite {
   GShape ball;
 
   @override

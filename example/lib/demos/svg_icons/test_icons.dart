@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-class TestIcons extends Sprite {
+class TestIcons extends GSprite {
   TestIcons() {
     _init();
   }
 
   void _init() {
-    final iconsContainer = Sprite();
+    final iconsContainer = GSprite();
     addChild(iconsContainer);
     iconsContainer.x = 100;
     iconsContainer.y = 100;

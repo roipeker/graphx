@@ -4,9 +4,9 @@ import 'package:graphx/graphx.dart';
 import '../../assets/svg_icons.dart';
 import '../../utils/svg_utils.dart';
 
-class TestSvgScene extends Sprite {
+class TestSvgScene extends GSprite {
   final groundHeight = 100.0;
-  Sprite trees, ground;
+  GSprite trees, ground;
 
   @override
   void addedToStage() {
@@ -18,8 +18,8 @@ class TestSvgScene extends Sprite {
     await _loadData();
     _drawSun();
 
-    trees = Sprite();
-    ground = Sprite();
+    trees = GSprite();
+    ground = GSprite();
     addChild(trees);
     addChild(ground);
 

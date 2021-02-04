@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 
 import '../../graphx.dart';
 
-class Sprite extends GDisplayObjectContainer {
+class GSprite extends GDisplayObjectContainer {
   @override
   String toString() {
     final msg = name != null ? ' {name: $name}' : '';

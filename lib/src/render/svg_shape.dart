@@ -15,6 +15,7 @@ class GSvgShape extends GDisplayObject {
   /// or modulate.
 
   bool _invalidColor = false;
+
   Color get tint => _tint;
 
   set tint(Color value) {
@@ -129,4 +130,10 @@ class SvgData {
   bool hasContent;
 
   SvgData([this.picture]);
+
+  void dispose() {
+    picture?.dispose();
+    picture = null;
+    hasContent = false;
+  }
 }

@@ -7,6 +7,12 @@
   - GxIcon > GIcon
   - Sprite > GSprite
   - GxPoint > GPoint, and so on...
+- added dispose() to `KeyboardManager` and `PointerManager`... so it manages hot reloader better.
+- added `LayoutUtils.objectFit()` to resize `GDisplayObject` (specially Bitmaps), using BoxFit.
+- downgraded `flutter_svg` to 0.18.1 in "example" to make it usable in beta channel.
+- refactor resource_loader.dart, changed most methods to use named params, now only stores in cache if a `cacheId` is defined (and also returns the cached data).
+- `GText` now uses Flutter's `TextStyle` to make it more convenient.
+- added `ResourceLoader.loadNetworkTextureSimple()` using a simple http call in flutter (useful for dartpad).
 
 ## [0.9.7]
 - added `MovieClip.gotoAndPlay` lastFrame for animation.

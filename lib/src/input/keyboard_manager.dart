@@ -1,14 +1,19 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../graphx.dart';
 
 class KeyboardManager<T extends KeyboardEventData> {
-  FocusNode focusNode = FocusNode();
+  FocusNode _focusNode;
+
+  FocusNode get focusNode => _focusNode ??= FocusNode();
 
   void dispose() {
-    focusNode?.dispose();
+    // _focusNode?.dispose();
+    // _focusNode = null;
+    _onDown?.removeAll();
+    _onUp?.removeAll();
+    _lastEvent = null;
   }
 
   EventSignal<T> get onDown => _onDown ??= EventSignal<T>();

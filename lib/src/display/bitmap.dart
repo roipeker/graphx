@@ -18,7 +18,7 @@ class GBitmap extends GDisplayObject {
   bool _hasScale9Grid;
   double _buffScaleX, _buffScaleY;
   final GRect _cachedBounds = GRect();
-  final _paint = ui.Paint()..filterQuality = ui.FilterQuality.high;
+  final _paint = ui.Paint()..filterQuality = ui.FilterQuality.medium;
   ui.Paint get nativePaint => _paint;
 
   @override

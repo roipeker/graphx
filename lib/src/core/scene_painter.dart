@@ -14,7 +14,7 @@ class ScenePainter with EventDispatcherMixin {
 
   /// Access to the `root` DisplayObject that will initialize
   /// the Scene layer.
-  Sprite root;
+  GSprite root;
 
   /// Allows to re-paint the internal CustomPainter on every tick()
   /// The flags allow the $render() `tick` process to know if it has to

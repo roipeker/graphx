@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-class SimpleShapesScene extends Sprite {
+class SimpleShapesScene extends GSprite {
   GShape triangle;
 
   @override

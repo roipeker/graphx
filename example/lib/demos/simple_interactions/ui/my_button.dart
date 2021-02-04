@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:graphx/graphx.dart';
 
-class MyButton extends Sprite {
+class MyButton extends GSprite {
   // variables to define the size of the button.
   double w = 80;
   double h = 80;
@@ -71,7 +71,7 @@ class MyButton extends Sprite {
   void _initText() {
     _fillText = GText(
       text: '0%',
-      textStyle: GText.getStyle(
+      textStyle: TextStyle(
         color: Colors.black,
         fontSize: 24,
         fontWeight: FontWeight.bold,

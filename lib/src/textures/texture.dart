@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+
 import '../../graphx.dart';
 
 class GTexture {
@@ -27,8 +28,7 @@ class GTexture {
   /// set this by hand.
   double actualWidth, actualHeight;
 
-  double pivotX = 0,
-      pivotY = 0;
+  double pivotX = 0, pivotY = 0;
   GRect sourceRect;
 
   double scale = 1;
@@ -57,11 +57,12 @@ class GTexture {
     return texture;
   }
 
-  static GTexture fromImage(ui.Image data, [
+  static GTexture fromImage(
+    ui.Image data, [
     double scale = 1,
   ]) {
     var texture =
-    GTexture.empty(data.width / scale, data.height / scale, scale);
+        GTexture.empty(data.width / scale, data.height / scale, scale);
     texture.root = data;
     texture.actualWidth = data.width.toDouble();
     texture.actualHeight = data.height.toDouble();
@@ -116,15 +117,23 @@ class GTexture {
     }
   }
 
+  var _disposed = false;
+
+  bool get disposed => _disposed;
+
   void dispose() {
+    if (_disposed) return;
     root?.dispose();
     root = null;
     color = null;
 //    width = height = nativeWidth = nativeHeight = 0;
     frame = null;
+    scale9Grid = null;
+    scale9GridDest = null;
+    _disposed = true;
   }
 
-/// TODO: all matrix calculation to map textures into vertices
+  /// TODO: all matrix calculation to map textures into vertices
 //  GxPoint getTexCoords(VertexData vertex, int id, [GxPoint out]) {
 //    out ??= GxPoint();
 //  }

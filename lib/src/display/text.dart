@@ -6,6 +6,7 @@ class GText extends GDisplayObject {
   ui.Paragraph _paragraph;
 
   Signal _onFontLoaded;
+
   Signal get onFontLoaded => _onFontLoaded ??= Signal();
 
   static final _sHelperMatrix = GMatrix();
@@ -42,7 +43,10 @@ class GText extends GDisplayObject {
 //  }
 
   ui.Paragraph get paragraph => _paragraph;
-  ui.TextStyle _style;
+
+  // ui.TextStyle _style;
+  painting.TextStyle _style;
+
   double _width;
 
   ui.ParagraphBuilder _builder;
@@ -52,6 +56,16 @@ class GText extends GDisplayObject {
   bool _invalidBuilder = true;
   String _text;
   ui.Color backgroundColor;
+
+  ui.Color get color {
+    return _style.color;
+  }
+
+  set color(ui.Color value) {
+    _style = _style.copyWith(color: value);
+    _invalidBuilder = true;
+    // _invalidateBuilder();
+  }
 
   /// TODO: implement this.
 //  TextFormat get format => _format;
@@ -88,7 +102,7 @@ class GText extends GDisplayObject {
     return _paragraph?.height ?? 0;
   }
 
-  static ui.TextStyle defaultTextStyle = ui.TextStyle(
+  static painting.TextStyle defaultTextStyle = painting.TextStyle(
     color: kColorBlack,
     decorationStyle: ui.TextDecorationStyle.solid,
   );
@@ -99,54 +113,54 @@ class GText extends GDisplayObject {
     textAlign: ui.TextAlign.left,
   );
 
-  static ui.TextStyle getStyle({
-    ui.Color color,
-    ui.TextDecoration decoration,
-    ui.Color decorationColor,
-    ui.TextDecorationStyle decorationStyle,
-    double decorationThickness,
-    ui.FontWeight fontWeight,
-    ui.FontStyle fontStyle,
-    ui.TextBaseline textBaseline,
-    String fontFamily,
-    List<String> fontFamilyFallback,
-    double fontSize,
-    double letterSpacing,
-    double wordSpacing,
-    double height,
-    ui.Locale locale,
-    ui.Paint background,
-    ui.Paint foreground,
-    List<ui.Shadow> shadows,
-    List<ui.FontFeature> fontFeatures,
-  }) {
-    return ui.TextStyle(
-      color: color,
-      decoration: decoration,
-      decorationColor: decorationColor,
-      decorationStyle: decorationStyle,
-      decorationThickness: decorationThickness,
-      fontWeight: fontWeight,
-      fontStyle: fontStyle,
-      textBaseline: textBaseline,
-      fontFamily: fontFamily,
-      fontFamilyFallback: fontFamilyFallback,
-      fontSize: fontSize,
-      letterSpacing: letterSpacing,
-      wordSpacing: wordSpacing,
-      height: height,
-      locale: locale,
-      background: background,
-      foreground: foreground,
-      shadows: shadows,
-      fontFeatures: fontFeatures,
-    );
-  }
+  // static ui.TextStyle getStyle({
+  //   ui.Color color,
+  //   ui.TextDecoration decoration,
+  //   ui.Color decorationColor,
+  //   ui.TextDecorationStyle decorationStyle,
+  //   double decorationThickness,
+  //   ui.FontWeight fontWeight,
+  //   ui.FontStyle fontStyle,
+  //   ui.TextBaseline textBaseline,
+  //   String fontFamily,
+  //   List<String> fontFamilyFallback,
+  //   double fontSize,
+  //   double letterSpacing,
+  //   double wordSpacing,
+  //   double height,
+  //   ui.Locale locale,
+  //   ui.Paint background,
+  //   ui.Paint foreground,
+  //   List<ui.Shadow> shadows,
+  //   List<ui.FontFeature> fontFeatures,
+  // }) {
+  //   return ui.TextStyle(
+  //     color: color,
+  //     decoration: decoration,
+  //     decorationColor: decorationColor,
+  //     decorationStyle: decorationStyle,
+  //     decorationThickness: decorationThickness,
+  //     fontWeight: fontWeight,
+  //     fontStyle: fontStyle,
+  //     textBaseline: textBaseline,
+  //     fontFamily: fontFamily,
+  //     fontFamilyFallback: fontFamilyFallback,
+  //     fontSize: fontSize,
+  //     letterSpacing: letterSpacing,
+  //     wordSpacing: wordSpacing,
+  //     height: height,
+  //     locale: locale,
+  //     background: background,
+  //     foreground: foreground,
+  //     shadows: shadows,
+  //     fontFeatures: fontFeatures,
+  //   );
+  // }
 
   GText({
     String text,
     ui.ParagraphStyle paragraphStyle,
-    ui.TextStyle textStyle,
+    painting.TextStyle textStyle,
     double width = double.infinity,
   }) {
     painting.PaintingBinding.instance.systemFonts.addListener(_fontLoaded);
@@ -173,13 +187,13 @@ class GText extends GDisplayObject {
     _onFontLoaded = null;
   }
 
-  void setTextStyle(ui.TextStyle style) {
+  void setTextStyle(painting.TextStyle style) {
     if (style == null || _style == style) return;
     _style = style;
     _invalidBuilder = true;
   }
 
-  ui.TextStyle getTextStyle() => _style;
+  painting.TextStyle getTextStyle() => _style;
 
   ui.ParagraphStyle getParagraphStyle() => _paragraphStyle;
 
@@ -192,9 +206,9 @@ class GText extends GDisplayObject {
   void _invalidateBuilder() {
     _paragraphStyle ??= defaultParagraphStyle;
     _builder = ui.ParagraphBuilder(_paragraphStyle);
-    if (_style != null) _builder.pushStyle(_style);
+    // if (_style != null) _builder.pushStyle(_style);
+    if (_style != null) _builder.pushStyle(_style.getTextStyle());
     _builder.addText(_text ?? '');
-
     _paragraph = _builder.build();
     _invalidBuilder = false;
     _invalidSize = true;
@@ -293,30 +307,31 @@ class GText extends GDisplayObject {
     if (w == double.infinity && textAlign != ui.TextAlign.left) {
       throw "[StaticText] To use $textAlign you need to specify the width";
     }
+    final style = painting.TextStyle(
+      color: color,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      decorationStyle: decorationStyle,
+      decorationThickness: decorationThickness,
+      fontWeight: fontWeight,
+      fontStyle: fontStyle,
+      textBaseline: textBaseline,
+      fontFamily: fontFamily,
+      fontFamilyFallback: fontFamilyFallback,
+      fontSize: fontSize,
+      letterSpacing: letterSpacing,
+      wordSpacing: wordSpacing,
+      height: height,
+      locale: locale,
+      background: background,
+      foreground: foreground,
+      shadows: shadows,
+      fontFeatures: fontFeatures,
+    );
     final tf = GText(
       text: text,
       width: w,
-      textStyle: GText.getStyle(
-        color: color,
-        decoration: decoration,
-        decorationColor: decorationColor,
-        decorationStyle: decorationStyle,
-        decorationThickness: decorationThickness,
-        fontWeight: fontWeight,
-        fontStyle: fontStyle,
-        textBaseline: textBaseline,
-        fontFamily: fontFamily,
-        fontFamilyFallback: fontFamilyFallback,
-        fontSize: fontSize,
-        letterSpacing: letterSpacing,
-        wordSpacing: wordSpacing,
-        height: height,
-        locale: locale,
-        background: background,
-        foreground: foreground,
-        shadows: shadows,
-        fontFeatures: fontFeatures,
-      ),
+      textStyle: style,
       paragraphStyle: ui.ParagraphStyle(
         textAlign: textAlign,
         textDirection: direction,

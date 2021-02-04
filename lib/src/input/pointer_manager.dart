@@ -94,4 +94,17 @@ class PointerManager<T extends PointerEventData> {
     onInput?.dispatch(event);
     signal?.dispatch(event);
   }
+
+  void dispose() {
+    _onDown?.removeAll();
+    _onUp?.removeAll();
+    _onInput?.removeAll();
+    _onCancel?.removeAll();
+    _onMove?.removeAll();
+    _onScroll?.removeAll();
+    _onHover?.removeAll();
+    _onExit?.removeAll();
+    _onEnter?.removeAll();
+    _lastEvent=null;
+  }
 }

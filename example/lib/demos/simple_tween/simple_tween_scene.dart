@@ -4,11 +4,11 @@ import 'package:graphx/graphx.dart';
 import 'my_box.dart';
 import 'tween_controller.dart';
 
-class SimpleTweenScene extends Sprite {
+class SimpleTweenScene extends GSprite {
   final TweenSceneController controller;
 
   MyBox box;
-  Sprite centeredContainer;
+  GSprite centeredContainer;
 
   SimpleTweenScene(this.controller);
 
@@ -24,7 +24,7 @@ class SimpleTweenScene extends Sprite {
     stage.maskBounds = true;
 
     /// use this Sprite to keep the box always centered in the stage.
-    centeredContainer = Sprite();
+    centeredContainer = GSprite();
 
     box = MyBox(size: 40);
 
@@ -59,7 +59,7 @@ class SimpleTweenScene extends Sprite {
 
   void _initCounter() {
     counterText = GText(
-      textStyle: GText.getStyle(
+      textStyle: TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.bold,
         fontSize: 20,

@@ -13,6 +13,21 @@ abstract class ResourceLoader {
   static Map<String, GTextureAtlas> atlases = <String, GTextureAtlas>{};
   static Map<String, GifAtlas> gifs = <String, GifAtlas>{};
 
+  static void clearCache() {
+    for (var vo in svgs.values) {
+      vo.dispose();
+    }
+    for (var vo in textures.values) {
+      vo.dispose();
+    }
+    for (var vo in atlases.values) {
+      vo.dispose();
+    }
+    for (var vo in gifs.values) {
+      vo.dispose();
+    }
+  }
+
   static GTexture getTexture(String cacheId) {
     return textures[cacheId];
   }
@@ -30,11 +45,13 @@ abstract class ResourceLoader {
   }
 
   static Future<GifAtlas> loadGif(
-    String path, [
+    String path, {
     double resolution = 1.0,
     String cacheId,
-  ]) async {
-    cacheId ??= path;
+  }) async {
+    if (cacheId != null && gifs.containsKey(cacheId)) {
+      return gifs[cacheId];
+    }
 
     final data = await rootBundle.load(path);
     final bytes = Uint8List.view(data.buffer);
@@ -50,17 +67,22 @@ abstract class ResourceLoader {
       var gifFrame = GifFrame(frame.duration, texture);
       atlas.addFrame(gifFrame);
     }
-    gifs[cacheId] = textures[cacheId] = atlas;
+    if (cacheId != null) {
+      gifs[cacheId] = atlas;
+    }
     return atlas;
   }
 
   static Future<GTexture> loadNetworkTextureSimple(
-      String url, {
-        int width,
-        int height,
-        double resolution = 1.0,
-        String cacheId,
-      }) async {
+    String url, {
+    int width,
+    int height,
+    double resolution = 1.0,
+    String cacheId,
+  }) async {
+    if (cacheId != null && textures.containsKey(cacheId)) {
+      return textures[cacheId];
+    }
     Uint8List bytes;
     try {
       bytes = await httpGet(url);
@@ -72,10 +94,13 @@ abstract class ResourceLoader {
       );
       final image = (await codec.getNextFrame()).image;
       final texture = GTexture.fromImage(image, resolution);
+      if (cacheId != null) {
+        textures[cacheId] = texture;
+      }
       textures[cacheId] = texture;
       return texture;
-    } catch(e){
-      return null ;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -108,6 +133,9 @@ abstract class ResourceLoader {
     Function(NetworkImageEvent) onProgress,
     Function(NetworkImageEvent) onError,
   }) async {
+    if (cacheId != null && textures.containsKey(cacheId)) {
+      return textures[cacheId];
+    }
     final response = await NetworkImageLoader.load(
       url,
       width: width,
@@ -128,9 +156,14 @@ abstract class ResourceLoader {
     double resolution = 1.0,
     String cacheId,
   ]) async {
-    cacheId ??= path;
-    textures[cacheId] = GTexture.fromImage(await loadImage(path), resolution);
-    return textures[cacheId];
+    if (cacheId != null && textures.containsKey(cacheId)) {
+      return textures[cacheId];
+    }
+    var texture = GTexture.fromImage(await loadImage(path), resolution);
+    if (cacheId != null) {
+      textures[cacheId] = texture;
+    }
+    return texture;
   }
 
   // static Future<SvgData> loadSvg(
@@ -143,11 +176,14 @@ abstract class ResourceLoader {
   // }
 
   static Future<GTextureAtlas> loadTextureAtlas(
-    String imagePath, [
+    String imagePath, {
     String dataPath,
     double resolution = 1.0,
     String cacheId,
-  ]) async {
+  }) async {
+    if (cacheId != null && atlases.containsKey(cacheId)) {
+      return atlases[cacheId];
+    }
     if (dataPath == null) {
       /// if no index at the end, guess it.
       var lastIndex = imagePath.lastIndexOf('.');
@@ -160,9 +196,11 @@ abstract class ResourceLoader {
     }
     var texture = await ResourceLoader.loadTexture(imagePath, resolution);
     var xmlData = await ResourceLoader.loadString(dataPath);
-    cacheId ??= imagePath;
-    atlases[cacheId] = GTextureAtlas(texture, xmlData);
-    return atlases[cacheId];
+    final atlas = GTextureAtlas(texture, xmlData);
+    if (cacheId != null) {
+      atlases[cacheId] = atlas;
+    }
+    return atlas;
   }
 
   static Future<ByteData> loadBinary(String path) async {

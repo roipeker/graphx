@@ -167,4 +167,10 @@ class GTextureAtlas {
     _subTextures[name] = subTexture;
     _subTexturesNames = null;
   }
+
+  void dispose() {
+    _atlasTexture?.dispose();
+    _subTextures?.clear();
+    _subTexturesNames?.clear();
+  }
 }

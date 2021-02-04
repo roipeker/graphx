@@ -75,8 +75,8 @@ class SceneController {
 
   /// constructor.
   SceneController({
-    Sprite back,
-    Sprite front,
+    GSprite back,
+    GSprite front,
     SceneConfig config,
   }) {
     assert(back != null || front != null);
