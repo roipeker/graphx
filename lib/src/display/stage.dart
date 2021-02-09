@@ -101,6 +101,7 @@ class Stage extends GDisplayObjectContainer
     ..strokeWidth = 2;
 
   final GRect _stageRect = GRect();
+
   GRect get stageRect => _stageRect;
   ui.Rect _stageRectNative;
 
@@ -202,8 +203,8 @@ class Stage extends GDisplayObjectContainer
   void dispose() {
     _size = null;
     _backgroundPaint = null;
-    pointer?.dispose();
-    keyboard?.dispose();
+    scene?.core?.pointer?.dispose();
+    scene?.core?.keyboard?.dispose();
     $disposeResizeSignals();
     $disposeTickerSignals();
     $disposeStagePointerSignals();
