@@ -20,6 +20,7 @@ class SceneController {
   ///   // your logic here
   ///  });`
   Signal _onHotReload;
+
   Signal get onHotReload => _onHotReload ??= Signal();
 
   ScenePainter backScene, frontScene;
@@ -108,6 +109,9 @@ class SceneController {
   }
 
   void setup() {
+    if (!GTween.initialized) {
+      GTween.registerCommonWraps();
+    }
     backScene?.$setup();
     frontScene?.$setup();
   }
@@ -115,6 +119,7 @@ class SceneController {
   /// [GTicker] that runs the `enterFrame`.
   /// Is independent from the rendering pipeline.
   void _onTick(double elapsed) {
+    GTween.processTick(elapsed);
     frontScene?.tick(elapsed);
     backScene?.tick(elapsed);
   }
@@ -155,6 +160,7 @@ class SceneController {
     _onHotReload?.dispatch();
     if (_config.rebuildOnHotReload) {
       dispose();
+
       /// TODO: check if we need to delay the reinitialization.
       $init();
     }

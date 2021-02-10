@@ -1,3 +1,8 @@
+## [0.9.9]
+- major fix for `GTween` when running lots of SceneControllers instances.
+- fix stage dispose exception with keyboard/pointer.
+- added some more ColorFilters.
+
 ## [0.9.8]
 - major code refactoring, remove svg_flutter as dependency to avoid breaking changes.
 - changed all methods that takes `int` hex colors + alphas, to `Color` (beginFill, beginGradientFill, stage.color, etc). 

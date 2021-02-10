@@ -1,6 +1,7 @@
 library gtween;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import '../../graphx.dart';
 
 part 'src/core/prop_tween.dart';

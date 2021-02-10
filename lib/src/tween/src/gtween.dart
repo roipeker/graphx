@@ -64,6 +64,7 @@ class GVars {
   }
 
   static const String selfTweenKey = '{self}';
+
   void _setCallbackParams(GTween twn, CallbackParams params) {
     final named = params.named;
     final positional = params.positional;
@@ -101,6 +102,7 @@ class GTween {
   /// );
   /// ```
   static void registerCommonWraps([List<GxAnimatableBuilder> otherWraps]) {
+    if (initialized) return;
     GTween.registerWrap(GTweenableDisplayObject.wrap);
     GTween.registerWrap(GTweenableMap.wrap);
     GTween.registerWrap(GTweenableDouble.wrap);
@@ -109,7 +111,22 @@ class GTween {
     GTween.registerWrap(GTweenableList.wrap);
 //    GTween.registerWrap(GTweenableColor.wrap);
     otherWraps?.forEach(GTween.registerWrap);
+    initialized = true;
   }
+
+  static Duration _lastFrameTimeStamp = Duration.zero;
+
+  /// TODO: This is a temporal solution, GTween must work per SceneController
+  /// or make GTicker global... being able to track unique refresh frames
+  /// is a must.
+  static void processTick(double elapsed) {
+    final ts = SchedulerBinding.instance.currentFrameTimeStamp;
+    if (_lastFrameTimeStamp == ts) return;
+    GTween.ticker.dispatch(elapsed);
+    _lastFrameTimeStamp = ts;
+  }
+
+  static bool initialized = false;
 
   static double _time = 0;
   static double _frame = 0;
@@ -428,7 +445,7 @@ class GTween {
   }
 
   /// Kills all running tweens.
-  static void killAll(){
+  static void killAll() {
     var t = _first;
     while (t != null) {
       var next = t._next;

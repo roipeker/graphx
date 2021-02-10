@@ -99,8 +99,6 @@ class ScenePainter with EventDispatcherMixin {
 
   void $setup() {
     makeCurrent();
-    GTween.registerCommonWraps();
-
     /// If needed, can be overridden later by the [root].
     autoUpdateAndRender = core.config.autoUpdateRender;
   }
@@ -136,7 +134,6 @@ class ScenePainter with EventDispatcherMixin {
     }
     $currentFrameDeltaTime = deltaTime;
     $accumulatedFrameDeltaTime += $currentFrameDeltaTime;
-    GTween.ticker.dispatch(deltaTime);
     _stage.$tick(deltaTime);
     if (_hasPointer) {
       _detectMouseMove();
