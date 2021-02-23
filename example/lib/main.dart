@@ -7,8 +7,9 @@ void main() {
       // home: SimpleShapesMain(),
       // home: SimpleTweenMain(),
       // home: DemoSvgIconsMain(),
-      home: SimpleInteractionsMain(),
+      // home: SimpleInteractionsMain(),
 //       home: GraphicsClipperDemo(),
+      home: FacebookReactionsMain(),
     ),
   );
 }

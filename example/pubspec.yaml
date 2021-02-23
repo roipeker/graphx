@@ -22,7 +22,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-#  assets:
+  assets:
+    - assets/fb_reactions/
 #    - assets/
 #    - assets/game/
 #    - assets/game/flare/

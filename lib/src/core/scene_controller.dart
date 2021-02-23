@@ -159,8 +159,8 @@ class SceneController {
   void reassembleWidget() {
     _onHotReload?.dispatch();
     if (_config.rebuildOnHotReload) {
+      GTween.hotReload();
       dispose();
-
       /// TODO: check if we need to delay the reinitialization.
       $init();
     }

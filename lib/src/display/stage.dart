@@ -108,6 +108,10 @@ class Stage extends GDisplayObjectContainer
   void $initFrameSize(ui.Size value) {
     if (value != _size) {
       _size = value;
+      if (_size.isEmpty) {
+        trace(
+            "WARNING:\n\tStage has size <= 0 in width or height. If you rely on stage size for a responsive layout or rendering, make sure SceneBuilderWidget() has some child, or the parent is defining the constraints.");
+      }
       _stageRectNative =
           _stageRect.setTo(0, 0, _size.width, _size.height).toNative();
       _stageBoundsRectPath ??= ui.Path();

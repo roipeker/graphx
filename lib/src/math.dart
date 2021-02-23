@@ -147,7 +147,7 @@ abstract class Math {
   static double randomRangeClamp(num min, num max, num clamp) =>
       (randomRange(min.toDouble(), max.toDouble()) / clamp.toDouble())
           .roundToDouble() *
-      clamp.toDouble();
+          clamp.toDouble();
 
   /// Returns a pseudo-random `int` number between parameters `min` and
   /// `max`, clamping the returned value to `clamp`.
@@ -155,5 +155,13 @@ abstract class Math {
   /// And `min` > `max`.
   static int randomRangeIntClamp(num min, num max, num clamp) =>
       (randomRangeInt(min.toInt(), max.toInt()) / clamp.toInt()).round() *
-      clamp.toInt();
+          clamp.toInt();
+
+  static double norm(num value, num min, num max) {
+    return (value - min) / (max - min);
+  }
+
+  static double lerp(num min, num max, double t) {
+    return min + (max - min) * t;
+  }
 }

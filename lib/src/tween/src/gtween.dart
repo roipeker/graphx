@@ -114,6 +114,13 @@ class GTween {
     initialized = true;
   }
 
+  static void hotReload() {
+    /// todo: search a way to kill active.
+    // if(!initialized) return ;
+    // GTween.killAll();
+    // initialized = false;
+  }
+
   static Duration _lastFrameTimeStamp = Duration.zero;
 
   /// TODO: This is a temporal solution, GTween must work per SceneController

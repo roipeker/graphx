@@ -115,15 +115,15 @@ class MPS {
   }
 
   void off(String topic, Function callback) {
-    _cache[topic].remove(callback);
-    _cacheOnce[topic].remove(callback);
+    _cache[topic]?.remove(callback);
+    _cacheOnce[topic]?.remove(callback);
   }
 
   MPS emit(String topic) {
     void _send(Function fn) => fn.call();
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
-    _cacheOnce.remove(topic);
+    _cacheOnce?.remove(topic);
     return this;
   }
 
