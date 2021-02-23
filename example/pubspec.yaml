@@ -24,6 +24,5 @@ flutter:
 
   assets:
     - assets/fb_reactions/
-#    - assets/
-#    - assets/game/
-#    - assets/game/flare/
+    - assets/bookmark_button/
+    - assets/card_rotation/
