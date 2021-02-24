@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'demos/demos.dart';
+import 'demos/pie_chart/pie_chart.dart';
 
 void main() {
   runApp(
@@ -33,7 +34,9 @@ void main() {
       // home: AltitudeIndicatorMain(),
       // home: BreakoutMain(),
       // home: XmasMain(),
-      home: SimpleRadialMenuMain(),
+      // home: SimpleRadialMenuMain(),
+      // home: MuratCoffeeMain(),
+      home: PieChartMain(),
     ),
   );
 }

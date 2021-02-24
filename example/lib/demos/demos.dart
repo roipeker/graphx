@@ -15,6 +15,8 @@ export 'glowing_circle/glowing_circle.dart';
 export 'graphics_clipper_demo/graphics_clipper_demo.dart';
 export 'jelly_thing/jelly_thing.dart';
 export 'lined_button/lined_button.dart';
+export 'murat_coffee/murat_coffee.dart';
+export 'pie_chart/pie_chart.dart';
 export 'raster_draw/raster_draw.dart';
 export 'simple_interactions/simple_interactions.dart';
 export 'simple_radial_menu/circ_menu.dart';

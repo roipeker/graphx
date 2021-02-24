@@ -27,6 +27,7 @@ flutter:
     - assets/bookmark_button/
     - assets/card_rotation/
     - assets/xmas/
+    - assets/murat_coffee/
 
   fonts:
     - family: pressstart
