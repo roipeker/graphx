@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
+/// TODO: rendering not ok, fix the code for latest graphx changes.
 class PieChartScene extends GSprite {
   @override
   void addedToStage() {
