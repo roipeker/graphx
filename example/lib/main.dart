@@ -30,7 +30,10 @@ void main() {
       // home: SplashIntroMain(),
       // home: LinedButtonMain(),
       // home: ColorPickerMain(),
-      home: AltitudeIndicatorMain(),
+      // home: AltitudeIndicatorMain(),
+      // home: BreakoutMain(),
+      // home: XmasMain(),
+      home: SimpleRadialMenuMain(),
     ),
   );
 }

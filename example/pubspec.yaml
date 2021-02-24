@@ -26,3 +26,9 @@ flutter:
     - assets/fb_reactions/
     - assets/bookmark_button/
     - assets/card_rotation/
+    - assets/xmas/
+
+  fonts:
+    - family: pressstart
+      fonts:
+        - asset: assets/fonts/pressstart.ttf
