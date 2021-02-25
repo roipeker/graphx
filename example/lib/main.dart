@@ -39,7 +39,15 @@ void main() {
       // home: ChartBezierMain(),
       // home: RunHeroCanvasMain(),
       // home: ElasticBandMain(),
-      home: FlowerGradientMain(),
+      // home: FlowerGradientMain(),
+      // home: NokiaSnakeMain(),
+      // home: HeartReactionMain(),
+      // home: SimpleToastMain(),
+      // home: RatingStarsMain(),
+      // home: PizzaBoxMain(),
+      // home: DrawingPadBezierMain(),
+      // home: IsmaChartMain(),
+      home: TriGridMain(),
     ),
   );
 }

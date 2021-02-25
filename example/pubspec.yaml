@@ -3,7 +3,7 @@ description: Graphx rendering prototype examples
 
 publish_to: "none"
 
-version: 1.0.0+20
+version: 1.0.0+21
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -30,6 +30,10 @@ flutter:
     - assets/murat_coffee/
     - assets/run_hero/
     - assets/run_hero/parallax/
+    - assets/heart_reaction/
+    - assets/pizza_box/
+    - assets/isma_chart/
+    - assets/trigrid/
 
   fonts:
     - family: pressstart

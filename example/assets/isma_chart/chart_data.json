@@ -1,0 +1,178 @@
+{"RecordSet" : [
+	{
+		"R_ID" : 24,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "25.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 4
+	},
+	{
+		"R_ID" : 36,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "03.08.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 8,
+		"R_OUTCOME" : null
+	},
+	{
+		"R_ID" : 6,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "02.03.2017",
+		"R_YEAR" : 2017,
+		"R_MONTH" : 3,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 11,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "15.07.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 7,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 7,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "02.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 4
+	},
+	{
+		"R_ID" : 13,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "09.07.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 7,
+		"R_OUTCOME" : 5
+	},
+	{
+		"R_ID" : 10,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "06.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 3
+	},
+	{
+		"R_ID" : 4,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "03.08.2016",
+		"R_YEAR" : 2016,
+		"R_MONTH" : 8,
+		"R_OUTCOME" : 4
+	},
+	{
+		"R_ID" : 12,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "16.07.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 7,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 14,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "18.07.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 7,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 9,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "05.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 2
+	},
+	{
+		"R_ID" : 17,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "25.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 2
+	},
+	{
+		"R_ID" : 5,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "28.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 21,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "30.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 18,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "27.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 1,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "28.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 8,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "28.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 2,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "29.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 4
+	},
+	{
+		"R_ID" : 15,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "04.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 4
+	},
+	{
+		"R_ID" : 3,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "30.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 2
+	},
+	{
+		"R_ID" : 19,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "27.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 1
+	},
+	{
+		"R_ID" : 23,
+		"R_USER_ID" : 1,
+		"R_DATE_ENR" : "19.06.2020",
+		"R_YEAR" : 2020,
+		"R_MONTH" : 6,
+		"R_OUTCOME" : 1
+	}
+]}
