@@ -47,7 +47,11 @@ void main() {
       // home: PizzaBoxMain(),
       // home: DrawingPadBezierMain(),
       // home: IsmaChartMain(),
-      home: TriGridMain(),
+      // home: TriGridMain(),
+      // home: NicoLoadingIndicatorMain(),
+      // home: FeelingSwitchMain(),
+      // home: MouseRepulsionMain(),
+      home: Globe3dMain(),
     ),
   );
 }
