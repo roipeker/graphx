@@ -426,7 +426,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics drawGxRect(GRect rect) {
+  Graphics drawGRect(GRect rect) {
     _path.addRect(rect.toNative());
     return this;
   }
@@ -701,6 +701,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     _constrainAlpha();
     if (!_isVisible) return;
 
+    // trace("en", _drawingQueue.length);
     for (var graph in _drawingQueue) {
       if (graph.hasPicture) {
         canvas.drawPicture(graph.picture);

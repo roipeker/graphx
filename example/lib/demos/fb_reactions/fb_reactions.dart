@@ -80,7 +80,8 @@ class InnerCardItem extends StatelessWidget {
                   CircleAvatar(
                     backgroundColor: Colors.grey.withOpacity(.3),
                     radius: 24,
-                    foregroundImage: NetworkImage(data.profileImageUrl),
+                    /// dev channel
+                    // foregroundImage: NetworkImage(data.profileImageUrl),
                     child: Text(data.username[0].toUpperCase()),
                   ),
                   const SizedBox(width: 8),

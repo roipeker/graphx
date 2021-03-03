@@ -51,7 +51,10 @@ void main() {
       // home: NicoLoadingIndicatorMain(),
       // home: FeelingSwitchMain(),
       // home: MouseRepulsionMain(),
-      home: Globe3dMain(),
+      // home: Globe3dMain(),
+      // home: LungsAnimationMain(),
+      // home: PathChartStressTestMain(),
+      home: ExpanderFabMenu(),
     ),
   );
 }

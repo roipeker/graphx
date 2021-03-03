@@ -36,7 +36,7 @@ class RatingStarsScene extends GSprite {
     );
     container.alignPivot();
     final bb = container.bounds;
-    container.graphics.beginFill(kColorTransparent).drawGxRect(bb).endFill();
+    container.graphics.beginFill(kColorTransparent).drawGRect(bb).endFill();
     container.onMouseOut.add((event) {
       if (container.hitTouch(GPoint(
         container.mouseX,
