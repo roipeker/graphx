@@ -54,7 +54,8 @@ void main() {
       // home: Globe3dMain(),
       // home: LungsAnimationMain(),
       // home: PathChartStressTestMain(),
-      home: ExpanderFabMenu(),
+      // home: ExpanderFabMenu(),
+      home: PageIndicatorMain(),
     ),
   );
 }

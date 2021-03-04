@@ -29,6 +29,7 @@ export 'mouse_repulsion/mouse_repulsion.dart';
 export 'murat_coffee/murat_coffee.dart';
 export 'nico_loading_indicator/nico_loading_indicator.dart';
 export 'nokia_snake/nokia_snake.dart';
+export 'page_indicator/page_indicator.dart';
 export 'path_chart_stress/path_chart_stress.dart';
 export 'pie_chart/pie_chart.dart';
 export 'pizza_box/pizza_box.dart';

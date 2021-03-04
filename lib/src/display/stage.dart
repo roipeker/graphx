@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+
 import '../../graphx.dart';
 import '../events/mixins.dart';
 
@@ -127,8 +128,9 @@ class Stage extends GDisplayObjectContainer
   /// Only available when [SceneConfig.useKeyboard] is true.
   KeyboardManager get keyboard {
     if (scene?.core?.keyboard == null) {
-      throw 'You need to enable keyboard capture, define useKeyboard=true '
-          'in your SceneController';
+      throw Exception(
+          'You need to enable keyboard capture, define useKeyboard=true '
+              'in your SceneController');
     }
     return scene?.core?.keyboard;
   }
