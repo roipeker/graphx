@@ -43,14 +43,14 @@ abstract class Math {
   static const SQRT2 = m.sqrt2;
 
   /// Computes and returns the cosine of the specified angle in radians.
-  static final cos = m.cos as double Function(num?);
+  static final cos = m.cos as num Function(num?);
 
   /// Computes and returns the arc cosine of the number specified in the
   /// parameter `x`, in radians.
   static final acos = m.acos;
 
   /// Computes and returns the sine of the specified angle in radians.
-  static final sin = m.sin as double Function(num?);
+  static final sin = m.sin as num Function(num?);
 
   /// Computes and returns the arc sine of the number specified in the
   /// parameter `x`, in radians.
