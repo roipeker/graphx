@@ -2,44 +2,44 @@ part of gtween;
 
 class PropTween {
   /// target or dynamic
-  GTweenable t;
+  GTweenable? t;
 
   /// property "name" (commonly a String), or value!
-  Object p;
+  Object? p;
 
   /// start value
-  double s;
+  double s = 0.0;
 
   /// amount to change, diff between end and start.
-  double c;
+  double? c;
 
   /// original target object.
-  Object cObj;
+  Object? cObj;
 
   /// is function
-  bool f;
+  bool? f;
 
   /// priority in render queue.
-  int pr;
+  int? pr;
 
   /// target is tween plugin?
-  bool pg;
+  bool? pg;
 
   // name of original target property. Typically same as `t`
-  String n;
+  String? n;
 
   /// rounded
-  bool r;
+  bool? r;
 
   /// linked list next.
-  PropTween _next, _prev;
+  PropTween? _next, _prev;
   PropTween({
-    GTweenable target,
-    Object property,
-    double start,
-    double change,
-    String name,
-    PropTween next,
+    GTweenable? target,
+    Object? property,
+    double start = 0.0,
+    double? change,
+    String? name,
+    PropTween? next,
     int priority = 0,
   }) {
     t = target;

@@ -49,7 +49,7 @@ class GlowingCircleMain extends StatelessWidget {
                 endScaleInterval: 0,
                 endScale: .5,
                 startScale: 3,
-                graphicBuilder: (Graphics g, Size size) {
+                graphicBuilder: (g, size) {
                   var sh = size.height;
                   g.clear();
                   g.beginFill(Colors.purple);

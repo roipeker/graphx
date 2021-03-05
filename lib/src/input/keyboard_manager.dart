@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../../graphx.dart';
 
 class KeyboardManager<T extends KeyboardEventData> {
-  FocusNode _focusNode;
+  FocusNode? _focusNode;
 
   FocusNode get focusNode => _focusNode ??= FocusNode();
 
@@ -17,12 +17,12 @@ class KeyboardManager<T extends KeyboardEventData> {
   }
 
   EventSignal<T> get onDown => _onDown ??= EventSignal<T>();
-  EventSignal<T> _onDown;
+  EventSignal<T>? _onDown;
 
   EventSignal<T> get onUp => _onUp ??= EventSignal<T>();
-  EventSignal<T> _onUp;
+  EventSignal<T>? _onUp;
 
-  KeyboardEventData _lastEvent;
+  KeyboardEventData? _lastEvent;
 
   bool isPressed(LogicalKeyboardKey key) {
     return _lastEvent?.rawEvent?.isKeyPressed(key) ?? false;
@@ -39,9 +39,9 @@ class KeyboardManager<T extends KeyboardEventData> {
   void $process(KeyboardEventData event) {
     _lastEvent = event;
     if (event.type == KeyEventType.down) {
-      _onDown?.dispatch(event);
+      _onDown?.dispatch(event as T);
     } else {
-      _onUp?.dispatch(event);
+      _onUp?.dispatch(event as T);
     }
   }
 }

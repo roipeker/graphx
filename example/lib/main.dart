@@ -53,9 +53,9 @@ void main() {
       // home: MouseRepulsionMain(),
       // home: Globe3dMain(),
       // home: LungsAnimationMain(),
-      // home: PathChartStressTestMain(),
+      home: PathChartStressTestMain(),
       // home: ExpanderFabMenu(),
-      home: PageIndicatorMain(),
+      // home: PageIndicatorMain(),
     ),
   );
 }

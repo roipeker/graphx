@@ -1,6 +1,7 @@
-import 'package:exampleGraphx/utils/svg_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
+
+import '../../utils/svg_utils.dart';
 
 class LungsScene extends GSprite {
   @override
@@ -37,9 +38,9 @@ class LungsScene extends GSprite {
     traquea.x = 139 + traquea.pivotX;
     traquea.y = traquea.pivotY;
 
-    double totalDuration = 2;
+    var totalDuration = 2.0;
     var baseY = stage.stageHeight / 2;
-    bool isExpanded = false;
+    var isExpanded = false;
 
     void _twnTrackea() {
       var targetY = isExpanded ? traquea.pivotY : traquea.pivotY + 8;

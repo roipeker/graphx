@@ -1,4 +1,3 @@
-import 'package:exampleGraphx/utils/utils.dart';
 /// roipeker 2021
 
 /// just wrap ur app with this, to emit "global" events (and close the dropdown)
@@ -7,6 +6,8 @@ import 'package:exampleGraphx/utils/utils.dart';
 ///      child: MaterialApp(
 ///        home: Scaffold(
 import 'package:graphx/graphx.dart';
+
+import '../../../utils/utils.dart';
 
 class RootWidget extends StatelessWidget {
   final Widget child;

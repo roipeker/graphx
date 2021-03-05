@@ -4,22 +4,20 @@
 ///
 /// web demo: https://roi-graphx-balls-collision.surge.sh/#/
 
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import 'ball.dart';
 
 class CollisionScene extends GSprite {
-
   double get sw => stage.stageWidth;
 
   double get sh => stage.stageHeight;
 
   /// lazy with the types :P
-  var lines = [];
-  var points = <List<double>>[];
-  var balls = <Ball>[];
+  List lines = [];
+  List<List<double>> points = <List<double>>[];
+  List<Ball> balls = <Ball>[];
   double maxAge = 200;
 
   @override
@@ -50,7 +48,7 @@ class CollisionScene extends GSprite {
   }
 
   @override
-  void update(t) {
+  void update(double t) {
     super.update(t);
     balls.forEach(updateBall);
     graphics.clear();

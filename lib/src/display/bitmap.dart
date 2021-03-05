@@ -11,12 +11,13 @@ class GBitmap extends GDisplayObject {
     return '$runtimeType (Bitmap2)$msg';
   }
 
-  GTexture _texture;
-  GTexture get texture => _texture;
+  GTexture? _texture;
+  GTexture? get texture => _texture;
   double $originalPivotX = 0, $originalPivotY = 0;
+
   /// TODO: improve this process, make bounds work properly.
-  bool _hasScale9Grid;
-  double _buffScaleX, _buffScaleY;
+  late bool _hasScale9Grid;
+  double _buffScaleX = 0.0, _buffScaleY = 0.0;
   final GRect _cachedBounds = GRect();
   final _paint = ui.Paint()..filterQuality = ui.FilterQuality.medium;
   ui.Paint get nativePaint => _paint;
@@ -33,28 +34,28 @@ class GBitmap extends GDisplayObject {
     super.pivotY = value;
   }
 
-  set texture(GTexture value) {
+  set texture(GTexture? value) {
     if (_texture == value) return;
     _texture = value;
     if (_texture != null) {
-      pivotX = -_texture.pivotX + $originalPivotX;
-      pivotY = -_texture.pivotY + $originalPivotY;
+      pivotX = -_texture!.pivotX! + $originalPivotX;
+      pivotY = -_texture!.pivotY! + $originalPivotY;
     }
     requiresRedraw();
   }
 
-  GBitmap([GTexture texture]) {
+  GBitmap([GTexture? texture]) {
     this.texture = texture;
   }
 
   @override
-  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+  GRect getBounds(GDisplayObject? targetSpace, [GRect? out]) {
     out ??= GRect();
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
     if (texture != null) {
-      var rect = texture.getBounds();
+      var rect = texture!.getBounds()!;
       out = MatrixUtils.getTransformedBoundsRect(
         matrix,
         rect,
@@ -74,15 +75,15 @@ class GBitmap extends GDisplayObject {
   }
 
   @override
-  set colorize(ui.Color value) {
+  set colorize(ui.Color? value) {
     if ($colorize == value) return;
     super.colorize = value;
     _paint.colorFilter =
-        $hasColorize ? PainterUtils.getColorize($colorize) : null;
+        $hasColorize ? PainterUtils.getColorize($colorize!) : null;
   }
 
   @override
-  set filters(List<GBaseFilter> value) {
+  set filters(List<GBaseFilter>? value) {
     if ($filters == value) return;
     $filters = value;
     if ($filters == null) {
@@ -92,9 +93,9 @@ class GBitmap extends GDisplayObject {
   }
 
   @override
-  void paint(ui.Canvas canvas) {
+  void paint(ui.Canvas? canvas) {
     if (texture == null) return;
-    _hasScale9Grid = texture.scale9Grid != null;
+    _hasScale9Grid = texture!.scale9Grid != null;
     if (_hasScale9Grid) {
       _adjustScaleGrid();
     }
@@ -102,9 +103,9 @@ class GBitmap extends GDisplayObject {
   }
 
   @override
-  void $applyPaint(ui.Canvas canvas) {
+  void $applyPaint(ui.Canvas? canvas) {
     if (hasFilters) {
-      for( var filter in filters ){
+      for (var filter in filters!) {
         filter.update();
         filter.resolvePaint(_paint);
       }
@@ -119,9 +120,9 @@ class GBitmap extends GDisplayObject {
     super.pivotX = $originalPivotX * _buffScaleX;
     super.pivotY = $originalPivotY * _buffScaleY;
     _cachedBounds.x = _cachedBounds.y = 0;
-    _cachedBounds.width = texture.width * _buffScaleX;
-    _cachedBounds.height = texture.height * _buffScaleY;
-    texture.scale9GridDest = _cachedBounds;
+    _cachedBounds.width = texture!.width! * _buffScaleX;
+    _cachedBounds.height = texture!.height! * _buffScaleY;
+    texture!.scale9GridDest = _cachedBounds;
     setScale(1, 1);
   }
 }

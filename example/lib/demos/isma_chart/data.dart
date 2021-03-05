@@ -37,6 +37,7 @@ class DotDataModel {
 
   @override
   String toString() {
+    // ignore: lines_longer_than_80_chars
     return 'DotDataModel {value: $value, year: $year, value2: $value2, name: $name}';
   }
 }

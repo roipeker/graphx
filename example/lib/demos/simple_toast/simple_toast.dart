@@ -26,7 +26,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final int _counter = 0;
   double bottom;
   final tec = TextEditingController();
 
@@ -37,8 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'text': tec.text == '' ? 'No messege' : tec.text,
         'color': Colors.red,
         'bottomInset': MediaQuery.of(context).viewInsets.bottom,
-        'onMouseClick': (MouseInputData event) =>
-            tec.text = event.localX.toString(),
+        'onMouseClick': (event) => tec.text = event.localX.toString(),
       },
     );
   }

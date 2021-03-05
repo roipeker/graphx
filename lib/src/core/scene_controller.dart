@@ -19,14 +19,14 @@ class SceneController {
   /// `stage.onHotReload.add((){
   ///   // your logic here
   ///  });`
-  Signal _onHotReload;
+  Signal? _onHotReload;
 
   Signal get onHotReload => _onHotReload ??= Signal();
 
-  ScenePainter backScene, frontScene;
+  ScenePainter? backScene, frontScene;
 
   /// Access the `ticker` (if any) created by this SceneController.
-  GTicker get ticker {
+  GTicker? get ticker {
     if (_ticker == null) {
       throw 'You need to enable ticker usage with '
           'SceneBuilderWidget( useTicker=true ) or '
@@ -38,19 +38,19 @@ class SceneController {
 
   /// Access the keyboard manager instance associated with this
   /// [SceneController].
-  KeyboardManager get keyboard => _keyboard;
+  KeyboardManager? get keyboard => _keyboard;
 
   /// Access the pointer manager instance associated with this
   /// [SceneController].
-  PointerManager get pointer => _pointer;
+  PointerManager? get pointer => _pointer;
 
-  KeyboardManager _keyboard;
+  KeyboardManager? _keyboard;
 
-  PointerManager _pointer;
+  PointerManager? _pointer;
 
-  GTicker _ticker;
+  GTicker? _ticker;
 
-  InputConverter $inputConverter;
+  InputConverter? $inputConverter;
 
   SceneConfig get config => _config;
 
@@ -58,7 +58,7 @@ class SceneController {
 
   /// gets widget's global coordinates.
   /// useful to compute interactions with children Widgets that gets
-  GRect Function() resolveWindowBounds;
+  GRect? Function()? resolveWindowBounds;
 
   int id = -1;
 
@@ -76,9 +76,9 @@ class SceneController {
 
   /// constructor.
   SceneController({
-    GSprite back,
-    GSprite front,
-    SceneConfig config,
+    GSprite? back,
+    GSprite? front,
+    SceneConfig? config,
   }) {
     assert(back != null || front != null);
     if (back != null) {
@@ -99,9 +99,9 @@ class SceneController {
     setup();
     if (_hasTicker()) {
       _ticker = GTicker();
-      _ticker.onFrame.add(_onTick);
+      _ticker!.onFrame.add(_onTick);
       if (_anySceneAutoUpdate()) {
-        _ticker.resume();
+        _ticker!.resume();
       }
     }
     _initInput();
@@ -129,7 +129,7 @@ class SceneController {
   }
 
   void dispose() {
-    if (_config.isPersistent) {
+    if (_config.isPersistent ?? false) {
       return;
     }
     _onHotReload?.removeAll();
@@ -140,25 +140,25 @@ class SceneController {
     _isInited = false;
   }
 
-  CustomPainter buildBackPainter() => backScene?.buildPainter();
+  CustomPainter? buildBackPainter() => backScene?.buildPainter();
 
-  CustomPainter buildFrontPainter() => frontScene?.buildPainter();
+  CustomPainter? buildFrontPainter() => frontScene?.buildPainter();
 
   void _initInput() {
-    if (_config.useKeyboard) {
+    if (_config.useKeyboard ?? false) {
       _keyboard ??= KeyboardManager();
     }
-    if (_config.usePointer) {
+    if (_config.usePointer ?? false) {
       _pointer ??= PointerManager();
     }
-    if (_config.useKeyboard || _config.usePointer) {
+    if (_config.useKeyboard ?? false || (_config.usePointer ?? false)) {
       $inputConverter ??= InputConverter(_pointer, _keyboard);
     }
   }
 
   void reassembleWidget() {
     _onHotReload?.dispatch();
-    if (_config.rebuildOnHotReload) {
+    if (_config.rebuildOnHotReload ?? false) {
       GTween.hotReload();
       dispose();
 
@@ -167,11 +167,11 @@ class SceneController {
     }
   }
 
-  bool _sceneAutoUpdate(ScenePainter scene) =>
+  bool _sceneAutoUpdate(ScenePainter? scene) =>
       scene?.autoUpdateAndRender ?? false;
 
   bool _anySceneAutoUpdate() =>
       _sceneAutoUpdate(backScene) || _sceneAutoUpdate(frontScene);
 
-  bool _hasTicker() => _anySceneAutoUpdate() || _config.useTicker;
+  bool _hasTicker() => _anySceneAutoUpdate() || (_config.useTicker ?? false);
 }

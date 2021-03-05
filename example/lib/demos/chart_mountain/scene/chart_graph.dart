@@ -1,5 +1,6 @@
-import '../../../utils/utils.dart';
 import 'package:graphx/graphx.dart';
+
+import '../../../utils/utils.dart';
 import '../chart_data.dart';
 import 'utils.dart';
 

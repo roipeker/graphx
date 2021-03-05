@@ -51,17 +51,17 @@ class SceneConfig {
 
   /// re-builds the SceneController (the ScenePainter and the scene class).
   /// disposes and initializes all the scene.
-  bool rebuildOnHotReload;
+  bool? rebuildOnHotReload;
 
   /// If the GraphX [SceneController] will use keyboard events.
-  bool useKeyboard;
+  bool? useKeyboard;
 
   /// If this GraphX [SceneController] will use pointer (touch/mouse) events.
-  bool usePointer;
+  bool? usePointer;
 
   /// Will be overwritten to `true` if [autoUpdateAndRender] is set on any
   /// [ScenePainter] layer.
-  bool useTicker;
+  bool? useTicker;
 
   /// See [CustomPaint.willChange].
   /// Rendering caching flag.
@@ -71,7 +71,7 @@ class SceneConfig {
   /// All these flags overrides the value to `true`:
   /// [autoUpdateRender], [useTicker], [usePointer], [useKeyboard]
   ///
-  bool painterWillChange;
+  bool? painterWillChange;
 
   /// Avoids the scene from being disposed by the Widget.
   /// Meant to be used with `ScenePainter.useOwnCanvas=true`
@@ -79,7 +79,7 @@ class SceneConfig {
   /// Picture (or Image eventually) by other [ScenePainter]s.
   /// Warning: Experimental
   ///
-  bool isPersistent = false;
+  bool? isPersistent = false;
 
   /// Default flag to make the engine update() the Stage and all
   /// his children (onEnterFrame), needed by [GTween] to run the tweens.
@@ -91,7 +91,7 @@ class SceneConfig {
   /// And, unless you don't need external control over the rendering & update
   /// pipelines for the scene, or if you use a static scene,
   /// you should leave it as `true`.
-  bool autoUpdateRender = true;
+  bool? autoUpdateRender = true;
 
   SceneConfig({
     this.rebuildOnHotReload = true,
@@ -102,14 +102,19 @@ class SceneConfig {
     this.autoUpdateRender = true,
     this.painterWillChange,
   }) {
-    if (autoUpdateRender) useTicker = true;
+    if (autoUpdateRender ?? false) useTicker = true;
   }
 
   /// Utility method used by the [SceneBuilderWidget] to set the flag
   /// `CustomPaint.willChange`
   ///
   bool painterMightChange() {
-    if (useTicker || autoUpdateRender || usePointer || useKeyboard) return true;
+    if ((useTicker ?? false) ||
+        (autoUpdateRender ?? false) ||
+        (usePointer ?? false) ||
+        (useKeyboard ?? false)) {
+      return true;
+    }
     return painterWillChange ?? false;
   }
 }

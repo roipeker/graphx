@@ -10,17 +10,17 @@ enum GradientType {
 }
 
 class Graphics with RenderUtilMixin implements GxRenderable {
-  final _drawingQueue = <GraphicsDrawingData>[];
-  GraphicsDrawingData _currentDrawing = GraphicsDrawingData(null, Path());
+  final _drawingQueue = <GraphicsDrawingData?>[];
+  GraphicsDrawingData? _currentDrawing = GraphicsDrawingData(null, Path());
   double alpha = 1;
 
   static final GMatrix _helperMatrix = GMatrix();
 
-  Graphics mask;
+  Graphics? mask;
 
   bool isMask = false;
 
-  Path get _path => _currentDrawing.path;
+  Path? get _path => _currentDrawing!.path;
 
   static final Path stageRectPath = Path();
 
@@ -31,16 +31,16 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   void dispose() {
     mask = null;
-    _drawingQueue?.clear();
+    _drawingQueue.clear();
     _currentDrawing = null;
   }
 
-  List<GraphicsDrawingData> get drawingQueue => _drawingQueue;
+  List<GraphicsDrawingData?> get drawingQueue => _drawingQueue;
 
   void copyFrom(Graphics other, [bool deepClone = false]) {
     _drawingQueue.clear();
     for (final command in other._drawingQueue) {
-      _drawingQueue.add(command.clone(deepClone, deepClone));
+      _drawingQueue.add(command!.clone(deepClone, deepClone));
     }
     mask = other.mask;
     alpha = other.alpha;
@@ -52,7 +52,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// a bigger CPU hit.
   /// In [Graphics] "paths" are separated by [Paint] drawing commands:
   /// [beginFill()] and [lineStyle()]
-  List<GRect> getAllBounds([List<GRect> out]) {
+  List<GRect> getAllBounds([List<GRect>? out]) {
     out ??= <GRect>[];
     for (var e in _drawingQueue) {
       final pathRect = e?.path?.getBounds();
@@ -63,8 +63,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   @override
-  GRect getBounds([GRect out]) {
-    Rect r;
+  GRect getBounds([GRect? out]) {
+    Rect? r;
     for (var e in _drawingQueue) {
       final pathRect = e?.path?.getBounds();
       if (pathRect == null) break;
@@ -90,7 +90,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         localPoint.y,
       );
       for (var e in _drawingQueue) {
-        if (e.path.contains(point)) return true;
+        if (e!.path!.contains(point)) return true;
       }
       return false;
     } else {
@@ -111,7 +111,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Graphics beginBitmapFill(
     GTexture texture, [
-    GMatrix matrix,
+    GMatrix? matrix,
     bool repeat = false,
     bool smooth = false,
   ]) {
@@ -122,13 +122,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     var tileMode = !repeat ? TileMode.clamp : TileMode.repeated;
     matrix ??= _helperMatrix;
     fill.shader = ImageShader(
-      texture.root,
+      texture.root!,
       tileMode,
       tileMode,
-      matrix.toNative().storage,
+      matrix.toNative()!.storage,
     );
     _addFill(fill);
-    _currentDrawing.shaderTexture = texture;
+    _currentDrawing!.shaderTexture = texture;
     return this;
   }
 
@@ -162,11 +162,11 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double thickness = 0.0,
     Color color = kColorBlack,
     bool pixelHinting = true,
-    StrokeCap caps,
-    StrokeJoin joints,
+    StrokeCap? caps,
+    StrokeJoin? joints,
     double miterLimit = 3.0,
   ]) {
-    alpha ??= 1.0;
+    alpha;
     alpha = alpha.clamp(0.0, 1.0);
     final paint = Paint();
     paint.style = PaintingStyle.stroke;
@@ -188,12 +188,12 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   Graphics beginGradientFill(
     GradientType type,
     List<Color> colors, {
-    List<double> ratios,
-    Alignment begin,
-    Alignment end,
+    List<double>? ratios,
+    Alignment? begin,
+    Alignment? end,
     double rotation = 0,
     TileMode tileMode = TileMode.clamp,
-    Rect gradientBox,
+    Rect? gradientBox,
 
     /// only radial
     double radius = 0.5,
@@ -221,9 +221,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     paint.isAntiAlias = true;
     _addFill(paint);
     if (gradientBox != null) {
-      _currentDrawing.fill.shader = gradient.createShader(gradientBox);
+      _currentDrawing!.fill!.shader = gradient.createShader(gradientBox);
     } else {
-      _currentDrawing.gradient = gradient;
+      _currentDrawing!.gradient = gradient;
     }
     return this;
   }
@@ -231,9 +231,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   Gradient _createGradient(
     GradientType type,
     List<Color> colors, [
-    List<double> ratios,
-    Alignment begin,
-    Alignment end,
+    List<double>? ratios,
+    Alignment? begin,
+    Alignment? end,
     double rotation = 0,
 
     /// only radial
@@ -287,9 +287,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   Graphics lineGradientStyle(
     GradientType type,
     List<Color> colors, {
-    List<double> ratios,
-    Alignment begin,
-    Alignment end,
+    List<double>? ratios,
+    Alignment? begin,
+    Alignment? end,
     double rotation = 0,
 
     /// only `GradientType.radial`
@@ -301,14 +301,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double sweepEndAngle = 6.2832,
 
     /// manually define the bounding box of the Gradient shader.
-    Rect gradientBox,
+    Rect? gradientBox,
 
     /// when the gradient box is different than the object bounds, you can
     /// see the `tileMode` behaviour.
     TileMode tileMode = TileMode.clamp,
   }) {
     /// actual paint must be stroke.
-    assert(_currentDrawing.fill.style == PaintingStyle.stroke);
+    assert(_currentDrawing!.fill!.style == PaintingStyle.stroke);
 
     final gradient = _createGradient(
       type,
@@ -324,48 +324,48 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       tileMode,
     );
     if (gradientBox != null) {
-      _currentDrawing.fill.shader = gradient.createShader(gradientBox);
+      _currentDrawing!.fill!.shader = gradient.createShader(gradientBox);
     } else {
-      _currentDrawing.gradient = gradient;
+      _currentDrawing!.gradient = gradient;
     }
     return this;
   }
 
   Graphics lineBitmapStyle(
     GTexture texture, [
-    GMatrix matrix,
+    GMatrix? matrix,
     bool repeat = true,
     bool smooth = false,
   ]) {
     /// actual paint must be stroke.
-    assert(_currentDrawing.fill.style == PaintingStyle.stroke);
+    assert(_currentDrawing!.fill!.style == PaintingStyle.stroke);
     if (_holeMode) return this;
-    final fill = _currentDrawing.fill;
+    final fill = _currentDrawing!.fill!;
     fill.isAntiAlias = smooth;
     var tileMode = !repeat ? TileMode.clamp : TileMode.repeated;
     matrix ??= _helperMatrix;
     fill.shader = ImageShader(
-      texture.root,
+      texture.root!,
       tileMode,
       tileMode,
-      matrix.toNative().storage,
+      matrix.toNative()!.storage,
     );
     // _addFill(fill);
     return this;
   }
 
   Graphics moveTo(double x, double y) {
-    _path.moveTo(x, y);
+    _path!.moveTo(x, y);
     return this;
   }
 
   Graphics lineTo(double x, double y) {
-    _path.lineTo(x, y);
+    _path!.lineTo(x, y);
     return this;
   }
 
   Graphics closePath() {
-    _path.close();
+    _path!.close();
     return this;
   }
 
@@ -377,7 +377,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double anchorX,
     double anchorY,
   ) {
-    _path.cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
+    _path!
+        .cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
     return this;
   }
 
@@ -387,7 +388,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double anchorX,
     double anchorY,
   ) {
-    _path.quadraticBezierTo(controlX, controlY, anchorX, anchorY);
+    _path!.quadraticBezierTo(controlX, controlY, anchorX, anchorY);
     return this;
   }
 
@@ -400,9 +401,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     bool relative = false,
   ]) {
     if (!relative) {
-      _path.conicTo(controlX, controlY, anchorX, anchorY, weight);
+      _path!.conicTo(controlX, controlY, anchorX, anchorY, weight);
     } else {
-      _path.relativeConicTo(controlX, controlY, anchorX, anchorY, weight);
+      _path!.relativeConicTo(controlX, controlY, anchorX, anchorY, weight);
     }
     return this;
   }
@@ -410,13 +411,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   Graphics drawCircle(double x, double y, double radius) {
     final pos = Offset(x, y);
     final circ = Rect.fromCircle(center: pos, radius: radius);
-    _path.addOval(circ);
+    _path!.addOval(circ);
     return this;
   }
 
   Graphics drawEllipse(double x, double y, double radiusX, double radiusY) {
     final pos = Offset(x, y);
-    _path.addOval(
+    _path!.addOval(
       Rect.fromCenter(
         center: pos,
         width: radiusX * 2,
@@ -427,13 +428,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   Graphics drawGRect(GRect rect) {
-    _path.addRect(rect.toNative());
+    _path!.addRect(rect.toNative());
     return this;
   }
 
   Graphics drawRect(double x, double y, double width, double height) {
     final r = Rect.fromLTWH(x, y, width, height);
-    _path.addRect(r);
+    _path!.addRect(r);
     return this;
   }
 
@@ -447,7 +448,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double bottomLeftRadius = 0,
     double bottomRightRadius = 0,
   ]) {
-    _path.addRRect(
+    _path!.addRRect(
       RRect.fromLTRBAndCorners(
         x,
         y,
@@ -468,7 +469,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double width,
     double height,
     double ellipseWidth, [
-    double ellipseHeight,
+    double? ellipseHeight,
   ]) {
     final r = RRect.fromLTRBXY(
       x,
@@ -478,17 +479,17 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       ellipseWidth,
       ellipseHeight ?? ellipseWidth,
     );
-    _path.addRRect(r);
+    _path!.addRRect(r);
     return this;
   }
 
   Graphics drawPoly(List<GPoint> points, [bool closePolygon = true]) {
     final len = points.length;
-    final list = List<Offset>(len);
+    final list = List<Offset?>.filled(len, null);
     for (var i = 0; i < len; ++i) {
       list[i] = points[i].toNative();
     }
-    _path.addPolygon(list, true);
+    _path!.addPolygon(list as List<ui.Offset>, true);
     return this;
   }
 
@@ -496,7 +497,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     final offset = Offset(x, y);
     if (modifyPreviousPaths) {
       for (var command in _drawingQueue) {
-        command?.path = command?.path?.shift(offset);
+        command?.path = command.path?.shift(offset);
       }
     } else {
       _currentDrawing?.path = _currentDrawing?.path?.shift(offset);
@@ -511,7 +512,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double startAngle,
     double sweepAngle,
   ) {
-    _path.addArc(
+    _path!.addArc(
       Rect.fromCenter(
         center: Offset(cx, cy),
         width: radiusX * 2,
@@ -533,14 +534,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   ]) {
     if (sweepAngle == 0) return this;
     if (!moveTo) {
-      _path.arcTo(
+      _path!.arcTo(
         Rect.fromCircle(center: Offset(cx, cy), radius: radius),
         startAngle,
         sweepAngle,
         false,
       );
     } else {
-      _path.addArc(
+      _path!.addArc(
         Rect.fromCircle(center: Offset(cx, cy), radius: radius),
         startAngle,
         sweepAngle,
@@ -560,7 +561,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   ]) {
     if (radius == 0) return this;
     if (relativeMoveTo) {
-      _path.arcToPoint(
+      _path!.arcToPoint(
         Offset(endX, endY),
         radius: Radius.circular(radius),
         clockwise: clockwise,
@@ -568,7 +569,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         rotation: rotation,
       );
     } else {
-      _path.relativeArcToPoint(
+      _path!.relativeArcToPoint(
         Offset(endX, endY),
         radius: Radius.circular(radius),
         clockwise: clockwise,
@@ -587,14 +588,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     int sides, [
     double rotation = 0,
   ]) {
-    final points = List<Offset>(sides);
+    final points = List<Offset?>.filled(sides, null);
     final rel = 2 * Math.PI / sides;
     for (var i = 1; i <= sides; ++i) {
       final px = x + radius * Math.cos(i * rel + rotation);
       final py = y + radius * Math.sin(i * rel + rotation);
       points[i - 1] = Offset(px, py);
     }
-    _path.addPolygon(points, true);
+    _path!.addPolygon(points as List<ui.Offset>, true);
     return this;
   }
 
@@ -603,7 +604,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double y,
     int points,
     double radius, [
-    double innerRadius,
+    double? innerRadius,
     double rotation = 0,
   ]) {
     innerRadius ??= radius / 2;
@@ -619,7 +620,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         y + (r * Math.sin(a)),
       ));
     }
-    _path.addPolygon(polys, true);
+    _path!.addPolygon(polys, true);
     return this;
   }
 
@@ -640,24 +641,24 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   Graphics endHole([bool applyToCurrentQueue = false]) {
     _holeMode = false;
     // apply to previous elements.
-    if (!_currentDrawing.isHole) {
+    if (!_currentDrawing!.isHole) {
       throw "Can't endHole() without starting a beginHole() command.";
 //      return this;
     }
-    final _holePath = _path;
+    final _holePath = _path!;
     _holePath.close();
     _currentDrawing = _drawingQueue.last;
     if (!applyToCurrentQueue) {
-      _currentDrawing.path = Path.combine(
+      _currentDrawing!.path = Path.combine(
         PathOperation.difference,
-        _path,
+        _path!,
         _holePath,
       );
     } else {
       for (final cmd in _drawingQueue) {
-        cmd.path = Path.combine(
+        cmd!.path = Path.combine(
           PathOperation.difference,
-          cmd.path,
+          cmd.path!,
           _holePath,
         );
       }
@@ -668,11 +669,11 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   void paintWithFill(Canvas canvas, Paint fill) {
     if (!_isVisible) return;
     for (var graph in _drawingQueue) {
-      if (graph.hasPicture) {
-        canvas.drawPicture(graph.picture);
+      if (graph!.hasPicture) {
+        canvas.drawPicture(graph.picture!);
         return;
       }
-      canvas.drawPath(graph.path, fill);
+      canvas.drawPath(graph.path!, fill);
     }
   }
 
@@ -681,7 +682,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     if (SystemUtils.usingSkia) {
       for (var graph in _drawingQueue) {
         /// unsupported on web.
-        output = Path.combine(PathOperation.union, output, graph.path);
+        output = Path.combine(PathOperation.union, output, graph!.path!);
       }
     } else {
       trace('Graphics.getPaths() is unsupported in the current platform.');
@@ -690,11 +691,11 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   @override
-  void paint(Canvas canvas) {
+  void paint(Canvas? canvas) {
     // TODO : add mask support.
     if (isMask) {
       for (var graph in _drawingQueue) {
-        canvas.clipPath(graph.path, doAntiAlias: false);
+        canvas!.clipPath(graph!.path!, doAntiAlias: false);
       }
       return;
     }
@@ -703,51 +704,51 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
     // trace("en", _drawingQueue.length);
     for (var graph in _drawingQueue) {
-      if (graph.hasPicture) {
-        canvas.drawPicture(graph.picture);
+      if (graph!.hasPicture) {
+        canvas!.drawPicture(graph.picture!);
         break;
       }
-      final fill = graph.fill;
+      final fill = graph.fill!;
       final baseColor = fill.color;
       if (baseColor.alpha == 0) break;
 
       /// calculate gradient.
       if (graph.hasGradient) {
-        Rect _bounds;
+        Rect? _bounds;
         if (graph.hasVertices) {
-          _bounds = graph.vertices.getBounds();
+          _bounds = graph.vertices!.getBounds();
         } else {
-          _bounds = graph.path.getBounds();
+          _bounds = graph.path!.getBounds();
         }
 
         /// TODO: try if this works to change the gradient
         /// opacity from the Shape.
         fill.color = baseColor.withOpacity(alpha);
-        fill.shader = graph.gradient.createShader(_bounds);
+        fill.shader = graph.gradient!.createShader(_bounds!);
       } else {
         if (alpha != 1) {
           fill.color = baseColor.withOpacity(baseColor.opacity * alpha);
         }
       }
       if (graph.hasVertices) {
-        if (graph.vertices.uvtData != null && graph.shaderTexture != null) {
-          graph.vertices.calculateUvt(graph.shaderTexture);
+        if (graph.vertices!.uvtData != null && graph.shaderTexture != null) {
+          graph.vertices!.calculateUvt(graph.shaderTexture);
         }
         if (fill.style == PaintingStyle.stroke) {
-          canvas.drawRawPoints(
+          canvas!.drawRawPoints(
             ui.PointMode.lines,
-            graph.vertices.rawPoints,
+            graph.vertices!.rawPoints!,
             fill,
           );
         } else {
-          canvas.drawVertices(
-            graph.vertices.rawData,
-            graph.vertices.blendMode ?? BlendMode.src,
+          canvas!.drawVertices(
+            graph.vertices!.rawData!,
+            graph.vertices!.blendMode,
             fill,
           );
         }
       } else {
-        canvas.drawPath(graph.path, fill);
+        canvas!.drawPath(graph.path!, fill);
       }
 
       fill.color = baseColor;
@@ -756,8 +757,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   void _addFill(Paint fill) {
     /// same type, create path.
-    Path path;
-    if (_currentDrawing.isSameType(fill)) {
+    Path? path;
+    if (_currentDrawing!.isSameType(fill)) {
       path = Path();
     } else {
       path = _currentDrawing?.path;
@@ -779,11 +780,11 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   void pushData(
     GraphicsDrawingData data, [
     bool asCurrent = false,
-    double x,
-    double y,
+    double? x,
+    double? y,
   ]) {
     if (x != null && y != null && data.path != null) {
-      data.path = data.path.shift(Offset(x, y));
+      data.path = data.path!.shift(Offset(x, y));
     }
     _drawingQueue.add(data);
     if (asCurrent) _currentDrawing = data;
@@ -792,7 +793,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// removes the last `GraphicsDrawingData` from the drawing queue...
   /// This should be used only if you are operating with `Path` and `Paint`
   /// directly.
-  GraphicsDrawingData popData() {
+  GraphicsDrawingData? popData() {
     return _drawingQueue.removeLast();
   }
 
@@ -815,9 +816,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     Path path, [
     double x = 0,
     double y = 0,
-    GMatrix transform,
+    GMatrix? transform,
   ]) {
-    _path.addPath(
+    _path!.addPath(
       path,
       Offset(x, y),
       matrix4: transform?.toNative()?.storage,
@@ -830,16 +831,16 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// Doesn't use a Path(), but drawVertices()...
   Graphics drawTriangles(
     List<double> vertices, [
-    List<int> indices,
-    List<double> uvtData,
-    List<int> hexColors,
+    List<int>? indices,
+    List<double>? uvtData,
+    List<int>? hexColors,
     BlendMode blendMode = BlendMode.src,
     Culling culling = Culling.positive,
   ]) {
     /// will only work if it has a fill.
     assert(_currentDrawing != null);
-    assert(_currentDrawing.fill != null);
-    _currentDrawing.vertices = _GraphVertices(
+    assert(_currentDrawing!.fill != null);
+    _currentDrawing!.vertices = _GraphVertices(
       ui.VertexMode.triangles,
       vertices,
       indices,
@@ -853,19 +854,19 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 }
 
 class GraphicsDrawingData {
-  Path path;
-  Paint fill;
+  Path? path;
+  Paint? fill;
 
-  Gradient gradient;
-  ui.Picture picture;
+  Gradient? gradient;
+  ui.Picture? picture;
   bool isHole = false;
 
   /// for drawVertices()
   BlendMode blendMode = BlendMode.src;
-  _GraphVertices vertices;
+  _GraphVertices? vertices;
 
   /// temporal storage to use with _GraphVertices
-  GTexture shaderTexture;
+  GTexture? shaderTexture;
 
   bool get hasVertices => vertices != null;
 
@@ -883,7 +884,7 @@ class GraphicsDrawingData {
     bool clonePath = false,
   ]) {
     final _fill = cloneFill ? fill?.clone() : fill;
-    final _path = clonePath ? (path != null ? Path.from(path) : null) : path;
+    final _path = clonePath ? (path != null ? Path.from(path!) : null) : path;
     final _vertices = vertices;
     return GraphicsDrawingData(_fill, _path)
       ..gradient = gradient
@@ -892,11 +893,11 @@ class GraphicsDrawingData {
       ..vertices = _vertices;
   }
 
-  bool isSameType(Paint otherFill) => fill?.style == otherFill?.style ?? false;
+  bool isSameType(Paint otherFill) => fill?.style == otherFill.style;
 }
 
 extension ExtSkiaPaintCustom on Paint {
-  Paint clone([Paint out]) {
+  Paint clone([Paint? out]) {
     out ??= Paint();
     out.maskFilter = maskFilter;
     out.blendMode = blendMode;
@@ -919,20 +920,20 @@ extension ExtSkiaPaintCustom on Paint {
 }
 
 class _GraphVertices {
-  List<double> vertices, uvtData, adjustedUvtData;
-  List<int> colors, indices;
+  List<double?>? vertices, uvtData, adjustedUvtData;
+  List<int>? colors, indices;
   BlendMode blendMode;
   VertexMode mode;
-  Path _path;
-  Rect _bounds;
-  bool _normalizedUvt;
+  Path? _path;
+  Rect? _bounds;
+  late bool _normalizedUvt;
 
-  Float32List _rawPoints;
+  Float32List? _rawPoints;
 
-  Float32List get rawPoints {
+  Float32List? get rawPoints {
     if (_rawPoints != null) return _rawPoints;
     var points = _GraphUtils.getTrianglePoints(this);
-    _rawPoints = Float32List.fromList(points);
+    _rawPoints = Float32List.fromList(points as List<double>);
     return _rawPoints;
   }
 
@@ -949,14 +950,14 @@ class _GraphVertices {
     this.culling = Culling.positive,
   ]) {
     _normalizedUvt = false;
-    final len = uvtData.length;
+    final len = uvtData!.length;
     if (uvtData != null && len > 6) {
       for (var i = 0; i < 6; ++i) {
-        if (uvtData[i] <= 2.0) {
+        if (uvtData![i]! <= 2.0) {
           _normalizedUvt = true;
         }
       }
-      if (uvtData[len - 2] <= 2.0 || uvtData[len - 1] <= 2.0) {
+      if (uvtData![len - 2]! <= 2.0 || uvtData![len - 1]! <= 2.0) {
         _normalizedUvt = true;
       }
     }
@@ -968,7 +969,7 @@ class _GraphVertices {
     _bounds = null;
   }
 
-  Rect getBounds() {
+  Rect? getBounds() {
     if (_bounds != null) return _bounds;
     _bounds = computePath().getBounds();
     return _bounds;
@@ -976,22 +977,23 @@ class _GraphVertices {
 
   Path computePath() => _path ??= _GraphUtils.getPathFromVertices(this);
 
-  ui.Vertices _rawData;
+  ui.Vertices? _rawData;
 
-  ui.Vertices get rawData {
+  ui.Vertices? get rawData {
     if (_rawData != null) return _rawData;
     // calculateCulling();
-    Float32List _textureCoordinates;
-    Int32List _colors;
-    Uint16List _indices;
+    Float32List? _textureCoordinates;
+    Int32List? _colors;
+    Uint16List? _indices;
     if (uvtData != null && adjustedUvtData != null) {
-      _textureCoordinates = Float32List.fromList(adjustedUvtData);
+      _textureCoordinates =
+          Float32List.fromList(adjustedUvtData as List<double>);
     }
-    if (colors != null) _colors = Int32List.fromList(colors);
-    if (indices != null) _indices = Uint16List.fromList(indices);
+    if (colors != null) _colors = Int32List.fromList(colors!);
+    if (indices != null) _indices = Uint16List.fromList(indices!);
     _rawData = ui.Vertices.raw(
       VertexMode.triangles,
-      Float32List.fromList(vertices),
+      Float32List.fromList(vertices as List<double>),
       textureCoordinates: _textureCoordinates,
       colors: _colors,
       indices: _indices,
@@ -999,18 +1001,18 @@ class _GraphVertices {
     return _rawData;
   }
 
-  void calculateUvt(GTexture shaderTexture) {
+  void calculateUvt(GTexture? shaderTexture) {
     if (uvtData == null) return;
     if (!_normalizedUvt) {
       adjustedUvtData = uvtData;
     } else {
       /// make a ratio of the image size
-      var imgW = shaderTexture.width;
+      var imgW = shaderTexture!.width;
       var imgH = shaderTexture.height;
-      adjustedUvtData = List<double>(uvtData.length);
-      for (var i = 0; i < uvtData.length; i += 2) {
-        adjustedUvtData[i] = uvtData[i] * imgW;
-        adjustedUvtData[i + 1] = uvtData[i + 1] * imgH;
+      adjustedUvtData = List<double?>.filled(uvtData!.length, null);
+      for (var i = 0; i < uvtData!.length; i += 2) {
+        adjustedUvtData![i] = uvtData![i]! * imgW!;
+        adjustedUvtData![i + 1] = uvtData![i + 1]! * imgH!;
       }
     }
   }
@@ -1020,25 +1022,25 @@ class _GraphVertices {
     var offsetX = 0.0, offsetY = 0.0;
     var ind = indices;
     var v = vertices;
-    var l = indices.length;
+    var l = indices!.length;
     while (i < l) {
       var _a = i;
       var _b = i + 1;
       var _c = i + 2;
 
-      var iax = ind[_a] * 2;
+      var iax = ind![_a] * 2;
       var iay = ind[_a] * 2 + 1;
       var ibx = ind[_b] * 2;
       var iby = ind[_b] * 2 + 1;
       var icx = ind[_c] * 2;
       var icy = ind[_c] * 2 + 1;
 
-      var x1 = v[iax] - offsetX;
-      var y1 = v[iay] - offsetY;
-      var x2 = v[ibx] - offsetX;
-      var y2 = v[iby] - offsetY;
-      var x3 = v[icx] - offsetX;
-      var y3 = v[icy] - offsetY;
+      var x1 = v![iax]! - offsetX;
+      var y1 = v[iay]! - offsetY;
+      var x2 = v[ibx]! - offsetX;
+      var y2 = v[iby]! - offsetY;
+      var x3 = v[icx]! - offsetX;
+      var y3 = v[icy]! - offsetY;
 
       switch (culling) {
         case Culling.positive:
@@ -1089,23 +1091,23 @@ class _GraphUtils {
   static Path getPathFromVertices(_GraphVertices v) {
     var path = _helperPath;
     path.reset();
-    var pos = v.vertices;
+    var pos = v.vertices!;
     var len = pos.length;
     final points = <Offset>[];
     for (var i = 0; i < len; i += 2) {
-      points.add(Offset(pos[i], pos[i + 1]));
+      points.add(Offset(pos[i]!, pos[i + 1]!));
     }
     path.addPolygon(points, true);
     return path;
   }
 
-  static List<double> getTrianglePoints(_GraphVertices v) {
+  static List<double?> getTrianglePoints(_GraphVertices v) {
     var ver = v.vertices;
     var ind = v.indices;
     if (ind == null) {
       /// calculate
-      var len = ver.length;
-      var out = List<double>(len * 2);
+      var len = ver!.length;
+      var out = List<double?>.filled(len * 2, null);
       var j = 0;
       for (var i = 0; i < len; i += 6) {
         out[j++] = ver[i + 0];
@@ -1124,7 +1126,7 @@ class _GraphUtils {
       return out;
     } else {
       var len = ind.length;
-      var out = List<double>(len * 4);
+      var out = List<double?>.filled(len * 4, null);
       var j = 0;
       for (var i = 0; i < len; i += 3) {
         var i0 = ind[i + 0];
@@ -1133,7 +1135,7 @@ class _GraphUtils {
         var v0 = i0 * 2;
         var v1 = i1 * 2;
         var v2 = i2 * 2;
-        out[j++] = ver[v0];
+        out[j++] = ver![v0];
         out[j++] = ver[v0 + 1];
         out[j++] = ver[v1];
         out[j++] = ver[v1 + 1];

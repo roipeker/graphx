@@ -9,30 +9,30 @@ abstract class MatrixUtils {
     var sinY = Math.sin(skewY);
     var cosY = Math.cos(skewY);
     matrix.setTo(
-      matrix.a * cosY - matrix.b * sinX,
-      matrix.a * sinY + matrix.b * cosX,
-      matrix.c * cosY - matrix.d * sinX,
-      matrix.c * sinY + matrix.d * cosX,
-      matrix.tx * cosY - matrix.ty * sinX,
-      matrix.tx * sinY + matrix.ty * cosX,
+      matrix.a* cosY - matrix.b* sinX,
+      matrix.a* sinY + matrix.b* cosX,
+      matrix.c* cosY - matrix.d* sinX,
+      matrix.c* sinY + matrix.d* cosX,
+      matrix.tx* cosY - matrix.ty* sinX,
+      matrix.tx* sinY + matrix.ty* cosX,
     );
   }
 
   static GRect getTransformedBoundsRect(GMatrix matrix, GRect rect,
-      [GRect out]) {
+      [GRect? out]) {
     out ??= GRect();
     var minX = 10000000.0;
     var maxX = -10000000.0;
     var minY = 10000000.0;
     var maxY = -10000000.0;
-    var tx1 = matrix.a * rect.x + matrix.c * rect.y + matrix.tx;
-    var ty1 = matrix.d * rect.y + matrix.b * rect.x + matrix.ty;
-    var tx2 = matrix.a * rect.x + matrix.c * rect.bottom + matrix.tx;
-    var ty2 = matrix.d * rect.bottom + matrix.b * rect.x + matrix.ty;
-    var tx3 = matrix.a * rect.right + matrix.c * rect.y + matrix.tx;
-    var ty3 = matrix.d * rect.y + matrix.b * rect.right + matrix.ty;
-    var tx4 = matrix.a * rect.right + matrix.c * rect.bottom + matrix.tx;
-    var ty4 = matrix.d * rect.bottom + matrix.b * rect.right + matrix.ty;
+    var tx1 = matrix.a* rect.x+ matrix.c* rect.y+ matrix.tx;
+    var ty1 = matrix.d* rect.y+ matrix.b* rect.x+ matrix.ty;
+    var tx2 = matrix.a* rect.x+ matrix.c* rect.bottom + matrix.tx;
+    var ty2 = matrix.d* rect.bottom + matrix.b* rect.x+ matrix.ty;
+    var tx3 = matrix.a* rect.right + matrix.c* rect.y+ matrix.tx;
+    var ty3 = matrix.d* rect.y+ matrix.b* rect.right + matrix.ty;
+    var tx4 = matrix.a* rect.right + matrix.c* rect.bottom + matrix.tx;
+    var ty4 = matrix.d* rect.bottom + matrix.b* rect.right + matrix.ty;
     if (minX > tx1) minX = tx1;
     if (minX > tx2) minX = tx2;
     if (minX > tx3) minX = tx3;

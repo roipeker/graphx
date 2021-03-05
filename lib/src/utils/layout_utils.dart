@@ -22,25 +22,24 @@ class LayoutUtils {
   static void objectFit(
     GDisplayObject object, {
     BoxFit fit = BoxFit.cover,
-    double objW,
-    double objH,
-    @required double canvasW,
-    @required double canvasH,
+    double? objW,
+    double? objH,
+    required double canvasW,
+    required double canvasH,
     bool reposition = false,
   }) {
-    assert(canvasW != null && canvasH != null);
     if (objW == null || objH == null) {
       /// calculate real objects bounds.
       if (object is GBitmap) {
-        objW ??= object.texture.width;
-        objH ??= object.texture.height;
+        objW ??= object.texture!.width;
+        objH ??= object.texture!.height;
       } else {
-        final bounds = object.bounds;
+        final bounds = object.bounds!;
         objW ??= bounds.width;
         objH ??= bounds.height;
       }
     }
-    var r1 = objW / objH;
+    var r1 = objW! / objH!;
     var r2 = canvasW / canvasH;
 
     if (fit == BoxFit.scaleDown) {
@@ -143,7 +142,7 @@ class LayoutUtils {
     double gapX = 0,
     double gapY = 0,
     int rows = 0,
-    @required int cols,
+    required int cols,
     double width = 0,
     double height = 0,
     double startX = 0,
@@ -203,7 +202,7 @@ class LayoutUtils {
       width = maxW;
     }
 
-    final parent = items?.first?.parent as GSprite;
+    final parent = items.first.parent as GSprite?;
     final hasSize = width > 0 && height > 0;
     if (debug && parent != null && hasSize) {
       final g = parent.graphics;
@@ -303,7 +302,7 @@ class LayoutUtils {
       height = maxH;
     }
 
-    final parent = items?.first?.parent as GSprite;
+    final parent = items.first.parent as GSprite?;
     final hasSize = width > 0 && height > 0;
     if (debug && parent != null && hasSize) {
       final g = parent.graphics;

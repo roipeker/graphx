@@ -36,8 +36,8 @@ class _ProductPlayful extends GSprite {
 
   double shadowY = 0.0;
   double imageY = 0.0;
-  var moveCounter = 0.0;
-  var rotationCounter = 0.0;
+  double moveCounter = 0.0;
+  double rotationCounter = 0.0;
 
   void loadImage(String url) {
     this.url = url;
@@ -74,7 +74,7 @@ class _ProductPlayful extends GSprite {
     var ratioRot = Math.sin(rotationCounter);
     var ratio = Math.sin(moveCounter);
     image.y = imageY + ratio * 20;
-    double ratio2 = (ratio / 2 + .5);
+    var ratio2 = (ratio / 2 + .5);
     image.scaleX = 0.9 + ratio2 * .1;
     image.scaleY = 0.88 + -ratio2 * .12;
     image.rotation = ratioRot * .1;

@@ -7,7 +7,7 @@ import '../../graphx.dart';
 
 class ScenePainter with EventDispatcherMixin {
   /// Current painter being processed.
-  static ScenePainter current;
+  static late ScenePainter current;
 
   /// access to SceneController defined in the Widget side.
   SceneController core;
@@ -26,16 +26,16 @@ class ScenePainter with EventDispatcherMixin {
   /// Warning: Experimental state
   bool useOwnCanvas = false;
   bool _ownCanvasNeedsRepaint = false;
-  Canvas $canvas;
+  Canvas? $canvas;
 
   /// Size of the area available in `CustomPainter::paint()`
   Size size = Size.zero;
 
   /// Scene Layer's stage. The very first DisplayObject where the render
   /// display list starts.
-  Stage _stage;
+  Stage? _stage;
 
-  Stage get stage => _stage;
+  Stage? get stage => _stage;
 
   /// Defines when the Scene is ready and stage is accessible to GraphX root.
   /// Runs on the first "render".
@@ -56,17 +56,17 @@ class ScenePainter with EventDispatcherMixin {
 
   /// Ticker callback, to access the current frame delta timestamp
   /// (in millisecond).
-  EventSignal<double> _onUpdate;
+  EventSignal<double>? _onUpdate;
 
   EventSignal<double> get onUpdate => _onUpdate ??= EventSignal<double>();
 
-  ui.Picture _canvasPicture;
+  ui.Picture? _canvasPicture;
 
   var _mouseMoveInputDetected = false;
   var _lastMouseX = -1000000.0;
   var _lastMouseY = -1000000.0;
   var _lastMouseOut = false;
-  MouseInputData _lastMouseInput;
+  MouseInputData? _lastMouseInput;
 
   /// constructor.
   ScenePainter(this.core, this.root) {
@@ -81,32 +81,33 @@ class ScenePainter with EventDispatcherMixin {
   void _paint(Canvas canvas, Size size) {
     if (this.size != size) {
       this.size = size;
-      _stage.$initFrameSize(size);
+      _stage!.$initFrameSize(size);
     }
     $canvas = canvas;
     if (!_isReady) {
       _isReady = true;
       _initMouseInput();
-      _stage.addChild(root);
+      _stage!.addChild(root);
       _stage?.$onResized?.dispatch();
     }
     if (useOwnCanvas) {
       _pictureFromCanvas();
     } else {
-      _stage.paint($canvas);
+      _stage!.paint($canvas);
     }
   }
 
   void $setup() {
     makeCurrent();
+
     /// If needed, can be overridden later by the [root].
-    autoUpdateAndRender = core.config.autoUpdateRender;
+    autoUpdateAndRender = core.config.autoUpdateRender ?? false;
   }
 
   void _createPicture() {
     final _recorder = ui.PictureRecorder();
     final _canvas = Canvas(_recorder);
-    _stage.paint(_canvas);
+    _stage!.paint(_canvas);
     _canvasPicture = _recorder.endRecording();
   }
 
@@ -115,7 +116,7 @@ class ScenePainter with EventDispatcherMixin {
   /// Manages the `update()` and can request to redraw the CustomPainter.
   void tick(double time) {
     makeCurrent();
-    if (autoUpdateAndRender || time != null) {
+    if (autoUpdateAndRender) {
       $currentFrameId++;
       $runTime += time;
       $update(time);
@@ -134,7 +135,7 @@ class ScenePainter with EventDispatcherMixin {
     }
     $currentFrameDeltaTime = deltaTime;
     $accumulatedFrameDeltaTime += $currentFrameDeltaTime;
-    _stage.$tick(deltaTime);
+    _stage!.$tick(deltaTime);
     if (_hasPointer) {
       _detectMouseMove();
     }
@@ -153,9 +154,9 @@ class ScenePainter with EventDispatcherMixin {
       input.stagePosition.setTo(_lastMouseX, _lastMouseY);
       input.mouseOut = _lastMouseOut;
       if (_lastMouseInput != null) {
-        input.buttonDown = _lastMouseInput.buttonDown;
-        input.rawEvent = _lastMouseInput.rawEvent;
-        input.buttonsFlags = _lastMouseInput.buttonsFlags;
+        input.buttonDown = _lastMouseInput!.buttonDown;
+        input.rawEvent = _lastMouseInput!.rawEvent;
+        input.buttonsFlags = _lastMouseInput!.buttonsFlags;
       }
       _mouseInputHandler(input);
     }
@@ -181,7 +182,7 @@ class ScenePainter with EventDispatcherMixin {
     }
     _lastMouseInput = input;
 
-    stage.captureMouseInput(input);
+    stage!.captureMouseInput(input);
   }
 
   /// Requests a new frame.
@@ -200,7 +201,7 @@ class ScenePainter with EventDispatcherMixin {
   }
 
   void _initMouseInput() {
-    core?.pointer?.onInput?.add(_onInputHandler);
+    core.pointer?.onInput.add(_onInputHandler);
   }
 
   void _onInputHandler(PointerEventData e) {
@@ -232,7 +233,7 @@ class ScenePainter with EventDispatcherMixin {
       _createPicture();
     }
     if (_canvasPicture != null) {
-      $canvas.drawPicture(_canvasPicture);
+      $canvas!.drawPicture(_canvasPicture!);
     }
   }
 
@@ -241,13 +242,13 @@ class ScenePainter with EventDispatcherMixin {
     _isReady = false;
     size = Size.zero;
     _stage?.dispose();
-    core?.pointer?.onInput?.remove(_onInputHandler);
+    core.pointer?.onInput.remove(_onInputHandler);
     _onUpdate?.removeAll();
     _onUpdate = null;
     super.dispose();
   }
 
-  bool get _hasPointer => core?.pointer?.onInput != null;
+  bool get _hasPointer => core.pointer?.onInput != null;
   bool shouldRepaint() => needsRepaint;
 }
 

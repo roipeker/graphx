@@ -11,9 +11,9 @@ class PageIndicatorPaged extends BaseScene {
   PageIndicatorPaged();
 
   List<PageDot> _dots;
-  static const double dotSize = 13;
-  static const double dotPreW = 18;
-  static const double dotSelectedW = 34;
+  static const double dotSize = 27 / 2;
+  static const double dotPreW = 37 / 2;
+  static const double dotSelectedW = 69 / 2;
   static const dotUnselectedColor = Color(0xffC4C4C4);
   static const dotSelectedColor = Colors.red;
   static const dotPreColor = Colors.blue;
@@ -25,20 +25,14 @@ class PageIndicatorPaged extends BaseScene {
   final int _visibleItems = 5;
   final int _numItems = 10;
   int _scroll = 0;
-  double _allDotsWidth = 0;
-
   double dotSep = 3;
 
-  /// Easing for euler integration.
-  /// The bigger number, the slower transitions.
-  double scrollEase = 10;
-  double dotSizeEase = 10;
-  double dotPositionEase = 3;
+  double allDotsWidth = 0;
 
   @override
   void addedToStage() {
     super.addedToStage();
-    // stage.color = Color(0xffD1D1D);
+    stage.color = Color(0xffD1D1D);
 
     container = GSprite();
     scrollContainer = GSprite();
@@ -53,8 +47,8 @@ class PageIndicatorPaged extends BaseScene {
     });
 
     var itemWS = dotSize + dotSep;
-    _allDotsWidth =
-        itemWS * (_visibleItems - 3) + (dotPreW + dotSep) * 2 + dotSelectedW;
+    allDotsWidth =
+        itemWS * (_visibleItems - 2) + (dotPreW + dotSep) * 2 + dotSelectedW;
 
     /// debug size.
     // container.graphics
@@ -64,15 +58,15 @@ class PageIndicatorPaged extends BaseScene {
     //     .endFill();
 
     /// -- masking.
+
     // var maskOff = 3.0;
     // container.maskRect = GRect(
     //   -maskOff,
     //   -maskOff,
-    //   _allDotsWidth + maskOff * 2,
+    //   allDotsWidth + maskOff * 2,
     //   dotSize + maskOff * 2,
     // );
     // container.maskRect.corners.allTo(dotSize);
-
     /// -- end masking.
 
     /// only for testing.
@@ -86,7 +80,7 @@ class PageIndicatorPaged extends BaseScene {
     });
 
     stage.onResized.add(() {
-      var ratioScale = sw / _allDotsWidth;
+      var ratioScale = sw / allDotsWidth;
       scale = ratioScale;
 
       /// center it (not using alignPivot())
@@ -110,7 +104,8 @@ class PageIndicatorPaged extends BaseScene {
   void update(double delta) {
     super.update(delta);
     _updateScroll();
-    _layoutDots();
+    _resizeItems();
+    _positionItems();
   }
 
   set currentIndex(int value) {
@@ -119,9 +114,8 @@ class PageIndicatorPaged extends BaseScene {
     _currentIndex = value.clamp(0, _numItems - 1);
 
     /// offset scroll.
-    /// -2 = take off mid size items.
-    if (_currentIndex > _visibleItems - 2) {
-      var offset = _visibleItems - 2 - _currentIndex;
+    if (_currentIndex > _visibleItems - 1) {
+      var offset = _visibleItems - 1 - _currentIndex;
       _scroll = offset;
       if (_currentIndex == _numItems - 1) {
         _scroll += 1;
@@ -132,50 +126,46 @@ class PageIndicatorPaged extends BaseScene {
       _targetScroll = 0;
     }
     var firstIndex = -_scroll;
-    _dots.forEach((dot) {
+    for (final dot in _dots) {
       var targetAlpha = 1.0;
-      if (dot.id < firstIndex || dot.id > firstIndex + (_visibleItems - 1)) {
-        targetAlpha = 0;
+      if (dot.id < firstIndex || dot.id > firstIndex + _visibleItems) {
+        targetAlpha = 0.3;
       }
       dot.tween(
         duration: .3,
+        colorize: dotUnselectedColor,
         alpha: targetAlpha,
-        /// for a zoom in effect
-        // scale: targetAlpha == 1 ? 1 : .25,
-        // y: targetAlpha == 1 ? 0.0 : dotSize / 2,
       );
-      dot.targetColor = dotUnselectedColor;
       dot.targetSize = dotSize;
-    });
+    }
 
     prevDot?.targetSize = dotPreW;
     nextDot?.targetSize = dotPreW;
 
-    /// color is computed internally in the dot to avoid
-    /// the expensize "colorize".
-    nextDot?.targetColor = dotPreColor;
-    prevDot?.targetColor = dotPreColor;
+    nextDot?.tween(duration: .3, colorize: dotPreColor, overwrite: 0);
+    prevDot?.tween(duration: .3, colorize: dotPreColor, overwrite: 0);
+    // nextDot?.color = dotPreColor;
+    // prevDot?.color = dotPreColor;
+
     currDot?.targetSize = dotSelectedW;
-    currDot?.targetColor = dotSelectedColor;
+    currDot?.tween(duration: .3, colorize: dotSelectedColor, overwrite: 0);
+    // _positionItems();
   }
 
-  void _layoutDots() {
+  void _positionItems() {
     var lastX = 0.0;
     for (var i = 0; i < _dots.length; ++i) {
       var dot = _dots[i];
-      var sizeDistance = dot.targetSize - dot.size;
-      if (sizeDistance.abs() < .1) {
-        dot.size = dot.targetSize;
-      } else {
-        dot.size += sizeDistance / dotSizeEase;
-      }
-      var posDistance = lastX - dot.x;
-      if (posDistance.abs() < .1) {
-        dot.x = lastX;
-      } else {
-        dot.x += posDistance / dotPositionEase;
-      }
+      // dot.x = lastX;
+      dot.x += (lastX - dot.x) / 4;
       lastX += dot.size + dotSep;
+    }
+  }
+
+  void _resizeItems() {
+    for (var i = 0; i < _dots.length; ++i) {
+      var dot = _dots[i];
+      dot.size += (dot.targetSize - dot.size) / 10;
     }
   }
 
@@ -195,10 +185,10 @@ class PageIndicatorPaged extends BaseScene {
 
   void _updateScroll() {
     var distance = _targetScroll - scrollContainer.x;
-    if (distance.abs() < .1) {
+    if (distance.abs() < .5) {
       scrollContainer.x = _targetScroll;
       return;
     }
-    scrollContainer.x += distance / scrollEase;
+    scrollContainer.x += distance / 12;
   }
 }

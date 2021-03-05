@@ -152,9 +152,11 @@ class GKeyboard {
   static const copy = GKeyboard._(LogicalKeyboardKey.copy);
   static const paste = GKeyboard._(LogicalKeyboardKey.paste);
   static const find = GKeyboard._(LogicalKeyboardKey.find);
-  static const audioVolumeMute = GKeyboard._(LogicalKeyboardKey.audioVolumeMute);
+  static const audioVolumeMute =
+      GKeyboard._(LogicalKeyboardKey.audioVolumeMute);
   static const audioVolumeUp = GKeyboard._(LogicalKeyboardKey.audioVolumeUp);
-  static const audioVolumeDown = GKeyboard._(LogicalKeyboardKey.audioVolumeDown);
+  static const audioVolumeDown =
+      GKeyboard._(LogicalKeyboardKey.audioVolumeDown);
   static const numpadComma = GKeyboard._(LogicalKeyboardKey.numpadComma);
   static const intlRo = GKeyboard._(LogicalKeyboardKey.intlRo);
   static const kanaMode = GKeyboard._(LogicalKeyboardKey.kanaMode);
@@ -168,17 +170,20 @@ class GKeyboard {
   static const lang5 = GKeyboard._(LogicalKeyboardKey.lang5);
   static const abort = GKeyboard._(LogicalKeyboardKey.abort);
   static const props = GKeyboard._(LogicalKeyboardKey.props);
-  static const numpadParenLeft = GKeyboard._(LogicalKeyboardKey.numpadParenLeft);
+  static const numpadParenLeft =
+      GKeyboard._(LogicalKeyboardKey.numpadParenLeft);
   static const numpadParenRight =
       GKeyboard._(LogicalKeyboardKey.numpadParenRight);
-  static const numpadBackspace = GKeyboard._(LogicalKeyboardKey.numpadBackspace);
+  static const numpadBackspace =
+      GKeyboard._(LogicalKeyboardKey.numpadBackspace);
   static const numpadMemoryStore =
       GKeyboard._(LogicalKeyboardKey.numpadMemoryStore);
   static const numpadMemoryRecall =
       GKeyboard._(LogicalKeyboardKey.numpadMemoryRecall);
   static const numpadMemoryClear =
       GKeyboard._(LogicalKeyboardKey.numpadMemoryClear);
-  static const numpadMemoryAdd = GKeyboard._(LogicalKeyboardKey.numpadMemoryAdd);
+  static const numpadMemoryAdd =
+      GKeyboard._(LogicalKeyboardKey.numpadMemoryAdd);
   static const numpadMemorySubtract =
       GKeyboard._(LogicalKeyboardKey.numpadMemorySubtract);
   static const numpadSignChange =
@@ -246,13 +251,15 @@ class GKeyboard {
   static const launchControlPanel =
       GKeyboard._(LogicalKeyboardKey.launchControlPanel);
   static const selectTask = GKeyboard._(LogicalKeyboardKey.selectTask);
-  static const launchDocuments = GKeyboard._(LogicalKeyboardKey.launchDocuments);
+  static const launchDocuments =
+      GKeyboard._(LogicalKeyboardKey.launchDocuments);
   static const spellCheck = GKeyboard._(LogicalKeyboardKey.spellCheck);
   static const launchKeyboardLayout =
       GKeyboard._(LogicalKeyboardKey.launchKeyboardLayout);
   static const launchScreenSaver =
       GKeyboard._(LogicalKeyboardKey.launchScreenSaver);
-  static const launchAssistant = GKeyboard._(LogicalKeyboardKey.launchAssistant);
+  static const launchAssistant =
+      GKeyboard._(LogicalKeyboardKey.launchAssistant);
   static const launchAudioBrowser =
       GKeyboard._(LogicalKeyboardKey.launchAudioBrowser);
   static const newKey = GKeyboard._(LogicalKeyboardKey.newKey);
@@ -296,8 +303,10 @@ class GKeyboard {
   static const gameButtonA = GKeyboard._(LogicalKeyboardKey.gameButtonA);
   static const gameButtonB = GKeyboard._(LogicalKeyboardKey.gameButtonB);
   static const gameButtonC = GKeyboard._(LogicalKeyboardKey.gameButtonC);
-  static const gameButtonLeft1 = GKeyboard._(LogicalKeyboardKey.gameButtonLeft1);
-  static const gameButtonLeft2 = GKeyboard._(LogicalKeyboardKey.gameButtonLeft2);
+  static const gameButtonLeft1 =
+      GKeyboard._(LogicalKeyboardKey.gameButtonLeft1);
+  static const gameButtonLeft2 =
+      GKeyboard._(LogicalKeyboardKey.gameButtonLeft2);
   static const gameButtonMode = GKeyboard._(LogicalKeyboardKey.gameButtonMode);
   static const gameButtonRight1 =
       GKeyboard._(LogicalKeyboardKey.gameButtonRight1);
@@ -305,7 +314,8 @@ class GKeyboard {
       GKeyboard._(LogicalKeyboardKey.gameButtonRight2);
   static const gameButtonSelect =
       GKeyboard._(LogicalKeyboardKey.gameButtonSelect);
-  static const gameButtonStart = GKeyboard._(LogicalKeyboardKey.gameButtonStart);
+  static const gameButtonStart =
+      GKeyboard._(LogicalKeyboardKey.gameButtonStart);
   static const gameButtonThumbLeft =
       GKeyboard._(LogicalKeyboardKey.gameButtonThumbLeft);
   static const gameButtonThumbRight =
@@ -328,15 +338,15 @@ class GKeyboard {
     alt: () => isDown(altLeft) || isDown(altRight),
   };
 
-  static Stage _stage;
+  static Stage? _stage;
 
   static bool justReleased(GKeyboard key) {
-    return _justReleased[key] != null;
+    return _justReleased[key as LogicalKeyboardKey] != null;
   }
 
   static bool isDown(GKeyboard key) {
     if (_metaKeys.containsKey(key)) {
-      return _metaKeys[key]();
+      return _metaKeys[key]!();
     }
     return _pressed[key.value] ?? false;
   }
@@ -344,17 +354,17 @@ class GKeyboard {
   /// Initializer of the Keyboard utility class.
   static void init(Stage stage) {
     _stage = stage;
-    _stage.keyboard.onDown.add(_onKey);
-    _stage.keyboard.onUp.add(_onKey);
+    _stage!.keyboard!.onDown.add(_onKey);
+    _stage!.keyboard!.onUp.add(_onKey);
   }
 
   static void dispose() {
-    _stage?.keyboard?.onDown?.remove(_onKey);
-    _stage?.keyboard?.onUp?.remove(_onKey);
+    _stage?.keyboard?.onDown.remove(_onKey);
+    _stage?.keyboard?.onUp.remove(_onKey);
   }
 
   static void _onKey(KeyboardEventData input) {
-    final k = input.rawEvent.logicalKey;
+    final k = input.rawEvent!.logicalKey;
     if (input.type == KeyEventType.down) {
       _pressed[k] = true;
     } else {

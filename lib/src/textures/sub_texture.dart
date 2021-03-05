@@ -2,24 +2,24 @@ import 'dart:ui' as ui;
 import '../../graphx.dart';
 
 class GSubTexture extends GTexture {
-  GTexture _parent;
-  bool _ownsParent;
-  GRect _region;
-  GRect _sourceRegion;
-  bool _rotated;
-  double _w;
-  double _h;
-  double _scale;
+  GTexture? _parent;
+  bool? _ownsParent;
+  GRect? _region;
+  late GRect _sourceRegion;
+  bool? _rotated;
+  double? _w;
+  double? _h;
+  double? _scale;
 
   /// cache rendering.
-  ui.Rect _sourceRegionRect;
-  ui.Rect _destRect;
+  late ui.Rect _sourceRegionRect;
+  late ui.Rect _destRect;
 
   GSubTexture(GTexture parent,
-      {GRect region,
+      {GRect? region,
       bool ownsParent = false,
-      GRect frame,
-      bool rotated,
+      GRect? frame,
+      required bool rotated,
       double scaleModifier = 1}) {
     $setTo(
       parent,
@@ -32,21 +32,21 @@ class GSubTexture extends GTexture {
   }
 
   void $setTo(GTexture parent,
-      {GRect region,
+      {GRect? region,
       bool ownsParent = false,
-      GRect frame,
-      bool rotated,
+      GRect? frame,
+      required bool rotated,
       double scaleModifier = 1}) {
     _region ??= GRect();
     if (region != null) {
-      _region.copyFrom(region);
+      _region!.copyFrom(region);
     } else {
       /// used (parent.width)
-      _region.setTo(0, 0, parent.nativeWidth, parent.nativeHeight);
+      _region!.setTo(0, 0, parent.nativeWidth, parent.nativeHeight);
     }
     if (frame != null) {
       if (this.frame != null) {
-        this.frame.copyFrom(frame);
+        this.frame!.copyFrom(frame);
       } else {
         this.frame = frame.clone();
       }
@@ -56,10 +56,10 @@ class GSubTexture extends GTexture {
     _parent = parent;
     _ownsParent = ownsParent;
     _rotated = rotated;
-    _w = (rotated ? _region.height : _region.width) / scaleModifier;
-    _h = (rotated ? _region.width : _region.height) / scaleModifier;
-    _scale = parent.scale * scaleModifier;
-    _sourceRegion = _region.clone() * scale;
+    _w = (rotated ? _region!.height : _region!.width)/ scaleModifier;
+    _h = (rotated ? _region!.width : _region!.height)/ scaleModifier;
+    _scale = parent.scale! * scaleModifier;
+    _sourceRegion = _region!.clone() * scale!;
 
     /// cache.
     _sourceRegionRect = _sourceRegion.toNative();
@@ -77,46 +77,46 @@ class GSubTexture extends GTexture {
 
   @override
   void dispose() {
-    if (_ownsParent) {
-      _parent.dispose();
+    if (_ownsParent!) {
+      _parent!.dispose();
     }
     super.dispose();
   }
 
-  GRect get region => _region;
+  GRect? get region => _region;
 
-  bool get rotated => _rotated;
+  bool? get rotated => _rotated;
 
-  bool get ownsParent => _ownsParent;
+  bool? get ownsParent => _ownsParent;
 
-  GTexture get parent => _parent;
-
-  @override
-  ui.Image get root => _parent.root;
+  GTexture? get parent => _parent;
 
   @override
-  double get width => _w;
+  ui.Image? get root => _parent!.root;
 
   @override
-  double get height => _h;
+  double? get width => _w;
 
   @override
-  double get nativeWidth => _w * _scale;
+  double? get height => _h;
 
   @override
-  double get nativeHeight => _h * _scale;
+  double get nativeWidth => _w! * _scale!;
 
   @override
-  double get scale => _scale;
+  double get nativeHeight => _h! * _scale!;
+
+  @override
+  double? get scale => _scale;
 
   /// no support
   void updateMatrices() {}
 
   @override
-  void render(ui.Canvas canvas, [ui.Paint paint]) {
+  void render(ui.Canvas? canvas, [ui.Paint? paint]) {
     paint ??= GTexture.sDefaultPaint;
     paint.isAntiAlias = true;
-    canvas.drawImageRect(root, _sourceRegionRect, _destRect, paint);
+    canvas!.drawImageRect(root!, _sourceRegionRect, _destRect, paint);
 //    final sub = texture as GSubTexture;
 //    final dest = Rect.fromLTWH(
 //      0,

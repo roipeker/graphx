@@ -27,7 +27,7 @@ mixin EventDispatcherMixin implements Listenable {
 }
 
 mixin TickerSignalMixin {
-  EventSignal<double> $onEnterFrame;
+  EventSignal<double>? $onEnterFrame;
 
   EventSignal<double> get onEnterFrame =>
       $onEnterFrame ??= EventSignal<double>();
@@ -39,7 +39,7 @@ mixin TickerSignalMixin {
 }
 
 mixin ResizeSignalMixin {
-  Signal $onResized;
+  Signal? $onResized;
   Signal get onResized => $onResized ??= Signal();
 
   void $disposeResizeSignals() {
@@ -49,19 +49,19 @@ mixin ResizeSignalMixin {
 }
 
 mixin DisplayListSignalsMixin {
-  Signal $onAdded;
+  Signal? $onAdded;
 
   Signal get onAdded => $onAdded ??= Signal();
 
-  Signal $onRemoved;
+  Signal? $onRemoved;
 
   Signal get onRemoved => $onRemoved ??= Signal();
 
-  Signal $onRemovedFromStage;
+  Signal? $onRemovedFromStage;
 
   Signal get onRemovedFromStage => $onRemovedFromStage ??= Signal();
 
-  Signal $onAddedToStage;
+  Signal? $onAddedToStage;
 
   Signal get onAddedToStage => $onAddedToStage ??= Signal();
 
@@ -78,13 +78,14 @@ mixin DisplayListSignalsMixin {
 }
 
 mixin RenderSignalMixin {
-  EventSignal<Canvas> $onPrePaint;
-  EventSignal<Canvas> $onPostPaint;
+  EventSignal<Canvas?>? $onPrePaint;
+  EventSignal<Canvas?>? $onPostPaint;
 //  EventSignal<Canvas> $onPaint;
 
-  EventSignal<Canvas> get onPrePaint => $onPrePaint ??= EventSignal<Canvas>();
+  EventSignal<Canvas?> get onPrePaint => $onPrePaint ??= EventSignal<Canvas?>();
 
-  EventSignal<Canvas> get onPostPaint => $onPostPaint ??= EventSignal<Canvas>();
+  EventSignal<Canvas?> get onPostPaint =>
+      $onPostPaint ??= EventSignal<Canvas?>();
 
 //  EventSignal<Canvas> get onPaint => $onPaint ??= EventSignal<Canvas>();
 
@@ -100,8 +101,8 @@ mixin RenderSignalMixin {
 
 /// use mouse signal for now.
 mixin StageMouseSignalsMixin<T extends MouseInputData> {
-  EventSignal<T> $onMouseLeave;
-  EventSignal<T> $onMouseEnter;
+  EventSignal<T>? $onMouseLeave;
+  EventSignal<T>? $onMouseEnter;
 
   EventSignal<T> get onMouseLeave => $onMouseLeave ??= EventSignal();
   EventSignal<T> get onMouseEnter => $onMouseEnter ??= EventSignal();
@@ -116,15 +117,15 @@ mixin StageMouseSignalsMixin<T extends MouseInputData> {
 
 /// use mouse signal for now.
 mixin MouseSignalsMixin<T extends MouseInputData> {
-  EventSignal<T> $onRightMouseDown;
-  EventSignal<T> $onMouseDoubleClick;
-  EventSignal<T> $onMouseClick;
-  EventSignal<T> $onMouseDown;
-  EventSignal<T> $onMouseUp;
-  EventSignal<T> $onMouseMove;
-  EventSignal<T> $onMouseOut;
-  EventSignal<T> $onMouseOver;
-  EventSignal<T> $onMouseWheel;
+  EventSignal<T>? $onRightMouseDown;
+  EventSignal<T>? $onMouseDoubleClick;
+  EventSignal<T>? $onMouseClick;
+  EventSignal<T>? $onMouseDown;
+  EventSignal<T>? $onMouseUp;
+  EventSignal<T>? $onMouseMove;
+  EventSignal<T>? $onMouseOut;
+  EventSignal<T>? $onMouseOver;
+  EventSignal<T>? $onMouseWheel;
 
   EventSignal<T> get onMouseClick => $onMouseClick ??= EventSignal();
   EventSignal<T> get onMouseDoubleClick =>
@@ -160,12 +161,12 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
 }
 
 mixin PointerSignalsMixin<T extends PointerEventData> {
-  EventSignal<T> $onClick;
-  EventSignal<T> $onDown;
-  EventSignal<T> $onUp;
-  EventSignal<T> $onHover;
-  EventSignal<T> $onOut;
-  EventSignal<T> $onScroll;
+  EventSignal<T>? $onClick;
+  EventSignal<T>? $onDown;
+  EventSignal<T>? $onUp;
+  EventSignal<T>? $onHover;
+  EventSignal<T>? $onOut;
+  EventSignal<T>? $onScroll;
 
   EventSignal<T> get onClick => $onClick ??= EventSignal();
   EventSignal<T> get onDown => $onDown ??= EventSignal();

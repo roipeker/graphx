@@ -37,7 +37,7 @@ class Pad extends GSprite {
     on();
   }
 
-  List<_StrokeData> _data = <_StrokeData>[];
+  final List<_StrokeData> _data = <_StrokeData>[];
   bool _isEmpty = true;
   bool _isMouseDown = false;
 
@@ -51,11 +51,7 @@ class Pad extends GSprite {
         .beginFill(backgroundColor)
         .drawRect(0, 0, w, h)
         .endFill();
-    _g
-        .clear()
-        .beginFill(baseTransparent)
-        .drawRect(0, 0, w, h)
-        .endFill();
+    _g.clear().beginFill(baseTransparent).drawRect(0, 0, w, h).endFill();
     _data.clear();
     _reset();
     _isEmpty = true;
@@ -201,7 +197,7 @@ class Pad extends GSprite {
 
   void _drawCurve(Color color, BezierDraw curve) {
     var wd = curve.endW - curve.startW;
-    int drawSteps = curve.length().floor() * 2;
+    var drawSteps = curve.length().floor() * 2;
 
     _g.beginFill(color);
     for (var i = 0; i < drawSteps; ++i) {

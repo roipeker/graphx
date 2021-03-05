@@ -51,11 +51,11 @@ class DrawPadScene extends GSprite {
 
     pad.minW = .2;
     pad.maxW = 12.2;
-    mps.on('alpha', (double alpha) {
+    mps.on('alpha', (alpha) {
       opacity = alpha;
       pad.canvas.alpha = alpha;
     });
-    mps.on('color', (Color color) {
+    mps.on('color', (color) {
       pad.penColor = color;
     });
     mps.on('clear', () {

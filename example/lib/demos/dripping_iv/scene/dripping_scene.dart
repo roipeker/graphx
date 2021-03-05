@@ -1,6 +1,7 @@
-import '../../../utils/svg_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
+
+import '../../../utils/svg_utils.dart';
 import 'svgs.dart';
 
 class DrippingScene extends GSprite {
@@ -63,7 +64,7 @@ class DrippingScene extends GSprite {
   }
 
   void moveWater() {
-    double targetH = water.height > 10 ? 5 : tubeH / 2;
+    var targetH = water.height > 10 ? 5 : tubeH / 2;
 
     /// toggle water box height up and down...
     water.tween(
