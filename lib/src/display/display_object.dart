@@ -253,7 +253,7 @@ abstract class GDisplayObject
 
   double get skewY => _skewY;
 
-  double? get rotation => _rotation;
+  double get rotation => _rotation;
 
   /// Indicates the width of the display object, in dp.
   /// The `width` is calculated based on the bounds of the content of the
@@ -592,7 +592,7 @@ abstract class GDisplayObject
     double scaleY,
     double skewX,
     double skewY,
-    double? rotation,
+    double rotation,
     GMatrix out,
   ) {
     out.identity();
@@ -622,7 +622,7 @@ abstract class GDisplayObject
       out.identity();
       out.scale(scaleX, scaleY);
       out.skew(skewX, skewY); // MatrixUtils.skew(out, skewX, skewY);
-      out.rotate(rotation!);
+      out.rotate(rotation);
       out.translate(x!, y!);
       if (pivotX != 0 || pivotY != 0) {
         out.tx = x - out.a * pivotX - out.c * pivotY;
