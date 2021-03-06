@@ -9,7 +9,7 @@ class GIcon extends GDisplayObject {
   final _localBounds = GRect();
 
   @override
-  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+  GRect getBounds(GDisplayObject? targetSpace, [GRect? out]) {
     _sHelperMatrix.identity();
     getTransformationMatrix(targetSpace, _sHelperMatrix);
     var r = MatrixUtils.getTransformedBoundsRect(
@@ -21,20 +21,20 @@ class GIcon extends GDisplayObject {
   }
 
   @override
-  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
+  GDisplayObject? hitTest(GPoint localPoint, [bool useShape = false]) {
     if (!visible || !mouseEnabled) return null;
     return _localBounds.containsPoint(localPoint) ? this : null;
   }
 
-  widgets.IconData _data;
-  double _size;
-  ui.Color _color;
+  widgets.IconData? _data;
+  double _size = 0.0;
+  ui.Color? _color;
 
   bool _invalidStyle = false;
 
-  ui.Color get color => _color;
+  ui.Color? get color => _color;
 
-  set color(ui.Color value) {
+  set color(ui.Color? value) {
     if (value == _color) return;
     _color = value;
     _invalidStyle = true;
@@ -46,14 +46,14 @@ class GIcon extends GDisplayObject {
   set size(double value) {
     if (value == _size) return;
     _size = value;
-    _localBounds?.setTo(0, 0, size, size);
+    _localBounds.setTo(0, 0, size, size);
     _invalidStyle = true;
     requiresRedraw();
   }
 
-  widgets.IconData get data => _data;
+  widgets.IconData? get data => _data;
 
-  set data(widgets.IconData value) {
+  set data(widgets.IconData? value) {
     if (value == _data) return;
     _data = value;
     _invalidStyle = true;
@@ -62,7 +62,7 @@ class GIcon extends GDisplayObject {
 
   GIcon(
     widgets.IconData data, [
-        ui.Color color = kColorWhite,
+    ui.Color color = kColorWhite,
     double size = 24.0,
   ]) {
     _data = data;
@@ -79,12 +79,12 @@ class GIcon extends GDisplayObject {
     requiresRedraw();
   }
 
-  ui.Paragraph _paragraph;
-  ui.ParagraphBuilder _builder;
-  ui.TextStyle _style;
+  ui.Paragraph? _paragraph;
+  late ui.ParagraphBuilder _builder;
+  late ui.TextStyle _style;
 
-  ui.Paint _paint;
-  ui.Shadow _shadow;
+  ui.Paint? _paint;
+  ui.Shadow? _shadow;
 
   void setPaint(ui.Paint value) {
     _paint = value;
@@ -105,24 +105,24 @@ class GIcon extends GDisplayObject {
       fontSize: _size,
       fontFamily: _resolveFontFamily(),
       foreground: _paint,
-      shadows: _shadow != null ? [_shadow] : null,
+      shadows: _shadow != null ? [_shadow!] : null,
     );
     _builder = ui.ParagraphBuilder(ui.ParagraphStyle());
     // _builder.pop();
     _builder.pushStyle(_style);
-    final charCode = String.fromCharCode(_data.codePoint);
+    final charCode = String.fromCharCode(_data!.codePoint);
     _builder.addText(charCode);
     _paragraph = _builder.build();
-    _paragraph.layout(ui.ParagraphConstraints(width: double.infinity));
+    _paragraph!.layout(ui.ParagraphConstraints(width: double.infinity));
     _invalidStyle = false;
   }
 
-  String _resolveFontFamily() {
+  String? _resolveFontFamily() {
     if (data == null) return null;
-    if (data.fontPackage == null) {
-      return data.fontFamily;
+    if (data!.fontPackage == null) {
+      return data!.fontFamily;
     } else {
-      return 'packages/${data.fontPackage}/${data.fontFamily}';
+      return 'packages/${data!.fontPackage}/${data!.fontFamily}';
     }
   }
 
@@ -131,14 +131,14 @@ class GIcon extends GDisplayObject {
   }
 
   @override
-  void $applyPaint(ui.Canvas canvas) {
+  void $applyPaint(ui.Canvas? canvas) {
     if (data == null) return;
     if (_invalidStyle) {
       _invalidStyle = false;
       _updateStyle();
     }
     if (_paragraph != null) {
-      canvas.drawParagraph(_paragraph, ui.Offset.zero);
+      canvas!.drawParagraph(_paragraph!, ui.Offset.zero);
     }
   }
 }

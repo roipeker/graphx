@@ -17,12 +17,12 @@ class Signal {
 
   void add(Function callback) {
 //    if (callback == null || _listenersOnce.contains(callback)) return;
-    if (callback == null || has(callback)) return;
+    if (has(callback)) return;
     _listeners.add(callback);
   }
 
   void addOnce(Function callback) {
-    if (callback == null || _listeners.contains(callback)) return;
+    if (_listeners.contains(callback)) return;
     _listenersOnce.add(callback);
   }
 
@@ -44,22 +44,22 @@ class Signal {
   void dispatch() {
     final len = _listeners.length;
     for (_iterDispatchers = 0; _iterDispatchers < len; ++_iterDispatchers) {
-      _listeners[_iterDispatchers]?.call();
+      _listeners[_iterDispatchers].call();
     }
     final lenCount = _listenersOnce.length;
     for (var i = 0; i < lenCount; i++) {
-      _listenersOnce.removeAt(0)?.call();
+      _listenersOnce.removeAt(0).call();
     }
   }
 
   void dispatchWithData(dynamic data) {
     final len = _listeners.length;
     for (_iterDispatchers = 0; _iterDispatchers < len; ++_iterDispatchers) {
-      _listeners[_iterDispatchers]?.call(data);
+      _listeners[_iterDispatchers].call(data);
     }
     final lenCount = _listenersOnce.length;
     for (var i = 0; i < lenCount; i++) {
-      _listenersOnce.removeAt(i)?.call(data);
+      _listenersOnce.removeAt(i).call(data);
     }
   }
 }
@@ -81,12 +81,12 @@ class EventSignal<T> {
   bool hasListeners() => _listeners.isNotEmpty || _listenersOnce.isNotEmpty;
 
   void add(EventSignalCallback<T> callback) {
-    if (callback == null || has(callback)) return;
+    if (has(callback)) return;
     _listeners.add(callback);
   }
 
   void addOnce(EventSignalCallback<T> callback) {
-    if (callback == null || _listeners.contains(callback)) return;
+    if (_listeners.contains(callback)) return;
     _listenersOnce.add(callback);
   }
 
@@ -94,9 +94,9 @@ class EventSignal<T> {
     final idx = _listeners.indexOf(callback);
     if (idx > -1) {
       if (idx <= _iterDispatchers) _iterDispatchers--;
-      _listeners?.removeAt(idx);
+      _listeners.removeAt(idx);
     } else {
-      _listenersOnce?.remove(callback);
+      _listenersOnce.remove(callback);
     }
   }
 
@@ -108,10 +108,10 @@ class EventSignal<T> {
   void dispatch(T data) {
     for (var i = 0; i < _listeners.length; ++i) {
 //      if (id > 0) print('Calling ::: $i - ${_listeners.length}');
-      _listeners[i]?.call(data);
+      _listeners[i].call(data);
     }
     for (var i = 0; i < _listenersOnce.length; i++) {
-      _listenersOnce?.removeAt(i)?.call(data);
+      _listenersOnce.removeAt(i).call(data);
     }
   }
 }

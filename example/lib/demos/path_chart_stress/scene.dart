@@ -28,8 +28,6 @@ class PathChartScene extends GSprite {
 
     container.x = stage.stageWidth * .8;
     container.y = stage.stageHeight * .5;
-    var scaleR = 0.0;
-    var tw = container.x;
     stage.onEnterFrame.add((event) {
       // if (container.width > container.x + 100) {
       //   tw = container.x + 100;
@@ -87,8 +85,6 @@ class ChartSection extends GShape {
     stage.onEnterFrame.add((event) {
       if (++frameCount % 3 == 0) {
         addSlot();
-        var maxPos = stage.stageWidth * .7;
-        var tempW = width;
         pivotX = width;
         // x = maxPos;
         // if (tempW > maxPos) {
@@ -112,31 +108,6 @@ class ChartSection extends GShape {
   void addSlot() {
     ++numQuads;
     label.text = '$numQuads rects';
-    var rects = List.generate(1, (index) {
-      var pw = Math.randomRange(20, 40);
-      var ph = Math.randomRange(20, 80);
-      var py = Math.randomRange(
-          lastRect.y - ph / 2, lastRect.y + lastRect.height / 2);
-      final rect = GRect(lastRect.right, py, pw, ph);
-      myPath = Path.combine(
-        PathOperation.union,
-        myPath,
-        Path()..addRect(rect.toNative()),
-      );
-
-      outputPath = myPath;
-
-      // outputPath = Path.combine(
-      //   PathOperation.intersect,
-      //   outputPath,
-      //   maskPath,
-      // );
-
-      // lastX += pw;
-      lastRect = rect;
-      return rect;
-    });
-
     graphics.clear();
     graphics.beginFill(color.withOpacity(.3));
     graphics.lineStyle(2, color);

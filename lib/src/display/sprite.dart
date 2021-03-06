@@ -11,31 +11,31 @@ class GSprite extends GDisplayObjectContainer {
 
   static final _sHelperMatrix = GMatrix();
 
-  Graphics _graphics;
+  Graphics? _graphics;
 
   Graphics get graphics => _graphics ??= Graphics();
 
   @override
-  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+  GRect? getBounds(GDisplayObject? targetSpace, [GRect? out]) {
     out = super.getBounds(targetSpace, out);
     if (_graphics != null) {
       _sHelperMatrix.identity();
       getTransformationMatrix(targetSpace, _sHelperMatrix);
 
       /// single bounds, all paths as 1 rect.
-      final graphicsBounds = _graphics.getBounds();
+      final graphicsBounds = _graphics!.getBounds();
       MatrixUtils.getTransformedBoundsRect(
         _sHelperMatrix,
         graphicsBounds,
         graphicsBounds,
       );
-      out.expandToInclude(graphicsBounds);
+      out!.expandToInclude(graphicsBounds);
     }
     return out;
   }
 
   @override
-  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
+  GDisplayObject? hitTest(GPoint localPoint, [bool useShape = false]) {
     if (!visible || !mouseEnabled) return null;
     var target = super.hitTest(localPoint);
     target ??=
@@ -44,7 +44,7 @@ class GSprite extends GDisplayObjectContainer {
   }
 
   @override
-  void $applyPaint(ui.Canvas canvas) {
+  void $applyPaint(ui.Canvas? canvas) {
     if (!$hasVisibleArea) return;
     _graphics?.alpha = worldAlpha;
     _graphics?.paint(canvas);

@@ -1,9 +1,9 @@
 part of gtween;
 
 extension GTweenNumExt on num {
-  GTweenableDouble get twn {
-    return this is double ? GTweenableDouble(this) : GTweenableInt(this);
-  }
+  GTweenableDouble get twn => this is double
+      ? GTweenableDouble(this as double)
+      : GTweenableInt(this as int) as GTweenableDouble;
 }
 
 extension GTweenDoubleExt on double {
@@ -14,7 +14,7 @@ extension GTweenIntExt on int {
   GTweenableInt get twn => GTweenableInt(this);
 }
 
-extension GTweenMapExt on Map<String, dynamic> {
+extension GTweenMapExt on Map<String?, dynamic> {
   GTweenableMap get twn => GTweenableMap(this);
 }
 

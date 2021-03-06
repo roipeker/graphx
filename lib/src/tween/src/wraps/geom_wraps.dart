@@ -1,12 +1,12 @@
 part of gtween;
 
 class GTweenablePoint with GTweenable {
-  static GTweenable wrap(Object target) {
+  static GTweenable? wrap(Object target) {
     if (target is! GPoint) return null;
     return GTweenablePoint(target);
   }
 
-  GPoint value;
+  late GPoint value;
 
   GTweenablePoint(GPoint target) {
     value = this.target = target;
@@ -19,23 +19,23 @@ class GTweenablePoint with GTweenable {
       };
 
   GTween tween({
-    @required double duration,
-    Object x,
-    Object y,
-    GPoint to,
-    EaseFunction ease,
-    double delay,
-    bool useFrames,
-    int overwrite,
-    VoidCallback onStart,
-    Object onStartParams,
-    VoidCallback onComplete,
-    Object onCompleteParams,
-    VoidCallback onUpdate,
-    Object onUpdateParams,
-    bool runBackwards,
-    bool immediateRender,
-    Map startAt,
+    required double duration,
+    Object? x,
+    Object? y,
+    GPoint? to,
+    EaseFunction? ease,
+    double? delay,
+    bool? useFrames,
+    int? overwrite,
+    VoidCallback? onStart,
+    Object? onStartParams,
+    VoidCallback? onComplete,
+    Object? onCompleteParams,
+    VoidCallback? onUpdate,
+    Object? onUpdateParams,
+    bool? runBackwards,
+    bool? immediateRender,
+    Map? startAt,
   }) {
     if ((x != null || y != null) && to != null) {
       throw '''
@@ -71,12 +71,12 @@ GTween Can't use 'x, y' AND 'to' arguments for GxPoint tween. Choose one''';
 }
 
 class GTweenableRect with GTweenable {
-  static GTweenable wrap(Object target) {
+  static GTweenable? wrap(Object target) {
     if (target is! GRect) return null;
     return GTweenableRect(target);
   }
 
-  GRect value;
+  late GRect value;
 
   GTweenableRect(GRect target) {
     value = this.target = target;
@@ -91,25 +91,25 @@ class GTweenableRect with GTweenable {
       };
 
   GTween tween(
-      {@required double duration,
-      Object x,
-      Object y,
-      Object width,
-      Object height,
-      GRect to,
-      EaseFunction ease,
-      double delay,
-      bool useFrames,
-      int overwrite,
-      VoidCallback onStart,
-      Object onStartParams,
-      VoidCallback onComplete,
-      Object onCompleteParams,
-      VoidCallback onUpdate,
-      Object onUpdateParams,
-      bool runBackwards,
-      bool immediateRender,
-      Map startAt}) {
+      {required double duration,
+      Object? x,
+      Object? y,
+      Object? width,
+      Object? height,
+      GRect? to,
+      EaseFunction? ease,
+      double? delay,
+      bool? useFrames,
+      int? overwrite,
+      VoidCallback? onStart,
+      Object? onStartParams,
+      VoidCallback? onComplete,
+      Object? onCompleteParams,
+      VoidCallback? onUpdate,
+      Object? onUpdateParams,
+      bool? runBackwards,
+      bool? immediateRender,
+      Map? startAt}) {
     if ((x != null || y != null || width != null || height != null) &&
         to != null) {
       throw "GTween Can't use 'x, y, width, height' AND 'to' arguments to "
@@ -151,14 +151,14 @@ class GTweenableRect with GTweenable {
 }
 
 class GTweenableColor with GTweenable {
-  static GTweenable wrap(Object target) {
+  static GTweenable? wrap(Object target) {
     if (target is! Color) return null;
     return GTweenableColor(target);
   }
 
-  Color value;
-  PropTween _propTween;
-  Color _targetColor;
+  Color? value;
+  late PropTween _propTween;
+  Color? _targetColor;
 
   @override
   void setTweenProp(PropTween tweenProp) {
@@ -171,29 +171,28 @@ class GTweenableColor with GTweenable {
   }
 
   @override
-  void setProperty(Object prop, double val) {
-    value = Color.lerp(target, _targetColor, val);
+  void setProperty(Object? prop, double val) {
+    value = Color.lerp(target as Color?, _targetColor, val);
   }
 
   @override
   double getProperty(Object prop) => 0.0; // start value, from 0-1
 
   GTween tween(Color color,
-      {@required double duration,
-      EaseFunction ease,
-      double delay,
-      bool useFrames,
-      int overwrite,
-      VoidCallback onStart,
-      Object onStartParams,
-      VoidCallback onComplete,
-      Object onCompleteParams,
-      VoidCallback onUpdate,
-      Object onUpdateParams,
-      bool runBackwards,
-      bool immediateRender,
-      Map startAt}) {
-    assert(color != null);
+      {required double duration,
+      EaseFunction? ease,
+      double? delay,
+      bool? useFrames,
+      int? overwrite,
+      VoidCallback? onStart,
+      Object? onStartParams,
+      VoidCallback? onComplete,
+      Object? onCompleteParams,
+      VoidCallback? onUpdate,
+      Object? onUpdateParams,
+      bool? runBackwards,
+      bool? immediateRender,
+      Map? startAt}) {
     _targetColor = color;
     return GTween.to(
         this,

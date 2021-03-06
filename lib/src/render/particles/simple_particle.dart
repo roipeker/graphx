@@ -1,11 +1,19 @@
-import 'dart:ui' as ui ;
+import 'dart:ui' as ui;
 import '../../../graphx.dart';
 
 class GSimpleParticle {
-  GSimpleParticle $next;
-  GSimpleParticle $prev;
+  GSimpleParticle? $next;
+  GSimpleParticle? $prev;
 
-  double x, y, rotation, scaleX, scaleY, alpha, red, green, blue;
+  double x = 0.0,
+      y = 0.0,
+      rotation = 0.0,
+      scaleX = 0.0,
+      scaleY = 0.0,
+      alpha = 0.0,
+      red = 0.0,
+      green = 0.0,
+      blue = 0.0;
 
   double velocityX = 0;
   double velocityY = 0;
@@ -19,17 +27,20 @@ class GSimpleParticle {
   double initialVelocityAngular = 0;
   double initialAccelerationX = 0;
   double initialAccelerationY = 0;
-  double initialAlpha, initialRed, initialBlue, initialGreen;
-  double endAlpha, endRed, endBlue, endGreen;
-  double alphaDif, redDif, blueDif, greenDif;
-  double scaleDif;
+  double initialAlpha = 0.0,
+      initialRed = 0.0,
+      initialBlue = 0.0,
+      initialGreen = 0.0;
+  double endAlpha = 0.0, endRed = 0.0, endBlue = 0.0, endGreen = 0.0;
+  double alphaDif = 0.0, redDif = 0.0, blueDif = 0.0, greenDif = 0.0;
+  late double scaleDif;
   double accumulatedEnergy = 0;
 
-  GSimpleParticle $nextInstance;
+  GSimpleParticle? $nextInstance;
   int id = 0;
 
-  GTexture texture;
-  static GSimpleParticle $availableInstance;
+  GTexture? texture;
+  static GSimpleParticle? $availableInstance;
   static int $instanceCount = 0;
 
   ui.Color get color {
@@ -53,7 +64,7 @@ class GSimpleParticle {
 
   static void precache(int count) {
     if (count < $instanceCount) return;
-    var cached = get();
+    GSimpleParticle? cached = get();
     while ($instanceCount < count) {
       var n = get();
       n.$prev = cached;
@@ -62,7 +73,7 @@ class GSimpleParticle {
     while (cached != null) {
       var d = cached;
       cached = d.$prev;
-      d?.dispose();
+      d.dispose();
     }
   }
 
@@ -124,8 +135,7 @@ class GSimpleParticle {
     if (emitter.dispersionAngle != 0 || emitter.dispersionAngleVariance != 0) {
       var dispersionAngle = emitter.dispersionAngle;
       if (emitter.dispersionAngleVariance > 0) {
-        dispersionAngle +=
-            emitter.dispersionAngleVariance * Math.random();
+        dispersionAngle += emitter.dispersionAngleVariance * Math.random();
       }
       var _sin = Math.sin(dispersionAngle);
       var _cos = Math.cos(dispersionAngle);
@@ -215,10 +225,10 @@ class GSimpleParticle {
 
   void dispose() {
     if ($next != null) {
-      $next.$prev = $prev;
+      $next!.$prev = $prev;
     }
     if ($prev != null) {
-      $prev.$next = $next;
+      $prev!.$next = $next;
     }
     $next = null;
     $prev = null;

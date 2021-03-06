@@ -83,6 +83,8 @@ abstract class Math {
 
   /// Evaluates `a` and `b` and returns the largest value.
   static final max = m.max;
+  // * OLD code
+  // static final max = m.max as T Function<T extends num>(T, T);
 
   /// Evaluates `a` and `b` and returns the smallest value.
   static final min = m.min;
@@ -92,22 +94,22 @@ abstract class Math {
 
   /// Returns the ceiling of the specified number or expression.
   /// Parameter `keepDouble` enforces the return type to be `double`.
-  static num ceil(double value, [bool keepDouble = true]) {
-    return keepDouble ? value?.ceilToDouble() : value?.ceil();
+  static num? ceil(double value, [bool keepDouble = true]) {
+    return keepDouble ? value.ceilToDouble() : value.ceil();
   }
 
   /// Returns the floor of the number or expression specified in the parameter
   /// `value`.
   /// Parameter `keepDouble` enforces the return type to be `double`.
-  static num floor(double value, [bool keepDouble = true]) {
-    return keepDouble ? value?.floorToDouble() : value?.floor();
+  static num? floor(double value, [bool keepDouble = true]) {
+    return keepDouble ? value.floorToDouble() : value.floor();
   }
 
   /// Rounds the value of the parameter `value` up or down to the nearest
   /// integer and returns the value.
   /// Parameter `keepDouble` enforces the return type to be `double`.
-  static num round(double value, [bool keepDouble = true]) {
-    return keepDouble ? value?.roundToDouble() : value?.round();
+  static num? round(double value, [bool keepDouble = true]) {
+    return keepDouble ? value.roundToDouble() : value.round();
   }
 
   /// Computes and returns an absolute value for the number specified by
@@ -147,7 +149,7 @@ abstract class Math {
   static double randomRangeClamp(num min, num max, num clamp) =>
       (randomRange(min.toDouble(), max.toDouble()) / clamp.toDouble())
           .roundToDouble() *
-          clamp.toDouble();
+      clamp.toDouble();
 
   /// Returns a pseudo-random `int` number between parameters `min` and
   /// `max`, clamping the returned value to `clamp`.
@@ -155,7 +157,7 @@ abstract class Math {
   /// And `min` > `max`.
   static int randomRangeIntClamp(num min, num max, num clamp) =>
       (randomRangeInt(min.toInt(), max.toInt()) / clamp.toInt()).round() *
-          clamp.toInt();
+      clamp.toInt();
 
   static double norm(num value, num min, num max) {
     return (value - min) / (max - min);

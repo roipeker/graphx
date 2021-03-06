@@ -50,11 +50,11 @@ class ColorMatrix {
 
   // ignore: non_constant_identifier_names
   static final int LENGTH = IDENTITY_MATRIX.length;
-  final _storage = List<double>(25);
+  final _storage = List<double?>.filled(25, null);
 
-  ColorMatrix([List<double> matrix]) {
+  ColorMatrix([List<double?>? matrix]) {
     matrix = _fixMatrix(matrix);
-    copyMatrix(((matrix.length == LENGTH) ? matrix : IDENTITY_MATRIX));
+    copyMatrix(((matrix!.length == LENGTH) ? matrix : IDENTITY_MATRIX));
   }
 
   // public methods:
@@ -77,7 +77,7 @@ class ColorMatrix {
   }
 
   void adjustBrightness(double percent) {
-    if (percent == null || percent == 0 || percent.isNaN) return;
+    if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
       percent *= 100;
     }
@@ -96,7 +96,7 @@ class ColorMatrix {
   }
 
   void adjustContrast(double percent) {
-    if (percent == null || percent == 0 || percent.isNaN) return;
+    if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
       percent *= 100;
     }
@@ -132,7 +132,7 @@ class ColorMatrix {
   }
 
   void adjustSaturation(double percent) {
-    if (percent == null || percent == 0 || percent.isNaN) return;
+    if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
       percent *= 100;
     }
@@ -156,7 +156,7 @@ class ColorMatrix {
   }
 
   void adjustHue(double percent) {
-    if (percent == null || percent == 0 || percent.isNaN) return;
+    if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
       percent *= 180;
     }
@@ -192,9 +192,9 @@ class ColorMatrix {
     ]);
   }
 
-  void concat(List<double> pMatrix) {
+  void concat(List<double?>? pMatrix) {
     pMatrix = _fixMatrix(pMatrix);
-    if (pMatrix.length != LENGTH) return;
+    if (pMatrix!.length != LENGTH) return;
     multiplyMatrix(pMatrix);
   }
 
@@ -204,20 +204,20 @@ class ColorMatrix {
   String toString() => "ColorMatrix [ ${_storage.join(" , ")} ]";
 
   /// return a length 20 array (5x4):
-  List<double> get storage =>
+  List<double?> get storage =>
       _storage.sublist(0, math.min(_storage.length, 20)).toList();
 
   /// private methods:
   /// copy the specified matrix's values to this matrix:
-  void copyMatrix(List<double> pMatrix) {
+  void copyMatrix(List<double?>? pMatrix) {
     for (var i = 0; i < LENGTH; i++) {
-      _storage[i] = pMatrix[i];
+      _storage[i] = pMatrix![i];
     }
   }
 
   /// multiplies one matrix against another:
-  void multiplyMatrix(List<double> pMatrix) {
-    var col = List<double>(25);
+  void multiplyMatrix(List<double?>? pMatrix) {
+    var col = List<double?>.filled(25, null);
 
     for (var i = 0; i < 5; i++) {
       for (var j = 0; j < 5; j++) {
@@ -226,7 +226,7 @@ class ColorMatrix {
       for (var j = 0; j < 5; j++) {
         var val = 0.0;
         for (var k = 0; k < 5; k++) {
-          val += pMatrix[j + k * 5] * col[k];
+          val += pMatrix![j + k * 5]! * col[k]!;
         }
         _storage[j + i * 5] = val;
       }
@@ -239,7 +239,7 @@ class ColorMatrix {
       math.min(pLimit, math.max(-pLimit, pVal));
 
   /// makes sure matrixes are 5x5 (25 long):
-  List<double> _fixMatrix([List<double> pMatrix]) {
+  List<double?>? _fixMatrix([List<double?>? pMatrix]) {
     if (pMatrix == null) return IDENTITY_MATRIX;
     if (pMatrix.length < LENGTH) {
       pMatrix = List.from(pMatrix)

@@ -3,7 +3,7 @@ import 'dart:ui';
 import '../../graphx.dart';
 
 mixin RenderUtilMixin {
-  Picture createPicture([void Function(Canvas) prePaintCallback]) {
+  Picture createPicture([void Function(Canvas)? prePaintCallback]) {
     final r = PictureRecorder();
     final c = Canvas(r);
     prePaintCallback?.call(c);
@@ -53,14 +53,14 @@ mixin RenderUtilMixin {
     final width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
     final height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
     final output = await picture.toImage(width, height);
-    picture?.dispose();
+    picture.dispose();
     return output;
   }
 }
 
 mixin DisplayMasking {
-  GRect maskRect;
-  double maskRectCornerRadius;
+  GRect? maskRect;
+  double? maskRectCornerRadius;
   bool maskRectInverted = false;
 
   /// Direct scissor rect masking, more optimized than using
@@ -78,15 +78,15 @@ mixin DisplayMasking {
   /// By default GxRect has no corners, so is only implemented to make use
   /// of `RRect` clipping.
   ///
-  void $applyMaskRect(Canvas c) {
-    if (maskRect.hasCorners) {
-      c.clipRRect(
-        maskRect.toRoundNative(),
+  void $applyMaskRect(Canvas? c) {
+    if (maskRect!.hasCorners) {
+      c!.clipRRect(
+        maskRect!.toRoundNative(),
         doAntiAlias: true,
       );
     } else {
-      c.clipRect(
-        maskRect.toNative(),
+      c!.clipRect(
+        maskRect!.toNative(),
         clipOp: maskRectInverted ? ClipOp.difference : ClipOp.intersect,
         doAntiAlias: true,
       );
