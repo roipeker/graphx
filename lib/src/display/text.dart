@@ -298,6 +298,8 @@ class GText extends GDisplayObject {
     ui.Locale locale,
     ui.Paint background,
     ui.Paint foreground,
+    String ellipsis,
+    int maxLines,
     List<ui.Shadow> shadows,
     List<ui.FontFeature> fontFeatures,
     ui.TextAlign textAlign = ui.TextAlign.left,
@@ -335,6 +337,8 @@ class GText extends GDisplayObject {
       paragraphStyle: ui.ParagraphStyle(
         textAlign: textAlign,
         textDirection: direction,
+        maxLines: maxLines,
+        ellipsis: ellipsis,
       ),
     );
     doc?.addChild(tf);
