@@ -7,7 +7,7 @@ import '../core/core.dart';
 class SceneBuilderWidget extends StatefulWidget {
   final Widget? child;
 
-  final SceneController Function()? builder;
+  final SceneController Function() builder;
 
   /// Rendering caching flag.
   /// See [CustomPaint.willChange]
@@ -23,7 +23,7 @@ class SceneBuilderWidget extends StatefulWidget {
 
   const SceneBuilderWidget({
     Key? key,
-    this.builder,
+    required this.builder,
     this.child,
     this.painterIsComplex = true,
     this.mouseOpaque = true,
@@ -35,15 +35,15 @@ class SceneBuilderWidget extends StatefulWidget {
 }
 
 class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
-  SceneController? _controller;
+  late SceneController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = widget.builder!();
+    _controller = widget.builder();
 
-    _controller!.resolveWindowBounds = _getRenderObjectWindowBounds;
-    _controller!.$init();
+    _controller.resolveWindowBounds = _getRenderObjectWindowBounds;
+    _controller.$init();
   }
 
   GRect? _getRenderObjectWindowBounds() {
@@ -54,14 +54,14 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   void reassemble() {
     super.reassemble();
-    _controller!.reassembleWidget();
+    _controller.reassembleWidget();
   }
 
   // @override
@@ -73,15 +73,15 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
   @override
   Widget build(BuildContext context) {
     Widget child = CustomPaint(
-      painter: _controller!.buildBackPainter(),
-      foregroundPainter: _controller!.buildFrontPainter(),
+      painter: _controller.buildBackPainter(),
+      foregroundPainter: _controller.buildFrontPainter(),
       isComplex: widget.painterIsComplex,
-      willChange: _controller!.config.painterMightChange(),
+      willChange: _controller.config.painterMightChange(),
       child: widget.child ?? Container(),
     );
 
-    var converter = _controller!.$inputConverter;
-    if (_controller!.config.usePointer ?? false) {
+    var converter = _controller.$inputConverter;
+    if (_controller.config.usePointer ?? false) {
       child = MouseRegion(
         onEnter: converter!.pointerEnter,
         onExit: converter.pointerExit,
@@ -99,7 +99,7 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
         ),
       );
     }
-    if (_controller!.config.useKeyboard ?? false) {
+    if (_controller.config.useKeyboard ?? false) {
       child = RawKeyboardListener(
         onKey: converter!.handleKey,
         autofocus: true,

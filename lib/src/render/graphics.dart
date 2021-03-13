@@ -588,7 +588,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     int sides, [
     double rotation = 0,
   ]) {
-    final points = List<Offset?>.filled(sides, null);
+    final points = List<Offset?>.filled(sides, Offset(0, 0));
     final rel = 2 * Math.PI / sides;
     for (var i = 1; i <= sides; ++i) {
       final px = x + radius * Math.cos(i * rel + rotation);
