@@ -83,19 +83,19 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
     var converter = _controller.$inputConverter;
     if (_controller.config.usePointer ?? false) {
       child = MouseRegion(
-        onEnter: converter!.pointerEnter,
-        onExit: converter.pointerExit,
-        onHover: converter.pointerHover,
+        onEnter: converter?.pointerEnter,
+        onExit: converter?.pointerExit,
+        onHover: converter?.pointerHover,
         cursor: MouseCursor.defer,
         opaque: widget.mouseOpaque,
         child: Listener(
           child: child,
           behavior: widget.pointerBehaviour,
-          onPointerDown: converter.pointerDown,
-          onPointerUp: converter.pointerUp,
-          onPointerCancel: converter.pointerCancel,
-          onPointerMove: converter.pointerMove,
-          onPointerSignal: converter.pointerSignal,
+          onPointerDown: converter?.pointerDown,
+          onPointerUp: converter?.pointerUp,
+          onPointerCancel: converter?.pointerCancel,
+          onPointerMove: converter?.pointerMove,
+          onPointerSignal: converter?.pointerSignal,
         ),
       );
     }
@@ -104,7 +104,7 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
         onKey: converter!.handleKey,
         autofocus: true,
         includeSemantics: false,
-        focusNode: converter.keyboard!.focusNode,
+        focusNode: converter.keyboard?.focusNode ?? FocusNode(),
         child: child,
       );
     }
