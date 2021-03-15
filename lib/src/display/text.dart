@@ -298,12 +298,12 @@ class GText extends GDisplayObject {
     ui.Locale? locale,
     ui.Paint? background,
     ui.Paint? foreground,
+    String? ellipsis,
+    int? maxLines,
     List<ui.Shadow>? shadows,
     List<ui.FontFeature>? fontFeatures,
     ui.TextAlign textAlign = ui.TextAlign.left,
     ui.TextDirection direction = ui.TextDirection.ltr,
-    String? ellipsis,
-    int? maxLines,
   }) {
     if (w == double.infinity && textAlign != ui.TextAlign.left) {
       throw "[StaticText] To use $textAlign you need to specify the width";
