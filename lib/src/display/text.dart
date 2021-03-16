@@ -338,6 +338,8 @@ class GText extends GDisplayObject {
         ellipsis: ellipsis,
         textAlign: textAlign,
         textDirection: direction,
+        maxLines: maxLines,
+        ellipsis: ellipsis,
       ),
     );
     doc?.addChild(tf);
