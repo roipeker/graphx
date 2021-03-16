@@ -520,16 +520,16 @@ class GTween {
     }
   }
 
-  static bool isTweening(Object target){
+  static bool isTweening(Object target) {
     var t = _first;
     while (t != null) {
       var next = t._next;
       if (t.target == target || t._animatableTarget == target) {
-        return true ;
+        return true;
       }
       t = next;
     }
-    return false ;
+    return false;
   }
 
   /// Removes a Tween based on the the target object.
