@@ -21,6 +21,7 @@ class ExpanderFabMenu extends StatelessWidget {
               Icons.arrow_back,
               color: Colors.black,
             ),
+            onPressed: () {},
           ),
         ),
         body: MyMenu(
@@ -61,7 +62,6 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    final dur = Duration(seconds: 1);
     // anim = AnimationController(
     //   vsync: this,
     //   duration: dur,
@@ -173,12 +173,10 @@ class MyCoolMenuScene extends GSprite {
     button = MyButton();
   }
 
-  GRect _position;
   double buttonY;
   GShape curtain;
 
   void updatePosition(GRect position) {
-    _position = position;
     button.x = position.x + position.width / 2;
     button.y = buttonY = position.y + position.height / 2;
   }
@@ -220,7 +218,6 @@ class MyCoolMenuScene extends GSprite {
             }
           },
         );
-
       } else {
         curtain.tween(
           duration: .5,
@@ -288,22 +285,22 @@ class MyCoolMenuScene extends GSprite {
         doc: menuContainer,
       );
       itm.alignPivot();
-      itm.alpha=0;
+      itm.alpha = 0;
       itm.y = i * 34.0;
       items.add(itm);
     }
     menuContainer.alignPivot();
-    menuContainer.setPosition(sw/2,sh/2);
+    menuContainer.setPosition(sw / 2, sh / 2);
   }
 
   void showMenuNow() {
-    var len = items.length ;
+    var len = items.length;
     for (var i = 0; i < items.length; ++i) {
       var itm = items[i];
       itm.y = i * 34.0;
-      double ta = isOpen ? 1 : 0 ;
-      if( isOpen ){
-        itm.tween(duration: .45, delay: .25 + ((len-1)-i) * .09, alpha: ta);
+      double ta = isOpen ? 1 : 0;
+      if (isOpen) {
+        itm.tween(duration: .45, delay: .25 + ((len - 1) - i) * .09, alpha: ta);
       } else {
         itm.tween(duration: .12, delay: 0, alpha: 0, overwrite: 1);
       }

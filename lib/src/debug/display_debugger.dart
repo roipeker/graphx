@@ -30,7 +30,7 @@ class DisplayBoundsDebugger {
     ..strokeWidth = 1;
 
   final GDisplayObjectContainer _root;
-  ui.Canvas canvas;
+  ui.Canvas? canvas;
   static final GRect _sHelpRect = GRect();
 
   DisplayBoundsDebugger(GDisplayObjectContainer root) : _root = root;
@@ -59,8 +59,8 @@ class DisplayBoundsDebugger {
     final linePaint = _paint.clone();
     linePaint.color = linePaint.color.withOpacity(.3);
     final rect = _sHelpRect.toNative();
-    canvas.drawLine(rect.topLeft, rect.bottomRight, linePaint);
-    canvas.drawLine(rect.topRight, rect.bottomLeft, linePaint);
-    canvas.drawRect(rect, _paint);
+    canvas!.drawLine(rect.topLeft, rect.bottomRight, linePaint);
+    canvas!.drawLine(rect.topRight, rect.bottomLeft, linePaint);
+    canvas!.drawRect(rect, _paint);
   }
 }

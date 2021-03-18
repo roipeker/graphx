@@ -17,7 +17,7 @@ String _tagPaddingChar = ', ';
 /// [tagPaddingCount] should be applied manually if you wanna have a cleaner
 /// tabulated view.
 void traceConfig({
-  String customTag,
+  String? customTag,
   int tagPaddingCount = 0,
   String tagPaddingChar = ' ',
   bool showFilename = false,
@@ -30,12 +30,12 @@ void traceConfig({
   _tagPaddingCount = tagPaddingCount;
   _tagPaddingChar = tagPaddingChar;
   _customTag = customTag ?? 'graphx™🌀';
-  _showFilename = showFilename ?? false;
-  _showLinenumber = showLinenumber ?? false;
-  _showClassname = showClassname ?? false;
-  _showMethodname = showMethodname ?? false;
-  _showOutsideTag = showOutsideTag ?? false;
-  _separator = argsSeparator ?? ', ';
+  _showFilename = showFilename;
+  _showLinenumber = showLinenumber;
+  _showClassname = showClassname;
+  _showMethodname = showMethodname;
+  _showOutsideTag = showOutsideTag;
+  _separator = argsSeparator;
   _useStack = _showFilename || _showClassname || _showMethodname;
 }
 
@@ -43,16 +43,17 @@ void traceConfig({
 /// `trace` works. It has up to 10 arguments slots so you can pass any type of
 /// object to be printed. The way trace() shows output in the console can be
 /// defined with [traceConfig()].
-void trace(Object arg1, [
-  Object arg2,
-  Object arg3,
-  Object arg4,
-  Object arg5,
-  Object arg6,
-  Object arg7,
-  Object arg8,
-  Object arg9,
-  Object arg10,
+void trace(
+  Object arg1, [
+  Object? arg2,
+  Object? arg3,
+  Object? arg4,
+  Object? arg5,
+  Object? arg6,
+  Object? arg7,
+  Object? arg8,
+  Object? arg9,
+  Object? arg10,
 ]) {
   ++_traceCount;
   final outputList = <String>[
@@ -118,8 +119,7 @@ String _stackCommon(String stack) {
   var callLine = locationParts[1];
   var filename = filePath.substring(
       filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
-  String methodName,
-      className = '';
+  String methodName, className = '';
   var output = ''; //ˇ
   if (_showFilename) {
     output += '$filename ';
@@ -138,7 +138,7 @@ String _stackCommon(String stack) {
     className = elements.removeAt(0);
     methodName = elements.join('.');
     methodName =
-    '${methodName.replaceAll(_anonymousMethodTag, '<⁕>')}$_sufixCall';
+        '${methodName.replaceAll(_anonymousMethodTag, '<⁕>')}$_sufixCall';
     if (_showClassname) {
       output += '‣ $className ';
     }

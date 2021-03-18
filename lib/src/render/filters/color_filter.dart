@@ -48,7 +48,7 @@ class GColorFilters {
 }
 
 class GColorMatrixFilter extends GBaseFilter {
-  ColorFilter colorFilter;
+  ColorFilter? colorFilter;
 
   GColorMatrixFilter(this.colorFilter);
 

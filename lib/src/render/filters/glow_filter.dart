@@ -23,7 +23,7 @@ class GlowFilter extends GComposerFilter {
 
   ui.Color get color => _color;
 
-  set color(ui.Color value) {
+  set color(ui.Color? value) {
     if (_color == value) return;
     _color = value ?? kColorBlack;
     dirty = true;
@@ -53,9 +53,9 @@ class GlowFilter extends GComposerFilter {
     this.hideObject = hideObject;
   }
 
-  ui.ColorFilter _colorFilter;
-  ui.MaskFilter _maskFilter;
-  ui.ImageFilter _imageFilter;
+  ui.ColorFilter? _colorFilter;
+  ui.MaskFilter? _maskFilter;
+  ui.ImageFilter? _imageFilter;
 
   final _rect = GRect();
 
@@ -81,7 +81,7 @@ class GlowFilter extends GComposerFilter {
       maxBlur = Math.max(_blurX, _blurY) / 2;
       if (maxBlur < 1) maxBlur = 1;
     }
-    _maskFilter = ui.MaskFilter.blur(style ?? ui.BlurStyle.normal, maxBlur);
+    _maskFilter = ui.MaskFilter.blur(style, maxBlur);
     _imageFilter = ui.ImageFilter.blur(sigmaX: _blurX, sigmaY: _blurY);
     _colorFilter = ui.ColorFilter.mode(
       _color.withAlpha(255),
@@ -98,13 +98,13 @@ class GlowFilter extends GComposerFilter {
   // var _iterations = 0;
 
   @override
-  void process(ui.Canvas canvas, Function applyPaint, [int processCount = 1]) {
+  void process(ui.Canvas? canvas, Function applyPaint, [int processCount = 1]) {
     // trace('rect is: ', _outBounds);
     // var a = GxRect(0, 0, layerBounds.width - layerBounds.x,
     //     layerBounds.height - layerBounds.y);
     // trace(layerBounds, _rect);
     // canvas.saveLayer(layerBounds.toNative(), paint);
-    canvas.saveLayer(null, paint);
+    canvas!.saveLayer(null, paint);
     applyPaint(canvas);
     canvas.restore();
     if (++processCount <= iterations) {

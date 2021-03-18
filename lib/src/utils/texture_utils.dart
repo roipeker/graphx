@@ -10,25 +10,25 @@ mixin GTextureUtils {
   static void scale9Rect(
     GTexture tx,
     double x, {
-    double y,
-    double w,
-    double h,
+    double? y,
+    double? w,
+    double? h,
     bool adjustScale = false,
   }) {
     y ??= x;
     w ??= -x;
     h ??= -y;
     if (adjustScale) {
-      x *= tx.scale;
-      y *= tx.scale;
-      w *= tx.scale;
-      h *= tx.scale;
+      x *= tx.scale!;
+      y *= tx.scale!;
+      w *= tx.scale!;
+      h *= tx.scale!;
     }
     if (w < 0) {
-      w = tx.width + w * 2;
+      w = tx.width! + w * 2;
     }
     if (h < 0) {
-      h = tx.height + h * 2;
+      h = tx.height! + h * 2;
     }
     var out = GRect(x, y, w, h);
     tx.scale9Grid = out;
@@ -39,7 +39,7 @@ mixin GTextureUtils {
     double radius = 20,
     double x = 0,
     double y = 0,
-    String id,
+    String? id,
   }) async {
     _g.clear()..beginFill(color).drawCircle(x, y, radius);
     return await _drawShape(id);
@@ -51,7 +51,7 @@ mixin GTextureUtils {
     double y = 0,
     double w = 20,
     double h = 20,
-    String id,
+    String? id,
   }) async {
     _g.clear()..beginFill(color).drawRect(x, y, w, h);
     return (await _drawShape(id));
@@ -64,7 +64,7 @@ mixin GTextureUtils {
     double w = 20,
     double h = 20,
     double r = 8,
-    String id,
+    String? id,
   }) async {
     _g.clear()..beginFill(color).drawRoundRect(x, y, w, h, r);
     return (await _drawShape(id));
@@ -75,7 +75,7 @@ mixin GTextureUtils {
     double w = 20,
     double h = 20,
     double rotation = 0,
-    String id,
+    String? id,
   }) async {
     _g.clear()
         .beginFill(color)
@@ -88,7 +88,7 @@ mixin GTextureUtils {
     return tx;
   }
 
-  static Future<GTexture> _drawShape([String id]) async {
+  static Future<GTexture> _drawShape([String? id]) async {
     final tx = await _helperShape.createImageTexture(
       true,
       GTextureUtils.resolution,
@@ -102,15 +102,15 @@ mixin GTextureUtils {
   static List<GTexture> getRectAtlasFromGTexture(
     GTexture base,
     int w, {
-    int h,
+    int? h,
     int padding = 0,
     double scale = 1,
   }) {
     h ??= w;
 
     /// create SubTextures from the main Texture.
-    var cols = base.sourceRect.width / w;
-    var rows = base.sourceRect.height / h;
+    var cols = base.sourceRect!.width/ w;
+    var rows = base.sourceRect!.height/ h;
     var total = cols * rows;
     var output = <GTexture>[];
     final _w = w.toDouble();

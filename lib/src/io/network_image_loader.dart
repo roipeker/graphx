@@ -11,19 +11,19 @@ class NetworkImageEvent {
   int bytesLoaded = 0;
 
   /// only svg responses.
-  String svgString;
-  SvgData svgData;
+  String? svgString;
+  SvgData? svgData;
 
-  double get percentLoaded => bytesLoaded / contentLength;
-  Image image;
+  double get percentLoaded => bytesLoaded / contentLength!;
+  Image? image;
   double scale = 1;
 
-  GTexture _texture;
+  GTexture? _texture;
   final http.BaseResponse response;
 
-  GTexture get texture {
+  GTexture? get texture {
     if (image == null) return null;
-    _texture ??= GTexture.fromImage(image, scale);
+    _texture ??= GTexture.fromImage(image!, scale);
     return _texture;
   }
 
@@ -32,10 +32,10 @@ class NetworkImageEvent {
   bool get isImage => image != null;
   bool get isSvg => svgString != null;
 
-  int get contentLength => response.contentLength;
+  int? get contentLength => response.contentLength;
   int get statusCode => response.statusCode;
-  String get reasonPhrase => response.reasonPhrase;
-  http.BaseRequest get request => response.request;
+  String? get reasonPhrase => response.reasonPhrase;
+  http.BaseRequest? get request => response.request;
   Map<String, String> get headers => response.headers;
   bool get isError => statusCode > 300;
 
@@ -57,12 +57,12 @@ class NetworkImageLoader {
 
   static Future<NetworkImageEvent> load(
     String url, {
-    int width,
-    int height,
+    int? width,
+    int? height,
     double scale = 1,
-    Function(NetworkImageEvent) onComplete,
-    Function(NetworkImageEvent) onProgress,
-    Function(NetworkImageEvent) onError,
+    Function(NetworkImageEvent)? onComplete,
+    Function(NetworkImageEvent)? onProgress,
+    Function(NetworkImageEvent)? onError,
   }) async {
     Completer completer = Completer<NetworkImageEvent>();
     var loadedBytes = <int>[];
@@ -73,52 +73,60 @@ class NetworkImageLoader {
     var response = _client.send(_request);
     void dispatchError(NetworkImageEvent eventData) {
       if (onError != null) {
-        onError?.call(eventData);
+        onError.call(eventData);
         completer.complete(eventData);
       } else {
         completer.completeError(eventData);
       }
     }
 
-    response.asStream().listen((r) {
-      var eventData = NetworkImageEvent(r);
-      eventData.scale = scale;
-      r.stream.listen((chunk) {
-        loadedBytes.addAll(chunk);
-        bytesLoaded += chunk.length;
-        eventData.bytesLoaded = bytesLoaded;
-        onProgress?.call(eventData);
-      }, onError: (error) {
-        dispatchError(eventData);
-      }, onDone: () async {
-        if (eventData.isError) {
-          dispatchError(eventData);
-          return null;
-        }
-        var bytes = Uint8List.fromList(loadedBytes);
-        final codec = await instantiateImageCodec(
-          bytes,
-          allowUpscaling: false,
-          targetWidth: width,
-          targetHeight: height,
+    response.asStream().listen(
+      (r) {
+        var eventData = NetworkImageEvent(r);
+        eventData.scale = scale;
+        r.stream.listen(
+          (chunk) {
+            loadedBytes.addAll(chunk);
+            bytesLoaded += chunk.length;
+            eventData.bytesLoaded = bytesLoaded;
+            onProgress?.call(eventData);
+          },
+          onError: (error) {
+            dispatchError(eventData);
+          },
+          onDone: () async {
+            if (eventData.isError) {
+              dispatchError(eventData);
+              return null;
+            }
+            var bytes = Uint8List.fromList(loadedBytes);
+            final codec = await instantiateImageCodec(
+              bytes,
+              allowUpscaling: false,
+              targetWidth: width,
+              targetHeight: height,
+            );
+            eventData.image = (await codec.getNextFrame()).image;
+            onComplete?.call(eventData);
+            completer.complete(eventData);
+            //TODO fix this
+            // return eventData;
+
+            // Save the file
+            // File file = new File('$dir/$filename');
+            // final Uint8List bytes = Uint8List(r.contentLength);
+            // int offset = 0;
+            // for (List<int> chunk in chunks) {
+            //   bytes.setRange(offset, offset + chunk.length, chunk);
+            //   offset += chunk.length;
+            // }
+            // await file.writeAsBytes(bytes);
+            // return;
+          },
         );
-        eventData.image = (await codec.getNextFrame()).image;
-        onComplete?.call(eventData);
-        completer.complete(eventData);
-        return eventData;
-        // Save the file
-        // File file = new File('$dir/$filename');
-        // final Uint8List bytes = Uint8List(r.contentLength);
-        // int offset = 0;
-        // for (List<int> chunk in chunks) {
-        //   bytes.setRange(offset, offset + chunk.length, chunk);
-        //   offset += chunk.length;
-        // }
-        // await file.writeAsBytes(bytes);
-        // return;
-      });
-    });
-    return completer.future;
+      },
+    );
+    return completer.future as FutureOr<NetworkImageEvent>;
     // var result = await client.get(url);
     // var bytes = result.bodyBytes;
     // final codec = await instantiateImageCodec(

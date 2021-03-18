@@ -1,12 +1,12 @@
 part of gtween;
 
 class GTweenableBlur with GTweenable {
-  static GTweenable wrap(Object target) {
+  static GTweenable? wrap(Object target) {
     if (target is! GBlurFilter) return null;
     return GTweenableBlur(target);
   }
 
-  GBlurFilter value;
+  late GBlurFilter value;
 
   GTweenableBlur(GBlurFilter target) {
     value = this.target = target;
@@ -19,22 +19,22 @@ class GTweenableBlur with GTweenable {
       };
 
   GTween tween({
-    @required double duration,
-    Object blurX,
-    Object blurY,
-    EaseFunction ease,
-    double delay,
-    bool useFrames,
+    required double duration,
+    Object? blurX,
+    Object? blurY,
+    EaseFunction? ease,
+    double? delay,
+    bool? useFrames,
     int overwrite = 1,
-    VoidCallback onStart,
-    Object onStartParams,
-    VoidCallback onComplete,
-    Object onCompleteParams,
-    VoidCallback onUpdate,
-    Object onUpdateParams,
-    bool runBackwards,
-    bool immediateRender,
-    Map startAt,
+    VoidCallback? onStart,
+    Object? onStartParams,
+    VoidCallback? onComplete,
+    Object? onCompleteParams,
+    VoidCallback? onUpdate,
+    Object? onUpdateParams,
+    bool? runBackwards,
+    bool? immediateRender,
+    Map? startAt,
   }) {
     final targetMap = {
       if (blurX != null) 'blurX': blurX,
@@ -63,12 +63,12 @@ class GTweenableBlur with GTweenable {
 }
 
 class GTweenableDropShadowFilter with GTweenable {
-  static GTweenable wrap(Object target) {
+  static GTweenable? wrap(Object target) {
     if (target is! GDropShadowFilter) return null;
     return GTweenableDropShadowFilter(target);
   }
 
-  GDropShadowFilter value;
+  late GDropShadowFilter value;
 
   GTweenableDropShadowFilter(GDropShadowFilter target) {
     value = this.target = target;
@@ -91,25 +91,25 @@ class GTweenableDropShadowFilter with GTweenable {
       };
 
   GTween tween({
-    @required double duration,
-    Object blurX,
-    Object blurY,
-    Object angle,
-    Object distance,
-    Color color,
-    EaseFunction ease,
-    double delay,
-    bool useFrames,
+    required double duration,
+    Object? blurX,
+    Object? blurY,
+    Object? angle,
+    Object? distance,
+    Color? color,
+    EaseFunction? ease,
+    double? delay,
+    bool? useFrames,
     int overwrite = 1,
-    VoidCallback onStart,
-    Object onStartParams,
-    VoidCallback onComplete,
-    Object onCompleteParams,
-    VoidCallback onUpdate,
-    Object onUpdateParams,
-    bool runBackwards,
-    bool immediateRender,
-    Map startAt,
+    VoidCallback? onStart,
+    Object? onStartParams,
+    VoidCallback? onComplete,
+    Object? onCompleteParams,
+    VoidCallback? onUpdate,
+    Object? onUpdateParams,
+    bool? runBackwards,
+    bool? immediateRender,
+    Map? startAt,
   }) {
     final targetMap = {
       if (blurX != null) 'blurX': blurX,
@@ -141,12 +141,12 @@ class GTweenableDropShadowFilter with GTweenable {
 }
 
 class GTweenableGlowFilter with GTweenable {
-  static GTweenable wrap(Object target) {
+  static GTweenable? wrap(Object target) {
     if (target is! GlowFilter) return null;
     return GTweenableGlowFilter(target);
   }
 
-  GlowFilter value;
+  late GlowFilter value;
 
   GTweenableGlowFilter(GlowFilter target) {
     value = this.target = target;
@@ -167,23 +167,23 @@ class GTweenableGlowFilter with GTweenable {
       };
 
   GTween tween({
-    @required double duration,
-    Object blurX,
-    Object blurY,
-    Color color,
-    EaseFunction ease,
-    double delay,
-    bool useFrames,
+    required double duration,
+    Object? blurX,
+    Object? blurY,
+    Color? color,
+    EaseFunction? ease,
+    double? delay,
+    bool? useFrames,
     int overwrite = 1,
-    VoidCallback onStart,
-    Object onStartParams,
-    VoidCallback onComplete,
-    Object onCompleteParams,
-    VoidCallback onUpdate,
-    Object onUpdateParams,
-    bool runBackwards,
-    bool immediateRender,
-    Map startAt,
+    VoidCallback? onStart,
+    Object? onStartParams,
+    VoidCallback? onComplete,
+    Object? onCompleteParams,
+    VoidCallback? onUpdate,
+    Object? onUpdateParams,
+    bool? runBackwards,
+    bool? immediateRender,
+    Map? startAt,
   }) {
     final targetMap = {
       if (blurX != null) 'blurX': blurX,

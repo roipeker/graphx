@@ -18,9 +18,9 @@ class GMovieClip extends GBitmap {
 
   /// stops the playback when reaching this frame.
   int targetFrame = -1;
-  GBitmap bitmap;
+  GBitmap? bitmap;
 
-  Signal _onFramesComplete;
+  Signal? _onFramesComplete;
 
   Signal get onFramesComplete => _onFramesComplete ??= Signal();
 
@@ -31,16 +31,16 @@ class GMovieClip extends GBitmap {
 
   set fps(double value) => speed = 1 / value;
 
-  GMovieClip({List<GTexture> frames, double fps = 30}) {
+  GMovieClip({required List<GTexture> frames, double fps = 30}) {
     setFrameTextures(frames);
     this.fps = fps;
   }
 
-  List<GTexture> _frameTextures;
+  List<GTexture>? _frameTextures;
 
   List<GTexture> setFrameTextures(List<GTexture> list) {
-    _frameTextures = list ?? [];
-    frameCount = list?.length ?? 0;
+    _frameTextures = list;
+    frameCount = list.length;
     currentFrame = 0;
     texture = list.isNotEmpty ? list[0] : null;
     return list;
@@ -50,7 +50,7 @@ class GMovieClip extends GBitmap {
     if (_frameTextures == null) return;
     currentFrame = frame;
     currentFrame %= frameCount;
-    texture = _frameTextures[currentFrame];
+    texture = _frameTextures![currentFrame];
   }
 
   void gotoAndPlay(int frame, {int lastFrame = -1}) {
@@ -105,7 +105,7 @@ class GMovieClip extends GBitmap {
         if (targetFrame > -1 && currentFrame == targetFrame) {
           playing = false;
         }
-        texture = _frameTextures[currentFrame];
+        texture = _frameTextures![currentFrame];
       }
       accumulatedTime %= speed;
     }

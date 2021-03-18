@@ -17,7 +17,7 @@ mixin Pool {
   /// Remember to NOT KEEP any references to the object after moving it to
   /// the pool.
   static void putPoint(GPoint point) {
-    if (point != null) _points.add(point);
+    _points.add(point);
   }
 
   static GMatrix getMatrix([
@@ -33,7 +33,7 @@ mixin Pool {
   }
 
   static void putMatrix(GMatrix matrix) {
-    if (matrix != null) _matrices.add(matrix);
+    _matrices.add(matrix);
   }
 
   static GRect getRect([
@@ -47,6 +47,6 @@ mixin Pool {
   }
 
   static void putRect(GRect rect) {
-    if (rect != null) _rectangles.add(rect);
+    _rectangles.add(rect);
   }
 }
