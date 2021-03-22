@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class FeelingSwitch extends GSprite {
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   @override
   void addedToStage() {
-    stage.color = const Color(0xffF7F7F7);
+    stage!.color = const Color(0xffF7F7F7);
     var container = GSprite();
     var tw = 100.0;
     var th = 40.0;
@@ -100,7 +100,7 @@ class FeelingSwitch extends GSprite {
       toggle();
     });
 
-    stage.onResized.add(() {
+    stage!.onResized.add(() {
       var sc = sw / tw;
       container.scale = sc;
       container.setPosition(sw / 2, sh / 2);

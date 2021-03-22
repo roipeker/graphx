@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class UniversoFlutterScene extends GSprite {
-  GSprite logo, fLogo;
-  GShape planetCirc, ringBack, ringFront;
-  GShape fLogo1, fLogo2, fLogo3;
+  late GSprite logo, fLogo;
+  late GShape planetCirc, ringBack, ringFront;
+  GShape? fLogo1, fLogo2, fLogo3;
 
   @override
   void addedToStage() {
-    stage.color = Color(0xff212121);
-    stage.maskBounds = true;
-    stage.showBoundsRect = true;
+    stage!.color = Color(0xff212121);
+    stage!.maskBounds = true;
+    stage!.showBoundsRect = true;
     _buildLogo();
   }
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   void _buildLogo() {
     _buildStars();
@@ -52,8 +52,8 @@ class UniversoFlutterScene extends GSprite {
     fLogo1 = _buildPill(fLogo, 144, fH);
     fLogo2 = _buildPill(fLogo, 97, fH);
     fLogo3 = _buildPill(fLogo, 97, fH);
-    fLogo2.rotation = deg2rad(90);
-    fLogo2.y = fLogo3.y = 54;
+    fLogo2!.rotation = deg2rad(90);
+    fLogo2!.y = fLogo3!.y = 54;
     fLogo.alignPivot();
     fLogo.y -= 54;
 
@@ -137,9 +137,9 @@ class UniversoFlutterScene extends GSprite {
 
     fLogo.setProps(rotation: 0);
 
-    fLogo1.setProps(scaleX: 0.5, scaleY: .7, alpha: 0, rotation: 1.9);
-    fLogo2.setProps(scaleX: 0.2, scaleY: .5, alpha: 0, rotation: 0);
-    fLogo3.setProps(scaleX: 0.6, scaleY: .2, alpha: 0, rotation: rot);
+    fLogo1!.setProps(scaleX: 0.5, scaleY: .7, alpha: 0, rotation: 1.9);
+    fLogo2!.setProps(scaleX: 0.2, scaleY: .5, alpha: 0, rotation: 0);
+    fLogo3!.setProps(scaleX: 0.6, scaleY: .2, alpha: 0, rotation: rot);
 
     logo.tween(duration: 1.6, scale: 1, rotation: 0, ease: GEase.easeInOutCirc);
     planetCirc.tween(duration: 2.5, alpha: 1, ease: GEase.easeInSine);
@@ -158,14 +158,14 @@ class UniversoFlutterScene extends GSprite {
       alpha: 1,
     );
 
-    fLogo1.tween(
+    fLogo1!.tween(
       duration: .4,
       delay: .4,
       scale: 1,
       alpha: 1,
       overwrite: 0,
     );
-    fLogo1.tween(
+    fLogo1!.tween(
       duration: .8,
       delay: .6,
       rotation: 0,
@@ -173,14 +173,14 @@ class UniversoFlutterScene extends GSprite {
       overwrite: 0,
     );
 
-    fLogo2.tween(
+    fLogo2!.tween(
       delay: .9,
       duration: .4,
       scale: 1,
       alpha: 1,
       overwrite: 0,
     );
-    fLogo2.tween(
+    fLogo2!.tween(
       delay: .9,
       duration: .7,
       rotation: rot,
@@ -188,14 +188,14 @@ class UniversoFlutterScene extends GSprite {
       overwrite: 0,
     );
 
-    fLogo3.tween(
+    fLogo3!.tween(
       delay: 1,
       duration: .5,
       scale: 1,
       alpha: 1,
       overwrite: 0,
     );
-    fLogo3.tween(
+    fLogo3!.tween(
       delay: 1,
       duration: .7,
       rotation: 0,

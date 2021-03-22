@@ -8,19 +8,19 @@ class Star extends GSprite {
   double dotSize = 10;
   bool active = false;
 
-  GShape _star;
+  late GShape _star;
 
-  GSprite _broken;
+  GSprite? _broken;
 
-  GShape _dot;
+  late GShape _dot;
 
   Star() {
     _initUi();
     mouseChildren = false;
   }
 
-  static GTexture _tx1;
-  static GTexture _tx2;
+  static GTexture? _tx1;
+  static GTexture? _tx2;
 
   Future<bool> createTemplate() async {
     var st = GShape();
@@ -77,7 +77,7 @@ class Star extends GSprite {
       await createTemplate();
     }
     _broken = GSprite();
-    addChild(_broken);
+    addChild(_broken!);
     var bmp1 = GBitmap(_tx1);
     var bmp2 = GBitmap(_tx2);
     // bmp1.nativePaint.filterQuality = FilterQuality.medium;
@@ -86,18 +86,18 @@ class Star extends GSprite {
     bmp1.pivotY = 24;
     bmp2.pivotX = 11;
     bmp2.pivotY = 24;
-    _broken.addChild(bmp1);
-    _broken.addChild(bmp2);
-    _broken.visible = false;
+    _broken!.addChild(bmp1);
+    _broken!.addChild(bmp2);
+    _broken!.visible = false;
 
     /// manual adjustment.
-    _broken.pivotX = bmp2.pivotX - 3;
-    _broken.pivotY = -3;
+    _broken!.pivotX = bmp2.pivotX - 3;
+    _broken!.pivotY = -3;
   }
 
   _handleDown(e) {
     if (!_selected) return;
-    stage.onMouseUp.addOnce(_handleUp);
+    stage!.onMouseUp.addOnce(_handleUp);
     _star.tween(duration: .24, scale: .86, overwrite: 0);
   }
 
@@ -119,14 +119,14 @@ class Star extends GSprite {
 
       final _color = kUnselectedSColor.withAlpha(0);
 
-      _broken.setProps(
+      _broken!.setProps(
         y: 0,
         alpha: 1,
         visible: true,
         colorize: _color,
       );
-      var p1 = _broken.children[0];
-      var p2 = _broken.children[1];
+      var p1 = _broken!.children[0];
+      var p2 = _broken!.children[1];
       p1.setProps(rotation: 0, y: 0);
       p2.setProps(rotation: 0, y: 0);
 
@@ -144,7 +144,7 @@ class Star extends GSprite {
         ease: GEase.easeOutQuad,
       );
 
-      _broken.tween(
+      _broken!.tween(
         duration: .3,
         delay: .1,
         colorize: kUnselectedSColor,
@@ -152,13 +152,13 @@ class Star extends GSprite {
       );
 
       var blur = GBlurFilter(0, 0);
-      _broken.filters = [blur];
+      _broken!.filters = [blur];
       var a = 0.0.twn;
       a.tween(8, duration: .5, delay: .16, onUpdate: () {
         blur.blurY = blur.blurX = a.value;
       });
 
-      _broken.tween(
+      _broken!.tween(
         duration: .6,
         overwrite: 0,
         y: 50,
@@ -167,7 +167,7 @@ class Star extends GSprite {
         alpha: 0,
         ease: GEase.easeInCubic,
         onComplete: () {
-          _broken.visible = false;
+          _broken!.visible = false;
           _star.visible = false;
         },
       );
@@ -179,7 +179,7 @@ class Star extends GSprite {
       );
     } else {
       GTween.killTweensOf(_broken);
-      _broken.visible = false;
+      _broken!.visible = false;
       _star.setProps(y: 0, rotation: 0, scale: 0, visible: true);
       _dot.tween(duration: .6, scale: 0);
       _star.tween(

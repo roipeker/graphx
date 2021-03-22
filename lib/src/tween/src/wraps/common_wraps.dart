@@ -29,7 +29,7 @@ class GTweenableDouble with GTweenable, SingleValueTweenMixin {
   static GTweenable? wrap(Object? target) =>
       target is double ? GTweenableDouble(target) : null;
 
-  double? value;
+  double value = 0.0;
 
   GTweenableDouble(double target) {
     value = this.target = target;

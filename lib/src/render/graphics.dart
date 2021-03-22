@@ -588,14 +588,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     int sides, [
     double rotation = 0,
   ]) {
-    final points = List<Offset?>.filled(sides, Offset(0, 0));
+    final points = List<Offset>.filled(sides, Offset(0, 0));
     final rel = 2 * Math.PI / sides;
     for (var i = 1; i <= sides; ++i) {
       final px = x + radius * Math.cos(i * rel + rotation);
       final py = y + radius * Math.sin(i * rel + rotation);
       points[i - 1] = Offset(px, py);
     }
-    _path!.addPolygon(points as List<ui.Offset>, true);
+    _path!.addPolygon(points, true);
     return this;
   }
 
@@ -743,7 +743,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
         } else {
           canvas!.drawVertices(
             graph.vertices!.rawData!,
-            graph.vertices!.blendMode,
+            graph.vertices!.blendMode!,
             fill,
           );
         }
@@ -834,7 +834,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     List<int>? indices,
     List<double>? uvtData,
     List<int>? hexColors,
-    BlendMode blendMode = BlendMode.src,
+    BlendMode? blendMode = BlendMode.src,
     Culling culling = Culling.positive,
   ]) {
     /// will only work if it has a fill.
@@ -922,8 +922,8 @@ extension ExtSkiaPaintCustom on Paint {
 class _GraphVertices {
   List<double?>? vertices, uvtData, adjustedUvtData;
   List<int>? colors, indices;
-  BlendMode blendMode;
-  VertexMode mode;
+  BlendMode? blendMode;
+  VertexMode? mode;
   Path? _path;
   Rect? _bounds;
   late bool _normalizedUvt;

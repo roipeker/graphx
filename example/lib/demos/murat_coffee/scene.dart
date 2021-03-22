@@ -9,7 +9,7 @@ class CoffeeItemScene extends GSprite {
     var product = _ProductSerious();
     // product = _ProductPlayful();
     product.loadImage(imageUrl);
-    product.setPosition(stage.stageWidth / 4, 0);
+    product.setPosition(stage!.stageWidth / 4, 0);
     addChild(product);
   }
 }
@@ -30,9 +30,9 @@ class _ProductSerious extends _ProductPlayful {
 }
 
 class _ProductPlayful extends GSprite {
-  String url;
-  GBitmap image;
-  GShape shadow;
+  late String url;
+  late GBitmap image;
+  late GShape shadow;
 
   double shadowY = 0.0;
   double imageY = 0.0;
@@ -57,8 +57,8 @@ class _ProductPlayful extends GSprite {
       ..graphics.beginFill(kColorBlack).drawCircle(0, 0, itmW / 2).endFill();
     shadow.filters = [GBlurFilter(8, 8)];
     shadow.scaleY = .2;
-    shadowY = shadow.y = image.bounds.height + shadow.height;
-    shadow.x = image.bounds.width / 2;
+    shadowY = shadow.y = image.bounds!.height + shadow.height;
+    shadow.x = image.bounds!.width / 2;
 
     addChild(image);
     addChild(shadow);

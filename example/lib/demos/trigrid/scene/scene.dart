@@ -16,30 +16,30 @@ class DrawTriangleGridScene extends GSprite {
   double sep = 50 / res;
   int cols = 5 * res, rows = 4 * res;
   double spring = .0025, stiff = .02, damp = .98, radius = targetRadius;
-  double radiusSq;
+  late double radiusSq;
 
-  List<GraphPoint> dots;
-  TriangleGrid triGrid;
-  GSprite container;
+  late List<GraphPoint> dots;
+  TriangleGrid? triGrid;
+  late GSprite container;
 
   @override
   Future<void> addedToStage() async {
-    stage.color = Colors.grey.shade800;
+    stage!.color = Colors.grey.shade800;
 
     container = GSprite();
     addChild(container);
     mouseChildren = false;
-    var texture = await ResourceLoader.loadTexture(
-        'assets/trigrid/cute_dog.png', 1, 'dog');
+    var texture = await (ResourceLoader.loadTexture(
+        'assets/trigrid/cute_dog.png', 1, 'dog') as Future<GTexture>);
 
-    cols = texture.width ~/ sep;
-    rows = texture.height ~/ sep;
+    cols = texture.width! ~/ sep;
+    rows = texture.height! ~/ sep;
     var total = cols * rows;
 
     dots = List.generate(total, (index) {
       var d = GraphPoint();
-      var idx = index % cols ?? 0;
-      var idy = index ~/ cols ?? 0;
+      var idx = index % cols;
+      var idy = index ~/ cols;
       if (index == 0) {
         d.tx = d.x = 0;
         d.ty = d.y = 0;
@@ -53,21 +53,21 @@ class DrawTriangleGridScene extends GSprite {
     triGrid = TriangleGrid(res: sep, cols: cols, rows: rows);
 
     /// show the triangles lines
-    triGrid.debugTriangles = true;
+    triGrid!.debugTriangles = true;
 
-    container.addChildAt(triGrid, 0);
-    triGrid.texture = texture;
-    triGrid.draw();
+    container.addChildAt(triGrid!, 0);
+    triGrid!.texture = texture;
+    triGrid!.draw();
   }
 
   void adjustContainer() {
     /// resize container based on the image dimensions.
-    var tw = triGrid.texture.width;
-    var th = triGrid.texture.height;
-    var scaleTo = stage.stageHeight / th;
+    var tw = triGrid!.texture!.width!;
+    var th = triGrid!.texture!.height!;
+    var scaleTo = stage!.stageHeight / th;
     container.y = 0;
     container.scale = scaleTo;
-    container.x = (stage.stageWidth - (tw * scaleTo)) / 2;
+    container.x = (stage!.stageWidth - (tw * scaleTo)) / 2;
   }
 
   @override
@@ -80,14 +80,14 @@ class DrawTriangleGridScene extends GSprite {
   }
 
   void renderPoints() {
-    var ver = triGrid.vertices;
+    var ver = triGrid!.vertices;
     var j = 0;
     for (var i = 0; i < dots.length; ++i) {
       var d = dots[i];
-      ver[j++] = d.x;
+      ver![j++] = d.x;
       ver[j++] = d.y;
     }
-    triGrid.draw();
+    triGrid!.draw();
   }
 
   void updatePoints() {
@@ -97,7 +97,7 @@ class DrawTriangleGridScene extends GSprite {
     // container.x = (sw - cols * sep) / 2;
     // container.y = (sh - rows * sep) / 2;
 
-    if (stage.pointer.isDown) {
+    if (stage!.pointer!.isDown) {
       radius = -targetRadius / 4;
     } else {
       radius = targetRadius;

@@ -6,9 +6,9 @@ import 'pad.dart';
 class DrawPadScene extends GSprite {
   int colorCount = 0;
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   double targetRot = 0;
   double opacity = 1.0;
@@ -20,9 +20,9 @@ class DrawPadScene extends GSprite {
 
   @override
   void addedToStage() async {
-    stage.onHotReload.addOnce(() {
-      stage.onMouseScroll.removeAll();
-      stage.onMouseMove.removeAll();
+    stage!.onHotReload.addOnce(() {
+      stage!.onMouseScroll.removeAll();
+      stage!.onMouseMove.removeAll();
       mps.offAll('color');
       mps.offAll('clear');
     });
@@ -35,11 +35,11 @@ class DrawPadScene extends GSprite {
     pad.onBegin = GMouse.hide;
     pad.onEnd = GMouse.show;
 
-    stage.onMouseScroll.add((event) {
+    stage!.onMouseScroll.add((event) {
       var dir = event.scrollDelta.y;
       if (dir == 0) return;
       dir = dir < 0 ? 1 : -1;
-      if (stage.keyboard.isShiftPressed) {
+      if (stage!.keyboard!.isShiftPressed) {
         pad.minW += (dir * .1);
         pad.minW = pad.minW.clamp(minRad, maxRad);
       } else {
@@ -47,13 +47,13 @@ class DrawPadScene extends GSprite {
         pad.maxW = pad.maxW.clamp(minRad, maxRad);
       }
     });
-    stage.onResized.add(() => pad.resize(sw, sh));
+    stage!.onResized.add(() => pad.resize(sw, sh));
 
     pad.minW = .2;
     pad.maxW = 12.2;
     mps.on('alpha', (double alpha) {
       opacity = alpha;
-      pad.canvas.alpha = alpha;
+      pad.canvas!.alpha = alpha;
     });
     mps.on('color', (Color color) {
       pad.penColor = color;

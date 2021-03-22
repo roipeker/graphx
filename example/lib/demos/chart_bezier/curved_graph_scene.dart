@@ -5,17 +5,17 @@ import 'bezier_points.dart';
 
 class CurvedGraphScene extends GSprite {
   List<double> graphPositions = [.2, .4, .9, .3, .6, .7, .9, .3];
-  List<GPoint> bezierPoints;
+  List<GPoint?>? bezierPoints;
 
-  double get graphW => stage.stageWidth;
-  double get graphH => stage.stageHeight;
+  double get graphW => stage!.stageWidth;
+  double get graphH => stage!.stageHeight;
 
-  GSprite graph, dots;
-  GShape lines, filled;
-  List<GPoint> coords;
+  late GSprite graph, dots;
+  late GShape lines, filled;
+  late List<GPoint> coords;
 
-  GTweenableList myTweenList;
-  List<double> lastPercents;
+  late GTweenableList myTweenList;
+  late List<double> lastPercents;
 
   GShape drawCircle(double px, double py) {
     var sh = GShape();
@@ -29,7 +29,7 @@ class CurvedGraphScene extends GSprite {
   void addedToStage() {
     bezierPoints = [];
     // stage.color = Colors.black;
-    stage.maskBounds=true;
+    stage!.maskBounds = true;
 
     graph = GSprite();
     dots = GSprite();
@@ -54,7 +54,7 @@ class CurvedGraphScene extends GSprite {
     lastPercents = List.from(graphPositions);
     myTweenList = lastPercents.twn;
     randomNumbers();
-    stage.onMouseClick.add((e) => randomNumbers());
+    stage!.onMouseClick.add((e) => randomNumbers());
   }
 
   void randomNumbers() {
@@ -84,16 +84,16 @@ class CurvedGraphScene extends GSprite {
       newValues,
       duration: 2,
       onUpdate: () {
-        final values = myTweenList.value as List<double>;
+        final values = myTweenList.value as List<double?>;
         renderPositions(values);
       },
       ease: GEase.fastLinearToSlowEaseIn,
     );
   }
 
-  void renderPositions(List<double> percents) {
+  void renderPositions(List<double?> percents) {
     for (var i = 0; i < percents.length; ++i) {
-      coords[i].y = percents[i] * graphH;
+      coords[i].y = percents[i]! * graphH;
       dots.getChildAt(i).y = coords[i].y;
     }
     lines.graphics.clear();
@@ -106,7 +106,7 @@ class CurvedGraphScene extends GSprite {
       ],
       ratios: [.1, 1],
     );
-    bezierPoints.clear();
+    bezierPoints!.clear();
     bezierCurveThrough(lines.graphics, coords, .25, bezierPoints);
 
     filled.graphics.clear();
@@ -120,11 +120,11 @@ class CurvedGraphScene extends GSprite {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
     );
-    bezierCurveThroughDraw(filled.graphics, bezierPoints);
+    bezierCurveThroughDraw(filled.graphics, bezierPoints!);
     filled.graphics
         .lineTo(graphW, graphH)
         .lineTo(0, graphH)
-        .lineTo(bezierPoints[0].x, bezierPoints[0].y)
+        .lineTo(bezierPoints![0]!.x, bezierPoints![0]!.y)
         .endFill();
   }
 }

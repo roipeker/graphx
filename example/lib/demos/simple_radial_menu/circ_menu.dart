@@ -36,14 +36,14 @@ class SimpleRadialMenuScene extends GSprite {
     var container = GSprite();
     addChild(container);
 
-    items?.clear();
+    items.clear();
     var mainCircle = createCircle(
       label: 'MAIN',
       size: itemSize * 1.5,
       iconData: Icons.menu,
       onPressed: toggleMenu,
     );
-    container.setPosition(stage.stageWidth / 2, stage.stageHeight / 2);
+    container.setPosition(stage!.stageWidth / 2, stage!.stageHeight / 2);
     var numItems = icons.length;
     var angleStep = Math.PI * 2 / numItems;
     var angleOffset = -Math.PI / 2;
@@ -68,10 +68,10 @@ class SimpleRadialMenuScene extends GSprite {
   }
 
   GSprite createCircle({
-    String label,
-    double size,
-    IconData iconData,
-    Function(MouseInputData input) onPressed,
+    String? label,
+    required double size,
+    required IconData iconData,
+    Function(MouseInputData input)? onPressed,
   }) {
     var item = GSprite();
     var text = GText(
@@ -114,11 +114,11 @@ class SimpleRadialMenuScene extends GSprite {
     isOpen = !isOpen;
     for (var i = 0; i < items.length; ++i) {
       final itm = items[i];
-      var point = itm.userData as GPoint;
+      var point = itm.userData as GPoint?;
       itm.tween(
         duration: .3,
-        x: isOpen ? point.x : 0,
-        y: isOpen ? point.y : 0,
+        x: isOpen ? point!.x : 0,
+        y: isOpen ? point!.y : 0,
       );
       // itm.x = isOpen ? point.x : 0;
       // itm.y = isOpen ? point.y : 0;

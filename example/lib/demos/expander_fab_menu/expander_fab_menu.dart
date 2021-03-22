@@ -44,9 +44,9 @@ class ExpanderFabMenu extends StatelessWidget {
 }
 
 class MyMenu extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
 
-  const MyMenu({Key key, this.child}) : super(key: key);
+  const MyMenu({Key? key, this.child}) : super(key: key);
 
   @override
   _MyMenuState createState() => _MyMenuState();
@@ -55,7 +55,7 @@ class MyMenu extends StatefulWidget {
 class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
   bool isOpen = false;
 
-  AnimationController anim;
+  AnimationController? anim;
   final GlobalKey mySuperKey = GlobalKey();
   final menuScene = MyCoolMenuScene();
 
@@ -69,14 +69,14 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
     // anim.addListener(() {
     //   setState(() {});
     // });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       getPosition();
     });
   }
 
   void getPosition() {
-    var ro = mySuperKey.currentContext.findRenderObject() as RenderBox;
-    var menuRO = context.findRenderObject() as RenderBox;
+    var ro = mySuperKey.currentContext!.findRenderObject() as RenderBox;
+    var menuRO = context.findRenderObject() as RenderBox?;
     var position = ro.localToGlobal(Offset.zero, ancestor: menuRO);
     menuScene.updatePosition(GRect.fromNative(position & ro.size));
   }
@@ -95,7 +95,7 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
             // color: Colors.red,
             child: Column(
               children: [
-                Expanded(child: widget.child),
+                Expanded(child: widget.child!),
                 Container(
                   height: 60,
                   decoration: BoxDecoration(color: Colors.white, boxShadow: [
@@ -165,7 +165,7 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
 }
 
 class MyCoolMenuScene extends GSprite {
-  MyButton button;
+  late MyButton button;
 
   bool isOpen = false;
 
@@ -173,15 +173,15 @@ class MyCoolMenuScene extends GSprite {
     button = MyButton();
   }
 
-  double buttonY;
-  GShape curtain;
+  double? buttonY;
+  late GShape curtain;
 
   void updatePosition(GRect position) {
     button.x = position.x + position.width / 2;
     button.y = buttonY = position.y + position.height / 2;
   }
 
-  GSprite menuContainer;
+  GSprite? menuContainer;
 
   @override
   void addedToStage() {
@@ -190,7 +190,7 @@ class MyCoolMenuScene extends GSprite {
     addChild(curtain);
 
     menuContainer = GSprite();
-    addChild(menuContainer);
+    addChild(menuContainer!);
     _buildMenu();
     addChild(button);
 
@@ -235,17 +235,17 @@ class MyCoolMenuScene extends GSprite {
     });
   }
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
-  var twnCurtainY = 0.0;
+  double get sh => stage!.stageHeight;
+  double? twnCurtainY = 0.0;
 
   bool bounceCurtain = false;
 
   _bounceCurtain() {
     if (bounceCurtain) return;
     bounceCurtain = true;
-    final myTween = twnCurtainY.twn;
+    final myTween = twnCurtainY!.twn;
     myTween.tween(
       sh,
       duration: 1,
@@ -267,7 +267,7 @@ class MyCoolMenuScene extends GSprite {
     // g.lineStyle(2, Colors.black);
     g.beginFill(Colors.red);
     g.moveTo(0, sh);
-    g.curveTo(button.x, sh, button.x, twnCurtainY);
+    g.curveTo(button.x, sh, button.x, twnCurtainY!);
     g.curveTo(button.x, sh, sw, sh);
     g.lineTo(sw, 0).lineTo(0, 0).closePath();
   }
@@ -289,8 +289,8 @@ class MyCoolMenuScene extends GSprite {
       itm.y = i * 34.0;
       items.add(itm);
     }
-    menuContainer.alignPivot();
-    menuContainer.setPosition(sw / 2, sh / 2);
+    menuContainer!.alignPivot();
+    menuContainer!.setPosition(sw / 2, sh / 2);
   }
 
   void showMenuNow() {
@@ -309,8 +309,8 @@ class MyCoolMenuScene extends GSprite {
 }
 
 class MyButton extends GSprite {
-  GShape bg;
-  GIcon icon;
+  late GShape bg;
+  late GIcon icon;
   double radius = 20;
 
   @override

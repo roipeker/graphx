@@ -4,23 +4,23 @@ import 'package:graphx/graphx.dart';
 import 'dot_button.dart';
 
 class Chart extends GSprite {
-  double w, h;
-  int cols, rows;
-  GShape chartLine;
+  double w = 0.0, h = 0.0;
+  int cols = 0, rows = 0;
+  late GShape chartLine;
 
-  Chart([GSprite doc]) {
+  Chart([GSprite? doc]) {
     doc?.addChild(this);
     chartLine = GShape();
     addChild(chartLine);
   }
 
-  double rowsSep;
+  double? rowsSep;
 
   void initDraw({
-    double w,
-    double h,
-    int cols,
-    int rows,
+    required double w,
+    required double h,
+    int cols = 0,
+    int rows = 0,
     // double rowsSep,
   }) {
     this.w = w;
@@ -35,8 +35,8 @@ class Chart extends GSprite {
     _drawGrid();
   }
 
-  double maxValueY;
-  double colSep, rowSep, colOffset;
+  late double maxValueY;
+  double colSep = 0.0, rowSep = 0.0, colOffset = 0.0;
 
   void _drawGrid() {
     colSep = w / cols;

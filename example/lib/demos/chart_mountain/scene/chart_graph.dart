@@ -4,9 +4,9 @@ import '../chart_data.dart';
 import 'utils.dart';
 
 class MyGraph extends GSprite {
-  GShape graph;
-  GSprite chartContainer, titlesContainer;
-  GShape background;
+  GShape? graph;
+  GSprite? chartContainer, titlesContainer;
+  late GShape background;
 
   double minValueY = 0, maxValueY = 160, stepY = 20;
   List xRange = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
@@ -14,12 +14,12 @@ class MyGraph extends GSprite {
   double graphW = 295;
   double graphH = 209;
 
-  double lineSepY, lineSepX;
-  int numLinesY, numLinesX;
+  double lineSepY = 0.0, lineSepX = 0.0;
+  int numLinesY = 0, numLinesX = 0;
 
   double minAlpha = .7;
   double maxAlpha = 1.0;
-  final List<GraphModel> data;
+  final List<GraphModel>? data;
   MyGraph({this.data});
 
   @override
@@ -28,7 +28,7 @@ class MyGraph extends GSprite {
     addChild(background);
 
     chartContainer = GSprite();
-    addChild(chartContainer);
+    addChild(chartContainer!);
 
     numLinesY = ((minValueY + (maxValueY - minValueY)) ~/ stepY) + 1;
     numLinesX = xRange.length;
@@ -70,18 +70,18 @@ class MyGraph extends GSprite {
           });
     });
 
-    chartContainer.addChild(graph);
+    chartContainer?.addChild(graph);
     drawChart(data, graph, 1);
     return graph;
   }
 
-  void drawChart(GraphModel data, GShape graph, [double percent = 1]) {
+  void drawChart(GraphModel data, GShape graph, [double? percent = 1]) {
     var g = graph.graphics;
     g.clear();
-    g.beginFill(data.color);
-    var list = data.data;
+    g.beginFill(data.color!);
+    var list = data.data!;
     for (var i = 0; i < list.length; ++i) {
-      final valuePercent = list[i] / maxValueY * percent;
+      final valuePercent = list[i] / maxValueY * percent!;
       final relY = graphH - valuePercent * graphH;
       var px = i * lineSepX;
       if (i == 0) {

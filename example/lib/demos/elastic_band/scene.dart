@@ -13,14 +13,14 @@ class ElasticBandScene extends GSprite {
 
   @override
   void addedToStage() {
-    stage.onMouseDown.add(_handleMouseDown);
+    stage!.onMouseDown.add(_handleMouseDown);
     _handleUp(null);
   }
 
   void _handleMouseDown(e) {
     isPressed = true;
-    stage.onMouseMove.add(_handleMouseMove);
-    stage.onMouseUp.addOnce(_handleUp);
+    stage!.onMouseMove.add(_handleMouseMove);
+    stage!.onMouseUp.addOnce(_handleUp);
   }
 
   void _handleMouseMove(e) {
@@ -28,11 +28,11 @@ class ElasticBandScene extends GSprite {
   }
 
   void _handleUp(e) {
-    stage.onMouseMove.remove(_handleMouseMove);
+    stage!.onMouseMove.remove(_handleMouseMove);
     isPressed = false;
     tweenPoint(
-      stage.stageWidth / 2,
-      stage.stageHeight / 2,
+      stage!.stageWidth / 2,
+      stage!.stageHeight / 2,
       1,
       GEase.elasticOut,
     );
@@ -53,8 +53,8 @@ class ElasticBandScene extends GSprite {
   }
 
   void drawLine() {
-    var sw = stage.stageWidth;
-    var sh = stage.stageHeight;
+    var sw = stage!.stageWidth;
+    var sh = stage!.stageHeight;
     var cx = sw / 2;
 
     graphics

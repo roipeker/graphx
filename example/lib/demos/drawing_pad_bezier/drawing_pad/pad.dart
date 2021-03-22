@@ -15,24 +15,24 @@ class Pad extends GSprite {
 
   Color penColor = Color(0xff000000);
   Color backgroundColor = Colors.black;
-  Function onBegin, onEnd, onUpdate;
+  Function? onBegin, onEnd, onUpdate;
   final List<PadPoint> _lastPoints = [];
   double _lastVelocity = 0;
   double _lastWidth = 0;
-  GShape _canvas;
+  GShape? _canvas;
 
-  GShape _bg;
+  late GShape _bg;
 
-  GShape get canvas => _canvas;
-  Graphics _g;
+  GShape? get canvas => _canvas;
+  late Graphics _g;
   double w, h;
 
   Pad({this.w = 300, this.h = 200}) {
     _canvas = GShape();
     _bg = GShape();
     addChild(_bg);
-    addChild(_canvas);
-    _g = _canvas.graphics;
+    addChild(_canvas!);
+    _g = _canvas!.graphics;
     clear();
     on();
   }
@@ -51,11 +51,7 @@ class Pad extends GSprite {
         .beginFill(backgroundColor)
         .drawRect(0, 0, w, h)
         .endFill();
-    _g
-        .clear()
-        .beginFill(baseTransparent)
-        .drawRect(0, 0, w, h)
-        .endFill();
+    _g.clear().beginFill(baseTransparent).drawRect(0, 0, w, h).endFill();
     _data.clear();
     _reset();
     _isEmpty = true;
@@ -76,7 +72,7 @@ class Pad extends GSprite {
   void off() {
     onMouseDown.remove(_handleMouseDown);
     onMouseMove.remove(_handleMouseMove);
-    stage?.onMouseUp?.remove(_handleMouseUp);
+    stage?.onMouseUp.remove(_handleMouseUp);
   }
 
   void on() {
@@ -85,7 +81,7 @@ class Pad extends GSprite {
   }
 
   _handleMouseDown(MouseInputData input) {
-    stage.onMouseUp.addOnce(_handleMouseUp);
+    stage!.onMouseUp.addOnce(_handleMouseUp);
     _isMouseDown = true;
     _strokeBegin(input);
   }
@@ -125,15 +121,15 @@ class Pad extends GSprite {
       return;
     }
 
-    final mx = _canvas.mouseX;
-    final my = _canvas.mouseY;
+    final mx = _canvas!.mouseX;
+    final my = _canvas!.mouseY;
     final point = _createPoint(mx, my);
     final lastPointData = _data.last;
     var lastPoints = lastPointData.points;
     var lastPoint = lastPoints.isNotEmpty ? lastPoints.last : null;
     var hasLastPoint = lastPoint != null;
     var isLastPointTooClose =
-        hasLastPoint ? point.distanceTo(lastPoint) <= minDist : false;
+        hasLastPoint ? point.distanceTo(lastPoint!) <= minDist : false;
     final color = lastPointData.color;
 
     if (!hasLastPoint || !(hasLastPoint && isLastPointTooClose)) {
@@ -150,7 +146,7 @@ class Pad extends GSprite {
 
   PadPoint _createPoint(double px, double py) => PadPoint(px, py, getTimer());
 
-  BezierDraw _addPoint(PadPoint point) {
+  BezierDraw? _addPoint(PadPoint point) {
     _lastPoints.add(point);
     if (_lastPoints.length > 2) {
       if (_lastPoints.length == 3) {
@@ -231,7 +227,7 @@ class Pad extends GSprite {
 
 class _StrokeData {
   Color color;
-  List<PadPoint> points;
+  late List<PadPoint> points;
 
   _StrokeData(this.color) {
     points = [];

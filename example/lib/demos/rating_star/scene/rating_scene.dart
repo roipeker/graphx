@@ -8,15 +8,15 @@ const Color kStarColor = Color(0xFFFCC915);
 const Color kUnselectedSColor = Color(0xFF7F86AC);
 
 class RatingStarsScene extends GSprite {
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
-  List<Star> stars;
-  GSprite container;
+  double get sh => stage!.stageHeight;
+  late List<Star> stars;
+  late GSprite container;
 
   @override
   void addedToStage() {
-    stage.color = kBgColor;
+    stage!.color = kBgColor;
     container = GSprite();
     addChild(container);
     stars = List.generate(
@@ -35,7 +35,7 @@ class RatingStarsScene extends GSprite {
       },
     );
     container.alignPivot();
-    final bb = container.bounds;
+    final bb = container.bounds!;
     container.graphics.beginFill(kColorTransparent).drawGRect(bb).endFill();
     container.onMouseOut.add((event) {
       if (container.hitTouch(GPoint(
@@ -46,7 +46,7 @@ class RatingStarsScene extends GSprite {
         stars[i].hoverState(false);
       }
     });
-    stage.onResized.add(() {
+    stage!.onResized.add(() {
       container.setPosition(sw / 2, sh / 2);
     });
   }

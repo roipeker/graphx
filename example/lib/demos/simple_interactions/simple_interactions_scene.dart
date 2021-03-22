@@ -5,7 +5,7 @@ import 'package:graphx/graphx.dart';
 import 'ui/my_button.dart';
 
 class SimpleInteractionsScene extends GSprite {
-  GShape ball;
+  late GShape ball;
 
   @override
   void addedToStage() {
@@ -18,9 +18,9 @@ class SimpleInteractionsScene extends GSprite {
     /// internally.
     // button.onMouseDown.add((e) => print("mouse down on button! $e"));
 
-    stage.onResized.add(() {
-      button.x = stage.stageWidth / 2;
-      button.y = stage.stageHeight / 2;
+    stage!.onResized.add(() {
+      button.x = stage!.stageWidth / 2;
+      button.y = stage!.stageHeight / 2;
     });
 
     _initBall();
@@ -38,8 +38,8 @@ class SimpleInteractionsScene extends GSprite {
     ball.x = 100;
     ball.y = 100;
 
-    stage.keyboard.onDown.add(_onKeyboardDown);
-    stage.keyboard.onUp.add(_onKeyboardUp);
+    stage!.keyboard!.onDown.add(_onKeyboardDown);
+    stage!.keyboard!.onUp.add(_onKeyboardUp);
   }
 
   /// Only the stage has access to keyboard events.
@@ -55,7 +55,7 @@ class SimpleInteractionsScene extends GSprite {
     /// for access modifiers keys, is better to check the raw event itself.
     /// as multiple physical keys have the same behaviour (shift, command,
     /// alt, etc) but different key codes.
-    if (event.rawEvent.isShiftPressed) {
+    if (event.rawEvent!.isShiftPressed) {
       pixelsToMove = 30.0;
     }
 
@@ -71,7 +71,7 @@ class SimpleInteractionsScene extends GSprite {
     if (event.isKey(LogicalKeyboardKey.arrowUp)) {
       // arrow key UP
       ball.y -= pixelsToMove;
-    } else if (event.rawEvent.logicalKey == LogicalKeyboardKey.arrowDown) {
+    } else if (event.rawEvent!.logicalKey == LogicalKeyboardKey.arrowDown) {
       // arrow key DOWN
       ball.y += pixelsToMove;
     }

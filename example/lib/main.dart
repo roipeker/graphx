@@ -36,7 +36,10 @@ void main() {
       // home: SimpleRadialMenuMain(),
       // home: MuratCoffeeMain(),
       // home: PieChartMain(),
+
+      //TODO doesn't work
       // home: ChartBezierMain(),
+
       // home: RunHeroCanvasMain(),
       // home: ElasticBandMain(),
       // home: FlowerGradientMain(),
@@ -47,14 +50,20 @@ void main() {
       // home: PizzaBoxMain(),
       // home: DrawingPadBezierMain(),
       // home: IsmaChartMain(),
+
+      //TODO doesn't work
       // home: TriGridMain(),
+
       // home: NicoLoadingIndicatorMain(),
       // home: FeelingSwitchMain(),
       // home: MouseRepulsionMain(),
       // home: Globe3dMain(),
       // home: LungsAnimationMain(),
       // home: PathChartStressTestMain(),
+
+      //TODO doesn't work
       // home: ExpanderFabMenu(),
+
       home: PageIndicatorMain(),
     ),
   );
