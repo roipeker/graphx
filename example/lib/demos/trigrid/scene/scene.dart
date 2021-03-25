@@ -5,7 +5,7 @@ import 'point.dart';
 import 'tri_grid.dart';
 
 class DrawTriangleGridScene extends GSprite {
-  static const int res = 6;
+  static const int res = 3;
   static const double targetRadius = 120;
 
   /// draw triangle parameters.
@@ -19,8 +19,10 @@ class DrawTriangleGridScene extends GSprite {
   late double radiusSq;
 
   late List<GraphPoint> dots;
-  TriangleGrid? triGrid;
+  late TriangleGrid triGrid;
   late GSprite container;
+  bool inited = false;
+  double textureW = 0, textureH = 0;
 
   @override
   Future<void> addedToStage() async {
@@ -29,15 +31,22 @@ class DrawTriangleGridScene extends GSprite {
     container = GSprite();
     addChild(container);
     mouseChildren = false;
-    var texture = await (ResourceLoader.loadTexture(
-        'assets/trigrid/cute_dog.png', 1, 'dog') as Future<GTexture>);
-
-    cols = texture.width! ~/ sep;
-    rows = texture.height! ~/ sep;
+    final texture = await ResourceLoader.loadTexture(
+        'assets/trigrid/cute_dog.png', 1, 'dog');
+    if (texture == null) {
+      throw "We have an error loading the image";
+    }
+    textureW = texture.width!;
+    textureH = texture.height!;
+    cols = textureW ~/ sep;
+    rows = textureH ~/ sep;
     var total = cols * rows;
 
+    /// these are the points that we MOVE to update the grid.
     dots = List.generate(total, (index) {
       var d = GraphPoint();
+      /// uncomment this to see the DOTS.
+      // container.addChild(d);
       var idx = index % cols;
       var idy = index ~/ cols;
       if (index == 0) {
@@ -53,17 +62,17 @@ class DrawTriangleGridScene extends GSprite {
     triGrid = TriangleGrid(res: sep, cols: cols, rows: rows);
 
     /// show the triangles lines
-    triGrid!.debugTriangles = true;
-
-    container.addChildAt(triGrid!, 0);
-    triGrid!.texture = texture;
-    triGrid!.draw();
+    // triGrid.debugTriangles = true;
+    container.addChildAt(triGrid, 0);
+    triGrid.texture = texture;
+    triGrid.draw();
+    inited = true;
   }
 
   void adjustContainer() {
     /// resize container based on the image dimensions.
-    var tw = triGrid!.texture!.width!;
-    var th = triGrid!.texture!.height!;
+    var tw = textureW;
+    var th = textureH;
     var scaleTo = stage!.stageHeight / th;
     container.y = 0;
     container.scale = scaleTo;
@@ -73,21 +82,22 @@ class DrawTriangleGridScene extends GSprite {
   @override
   void update(double delta) {
     super.update(delta);
-    if (triGrid == null) return;
+    if (!inited) return;
+    // return;
     adjustContainer();
     updatePoints();
     renderPoints();
   }
 
   void renderPoints() {
-    var ver = triGrid!.vertices;
+    var ver = triGrid.vertices;
     var j = 0;
     for (var i = 0; i < dots.length; ++i) {
       var d = dots[i];
-      ver![j++] = d.x;
+      ver[j++] = d.x;
       ver[j++] = d.y;
     }
-    triGrid!.draw();
+    triGrid.draw();
   }
 
   void updatePoints() {

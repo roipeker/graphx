@@ -30,8 +30,9 @@ mixin GTweenable {
 
   /// override to know which properties will change.
   void setTweenProp(PropTween tweenProp) {
-    final lerpObj = _lerps[tweenProp.p as String];
-    if (lerpObj == null) return;
+    final key = '${tweenProp.p}';
+    if( !_lerps.containsKey(key)) return ;
+    final lerpObj = _lerps[key]!;
     lerpObj.to = tweenProp.cObj;
     tweenProp.c = 1.0;
   }
@@ -55,14 +56,21 @@ mixin GTweenable {
   /// implement in class.
   Map<String, List<Function>>? getTweenableAccessors() => null;
 
-  void setProperty(Object? prop, double value) {
-    if (_lerps[prop as String] != null) {
-      _lerps[prop]!.resolve(value);
-      // TODO: add setLerp(prop, value) function to be override?
+  void setProperty(Object prop, double value) {
+    final key = '$prop';
+    if (_lerps.containsKey(key)){
+      _lerps[key]?.resolve(value);
     } else {
       if (_accessors == null) initProps();
-      _accessors![prop]![1](value);
+      _accessors![key]![1](value);
     }
+    // if (_lerps[prop as String] != null) {
+    //   _lerps[prop]!.resolve(value);
+    //   // TODO: add setLerp(prop, value) function to be override?
+    // } else {
+    //   if (_accessors == null) initProps();
+    //   _accessors![prop]![1](value);
+    // }
   }
 
   double getProperty(Object prop) {
@@ -83,5 +91,5 @@ mixin GTweenable {
 
   double? operator [](String key) => getProperty(key);
 
-  void operator []=(String? key, double value) => setProperty(key, value);
+  void operator []=(String key, double value) => setProperty(key, value);
 }

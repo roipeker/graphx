@@ -62,13 +62,7 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // anim = AnimationController(
-    //   vsync: this,
-    //   duration: dur,
-    // );
-    // anim.addListener(() {
-    //   setState(() {});
-    // });
+    menuScene.requestPositionCallback = getPosition;
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       getPosition();
     });
@@ -116,10 +110,6 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
                         color: Colors.transparent,
                         key: mySuperKey,
                       ),
-                      // Visibility(
-                      //   visible: !isOpen,
-                      //   child: myFav(),
-                      // ),
                       baseButton,
                       baseButton,
                     ],
@@ -134,54 +124,29 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
       ),
     );
   }
-
-// Widget buildAnimFab() {
-//   print(isOpen);
-//   print(anim.value);
-//   print(pos);
-//   if (!isOpen) {}
-//   return Positioned(
-//     top: pos.dy * (1 - anim.value),
-//     left: pos.dx,
-//     child: IconButton(
-//       // key: mySuperKey,
-//       icon: Icon(
-//         Icons.accessibility,
-//         color: Colors.red,
-//       ),
-//       // backgroundColor: Colors.white,
-//       onPressed: () {
-//         isOpen = !isOpen;
-//         trace('pressed', isOpen);
-//         if (isOpen) {
-//           anim.forward();
-//         } else {
-//           anim.reverse();
-//         }
-//       },
-//     ),
-//   );
-// }
 }
 
 class MyCoolMenuScene extends GSprite {
-  late MyButton button;
-
   bool isOpen = false;
+  late VoidCallback requestPositionCallback;
+  late MyButton button;
+  double? buttonY;
+  late GShape curtain;
+  late GSprite menuContainer;
 
   MyCoolMenuScene() {
     button = MyButton();
   }
 
-  double? buttonY;
-  late GShape curtain;
 
   void updatePosition(GRect position) {
     button.x = position.x + position.width / 2;
-    button.y = buttonY = position.y + position.height / 2;
+    buttonY = position.y + position.height / 2;
+    if( !isOpen ){
+      button.y = buttonY;
+    }
   }
 
-  GSprite? menuContainer;
 
   @override
   void addedToStage() {
@@ -190,9 +155,17 @@ class MyCoolMenuScene extends GSprite {
     addChild(curtain);
 
     menuContainer = GSprite();
-    addChild(menuContainer!);
+    addChild(menuContainer);
     _buildMenu();
     addChild(button);
+
+    stage!.onResized.add((){
+      requestPositionCallback.call();
+      menuContainer.setPosition(sw / 2, sh / 2);
+      if( isOpen ){
+        _renderCurt();
+      }
+    });
 
     button.onMouseClick.add((event) {
       isOpen = !isOpen;
@@ -262,7 +235,6 @@ class MyCoolMenuScene extends GSprite {
 
   void _renderCurt() {
     final g = curtain.graphics;
-
     g.clear();
     // g.lineStyle(2, Colors.black);
     g.beginFill(Colors.red);
@@ -289,8 +261,8 @@ class MyCoolMenuScene extends GSprite {
       itm.y = i * 34.0;
       items.add(itm);
     }
-    menuContainer!.alignPivot();
-    menuContainer!.setPosition(sw / 2, sh / 2);
+    menuContainer.alignPivot();
+    menuContainer.setPosition(sw / 2, sh / 2);
   }
 
   void showMenuNow() {

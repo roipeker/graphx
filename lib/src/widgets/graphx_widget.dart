@@ -48,7 +48,6 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
 
   GRect? _getRenderObjectWindowBounds() {
     if (!mounted) return null;
-    trace(context);
     return ContextUtils.getRenderObjectBounds(context);
   }
 
@@ -81,30 +80,30 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
     );
 
     var converter = _controller.$inputConverter;
-    if (_controller.config.usePointer ?? false) {
+    if (_controller.config.usePointer) {
       child = MouseRegion(
-        onEnter: converter?.pointerEnter,
-        onExit: converter?.pointerExit,
-        onHover: converter?.pointerHover,
+        onEnter: converter.pointerEnter,
+        onExit: converter.pointerExit,
+        onHover: converter.pointerHover,
         cursor: MouseCursor.defer,
         opaque: widget.mouseOpaque,
         child: Listener(
           child: child,
           behavior: widget.pointerBehaviour,
-          onPointerDown: converter?.pointerDown,
-          onPointerUp: converter?.pointerUp,
-          onPointerCancel: converter?.pointerCancel,
-          onPointerMove: converter?.pointerMove,
-          onPointerSignal: converter?.pointerSignal,
+          onPointerDown: converter.pointerDown,
+          onPointerUp: converter.pointerUp,
+          onPointerCancel: converter.pointerCancel,
+          onPointerMove: converter.pointerMove,
+          onPointerSignal: converter.pointerSignal,
         ),
       );
     }
-    if (_controller.config.useKeyboard ?? false) {
+    if (_controller.config.useKeyboard) {
       child = RawKeyboardListener(
-        onKey: converter!.handleKey,
+        onKey: converter.handleKey,
         autofocus: true,
         includeSemantics: false,
-        focusNode: converter.keyboard?.focusNode ?? FocusNode(),
+        focusNode: converter.keyboard.focusNode,
         child: child,
       );
     }

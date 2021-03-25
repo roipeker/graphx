@@ -153,10 +153,10 @@ class MyButton extends GSprite {
   /// update the [icon.data] and icon's color, based on [_isOn] current state.
   void _updateIcon() {
     if (_isOn) {
-      icon.data = Icons.brightness_7_outlined;
+      icon.data = Icons.wb_incandescent;
       icon.color = Colors.yellow;
     } else {
-      icon.data = Icons.brightness_2_outlined;
+      icon.data = Icons.wb_incandescent_outlined;
       icon.color = Colors.white;
     }
   }

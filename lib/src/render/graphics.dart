@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+
 import 'package:flutter/painting.dart';
+
 import '../../graphx.dart';
 
 enum GradientType {
@@ -109,8 +111,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics beginBitmapFill(
-    GTexture texture, [
+  Graphics beginBitmapFill(GTexture texture, [
     GMatrix? matrix,
     bool repeat = false,
     bool smooth = false,
@@ -144,7 +145,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   Graphics drawPicture(ui.Picture picture) {
-    _drawingQueue.add(GraphicsDrawingData()..picture = picture);
+    _drawingQueue.add(GraphicsDrawingData()
+      ..picture = picture);
     return this;
   }
 
@@ -185,24 +187,23 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   /// For [GradientType.radial], `end` is used for [RadialGradient.focal], check
   /// the [RadialGradient] docs to understand the relation with [focalRadius]
-  Graphics beginGradientFill(
-    GradientType type,
-    List<Color> colors, {
-    List<double>? ratios,
-    Alignment? begin,
-    Alignment? end,
-    double rotation = 0,
-    TileMode tileMode = TileMode.clamp,
-    Rect? gradientBox,
+  Graphics beginGradientFill(GradientType type,
+      List<Color> colors, {
+        List<double>? ratios,
+        Alignment? begin,
+        Alignment? end,
+        double rotation = 0,
+        TileMode tileMode = TileMode.clamp,
+        Rect? gradientBox,
 
-    /// only radial
-    double radius = 0.5,
-    double focalRadius = 0.0,
+        /// only radial
+        double radius = 0.5,
+        double focalRadius = 0.0,
 
-    /// only sweep
-    double sweepStartAngle = 0.0,
-    double sweepEndAngle = 6.2832,
-  }) {
+        /// only sweep
+        double sweepStartAngle = 0.0,
+        double sweepEndAngle = 6.2832,
+      }) {
     final gradient = _createGradient(
       type,
       colors,
@@ -228,23 +229,22 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Gradient _createGradient(
-    GradientType type,
-    List<Color> colors, [
-    List<double>? ratios,
-    Alignment? begin,
-    Alignment? end,
-    double rotation = 0,
+  Gradient _createGradient(GradientType type,
+      List<Color> colors, [
+        List<double>? ratios,
+        Alignment? begin,
+        Alignment? end,
+        double rotation = 0,
 
-    /// only radial
-    double radius = 0.5,
-    double focalRadius = 0.0,
+        /// only radial
+        double radius = 0.5,
+        double focalRadius = 0.0,
 
-    /// only sweep
-    double sweepStartAngle = 0.0,
-    double sweepEndAngle = 6.2832,
-    TileMode tileMode = TileMode.clamp,
-  ]) {
+        /// only sweep
+        double sweepStartAngle = 0.0,
+        double sweepEndAngle = 6.2832,
+        TileMode tileMode = TileMode.clamp,
+      ]) {
     final transform = GradientRotation(rotation);
     if (type == GradientType.radial) {
       return RadialGradient(
@@ -284,29 +284,28 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// Also for `GradientType.radial`, `Alignment end` represents the focalPoint.
   /// So make sure to increase the `radius` if you use a focalPoint alignment
   /// different than the center (meaning `begin!=end`).
-  Graphics lineGradientStyle(
-    GradientType type,
-    List<Color> colors, {
-    List<double>? ratios,
-    Alignment? begin,
-    Alignment? end,
-    double rotation = 0,
+  Graphics lineGradientStyle(GradientType type,
+      List<Color> colors, {
+        List<double>? ratios,
+        Alignment? begin,
+        Alignment? end,
+        double rotation = 0,
 
-    /// only `GradientType.radial`
-    double radius = 0.5,
-    double focalRadius = 0.0,
+        /// only `GradientType.radial`
+        double radius = 0.5,
+        double focalRadius = 0.0,
 
-    /// only `GradientType.sweep`
-    double sweepStartAngle = 0.0,
-    double sweepEndAngle = 6.2832,
+        /// only `GradientType.sweep`
+        double sweepStartAngle = 0.0,
+        double sweepEndAngle = 6.2832,
 
-    /// manually define the bounding box of the Gradient shader.
-    Rect? gradientBox,
+        /// manually define the bounding box of the Gradient shader.
+        Rect? gradientBox,
 
-    /// when the gradient box is different than the object bounds, you can
-    /// see the `tileMode` behaviour.
-    TileMode tileMode = TileMode.clamp,
-  }) {
+        /// when the gradient box is different than the object bounds, you can
+        /// see the `tileMode` behaviour.
+        TileMode tileMode = TileMode.clamp,
+      }) {
     /// actual paint must be stroke.
     assert(_currentDrawing!.fill!.style == PaintingStyle.stroke);
 
@@ -331,8 +330,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics lineBitmapStyle(
-    GTexture texture, [
+  Graphics lineBitmapStyle(GTexture texture, [
     GMatrix? matrix,
     bool repeat = true,
     bool smooth = false,
@@ -369,37 +367,32 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics cubicCurveTo(
-    double controlX1,
-    double controlY1,
-    double controlX2,
-    double controlY2,
-    double anchorX,
-    double anchorY,
-  ) {
+  Graphics cubicCurveTo(double controlX1,
+      double controlY1,
+      double controlX2,
+      double controlY2,
+      double anchorX,
+      double anchorY,) {
     _path!
         .cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
     return this;
   }
 
-  Graphics curveTo(
-    double controlX,
-    double controlY,
-    double anchorX,
-    double anchorY,
-  ) {
+  Graphics curveTo(double controlX,
+      double controlY,
+      double anchorX,
+      double anchorY,) {
     _path!.quadraticBezierTo(controlX, controlY, anchorX, anchorY);
     return this;
   }
 
-  Graphics conicCurveTo(
-    double controlX,
-    double controlY,
-    double anchorX,
-    double anchorY,
-    double weight, [
-    bool relative = false,
-  ]) {
+  Graphics conicCurveTo(double controlX,
+      double controlY,
+      double anchorX,
+      double anchorY,
+      double weight, [
+        bool relative = false,
+      ]) {
     if (!relative) {
       _path!.conicTo(controlX, controlY, anchorX, anchorY, weight);
     } else {
@@ -438,16 +431,15 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics drawRoundRectComplex(
-    double x,
-    double y,
-    double width,
-    double height, [
-    double topLeftRadius = 0,
-    double topRightRadius = 0,
-    double bottomLeftRadius = 0,
-    double bottomRightRadius = 0,
-  ]) {
+  Graphics drawRoundRectComplex(double x,
+      double y,
+      double width,
+      double height, [
+        double topLeftRadius = 0,
+        double topRightRadius = 0,
+        double bottomLeftRadius = 0,
+        double bottomRightRadius = 0,
+      ]) {
     _path!.addRRect(
       RRect.fromLTRBAndCorners(
         x,
@@ -463,14 +455,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics drawRoundRect(
-    double x,
-    double y,
-    double width,
-    double height,
-    double ellipseWidth, [
-    double? ellipseHeight,
-  ]) {
+  Graphics drawRoundRect(double x,
+      double y,
+      double width,
+      double height,
+      double ellipseWidth, [
+        double? ellipseHeight,
+      ]) {
     final r = RRect.fromLTRBXY(
       x,
       y,
@@ -504,14 +495,12 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     }
   }
 
-  Graphics arcOval(
-    double cx,
-    double cy,
-    double radiusX,
-    double radiusY,
-    double startAngle,
-    double sweepAngle,
-  ) {
+  Graphics arcOval(double cx,
+      double cy,
+      double radiusX,
+      double radiusY,
+      double startAngle,
+      double sweepAngle,) {
     _path!.addArc(
       Rect.fromCenter(
         center: Offset(cx, cy),
@@ -524,14 +513,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics arc(
-    double cx,
-    double cy,
-    double radius,
-    double startAngle,
-    double sweepAngle, [
-    bool moveTo = false,
-  ]) {
+  Graphics arc(double cx,
+      double cy,
+      double radius,
+      double startAngle,
+      double sweepAngle, [
+        bool moveTo = false,
+      ]) {
     if (sweepAngle == 0) return this;
     if (!moveTo) {
       _path!.arcTo(
@@ -550,15 +538,14 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics arcToPoint(
-    double endX,
-    double endY,
-    double radius, [
-    double rotation = 0.0,
-    bool largeArc = false,
-    bool clockwise = true,
-    bool relativeMoveTo = false,
-  ]) {
+  Graphics arcToPoint(double endX,
+      double endY,
+      double radius, [
+        double rotation = 0.0,
+        bool largeArc = false,
+        bool clockwise = true,
+        bool relativeMoveTo = false,
+      ]) {
     if (radius == 0) return this;
     if (relativeMoveTo) {
       _path!.arcToPoint(
@@ -581,13 +568,12 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics drawPolygonFaces(
-    double x,
-    double y,
-    double radius,
-    int sides, [
-    double rotation = 0,
-  ]) {
+  Graphics drawPolygonFaces(double x,
+      double y,
+      double radius,
+      int sides, [
+        double rotation = 0,
+      ]) {
     final points = List<Offset>.filled(sides, Offset(0, 0));
     final rel = 2 * Math.PI / sides;
     for (var i = 1; i <= sides; ++i) {
@@ -599,14 +585,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics drawStar(
-    double x,
-    double y,
-    int points,
-    double radius, [
-    double? innerRadius,
-    double rotation = 0,
-  ]) {
+  Graphics drawStar(double x,
+      double y,
+      int points,
+      double radius, [
+        double? innerRadius,
+        double rotation = 0,
+      ]) {
     innerRadius ??= radius / 2;
     final startAngle = (-1 * Math.PI1_2) + rotation;
     final len = points * 2;
@@ -629,7 +614,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   Graphics beginHole() {
     if (_holeMode) return this;
     _holeMode = true;
-    _currentDrawing = GraphicsDrawingData(null, Path())..isHole = true;
+    _currentDrawing = GraphicsDrawingData(null, Path())
+      ..isHole = true;
     return this;
   }
 
@@ -702,7 +688,6 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     _constrainAlpha();
     if (!_isVisible) return;
 
-    // trace("en", _drawingQueue.length);
     for (var graph in _drawingQueue) {
       if (graph!.hasPicture) {
         canvas!.drawPicture(graph.picture!);
@@ -777,8 +762,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// This should be used only if you are operating with `Path` and `Paint`
   /// directly.
   /// `x` and `y` can shift the Path coordinates.
-  void pushData(
-    GraphicsDrawingData data, [
+  void pushData(GraphicsDrawingData data, [
     bool asCurrent = false,
     double? x,
     double? y,
@@ -812,8 +796,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// Appends a native `Path` to the current drawing path,
   /// `x` and `y` can offset the target position, while `transform` can be used
   /// to rotated, scale, translate, the given shape.
-  Graphics drawPath(
-    Path path, [
+  Graphics drawPath(Path path, [
     double x = 0,
     double y = 0,
     GMatrix? transform,
@@ -821,7 +804,9 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     _path!.addPath(
       path,
       Offset(x, y),
-      matrix4: transform?.toNative()?.storage,
+      matrix4: transform
+          ?.toNative()
+          ?.storage,
     );
     return this;
   }
@@ -829,8 +814,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   /// Draw a bunch of triangles in the Canvas, only supports
   /// solid fill or image (not a stroke).
   /// Doesn't use a Path(), but drawVertices()...
-  Graphics drawTriangles(
-    List<double> vertices, [
+  Graphics drawTriangles(List<double> vertices, [
     List<int>? indices,
     List<double>? uvtData,
     List<int>? hexColors,
@@ -920,7 +904,8 @@ extension ExtSkiaPaintCustom on Paint {
 }
 
 class _GraphVertices {
-  List<double?>? vertices, uvtData, adjustedUvtData;
+  List<double> vertices;
+  List<double>?uvtData, adjustedUvtData;
   List<int>? colors, indices;
   BlendMode? blendMode;
   VertexMode? mode;
@@ -940,24 +925,23 @@ class _GraphVertices {
   Culling culling;
 
   /// check if uvt requires normalization.
-  _GraphVertices(
-    this.mode,
-    this.vertices, [
-    this.indices,
-    this.uvtData,
-    this.colors,
-    this.blendMode = BlendMode.src,
-    this.culling = Culling.positive,
-  ]) {
+  _GraphVertices(this.mode,
+      this.vertices, [
+        this.indices,
+        this.uvtData,
+        this.colors,
+        this.blendMode = BlendMode.src,
+        this.culling = Culling.positive,
+      ]) {
     _normalizedUvt = false;
-    final len = uvtData!.length;
+    final len = uvtData?.length ?? 0;
     if (uvtData != null && len > 6) {
       for (var i = 0; i < 6; ++i) {
-        if (uvtData![i]! <= 2.0) {
+        if (uvtData![i] <= 2.0) {
           _normalizedUvt = true;
         }
       }
-      if (uvtData![len - 2]! <= 2.0 || uvtData![len - 1]! <= 2.0) {
+      if (uvtData![len - 2] <= 2.0 || uvtData![len - 1] <= 2.0) {
         _normalizedUvt = true;
       }
     }
@@ -1007,19 +991,20 @@ class _GraphVertices {
       adjustedUvtData = uvtData;
     } else {
       /// make a ratio of the image size
-      var imgW = shaderTexture!.width;
-      var imgH = shaderTexture.height;
-      adjustedUvtData = List<double?>.filled(uvtData!.length, null);
+      final imgW = shaderTexture!.width ?? 0;
+      final imgH = shaderTexture.height ?? 0;
+      adjustedUvtData = List<double>.filled(uvtData!.length, 0.0);
       for (var i = 0; i < uvtData!.length; i += 2) {
-        adjustedUvtData![i] = uvtData![i]! * imgW!;
-        adjustedUvtData![i + 1] = uvtData![i + 1]! * imgH!;
+        adjustedUvtData![i] = uvtData![i] * imgW;
+        adjustedUvtData![i + 1] = uvtData![i + 1] * imgH;
       }
     }
   }
 
   void calculateCulling() {
     var i = 0;
-    var offsetX = 0.0, offsetY = 0.0;
+    var offsetX = 0.0,
+        offsetY = 0.0;
     var ind = indices;
     var v = vertices;
     var l = indices!.length;
@@ -1035,12 +1020,12 @@ class _GraphVertices {
       var icx = ind[_c] * 2;
       var icy = ind[_c] * 2 + 1;
 
-      var x1 = v![iax]! - offsetX;
-      var y1 = v[iay]! - offsetY;
-      var x2 = v[ibx]! - offsetX;
-      var y2 = v[iby]! - offsetY;
-      var x3 = v[icx]! - offsetX;
-      var y3 = v[icy]! - offsetY;
+      var x1 = v[iax] - offsetX;
+      var y1 = v[iay] - offsetY;
+      var x2 = v[ibx] - offsetX;
+      var y2 = v[iby] - offsetY;
+      var x3 = v[icx] - offsetX;
+      var y3 = v[icy] - offsetY;
 
       switch (culling) {
         case Culling.positive:
@@ -1067,14 +1052,12 @@ class _GraphVertices {
 }
 
 class _GraphUtils {
-  static bool isCCW(
-    double x1,
-    double y1,
-    double x2,
-    double y2,
-    double x3,
-    double y3,
-  ) =>
+  static bool isCCW(double x1,
+      double y1,
+      double x2,
+      double y2,
+      double x3,
+      double y3,) =>
       ((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) < 0;
 
   // static List<Color> colorsFromHex(List<int> colors, List<double> alphas) {
@@ -1091,11 +1074,11 @@ class _GraphUtils {
   static Path getPathFromVertices(_GraphVertices v) {
     var path = _helperPath;
     path.reset();
-    var pos = v.vertices!;
+    final pos = v.vertices;
     var len = pos.length;
     final points = <Offset>[];
     for (var i = 0; i < len; i += 2) {
-      points.add(Offset(pos[i]!, pos[i + 1]!));
+      points.add(Offset(pos[i], pos[i + 1]));
     }
     path.addPolygon(points, true);
     return path;
@@ -1106,8 +1089,8 @@ class _GraphUtils {
     var ind = v.indices;
     if (ind == null) {
       /// calculate
-      var len = ver!.length;
-      var out = List<double?>.filled(len * 2, null);
+      var len = ver.length;
+      var out = List<double>.filled(len * 2, 0.0);
       var j = 0;
       for (var i = 0; i < len; i += 6) {
         out[j++] = ver[i + 0];
@@ -1126,7 +1109,7 @@ class _GraphUtils {
       return out;
     } else {
       var len = ind.length;
-      var out = List<double?>.filled(len * 4, null);
+      var out = List<double>.filled(len * 4, 0.0);
       var j = 0;
       for (var i = 0; i < len; i += 3) {
         var i0 = ind[i + 0];
@@ -1135,7 +1118,7 @@ class _GraphUtils {
         var v0 = i0 * 2;
         var v1 = i1 * 2;
         var v2 = i2 * 2;
-        out[j++] = ver![v0];
+        out[j++] = ver[v0];
         out[j++] = ver[v0 + 1];
         out[j++] = ver[v1];
         out[j++] = ver[v1 + 1];

@@ -22,7 +22,7 @@ class MouseRepulsionScene extends GSprite {
     mouseChildren = false;
     mouseRadiusShape = GShape();
     radiusSq = radius * radius;
-    sep = 6;
+    sep = 12;
     cols = 70;
     rows = 60;
 

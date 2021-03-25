@@ -145,14 +145,16 @@ class GTweenableList with GTweenable {
   }
 
   @override
-  void setProperty(Object? prop, double val) {
+  void setProperty(Object prop, double val) {
     final index = int.tryParse('$prop')!;
     value[index] = convertFromDouble(value[index], val);
   }
 
   @override
   double getProperty(Object prop) {
-    return convertToDouble(value[int.parse('$prop')]);
+    final idx = int.parse('$prop');
+    final output = convertToDouble(value[idx]);
+    return output;
   }
 
   GTween tween(
