@@ -3,9 +3,9 @@ import 'package:graphx/graphx.dart';
 import '../../utils/utils.dart';
 
 class DrawingScene extends GSprite {
-  GShape drawer;
-  GSprite container;
-  GBitmap captured;
+  late GShape drawer;
+  late GSprite container;
+  late GBitmap captured;
 
   @override
   void addedToStage() {
@@ -15,7 +15,7 @@ class DrawingScene extends GSprite {
     /// capturing the snapshot.
     container.graphics
         .beginFill(Colors.red.withOpacity(0))
-        .drawRect(0, 0, stage.stageWidth, stage.stageHeight)
+        .drawRect(0, 0, stage!.stageWidth, stage!.stageHeight)
         .endFill();
     drawer = GShape();
     captured = GBitmap();
@@ -28,13 +28,13 @@ class DrawingScene extends GSprite {
     container.addChild(drawer);
 
     /// keep the stage clipped to the Widget size.
-    stage.maskBounds = true;
+    stage!.maskBounds = true;
 
     /// shows a border around the stage area (for debug).
-    stage.showBoundsRect = true;
+    stage!.showBoundsRect = true;
 
     /// listen to mouse/touch events.
-    stage.onMouseDown.add(_onDown);
+    stage!.onMouseDown.add(_onDown);
   }
 
   /// basic draw line command from the previous point.
@@ -52,7 +52,7 @@ class DrawingScene extends GSprite {
 
     /// refresh the GBitmap with the new texture.
     captured.texture = texture;
-    stage.onMouseMove.remove(_onMove);
+    stage!.onMouseMove.remove(_onMove);
 
     /// after capturing the Texture, we clear the drawn line... to start fresh.
     /// and not overload the CPU.
@@ -67,7 +67,7 @@ class DrawingScene extends GSprite {
       kColorBlack.withOpacity(Math.randomRange(.4, 1)),
     );
     drawer.graphics.moveTo(mouseX, mouseY);
-    stage.onMouseMove.add(_onMove);
-    stage.onMouseUp.addOnce(_onRelease);
+    stage!.onMouseMove.add(_onMove);
+    stage!.onMouseUp.addOnce(_onRelease);
   }
 }

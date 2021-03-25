@@ -1,17 +1,16 @@
 import 'package:graphx/graphx.dart';
 
-import '../../utils/svg_utils.dart';
 import '../../utils/utils.dart';
 import 'assets.dart';
 
 class HeartScene extends GSprite {
   HeartScene({this.key});
 
-  double get h => stage.stageHeight;
+  double get h => stage!.stageHeight;
 
-  double get w => stage.stageWidth;
-  SvgData svg;
-  final GlobalKey key;
+  double get w => stage!.stageWidth;
+  SvgData? svg;
+  final GlobalKey? key;
 
   @override
   Future<void> addedToStage() async {
@@ -21,7 +20,7 @@ class HeartScene extends GSprite {
   }
 
   void _heartRain() {
-    final _grect = ContextUtils.getRenderObjectBounds(key.currentContext);
+    final _grect = ContextUtils.getRenderObjectBounds(key!.currentContext!)!;
     var isUp = _grect.y < h / 2;
     var maxDuration = 0.0;
     List.generate(

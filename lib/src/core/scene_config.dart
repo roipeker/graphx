@@ -51,17 +51,17 @@ class SceneConfig {
 
   /// re-builds the SceneController (the ScenePainter and the scene class).
   /// disposes and initializes all the scene.
-  bool? rebuildOnHotReload;
+  late bool rebuildOnHotReload;
 
   /// If the GraphX [SceneController] will use keyboard events.
-  bool? useKeyboard;
+  late bool useKeyboard;
 
   /// If this GraphX [SceneController] will use pointer (touch/mouse) events.
-  bool? usePointer;
+  late bool usePointer;
 
   /// Will be overwritten to `true` if [autoUpdateAndRender] is set on any
   /// [ScenePainter] layer.
-  bool? useTicker;
+  bool useTicker = false;
 
   /// See [CustomPaint.willChange].
   /// Rendering caching flag.
@@ -71,7 +71,7 @@ class SceneConfig {
   /// All these flags overrides the value to `true`:
   /// [autoUpdateRender], [useTicker], [usePointer], [useKeyboard]
   ///
-  bool? painterWillChange;
+  late bool painterWillChange;
 
   /// Avoids the scene from being disposed by the Widget.
   /// Meant to be used with `ScenePainter.useOwnCanvas=true`
@@ -79,7 +79,7 @@ class SceneConfig {
   /// Picture (or Image eventually) by other [ScenePainter]s.
   /// Warning: Experimental
   ///
-  bool? isPersistent = false;
+  late bool isPersistent;
 
   /// Default flag to make the engine update() the Stage and all
   /// his children (onEnterFrame), needed by [GTween] to run the tweens.
@@ -91,7 +91,7 @@ class SceneConfig {
   /// And, unless you don't need external control over the rendering & update
   /// pipelines for the scene, or if you use a static scene,
   /// you should leave it as `true`.
-  bool? autoUpdateRender = true;
+  late bool autoUpdateRender;
 
   SceneConfig({
     this.rebuildOnHotReload = true,
@@ -100,21 +100,18 @@ class SceneConfig {
     this.useTicker = false,
     this.isPersistent = false,
     this.autoUpdateRender = true,
-    this.painterWillChange,
+    this.painterWillChange = true,
   }) {
-    if (autoUpdateRender ?? false) useTicker = true;
+    if (autoUpdateRender) useTicker = true;
   }
 
   /// Utility method used by the [SceneBuilderWidget] to set the flag
   /// `CustomPaint.willChange`
   ///
   bool painterMightChange() {
-    if ((useTicker ?? false) ||
-        (autoUpdateRender ?? false) ||
-        (usePointer ?? false) ||
-        (useKeyboard ?? false)) {
+    if (useTicker || autoUpdateRender || usePointer || useKeyboard) {
       return true;
     }
-    return painterWillChange ?? false;
+    return painterWillChange;
   }
 }

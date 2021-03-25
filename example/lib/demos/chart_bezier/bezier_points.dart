@@ -1,12 +1,10 @@
 import 'package:graphx/graphx.dart';
 
 class _BezierControlPoint {
-  GPoint prev;
-  GPoint next;
-
-  _BezierControlPoint([this.prev, this.next]) {
-    prev ??= GPoint();
-    next ??= GPoint();
+  late GPoint prev, next;
+  _BezierControlPoint() {
+    prev = GPoint();
+    next = GPoint();
   }
 }
 
@@ -16,14 +14,13 @@ void bezierCurveThrough(
   Graphics g,
   List<GPoint> points, [
   double tension = .25,
-  List<GPoint> output,
+  List<GPoint>? output,
 ]) {
-  tension ??= .25;
   var len = points.length;
   if (len == 2) {
     output?.addAll([points[0], points[1]]);
-    g?.moveTo(points[0].x, points[0].y);
-    g?.lineTo(points[1].x, points[1].y);
+    g.moveTo(points[0].x, points[0].y);
+    g.lineTo(points[1].x, points[1].y);
     return;
   }
 
@@ -66,13 +63,13 @@ void bezierCurveThrough(
   );
 
   /// draw?
-  g?.moveTo(points[0].x, points[0].y);
+  g.moveTo(points[0].x, points[0].y);
   output?.add(points[0]);
   for (var i = 1; i < len; ++i) {
     var p = points[i];
     var cp = cpoints[i];
     var cpp = cpoints[i - 1];
-    g?.cubicCurveTo(cpp.next.x, cpp.next.y, cp.prev.x, cp.prev.y, p.x, p.y);
+    g.cubicCurveTo(cpp.next.x, cpp.next.y, cp.prev.x, cp.prev.y, p.x, p.y);
     output?.addAll([cpp.next, cp.prev, p]);
   }
   cpoints.clear();

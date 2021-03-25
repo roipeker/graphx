@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:graphx/graphx.dart';
 
 class MyButton extends GSprite {
@@ -8,19 +7,19 @@ class MyButton extends GSprite {
   double h = 80;
 
   // backwards background (black)
-  GShape bg;
+  late GShape bg;
 
   // filled background that changes with [_fillPercent] (yellow)
-  GShape fillBg;
+  late GShape fillBg;
 
   // the light bulb icon that toggles when clicking the button
-  GIcon icon;
+  GIcon icon = GIcon(Icons.ac_unit);
 
   bool _isTouching = false;
   bool _isOn = false;
   double _fillPercent = 0.0;
 
-  GText _fillText;
+  late GText _fillText;
 
   MyButton() {
     _init();
@@ -35,7 +34,6 @@ class MyButton extends GSprite {
     fillBg = GShape();
     _dragBackground(fillBg.graphics, Colors.yellow.shade800);
 
-    icon = GIcon(null);
     _updateIcon();
 
     icon.alignPivot();
@@ -104,7 +102,7 @@ class MyButton extends GSprite {
   /// Handler for pointer down (mouse or touch).
   void _onMouseDown(MouseInputData input) {
     scale = .94;
-    stage.onMouseUp.addOnce(_onStageRelease);
+    stage!.onMouseUp.addOnce(_onStageRelease);
   }
 
   /// Handler for mouse scroll wheel (only desktop).
@@ -155,10 +153,10 @@ class MyButton extends GSprite {
   /// update the [icon.data] and icon's color, based on [_isOn] current state.
   void _updateIcon() {
     if (_isOn) {
-      icon.data = Feather.sun;
+      icon.data = Icons.wb_incandescent;
       icon.color = Colors.yellow;
     } else {
-      icon.data = Feather.moon;
+      icon.data = Icons.wb_incandescent_outlined;
       icon.color = Colors.white;
     }
   }

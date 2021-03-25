@@ -27,7 +27,7 @@ class PickerContainer extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ValueListenableBuilder<Color>(
+          ValueListenableBuilder<Color?>(
             valueListenable: pickerNotifier,
             builder: (ctx, value, _) => Container(
               width: 40,

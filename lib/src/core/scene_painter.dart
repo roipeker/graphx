@@ -101,7 +101,7 @@ class ScenePainter with EventDispatcherMixin {
     makeCurrent();
 
     /// If needed, can be overridden later by the [root].
-    autoUpdateAndRender = core.config.autoUpdateRender ?? false;
+    autoUpdateAndRender = core.config.autoUpdateRender;
   }
 
   void _createPicture() {
@@ -201,7 +201,7 @@ class ScenePainter with EventDispatcherMixin {
   }
 
   void _initMouseInput() {
-    core.pointer?.onInput.add(_onInputHandler);
+    core.pointer.onInput.add(_onInputHandler);
   }
 
   void _onInputHandler(PointerEventData e) {
@@ -242,13 +242,13 @@ class ScenePainter with EventDispatcherMixin {
     _isReady = false;
     size = Size.zero;
     _stage?.dispose();
-    core.pointer?.onInput.remove(_onInputHandler);
+    core.pointer.onInput.remove(_onInputHandler);
     _onUpdate?.removeAll();
     _onUpdate = null;
     super.dispose();
   }
 
-  bool get _hasPointer => core.pointer?.onInput != null;
+  bool get _hasPointer => core.pointer.onInput != null;
   bool shouldRepaint() => needsRepaint;
 }
 

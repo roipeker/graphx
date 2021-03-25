@@ -3,20 +3,20 @@ import 'package:graphx/graphx.dart';
 
 class Ball extends GShape {
   double radius, vx, vy;
-  Color color;
+  Color? color;
 
   Ball({
-    double x,
-    double y,
-    this.radius,
-    this.vx,
-    this.vy,
+    double? x,
+    double? y,
+    required this.radius,
+    required this.vx,
+    required this.vy,
     this.color,
   }) {
     this.x = x;
     this.y = y;
     graphics
-        .beginFill(color.withOpacity(.8))
+        .beginFill(color!.withOpacity(.8))
         .lineStyle(6, kColorBlack)
         .drawCircle(0, 0, radius)
         .endFill()

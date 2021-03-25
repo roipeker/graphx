@@ -6,38 +6,38 @@ import 'package:graphx/graphx.dart';
 class PageDot extends GShape {
   int id;
 
-  double _baseSize;
+  double? _baseSize;
 
-  Color _color;
+  Color? _color;
 
-  Color get color => _color;
+  Color? get color => _color;
 
-  set color(Color value) {
+  set color(Color? value) {
     if (value == _color) return;
     _color = value;
     _invalidateDraw();
   }
 
-  Color _targetColor;
+  Color? _targetColor;
 
-  Color get targetColor => _targetColor;
+  Color? get targetColor => _targetColor;
 
-  GTweenableColor _colorTween;
+  GTweenableColor? _colorTween;
   bool _invalidColor = false;
 
-  set targetColor(Color value) {
+  set targetColor(Color? value) {
     if (value == _color) return;
     _targetColor = value;
     _invalidColor = true;
   }
 
-  double _size;
-  double targetSize;
+  double? _size;
+  double? targetSize;
 
-  double get size => _size;
+  double get size => _size!;
 
   set size(double value) {
-    if (value < _baseSize) value = _baseSize;
+    if (value < _baseSize!) value = _baseSize!;
     if (value == _size) return;
     _size = value;
     _invalidateDraw();
@@ -53,8 +53,8 @@ class PageDot extends GShape {
   void _draw() {
     graphics
         .clear()
-        .beginFill(_color)
-        .drawRoundRect(0, 0, _size, _baseSize, _baseSize / 2)
+        .beginFill(_color!)
+        .drawRoundRect(0, 0, _size!, _baseSize!, _baseSize! / 2)
         .endFill();
   }
 
@@ -107,9 +107,9 @@ class PageDot extends GShape {
     if (_colorTween != null) {
       GTween.killTweensOf(_colorTween);
     }
-    _colorTween = _color.twn;
-    _colorTween.tween(_targetColor, duration: .3, onUpdate: () {
-      color = _colorTween.value;
+    _colorTween = _color!.twn;
+    _colorTween!.tween(_targetColor!, duration: .3, onUpdate: () {
+      color = _colorTween!.value;
     });
   }
 }

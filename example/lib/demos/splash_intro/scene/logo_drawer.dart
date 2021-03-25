@@ -12,17 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:graphx/graphx.dart';
 
-import '../../../utils/svg_utils.dart';
-
 /// GSprite that will hold a SVG path drawing with a
 /// filled and outlined version... and the ability to partially
 /// draw the outlined based on percentage.
 class LogoDrawer extends GSprite {
-  List<PathMetric> _metricsList;
-  Path _rootPath;
+  late List<PathMetric> _metricsList;
+  late Path _rootPath;
 
-  GShape line;
-  GShape fill;
+  late GShape line;
+  late GShape fill;
 
   LogoDrawer() {
     _init();
@@ -53,11 +51,11 @@ class LogoDrawer extends GSprite {
     drawPercent(1);
   }
 
-  void drawPercent(double percent) {
+  void drawPercent(double? percent) {
     line.graphics.clear();
     line.graphics.lineStyle(1, Colors.white);
     for (var m in _metricsList) {
-      line.graphics.drawPath(m.extractPath(0, m.length * percent));
+      line.graphics.drawPath(m.extractPath(0, m.length * percent!));
     }
     line.graphics.endFill();
   }

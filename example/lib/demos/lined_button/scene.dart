@@ -8,28 +8,28 @@ final stageColor = Colors.grey.shade800;
 class LinedButtonScene extends GSprite {
   @override
   void addedToStage() {
-    stage.color = stageColor;
+    stage!.color = stageColor;
     var btn = LineButton(120, 60);
     addChild(btn);
-    btn.x = stage.stageWidth / 2;
-    btn.y = stage.stageHeight / 2;
+    btn.x = stage!.stageWidth / 2;
+    btn.y = stage!.stageHeight / 2;
   }
 }
 
 class LineButton extends GSprite {
   double w, h;
-  Path _oriPath;
-  PathMetric _metrics;
+  late Path _oriPath;
+  late PathMetric _metrics;
 
   final _tweenTf = 0.0.twn;
   final _tweenBg1 = 0.0.twn;
   final _tweenBg2 = 0.0.twn;
   final _stageColorTween = stageColor.twn;
 
-  GShape bg;
-  GShape bg2;
-  GShape bgBounds;
-  GText tf;
+  late GShape bg;
+  late GShape bg2;
+  late GShape bgBounds;
+  GText? tf;
   bool isOver = false;
 
   LineButton([this.w = 100, this.h = 50]) {
@@ -62,10 +62,10 @@ class LineButton extends GSprite {
     addChild(bg);
     addChild(bg2);
     addChild(bgBounds);
-    addChild(tf);
+    addChild(tf!);
 
     // mouseChildren = false;
-    tf.mouseEnabled = bg.mouseEnabled = bg2.mouseEnabled = false;
+    tf!.mouseEnabled = bg.mouseEnabled = bg2.mouseEnabled = false;
     // bgBounds.mouseUseShape = false;
     bgBounds.mouseEnabled = true;
     bgBounds.useCursor = true;
@@ -73,9 +73,9 @@ class LineButton extends GSprite {
     bgBounds.onMouseDown.add((e) {
       GTween.killTweensOf(tf);
       GTween.killTweensOf(_openLink);
-      tf.tween(duration: .3, scale: .88);
-      stage.onMouseUp.addOnce((e) {
-        tf.tween(
+      tf!.tween(duration: .3, scale: .88);
+      stage!.onMouseUp.addOnce((e) {
+        tf!.tween(
           duration: .5,
           scale: 1,
           ease: GEase.elasticOut,
@@ -94,8 +94,8 @@ class LineButton extends GSprite {
       });
     });
     alignPivot();
-    tf.alignPivot();
-    tf.setPosition(w / 2, h / 2);
+    tf!.alignPivot();
+    tf!.setPosition(w / 2, h / 2);
   }
 
   void _openLink() {
@@ -117,7 +117,7 @@ class LineButton extends GSprite {
       enters ? Colors.grey.shade900 : stageColor,
       ease: GEase.easeOutSine,
       duration: 1.1,
-      onUpdate: () => stage.color = _stageColorTween.value,
+      onUpdate: () => stage!.color = _stageColorTween.value,
     );
 
     _tweenTf.tween(value, duration: .4, onUpdate: _drawText);
@@ -136,12 +136,12 @@ class LineButton extends GSprite {
   }
 
   void _setStyle({
-    FontWeight fontWeight,
-    double letterSpacing,
-    Color color,
-    double fontSize,
+    FontWeight? fontWeight,
+    double? letterSpacing,
+    Color? color,
+    double? fontSize,
   }) {
-    tf.setTextStyle(
+    tf!.setTextStyle(
       TextStyle(
         fontWeight: fontWeight,
         fontSize: fontSize,
@@ -181,6 +181,6 @@ class LineButton extends GSprite {
       color: Colors.white,
       fontSize: 18,
     );
-    tf.alignPivot();
+    tf!.alignPivot();
   }
 }

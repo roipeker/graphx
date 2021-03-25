@@ -4,17 +4,15 @@
 ///
 /// web demo: https://roi-graphx-balls-collision.surge.sh/#/
 
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import 'ball.dart';
 
 class CollisionScene extends GSprite {
+  double get sw => stage!.stageWidth;
 
-  double get sw => stage.stageWidth;
-
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   /// lazy with the types :P
   var lines = [];
@@ -37,12 +35,12 @@ class CollisionScene extends GSprite {
       addChild(ball);
       balls.add(ball);
     });
-    stage.onMouseDown.add(_onMouseDown);
+    stage!.onMouseDown.add(_onMouseDown);
   }
 
   void _onMouseDown(input) {
-    stage.onMouseUp.addOnce((input) => stage.onMouseMove.removeAll());
-    stage.onMouseMove.add((input) => points.add([mouseX, mouseY, 0.0]));
+    stage!.onMouseUp.addOnce((input) => stage!.onMouseMove.removeAll());
+    stage!.onMouseMove.add((input) => points.add([mouseX, mouseY, 0.0]));
     points = <List<double>>[
       [mouseX, mouseY, 0.0]
     ];

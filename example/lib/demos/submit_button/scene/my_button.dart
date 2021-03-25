@@ -3,15 +3,15 @@ import 'package:graphx/graphx.dart';
 
 class MyButton extends GSprite {
   double w, h;
-  GShape bg, border1, border2;
-  GIcon successIco;
+  late GShape bg, border1, border2;
+  late GIcon successIco;
 
-  GText label;
+  late GText label;
   final Color mainColor = const Color(0xff58A993);
   final Color greyColor = const Color(0xffE3E3E3);
   final tweenWidth = 0.0.twn;
-  double currentW;
-  double percentLoaded = 0.0;
+  double? currentW;
+  double? percentLoaded = 0.0;
   double lineThickness = 4;
 
   MyButton(this.w, this.h) {
@@ -53,7 +53,7 @@ class MyButton extends GSprite {
   void _onMousePress(event) {
     bg.tween(duration: .3, colorize: mainColor);
     label.tween(duration: .2, colorize: Colors.white, scale: .9);
-    stage.onMouseUp.addOnce(_onMouseUp);
+    stage!.onMouseUp.addOnce(_onMouseUp);
   }
 
   void _onMouseUp(event) {
@@ -85,7 +85,7 @@ class MyButton extends GSprite {
 
   void setToProgress() {
     percentLoaded = 0;
-    final tweenProgress = percentLoaded.twn;
+    final tweenProgress = percentLoaded!.twn;
     tweenProgress.tween(
       1.0,
       duration: 1.3,
@@ -138,7 +138,7 @@ class MyButton extends GSprite {
     border2.graphics
         .clear()
         .lineStyle(lineThickness, mainColor)
-        .arc(0, 0, radius, -Math.PI / 2, Math.PI_2 * percentLoaded)
+        .arc(0, 0, radius, -Math.PI / 2, Math.PI_2 * percentLoaded!)
         .endFill();
   }
 
@@ -146,22 +146,22 @@ class MyButton extends GSprite {
     bg.graphics
         .clear()
         .beginFill(Colors.white)
-        .drawRoundRect(-currentW / 2, -h / 2, currentW, h, h / 2)
+        .drawRoundRect(-currentW! / 2, -h / 2, currentW!, h, h / 2)
         .endFill();
     var lineWOffset = lineThickness / 2;
     border1.graphics
         .clear()
         .beginFill(kColorTransparent)
         .drawRoundRect(
-          -currentW / 2 - lineWOffset,
+          -currentW! / 2 - lineWOffset,
           -h / 2 - lineWOffset,
-          currentW + lineWOffset * 2,
+          currentW! + lineWOffset * 2,
           h + lineWOffset * 2,
           h / 2,
         )
         .endFill()
         .lineStyle(lineThickness, mainColor)
-        .drawRoundRect(-currentW / 2, -h / 2, currentW, h, h / 2)
+        .drawRoundRect(-currentW! / 2, -h / 2, currentW!, h, h / 2)
         .endFill();
     bg.alignPivot();
     border1.alignPivot();

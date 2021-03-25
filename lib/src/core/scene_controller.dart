@@ -38,19 +38,18 @@ class SceneController {
 
   /// Access the keyboard manager instance associated with this
   /// [SceneController].
-  KeyboardManager? get keyboard => _keyboard;
+  KeyboardManager get keyboard => _keyboard;
 
   /// Access the pointer manager instance associated with this
   /// [SceneController].
-  PointerManager? get pointer => _pointer;
+  PointerManager get pointer => _pointer;
 
-  KeyboardManager? _keyboard;
-
-  PointerManager? _pointer;
+  late KeyboardManager _keyboard;
+  late PointerManager _pointer;
 
   GTicker? _ticker;
 
-  InputConverter? $inputConverter;
+  late InputConverter $inputConverter;
 
   SceneConfig get config => _config;
 
@@ -65,13 +64,13 @@ class SceneController {
   bool _isInited = false;
 
   set config(SceneConfig sceneConfig) {
-    _config.rebuildOnHotReload = sceneConfig.rebuildOnHotReload ?? true;
-    _config.autoUpdateRender = sceneConfig.autoUpdateRender ?? true;
-    _config.isPersistent = sceneConfig.isPersistent ?? false;
-    _config.painterWillChange = sceneConfig.painterWillChange ?? true;
-    _config.useKeyboard = sceneConfig.useKeyboard ?? false;
-    _config.usePointer = sceneConfig.usePointer ?? false;
-    _config.useTicker = sceneConfig.useTicker ?? false;
+    _config.rebuildOnHotReload = sceneConfig.rebuildOnHotReload;
+    _config.autoUpdateRender = sceneConfig.autoUpdateRender;
+    _config.isPersistent = sceneConfig.isPersistent;
+    _config.painterWillChange = sceneConfig.painterWillChange;
+    _config.useKeyboard = sceneConfig.useKeyboard;
+    _config.usePointer = sceneConfig.usePointer;
+    _config.useTicker = sceneConfig.useTicker;
   }
 
   /// constructor.
@@ -87,7 +86,7 @@ class SceneController {
     if (front != null) {
       frontScene = ScenePainter(this, front);
     }
-    this.config = config ?? SceneConfig.defaultConfig;
+    this.config = config??SceneConfig.defaultConfig;
   }
 
   /// WARNING: Internal method
@@ -109,7 +108,7 @@ class SceneController {
   }
 
   void setup() {
-    if (!GTween.initialized) {
+    if (!GTween.initializedCommonWraps) {
       GTween.registerCommonWraps();
     }
     backScene?.$setup();
@@ -129,7 +128,7 @@ class SceneController {
   }
 
   void dispose() {
-    if (_config.isPersistent ?? false) {
+    if (_config.isPersistent) {
       return;
     }
     _onHotReload?.removeAll();
@@ -145,20 +144,24 @@ class SceneController {
   CustomPainter? buildFrontPainter() => frontScene?.buildPainter();
 
   void _initInput() {
-    if (_config.useKeyboard ?? false) {
-      _keyboard ??= KeyboardManager();
-    }
-    if (_config.usePointer ?? false) {
-      _pointer ??= PointerManager();
-    }
-    if (_config.useKeyboard ?? false || (_config.usePointer ?? false)) {
-      $inputConverter ??= InputConverter(_pointer, _keyboard);
-    }
+    // if (_config.useKeyboard) {
+    //   _keyboard ??= KeyboardManager();
+    // }
+    // if (_config.usePointer) {
+    //   _pointer ??= PointerManager();
+    // }
+
+    _keyboard = KeyboardManager();
+    _pointer = PointerManager();
+    // if (_config.useKeyboard ?? false || (_config.usePointer ?? false)) {
+    //   trace("CREATE INPUT!");
+    // }
+    $inputConverter = InputConverter(_pointer, _keyboard);
   }
 
   void reassembleWidget() {
     _onHotReload?.dispatch();
-    if (_config.rebuildOnHotReload ?? false) {
+    if (_config.rebuildOnHotReload) {
       GTween.hotReload();
       dispose();
 
@@ -173,5 +176,5 @@ class SceneController {
   bool _anySceneAutoUpdate() =>
       _sceneAutoUpdate(backScene) || _sceneAutoUpdate(frontScene);
 
-  bool _hasTicker() => _anySceneAutoUpdate() || (_config.useTicker ?? false);
+  bool _hasTicker() => _anySceneAutoUpdate() || _config.useTicker;
 }

@@ -10,7 +10,7 @@ import 'dot.dart';
 class PageIndicatorPaged extends BaseScene {
   PageIndicatorPaged();
 
-  List<PageDot> _dots;
+  late List<PageDot> _dots;
   static const double dotSize = 13;
   static const double dotPreW = 18;
   static const double dotSelectedW = 34;
@@ -18,8 +18,8 @@ class PageIndicatorPaged extends BaseScene {
   static const dotSelectedColor = Colors.red;
   static const dotPreColor = Colors.blue;
 
-  GSprite container;
-  GSprite scrollContainer;
+  late GSprite container;
+  late GSprite scrollContainer;
 
   int _currentIndex = 0;
   final int _visibleItems = 5;
@@ -76,8 +76,8 @@ class PageIndicatorPaged extends BaseScene {
     /// -- end masking.
 
     /// only for testing.
-    stage.keyboard.focusNode.requestFocus();
-    stage.keyboard.onDown.add((event) {
+    stage!.keyboard!.focusNode.requestFocus();
+    stage!.keyboard!.onDown.add((event) {
       if (event.arrowLeft) {
         moveDir(-1);
       } else if (event.arrowRight) {
@@ -85,7 +85,7 @@ class PageIndicatorPaged extends BaseScene {
       }
     });
 
-    stage.onResized.add(() {
+    stage!.onResized.add(() {
       var ratioScale = sw / _allDotsWidth;
       scale = ratioScale;
 
@@ -155,17 +155,17 @@ class PageIndicatorPaged extends BaseScene {
     /// the expensize "colorize".
     nextDot?.targetColor = dotPreColor;
     prevDot?.targetColor = dotPreColor;
-    currDot?.targetSize = dotSelectedW;
-    currDot?.targetColor = dotSelectedColor;
+    currDot.targetSize = dotSelectedW;
+    currDot.targetColor = dotSelectedColor;
   }
 
   void _layoutDots() {
     var lastX = 0.0;
     for (var i = 0; i < _dots.length; ++i) {
       var dot = _dots[i];
-      var sizeDistance = dot.targetSize - dot.size;
+      var sizeDistance = dot.targetSize! - dot.size;
       if (sizeDistance.abs() < .1) {
-        dot.size = dot.targetSize;
+        dot.size = dot.targetSize!;
       } else {
         dot.size += sizeDistance / dotSizeEase;
       }
@@ -183,12 +183,12 @@ class PageIndicatorPaged extends BaseScene {
     return _dots[_currentIndex];
   }
 
-  PageDot get prevDot {
+  PageDot? get prevDot {
     if (_currentIndex == 0) return null;
     return _dots[_currentIndex - 1];
   }
 
-  PageDot get nextDot {
+  PageDot? get nextDot {
     if (_currentIndex >= _numItems - 1) return null;
     return _dots[_currentIndex + 1];
   }

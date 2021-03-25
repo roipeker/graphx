@@ -39,8 +39,8 @@ class PostVo {
   final String imageUrl;
   final String time;
 
-  int numLikes, numComments;
-  String shares;
+  int? numLikes, numComments;
+  late String shares;
 
   PostVo._(
     this.username,

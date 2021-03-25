@@ -102,7 +102,7 @@ class GTween {
   /// );
   /// ```
   static void registerCommonWraps([List<GxAnimatableBuilder>? otherWraps]) {
-    if (initialized) return;
+    if (initializedCommonWraps) return;
     GTween.registerWrap(GTweenableDisplayObject.wrap);
     GTween.registerWrap(GTweenableMap.wrap);
     GTween.registerWrap(GTweenableDouble.wrap);
@@ -111,7 +111,7 @@ class GTween {
     GTween.registerWrap(GTweenableList.wrap);
 //    GTween.registerWrap(GTweenableColor.wrap);
     otherWraps?.forEach(GTween.registerWrap);
-    initialized = true;
+    initializedCommonWraps = true;
   }
 
   static void hotReload() {
@@ -133,8 +133,8 @@ class GTween {
     _lastFrameTimeStamp = ts;
   }
 
-  static bool initialized = false;
-
+  static bool initializedEngine = false;
+  static bool initializedCommonWraps = false;
   static double _time = 0;
   static double _frame = 0;
 
@@ -147,11 +147,29 @@ class GTween {
   static void registerWrap(GxAnimatableBuilder builder) =>
       _tweenableBuilders.add(builder);
 
-  static Map? _reservedProps;
+  static void _initEngine() {
+    initializedEngine = true;
+    _time = getTimer() / 1000;
+    _frame = 0;
+    ticker.add(_updateRoot);
+  }
+
+  static final Map _reservedProps = {
+    'delay': 1,
+    'ease': 1,
+    'usedFrames': 1,
+    'overwrite': 1,
+    'onComplete': 1,
+    'runBackwards': 1,
+    'immediateRender': 1,
+    'onUpdate': 1,
+    'startAt': 1,
+  };
+
   static GTween? _first;
   static GTween? _last;
 
-  double? _duration;
+  late double _duration;
   Map? vars;
   late GVars nanoVars;
   late double _startTime;
@@ -164,7 +182,7 @@ class GTween {
   late bool _useFrames;
   double? ratio = 0;
 
-  Function? _ease;
+  late Function _ease;
 
 //  Ease _rawEase;
   bool _inited = false;
@@ -177,22 +195,7 @@ class GTween {
   bool _gc = false;
 
   GTween(this.target, double duration, this.vars, [GVars? myVars]) {
-    if (_reservedProps == null) {
-      _reservedProps = {
-        'delay': 1,
-        'ease': 1,
-        'usedFrames': 1,
-        'overwrite': 1,
-        'onComplete': 1,
-        'runBackwards': 1,
-        'immediateRender': 1,
-        'onUpdate': 1,
-        'startAt': 1,
-      };
-      _time = getTimer() / 1000;
-      _frame = 0;
-      ticker.add(_updateRoot);
-    }
+    if (!GTween.initializedEngine) GTween._initEngine();
 
     nanoVars = myVars ?? GVars();
     nanoVars.defaults();
@@ -230,7 +233,7 @@ class GTween {
     }
 //    _rawEase = nanoVars.ease;
 //    _ease = _rawEase?.getRatio;
-    _ease = nanoVars.ease;
+    _ease = nanoVars.ease ?? GTween.defaultEase;
     _useFrames = nanoVars.useFrames ?? false;
     _startTime = (_useFrames ? _frame : _time) + (nanoVars.delay ?? 0);
 
@@ -241,19 +244,19 @@ class GTween {
         killTweensOf(target);
       }
     }
-    _prev = _last;
-    if (_last != null) {
-      _last!._next = this;
+    _prev = GTween._last;
+    if (GTween._last != null) {
+      GTween._last!._next = this;
     } else {
-      _first = this;
+      GTween._first = this;
     }
-    _last = this;
+    GTween._last = this;
 
     if (nanoVars.immediateRender! ||
         (duration == 0 &&
             nanoVars.delay == 0 &&
             nanoVars.immediateRender != false)) {
-      _render(0);
+      _render(0.0);
     }
   }
 
@@ -287,10 +290,13 @@ class GTween {
     if (target == null) return;
     for (final key in vars!.keys) {
       final prop = '$key';
-      if (!_reservedProps!.containsKey(prop)) {
+      if (!GTween._reservedProps.containsKey(prop)) {
         _firstPT = PropTween(
-            target: target as GTweenable?, property: key, next: _firstPT);
-        var startVal = _getStartValue(target, key);
+          target: target as GTweenable,
+          property: key,
+          next: _firstPT,
+        );
+        final startVal = _getStartValue(target, key);
         _firstPT!.s = startVal;
         var endValue = _getEndValue(vars!, key, _firstPT!.s);
         _firstPT!.cObj = vars![key];
@@ -325,7 +331,7 @@ class GTween {
   void _setCurrentValue(PropTween pt, double ratio) {
     var value = pt.c! * ratio + pt.s;
     if (pt.t is GTweenable) {
-      pt.t!.setProperty(pt.p, value);
+      pt.t!.setProperty(pt.p!, value);
     } else {
       pt.t![pt.p as String] = value;
     }
@@ -337,16 +343,16 @@ class GTween {
     } else if (t is Map) {
       return t[prop];
     }
-    throw 'error';
+    throw 'GTween Error: property not found.';
   }
 
-  void _render(double? time) {
+  void _render(double time) {
     if (!_inited) {
       _init();
-      time = 0;
+      time = 0.0;
     }
     var prevTime = time;
-    if (time! >= _duration!) {
+    if (time >= _duration) {
       time = _duration;
       ratio = 1;
     } else if (time <= 0) {
@@ -356,7 +362,7 @@ class GTween {
       ratio = 0;
     } else {
 //      ratio = _ease.getRatio(time / _duration);
-      ratio = _ease!(time / _duration!);
+      ratio = _ease(time / _duration);
     }
 
     var pt = _firstPT;
@@ -508,11 +514,11 @@ class GTween {
     _frame += 1;
     // _time = getTimer() * .001;
     if (delta <= 0) delta = .016;
-    _time += delta * timeScale;
-    var tween = _first;
+    GTween._time += delta * GTween.timeScale;
+    var tween = GTween._first;
     while (tween != null) {
       var next = tween._next;
-      var t = tween._useFrames ? _frame : _time;
+      double t = tween._useFrames ? GTween._frame : GTween._time;
       if (t >= tween._startTime && !tween._gc) {
         tween._render(t - tween._startTime);
       }

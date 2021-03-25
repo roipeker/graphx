@@ -218,7 +218,7 @@ class GText extends GDisplayObject {
 
   void _layout() {
     //// Web has a bug for double.infinity for text layout.
-    var paragraphWidth = !SystemUtils.usingSkia ? _maxTextWidthForWeb : _width;
+    final paragraphWidth = _width.isInfinite && !SystemUtils.usingSkia ? _maxTextWidthForWeb : _width;
     _paragraph?.layout(ui.ParagraphConstraints(width: paragraphWidth));
     _invalidSize = false;
   }

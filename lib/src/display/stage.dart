@@ -214,8 +214,8 @@ class Stage extends GDisplayObjectContainer
   void dispose() {
     _size = null;
     _backgroundPaint = null;
-    scene.core.pointer?.dispose();
-    scene.core.keyboard?.dispose();
+    scene.core.pointer.dispose();
+    scene.core.keyboard.dispose();
     $disposeResizeSignals();
     $disposeTickerSignals();
     $disposeStagePointerSignals();

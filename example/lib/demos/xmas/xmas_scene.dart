@@ -10,9 +10,9 @@ import 'package:graphx/graphx.dart';
 class SnowScene extends GSprite {
   int numTextureVariants = 6;
   int numFlakes = 100;
-  final List<GTexture> _textures = [];
-  List<Snowflake> flakes;
-  Timer _snowDirectionTimer;
+  final List<GTexture?> _textures = [];
+  List<Snowflake> flakes = <Snowflake>[];
+  late Timer _snowDirectionTimer;
 
   @override
   Future<void> addedToStage() async {
@@ -28,8 +28,8 @@ class SnowScene extends GSprite {
       var flake = Snowflake(texture);
       addChild(flake);
       flake.setPosition(
-        Math.randomRange(0, stage.stageWidth),
-        Math.randomRange(0, stage.stageHeight),
+        Math.randomRange(0, stage!.stageWidth),
+        Math.randomRange(0, stage!.stageHeight),
       );
       return flake;
     });
@@ -59,12 +59,12 @@ class SnowScene extends GSprite {
       flake.y += flake.velY;
 
       /// check the stage bounds (Scaffold::body)
-      if (flake.y > stage.stageHeight) {
+      if (flake.y > stage!.stageHeight) {
         flake.y = -flake.height;
       }
       if (flake.x < -flake.width) {
-        flake.x = stage.stageWidth;
-      } else if (flake.x > stage.stageWidth) {
+        flake.x = stage!.stageWidth;
+      } else if (flake.x > stage!.stageWidth) {
         flake.x = -flake.width;
       }
     });
@@ -89,10 +89,10 @@ class Snowflake extends GBitmap {
       minVelY = .5,
       maxVelY = 2.5;
 
-  double velY, velX;
+  double velY = 0.0, velX = 0.0;
 
   /// GBitmap requires the Texture in the constructor.
-  Snowflake(GTexture texture) : super(texture) {
+  Snowflake(GTexture? texture) : super(texture) {
     _init();
   }
 

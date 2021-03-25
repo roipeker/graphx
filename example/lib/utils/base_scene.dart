@@ -4,7 +4,7 @@ class BaseScene extends GSprite {
   double get sw => stage?.stageWidth ?? 0;
   double get sh => stage?.stageHeight ?? 0;
 
-  BaseScene([GSprite doc]) {
+  BaseScene([GSprite? doc]) {
     doc?.addChild(this);
   }
 }

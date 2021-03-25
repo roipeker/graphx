@@ -11,7 +11,7 @@ extension MyGlowingExt on Widget {
     double endScaleInterval = 0.8,
     double circleInterval = .2,
     double replayDelay = .2,
-    Function(Graphics graphics, Size size) graphicBuilder,
+    Function(Graphics graphics, Size size)? graphicBuilder,
   }) {
     return SceneBuilderWidget(
         builder: () => SceneController(
@@ -34,7 +34,7 @@ class MyGlowingEffect extends GSprite {
   final Color color;
   final double duration, circleInterval, replayDelay;
   final double startScale, endScale, endScaleInterval;
-  final Function(Graphics graphics, Size size) graphicBuilder;
+  final Function(Graphics graphics, Size size)? graphicBuilder;
 
   MyGlowingEffect({
     this.color = const Color(0x8842A5F5),
@@ -56,8 +56,8 @@ class MyGlowingEffect extends GSprite {
     final circles = List<GShape>.generate(4, (index) {
       var shape = GShape();
       addChild(shape);
-      final size = Size(stage.stageWidth, stage.stageHeight);
-      shape.setPosition(stage.stageWidth / 2, stage.stageHeight / 2);
+      final size = Size(stage!.stageWidth, stage!.stageHeight);
+      shape.setPosition(stage!.stageWidth / 2, stage!.stageHeight / 2);
       if (graphicBuilder == null) {
         drawCircle(shape.graphics, size, color);
       } else {

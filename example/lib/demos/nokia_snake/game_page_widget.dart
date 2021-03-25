@@ -9,7 +9,7 @@ import 'nokia_snake.dart';
 class GamePage extends StatefulWidget {
   final int speed;
 
-  const GamePage({Key key, @required this.speed}) : super(key: key);
+  const GamePage({Key? key, required this.speed}) : super(key: key);
 
   @override
   _GamePageState createState() => _GamePageState();

@@ -6,20 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class GaugeMeterScene extends GSprite {
-  GSprite container;
-  GShape nailMeter;
-  GText labelValue;
+  late GSprite container;
+  late GShape nailMeter;
+  late GText labelValue;
   double swipeAngle = Math.PI * .8;
-  double offsetAngle;
+  late double offsetAngle;
   Color nailColor = Colors.redAccent;
   String letterValue = 'A';
   int gaugeSteps = 7;
   double maxValue = 90;
-  double stepValueDeg;
+  late double stepValueDeg;
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   @override
   void addedToStage() {
@@ -34,7 +34,7 @@ class GaugeMeterScene extends GSprite {
     var curve = GShape();
     container.addChild(curve);
     var bigRadius = 214 / 2;
-    final baseColor = Color.lerp(nailColor, Colors.black, .6);
+    final baseColor = Color.lerp(nailColor, Colors.black, .6)!;
     offsetAngle = -(Math.PI / 2) - swipeAngle / 2;
     var g = curve.graphics;
 
@@ -94,7 +94,7 @@ class GaugeMeterScene extends GSprite {
 
     // big value text.
     var labelA = GText(
-      text: letterValue ?? 'V',
+      text: letterValue,
       textStyle: TextStyle(
         fontSize: 25,
         fontWeight: FontWeight.bold,
@@ -136,8 +136,8 @@ class GaugeMeterScene extends GSprite {
     // adjust size
     // container.scale = .5;
     // container.$debugBounds = true;
-    stage.onResized.add(() {
-      var graphBounds = container.bounds;
+    stage!.onResized.add(() {
+      var graphBounds = container.bounds!;
       var r1 = sw / sh;
       var r2 = graphBounds.width / graphBounds.height;
       if (r1 < r2) {

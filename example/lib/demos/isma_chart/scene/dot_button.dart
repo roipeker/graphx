@@ -1,17 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import '../data.dart';
 
 class DotButton extends GSprite {
-  GShape bg, bgOver;
+  late GShape bg, bgOver;
 
-  DotDataModel model;
+  DotDataModel? model;
 
   void setValue(double value) {
     model = DotDataModel();
-    model.value = value;
+    model!.value = value;
   }
 
   @override
@@ -42,8 +41,8 @@ class DotButton extends GSprite {
     onMouseOver.add((event) {
       bgOver.tween(duration: .5, scale: 2);
 
-      final rect = bg.getBounds(stage);
-      model.coordinate.setTo(
+      final rect = bg.getBounds(stage)!;
+      model!.coordinate.setTo(
         rect.x + rect.width / 2,
         rect.y + rect.height / 2,
       );

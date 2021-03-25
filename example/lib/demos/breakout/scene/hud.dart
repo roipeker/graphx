@@ -7,7 +7,7 @@ import 'game_scene.dart';
 
 class HUD extends GSprite {
   // ignore: non_constant_identifier_names
-  GText _score_tf, _balls_tf, _gameState_tf, _speedUp_tf;
+  GText? _score_tf, _balls_tf, _gameState_tf, _speedUp_tf;
   final w = BreakoutAtari.gameW;
   final h = BreakoutAtari.gameH;
 
@@ -20,15 +20,15 @@ class HUD extends GSprite {
     var titleScore = _getText('SCORE', 4);
     titleScore.setPosition(textMargin, textMargin);
     _score_tf = _getText('0', 6);
-    _score_tf.setPosition(textMargin, 10);
+    _score_tf!.setPosition(textMargin, 10);
 
     var titleBall = _getText('BALL', 4);
     titleBall.alignPivot(Alignment.topRight);
     titleBall.setPosition(w - textMargin, textMargin);
 
     _balls_tf = _getText('3/3', 6);
-    _balls_tf.alignPivot(Alignment.topRight);
-    _balls_tf.setPosition(titleBall.x, 10);
+    _balls_tf!.alignPivot(Alignment.topRight);
+    _balls_tf!.setPosition(titleBall.x, 10);
 
     _gameState_tf = GText(
       text: 'GAME OVER',
@@ -40,13 +40,13 @@ class HUD extends GSprite {
       ),
       paragraphStyle: ParagraphStyle(textAlign: TextAlign.center),
     );
-    _gameState_tf.y = (h - _gameState_tf.textHeight) / 2;
-    addChild(_gameState_tf);
+    _gameState_tf!.y = (h - _gameState_tf!.textHeight) / 2;
+    addChild(_gameState_tf!);
 
     _speedUp_tf = _getText('SPEED UP!', 10);
-    _speedUp_tf.alignPivot();
-    _speedUp_tf.setPosition(w / 2, h / 2);
-    _speedUp_tf.alpha = 0;
+    _speedUp_tf!.alignPivot();
+    _speedUp_tf!.setPosition(w / 2, h / 2);
+    _speedUp_tf!.alpha = 0;
 
     setGameOver(false);
   }
@@ -102,13 +102,13 @@ class HUD extends GSprite {
   void speedUp() {
     final offset = 10.0;
     GTween.killTweensOf(_speedUp_tf);
-    _speedUp_tf.y = h / 2;
-    _speedUp_tf.alpha = 0;
-    _speedUp_tf.tween(duration: .15, alpha: 1);
-    _speedUp_tf.tween(duration: 1.2, delay: .15, y: h / 2 - offset, alpha: 0);
+    _speedUp_tf!.y = h / 2;
+    _speedUp_tf!.alpha = 0;
+    _speedUp_tf!.tween(duration: .15, alpha: 1);
+    _speedUp_tf!.tween(duration: 1.2, delay: .15, y: h / 2 - offset, alpha: 0);
   }
 
-  GText _getText(String label, double size, [Shadow shadow]) {
+  GText _getText(String label, double size, [Shadow? shadow]) {
     var tf = GText(
       text: label,
       textStyle: TextStyle(
@@ -124,32 +124,32 @@ class HUD extends GSprite {
 
   void showPause(bool isPaused) {
     if (isPaused) {
-      _gameState_tf.text = 'PAUSED';
-      _gameState_tf.visible = true;
+      _gameState_tf!.text = 'PAUSED';
+      _gameState_tf!.visible = true;
     } else {
-      _gameState_tf.visible = false;
+      _gameState_tf!.visible = false;
     }
   }
 
   void showWin() {
-    _gameState_tf.text = 'YOU WIN!';
-    _gameState_tf.visible = true;
+    _gameState_tf!.text = 'YOU WIN!';
+    _gameState_tf!.visible = true;
   }
 
   void setBalls(int numBalls, int maxBalls) {
-    _balls_tf.text = '$numBalls/$maxBalls';
-    _balls_tf.alignPivot(Alignment.topRight);
+    _balls_tf!.text = '$numBalls/$maxBalls';
+    _balls_tf!.alignPivot(Alignment.topRight);
   }
 
   void setScore(int points) {
-    _score_tf.text = '$points';
+    _score_tf!.text = '$points';
   }
 
   void setGameOver(bool flag) {
-    _gameState_tf.visible = false;
+    _gameState_tf!.visible = false;
     if (flag) {
-      _gameState_tf.text = 'GAME OVER';
-      _gameState_tf.visible = true;
+      _gameState_tf!.text = 'GAME OVER';
+      _gameState_tf!.visible = true;
     }
   }
 }
