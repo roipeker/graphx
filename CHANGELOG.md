@@ -1,3 +1,7 @@
+## [0.9.10]
+- start port to null-safety.
+- fix a bug with GText layout.
+
 ## [0.9.9]
 - major fix for `GTween` when running lots of SceneControllers instances.
 - fix stage dispose exception with keyboard/pointer.
