@@ -474,13 +474,17 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  /// Draws a complex polygon from a List of `GPoint`.
+  /// Is similar to use [moveTo] and [lineTo] methods but in one command..
+  /// [closePolygon] will close the shape (defaults to `true`).
+  /// See dart:ui [Path.addPolygon].
   Graphics drawPoly(List<GPoint> points, [bool closePolygon = true]) {
     final len = points.length;
-    final list = List<Offset?>.filled(len, null);
+    final list = List<Offset>.filled(len, Offset.zero);
     for (var i = 0; i < len; ++i) {
       list[i] = points[i].toNative();
     }
-    _path!.addPolygon(list as List<ui.Offset>, true);
+    _path!.addPolygon(list, true);
     return this;
   }
 
