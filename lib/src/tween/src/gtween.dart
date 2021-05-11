@@ -518,7 +518,7 @@ class GTween {
     var tween = GTween._first;
     while (tween != null) {
       var next = tween._next;
-      double t = tween._useFrames ? GTween._frame : GTween._time;
+      final t = tween._useFrames ? GTween._frame : GTween._time;
       if (t >= tween._startTime && !tween._gc) {
         tween._render(t - tween._startTime);
       }
