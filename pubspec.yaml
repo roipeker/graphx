@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  xml: ^5.0.2
-  http: ^0.13.1
-  flutter_svg: ^0.21.0-nullsafety.0
+  xml: ^5.1.0
+  http: ^0.13.3
+  flutter_svg: ^0.22.0
 
 dev_dependencies:
   flutter_test:
