@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import '../../graphx.dart';
@@ -39,6 +40,7 @@ class Stage extends GDisplayObjectContainer
   ui.Size _size;
   ui.Paint _backgroundPaint;
   DisplayBoundsDebugger _boundsDebugger;
+
 
   /// Shortcut to access the owner [SceneController].
   SceneController get controller => scene.core;
