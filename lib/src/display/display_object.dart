@@ -147,6 +147,7 @@ abstract class GDisplayObject
           }
           if($onLongPress != null) {
             _longPressTimer = Timer($onLongPress.configure[EventSignalConfKey.LongPressDuration], () {
+              mouseInput.type = MouseInputType.longPress;
               $onLongPress?.dispatch(mouseInput);
             });
           }
