@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../../geom/gxrect.dart';
+import '../../geom/grect.dart';
 import 'blur_filter.dart';
 
 class GColorFilters {

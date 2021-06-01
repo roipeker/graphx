@@ -7,7 +7,6 @@
 /// https://gist.github.com/roipeker/37374272d15539aa60c2bdc39001a035
 ///
 
-
 /// just raw SVG strings... I used Figma to get the outlined texts.
 
 const graphxSvgString = '''

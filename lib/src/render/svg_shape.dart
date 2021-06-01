@@ -96,7 +96,7 @@ class GSvgShape extends GDisplayObject {
   }
 
   @override
-  void paint(Canvas? canvas) {
+  void paint(Canvas canvas) {
     if (!_isValid) return;
     super.paint(canvas);
   }

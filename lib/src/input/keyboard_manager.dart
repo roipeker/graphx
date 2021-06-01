@@ -4,16 +4,11 @@ import 'package:flutter/services.dart';
 import '../../graphx.dart';
 
 class KeyboardManager<T extends KeyboardEventData> {
-  FocusNode? _focusNode;
-
-  FocusNode get focusNode => _focusNode ??= FocusNode();
+  final focusNode = FocusNode();
 
   void dispose() {
-    // _focusNode?.dispose();
-    // _focusNode = null;
     _onDown?.removeAll();
     _onUp?.removeAll();
-    _lastEvent = null;
   }
 
   EventSignal<T> get onDown => _onDown ??= EventSignal<T>();
@@ -34,7 +29,7 @@ class KeyboardManager<T extends KeyboardEventData> {
 
   bool get isControlPressed => _lastEvent?.rawEvent?.isControlPressed ?? false;
 
-  bool get isMetaPressed => _lastEvent?.rawEvent?.isMetaPressed ?? false;
+  bool get isMetaPressed => _lastEvent?.rawEvent?.isMetaPressed ?? false ;
 
   void $process(KeyboardEventData event) {
     _lastEvent = event;

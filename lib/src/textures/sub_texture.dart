@@ -56,8 +56,8 @@ class GSubTexture extends GTexture {
     _parent = parent;
     _ownsParent = ownsParent;
     _rotated = rotated;
-    _w = (rotated ? _region!.height : _region!.width)/ scaleModifier;
-    _h = (rotated ? _region!.width : _region!.height)/ scaleModifier;
+    _w = (rotated ? _region!.height : _region!.width) / scaleModifier;
+    _h = (rotated ? _region!.width : _region!.height) / scaleModifier;
     _scale = parent.scale! * scaleModifier;
     _sourceRegion = _region!.clone() * scale!;
 

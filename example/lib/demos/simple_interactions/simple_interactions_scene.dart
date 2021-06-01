@@ -55,7 +55,7 @@ class SimpleInteractionsScene extends GSprite {
     /// for access modifiers keys, is better to check the raw event itself.
     /// as multiple physical keys have the same behaviour (shift, command,
     /// alt, etc) but different key codes.
-    if (event.rawEvent!.isShiftPressed) {
+    if (event.rawEvent.isShiftPressed) {
       pixelsToMove = 30.0;
     }
 
@@ -71,7 +71,7 @@ class SimpleInteractionsScene extends GSprite {
     if (event.isKey(LogicalKeyboardKey.arrowUp)) {
       // arrow key UP
       ball.y -= pixelsToMove;
-    } else if (event.rawEvent!.logicalKey == LogicalKeyboardKey.arrowDown) {
+    } else if (event.rawEvent.logicalKey == LogicalKeyboardKey.arrowDown) {
       // arrow key DOWN
       ball.y += pixelsToMove;
     }

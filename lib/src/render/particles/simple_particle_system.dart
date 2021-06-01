@@ -113,13 +113,11 @@ class GSimpleParticleSystem extends GDisplayObject {
   void _setInitialParticlePosition(GSimpleParticle p) {
     p.x = useWorldSpace ? x : 0;
     if (dispersionXVariance > 0) {
-      p.x +=
-          dispersionXVariance * Math.random() - dispersionXVariance * .5;
+      p.x += dispersionXVariance * Math.random() - dispersionXVariance * .5;
     }
     p.y = useWorldSpace ? y : 0;
     if (dispersionYVariance > 0) {
-      p.y +=
-          dispersionYVariance * Math.random() - dispersionYVariance * .5;
+      p.y += dispersionYVariance * Math.random() - dispersionYVariance * .5;
     }
     p.rotation = initialAngle;
     if (initialAngleVariance > 0) {
@@ -159,8 +157,7 @@ class GSimpleParticleSystem extends GDisplayObject {
   late double particlePivotY;
 
   void forceBurst() {
-    var currentEmission =
-        (emission + emissionVariance * Math.random()).toInt();
+    var currentEmission = (emission + emissionVariance * Math.random()).toInt();
     for (var i = 0; i < currentEmission; ++i) {
       activateParticle();
     }
@@ -204,7 +201,7 @@ class GSimpleParticleSystem extends GDisplayObject {
   }
 
   @override
-  void paint(ui.Canvas? canvas) {
+  void paint(ui.Canvas canvas) {
     if (!$hasVisibleArea) return;
     if (useWorldSpace) {
       render(canvas);
@@ -234,8 +231,8 @@ class GSimpleParticleSystem extends GDisplayObject {
       double? tx, ty, sx, sy;
       tx = particle.x;
       ty = particle.y;
-      sx = particle.scaleX/ texture!.scale!;
-      sy = particle.scaleY/ texture!.scale!;
+      sx = particle.scaleX / texture!.scale!;
+      sy = particle.scaleY / texture!.scale!;
       if (useWorldSpace) {
         sx *= scaleX;
         sy *= scaleY;

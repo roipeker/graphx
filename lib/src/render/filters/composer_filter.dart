@@ -9,7 +9,7 @@ class GComposerFilter extends GBaseFilter {
   @override
   void resolvePaint(ui.Paint paint) {}
 
-  void process(ui.Canvas? canvas, Function applyPaint, [int processCount = 1]) {
+  void process(ui.Canvas canvas, Function applyPaint, [int processCount = 1]) {
     /// todo: figure the area.
     // canvas.saveLayer(null, paint);
     // canvas.translate(_dx, _dy);

@@ -45,6 +45,7 @@ class DrawTriangleGridScene extends GSprite {
     /// these are the points that we MOVE to update the grid.
     dots = List.generate(total, (index) {
       var d = GraphPoint();
+
       /// uncomment this to see the DOTS.
       // container.addChild(d);
       var idx = index % cols;

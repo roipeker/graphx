@@ -218,21 +218,23 @@ class GText extends GDisplayObject {
 
   void _layout() {
     //// Web has a bug for double.infinity for text layout.
-    final paragraphWidth = _width.isInfinite && !SystemUtils.usingSkia ? _maxTextWidthForWeb : _width;
+    final paragraphWidth = _width.isInfinite && !SystemUtils.usingSkia
+        ? _maxTextWidthForWeb
+        : _width;
     _paragraph?.layout(ui.ParagraphConstraints(width: paragraphWidth));
     _invalidSize = false;
   }
 
   /// Warning: Internal method.
   /// applies the painting after the DisplayObject transformations.
-  /// Should be overriden by subclasses.
+  /// Should be override by subclasses.
   @override
-  void $applyPaint(ui.Canvas? canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     super.$applyPaint(canvas);
     if (_text == '') return;
     validate();
     if (backgroundColor != null && backgroundColor!.alpha > 0) {
-      canvas!.drawRect(
+      canvas.drawRect(
         ui.Rect.fromLTWH(0, 0, intrinsicWidth, textHeight),
         ui.Paint()..color = backgroundColor!,
       );
@@ -243,11 +245,11 @@ class GText extends GDisplayObject {
 //        final alphaPaint = PainterUtils.getAlphaPaint($alpha);
 //        final alphaPaint = _alphaPaint;
 //        var bounds = Rect.fromLTWH(0, 0, textWidth, textHeight);
-        canvas!.saveLayer(null, _alphaPaint);
+        canvas.saveLayer(null, _alphaPaint);
         canvas.drawParagraph(_paragraph!, ui.Offset.zero);
         canvas.restore();
       } else {
-        canvas!.drawParagraph(_paragraph!, ui.Offset.zero);
+        canvas.drawParagraph(_paragraph!, ui.Offset.zero);
       }
     }
   }

@@ -77,13 +77,13 @@ class Stage extends GDisplayObjectContainer
   }
 
   @override
-  void paint(ui.Canvas? canvas) {
+  void paint(ui.Canvas canvas) {
     /// scene start painting.
     if (maskBounds && _stageRectNative != null) {
-      canvas!.clipRect(_stageRectNative!);
+      canvas.clipRect(_stageRectNative!);
     }
     if (_backgroundPaint != null) {
-      canvas!.drawPaint(_backgroundPaint!);
+      canvas.drawPaint(_backgroundPaint!);
     }
     super.paint(canvas);
     if (DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.stage) {
@@ -91,7 +91,7 @@ class Stage extends GDisplayObjectContainer
       _boundsDebugger.render();
     }
     if (showBoundsRect) {
-      canvas!.drawPath(_stageBoundsRectPath, _stageBoundsRectPaint);
+      canvas.drawPath(_stageBoundsRectPath, _stageBoundsRectPaint);
     }
   }
 

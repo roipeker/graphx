@@ -26,7 +26,7 @@ class ScenePainter with EventDispatcherMixin {
   /// Warning: Experimental state
   bool useOwnCanvas = false;
   bool _ownCanvasNeedsRepaint = false;
-  Canvas? $canvas;
+  late Canvas $canvas;
 
   /// Size of the area available in `CustomPainter::paint()`
   Size size = Size.zero;
@@ -93,7 +93,7 @@ class ScenePainter with EventDispatcherMixin {
     if (useOwnCanvas) {
       _pictureFromCanvas();
     } else {
-      _stage!.paint($canvas);
+      _stage!.paint(canvas);
     }
   }
 
@@ -146,7 +146,7 @@ class ScenePainter with EventDispatcherMixin {
     if (!_mouseMoveInputDetected && _lastMouseX != -1000000) {
       final input = MouseInputData(
         target: _stage,
-        dispatcher: _stage,
+        dispatcher: _stage!,
         type: MouseInputType.still,
       );
       input.uid = ++MouseInputData.uniqueId;
@@ -207,7 +207,7 @@ class ScenePainter with EventDispatcherMixin {
   void _onInputHandler(PointerEventData e) {
     var input = MouseInputData(
       target: stage,
-      dispatcher: stage,
+      dispatcher: stage!,
       type: MouseInputData.fromNativeType(e.type),
     );
     input.rawEvent = e;
@@ -233,7 +233,7 @@ class ScenePainter with EventDispatcherMixin {
       _createPicture();
     }
     if (_canvasPicture != null) {
-      $canvas!.drawPicture(_canvasPicture!);
+      $canvas.drawPicture(_canvasPicture!);
     }
   }
 

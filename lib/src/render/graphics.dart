@@ -127,19 +127,18 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       texture.root!,
       tileMode,
       tileMode,
-      matrix.toNative()!.storage,
+      matrix.toNative().storage,
     );
     _addFill(fill);
     _currentDrawing!.shaderTexture = texture;
     return this;
   }
 
-  Graphics beginFill(Color color) {
+  Graphics beginFill(Color color, [bool antiAlias = true]) {
     if (_holeMode) return this;
     final fill = Paint();
     fill.style = PaintingStyle.fill;
-    fill.isAntiAlias = true;
-    // fill.color = Color(color).withOpacity(alpha.clamp(0.0, 1.0));
+    fill.isAntiAlias = antiAlias;
     fill.color = color;
     _addFill(fill);
     return this;
@@ -350,7 +349,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       texture.root!,
       tileMode,
       tileMode,
-      matrix.toNative()!.storage,
+      matrix.toNative().storage,
     );
     // _addFill(fill);
     return this;
@@ -697,11 +696,11 @@ class Graphics with RenderUtilMixin implements GxRenderable {
   }
 
   @override
-  void paint(Canvas? canvas) {
+  void paint(Canvas canvas) {
     // TODO : add mask support.
     if (isMask) {
       for (var graph in _drawingQueue) {
-        canvas!.clipPath(graph!.path!, doAntiAlias: false);
+        canvas.clipPath(graph!.path!, doAntiAlias: false);
       }
       return;
     }
@@ -710,7 +709,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
     for (var graph in _drawingQueue) {
       if (graph!.hasPicture) {
-        canvas!.drawPicture(graph.picture!);
+        canvas.drawPicture(graph.picture!);
         break;
       }
       final fill = graph.fill!;
@@ -740,20 +739,20 @@ class Graphics with RenderUtilMixin implements GxRenderable {
           graph.vertices!.calculateUvt(graph.shaderTexture);
         }
         if (fill.style == PaintingStyle.stroke) {
-          canvas!.drawRawPoints(
+          canvas.drawRawPoints(
             ui.PointMode.lines,
             graph.vertices!.rawPoints!,
             fill,
           );
         } else {
-          canvas!.drawVertices(
+          canvas.drawVertices(
             graph.vertices!.rawData!,
             graph.vertices!.blendMode!,
             fill,
           );
         }
       } else {
-        canvas!.drawPath(graph.path!, fill);
+        canvas.drawPath(graph.path!, fill);
       }
 
       fill.color = baseColor;

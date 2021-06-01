@@ -140,6 +140,7 @@ class PageIndicatorPaged extends BaseScene {
       dot.tween(
         duration: .3,
         alpha: targetAlpha,
+
         /// for a zoom in effect
         // scale: targetAlpha == 1 ? 1 : .25,
         // y: targetAlpha == 1 ? 0.0 : dotSize / 2,

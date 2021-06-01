@@ -40,7 +40,7 @@ abstract class GraphicsClipper extends CustomClipper<Path> {
     final m = Pool.getMatrix();
     m.setTransform(
         x, y, pivotX, pivotY, scaleX, scaleY, skewX, skewY, rotation);
-    final result = p.transform(m.toNative()!.storage);
+    final result = p.transform(m.toNative().storage);
     Pool.putMatrix(m);
     return result;
   }

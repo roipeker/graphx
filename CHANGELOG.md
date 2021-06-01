@@ -1,3 +1,12 @@
+## [1.0.1]
+- more null safety migrations.
+- experimental GDropShadowFilter.innerShadow (hurts performance).
+- add SceneBuilderWidget.autoSize to auto expand the scene on the parent widget.
+- fix bug with GText in `LayoutUtils.row`.
+- fix `EventSignal` bug, remove() callbacks while dispatching them.
+- prevents assigning `NaN` to GDisplayObject transform properties based on `double`.
+- some minor fixes and forced non-nullable properties.
+
 ## [1.0.0-nullsafety.0]
 - initial migration to null-safety
 - fix non-working examples.

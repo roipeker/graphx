@@ -93,7 +93,7 @@ class GBitmap extends GDisplayObject {
   }
 
   @override
-  void paint(ui.Canvas? canvas) {
+  void paint(ui.Canvas canvas) {
     if (texture == null) return;
     _hasScale9Grid = texture!.scale9Grid != null;
     if (_hasScale9Grid) {
@@ -103,7 +103,7 @@ class GBitmap extends GDisplayObject {
   }
 
   @override
-  void $applyPaint(ui.Canvas? canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (hasFilters) {
       for (var filter in filters!) {
         filter.update();

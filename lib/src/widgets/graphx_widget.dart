@@ -21,6 +21,10 @@ class SceneBuilderWidget extends StatefulWidget {
   /// defaults to capture translucent("empty") areas.
   final HitTestBehavior pointerBehaviour;
 
+  /// Wraps the [CustomPaint] in an expanded SizedBox
+  /// so it takes the available space in the parent.
+  final bool autoSize;
+
   const SceneBuilderWidget({
     Key? key,
     required this.builder,
@@ -28,6 +32,7 @@ class SceneBuilderWidget extends StatefulWidget {
     this.painterIsComplex = true,
     this.mouseOpaque = true,
     this.pointerBehaviour = HitTestBehavior.translucent,
+    this.autoSize = true,
   }) : super(key: key);
 
   @override
@@ -41,7 +46,6 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
   void initState() {
     super.initState();
     _controller = widget.builder();
-
     _controller.resolveWindowBounds = _getRenderObjectWindowBounds;
     _controller.$init();
   }
@@ -76,8 +80,13 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
       foregroundPainter: _controller.buildFrontPainter(),
       isComplex: widget.painterIsComplex,
       willChange: _controller.config.painterMightChange(),
-      child: widget.child ?? Container(),
+      child: widget.child ?? const SizedBox(),
     );
+    if (widget.autoSize) {
+      child = SizedBox.expand(
+        child: child,
+      );
+    }
 
     var converter = _controller.$inputConverter;
     if (_controller.config.usePointer) {

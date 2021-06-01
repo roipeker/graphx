@@ -3,6 +3,7 @@
 import '../../graphx.dart';
 
 double deg2rad(double deg) => deg / 180.0 * Math.PI;
+
 double rad2deg(double rad) => rad / Math.PI * 180.0;
 
 abstract class MathUtils {

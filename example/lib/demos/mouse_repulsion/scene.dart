@@ -75,6 +75,10 @@ class MouseRepulsionScene extends GSprite {
       var dy = d.y - my;
       var dsq = dx * dx + dy * dy;
       if (dsq < radiusSq) {
+        /// can't divide by 0
+        if (dsq == 0) {
+          dsq = 200;
+        }
         var dist = Math.sqrt(dsq);
         var tx = mx + dx / dist * radius;
         var ty = my + dy / dist * radius;
@@ -87,10 +91,7 @@ class MouseRepulsionScene extends GSprite {
       d.vy *= damp;
       d.x += d.vx;
       d.y += d.vy;
-      if (d.x.isNaN) d.x = 0;
-      if (d.y.isNaN) d.y = 0;
     }
-
     draw(container.graphics);
   }
 
@@ -125,7 +126,7 @@ class MouseRepulsionScene extends GSprite {
 }
 
 class GraphPoint extends GShape {
-  double tx = 0, ty = 0, vx = 0, vy = 0;
+  double tx = 0, ty = 0, vx = 0.0, vy = 0.0;
 
   GraphPoint() {
     mouseEnabled = false;

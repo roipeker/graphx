@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import '../../graphx.dart';
+
 enum DebugBoundsMode {
   /// renders the bounding box transformed, inside the current object [paint()]
   /// method process.

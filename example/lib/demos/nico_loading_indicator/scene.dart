@@ -35,8 +35,7 @@ class CustomLoadingIndicatorSprite extends GSprite {
 
   @override
   void addedToStage() {
-
-    stage!.onResized.add((){
+    stage!.onResized.add(() {
       x = stage!.stageWidth / 2;
       y = stage!.stageHeight / 2;
     });

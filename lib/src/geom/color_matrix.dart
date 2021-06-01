@@ -50,11 +50,11 @@ class ColorMatrix {
 
   // ignore: non_constant_identifier_names
   static final int LENGTH = IDENTITY_MATRIX.length;
-  final _storage = List<double?>.filled(25, null);
+  final _storage = List<double>.filled(25, 0);
 
-  ColorMatrix([List<double?>? matrix]) {
+  ColorMatrix([List<double> matrix = IDENTITY_MATRIX]) {
     matrix = _fixMatrix(matrix);
-    copyMatrix(((matrix!.length == LENGTH) ? matrix : IDENTITY_MATRIX));
+    copyMatrix(((matrix.length == LENGTH) ? matrix : IDENTITY_MATRIX));
   }
 
   // public methods:
@@ -192,9 +192,9 @@ class ColorMatrix {
     ]);
   }
 
-  void concat(List<double?>? pMatrix) {
+  void concat(List<double> pMatrix) {
     pMatrix = _fixMatrix(pMatrix);
-    if (pMatrix!.length != LENGTH) return;
+    if (pMatrix.length != LENGTH) return;
     multiplyMatrix(pMatrix);
   }
 
@@ -209,15 +209,15 @@ class ColorMatrix {
 
   /// private methods:
   /// copy the specified matrix's values to this matrix:
-  void copyMatrix(List<double?>? pMatrix) {
+  void copyMatrix(List<double> pMatrix) {
     for (var i = 0; i < LENGTH; i++) {
-      _storage[i] = pMatrix![i];
+      _storage[i] = pMatrix[i];
     }
   }
 
   /// multiplies one matrix against another:
-  void multiplyMatrix(List<double?>? pMatrix) {
-    var col = List<double?>.filled(25, null);
+  void multiplyMatrix(List<double> pMatrix) {
+    var col = List<double>.filled(25, 0);
 
     for (var i = 0; i < 5; i++) {
       for (var j = 0; j < 5; j++) {
@@ -226,7 +226,7 @@ class ColorMatrix {
       for (var j = 0; j < 5; j++) {
         var val = 0.0;
         for (var k = 0; k < 5; k++) {
-          val += pMatrix![j + k * 5]! * col[k]!;
+          val += pMatrix[j + k * 5] * col[k];
         }
         _storage[j + i * 5] = val;
       }
@@ -238,9 +238,8 @@ class ColorMatrix {
   double _cleanValue(double pVal, double pLimit) =>
       math.min(pLimit, math.max(-pLimit, pVal));
 
-  /// makes sure matrixes are 5x5 (25 long):
-  List<double?>? _fixMatrix([List<double?>? pMatrix]) {
-    if (pMatrix == null) return IDENTITY_MATRIX;
+  /// makes sure Matrices are 5x5 (25 long):
+  List<double> _fixMatrix(List<double> pMatrix) {
     if (pMatrix.length < LENGTH) {
       pMatrix = List.from(pMatrix)
         ..addAll(IDENTITY_MATRIX.getRange(pMatrix.length, LENGTH));

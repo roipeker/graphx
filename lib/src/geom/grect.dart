@@ -4,15 +4,11 @@ import 'dart:ui';
 import 'geom.dart';
 
 class GRect {
-  static GRect fromNative(Rect nativeRect) {
-    return GRect(
-        nativeRect.left, nativeRect.top, nativeRect.width, nativeRect.height);
-  }
+  static GRect fromNative(Rect nativeRect) => GRect(
+      nativeRect.left, nativeRect.top, nativeRect.width, nativeRect.height);
 
   @override
-  String toString() {
-    return 'GxRect {x: $x, y: $y, w: $width, h: $height}';
-  }
+  String toString() => 'GRect {x: $x, y: $y, w: $width, h: $height}';
 
   Rect toNative() {
     return Rect.fromLTWH(x, y, width, height);
@@ -182,7 +178,9 @@ class GRect {
 
   /// --- Round Rect implementation ---
   GxRectCornerRadius? _corners;
+
   bool get hasCorners => _corners?.isNotEmpty ?? false;
+
   GxRectCornerRadius? get corners {
     _corners ??= GxRectCornerRadius();
     return _corners;
@@ -211,6 +209,7 @@ class GRect {
 
 class GxRectCornerRadius {
   double topLeft, topRight, bottomRight, bottomLeft;
+
   GxRectCornerRadius([
     this.topLeft = 0,
     this.topRight = 0,

@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
 
-/// roipeker 2021...
+/// roipeker 2021
 /// some utility functions to layout DisplayObjects:
 ///   - LayoutUtils.row
 ///   - LayoutUtils.col
@@ -13,7 +13,7 @@ class LayoutUtils {
   static Color debugColor = kColorMagenta.withOpacity(.1);
 
   /// behaviour to image resizing in a parent container.
-  /// `objW` and `objH` if provided, shuold be the original size of the asset.
+  /// `objW` and `objH` if provided, should be the original size of the asset.
   /// `canvasW` and `canvasH`, are the actual target bounds where you wanna
   /// resize your image.
   /// `fit` behaves pretty much the same as in Flutter.
@@ -242,7 +242,7 @@ class LayoutUtils {
         currentY += itm.height + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceEvenly) {
-      /// calcaulte gap.
+      /// calculate gap.
       gap = (height - itemsH) / (numItems + 1);
       startY += gap;
       for (var i = 0; i < numItems; ++i) {
@@ -286,6 +286,9 @@ class LayoutUtils {
   }) {
     var currentX = .0, maxH = .0, maxW = .0, itemsW = .0;
     final numItems = items.length;
+    if (numItems == 0) {
+      return;
+    }
 
     /// default to start.
     for (var i = 0; i < numItems; ++i) {
@@ -294,6 +297,9 @@ class LayoutUtils {
       itm.x = startX + currentX;
       maxH = Math.max(maxH, itm.height);
       var itmW = itm.width;
+      if (itm is GText && itmW.isInfinite) {
+        itmW = itm.textWidth;
+      }
       itemsW += itmW;
       currentX += itmW + gap;
     }
@@ -332,7 +338,11 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        var itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.end) {
       startX += width - maxW;
@@ -342,20 +352,28 @@ class LayoutUtils {
         currentX += itm.width + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceEvenly) {
-      /// calcaulte gap.
+      /// calculate gap.
       gap = (width - itemsW) / (numItems + 1);
       startX += gap;
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        var itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceBetween) {
       gap = (width - itemsW) / (numItems - 1);
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        var itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceAround) {
       gap = (width - itemsW) / (numItems);
@@ -363,7 +381,11 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        var itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     }
   }

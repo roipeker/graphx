@@ -138,15 +138,13 @@ class MyCoolMenuScene extends GSprite {
     button = MyButton();
   }
 
-
   void updatePosition(GRect position) {
     button.x = position.x + position.width / 2;
     buttonY = position.y + position.height / 2;
-    if( !isOpen ){
+    if (!isOpen) {
       button.y = buttonY;
     }
   }
-
 
   @override
   void addedToStage() {
@@ -159,10 +157,10 @@ class MyCoolMenuScene extends GSprite {
     _buildMenu();
     addChild(button);
 
-    stage!.onResized.add((){
+    stage!.onResized.add(() {
       requestPositionCallback.call();
       menuContainer.setPosition(sw / 2, sh / 2);
-      if( isOpen ){
+      if (isOpen) {
         _renderCurt();
       }
     });

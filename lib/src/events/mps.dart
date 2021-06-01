@@ -14,9 +14,6 @@ class MPS {
   final _cacheOnce = <String, List<Function>>{};
 
   void publishParams(String topic, CallbackParams args) {
-//    final subs = _cache[topic];
-//    subs?.forEach((fn) => Function.apply(fn, args?.positional, args?.named));
-
     void _send(Function? fn) =>
         Function.apply(fn!, args.positional, args.named);
 

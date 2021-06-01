@@ -23,34 +23,34 @@ class FacebookReactionsMain extends StatelessWidget {
       appBar: AppBar(
         centerTitle: false,
         title: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16,),
+          filter: ImageFilter.blur(
+            sigmaX: 16,
+            sigmaY: 16,
+          ),
           child: Text(
             'Facebook Reactions',
             style: TextStyle(
-                color: _kBlue,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              color: _kBlue,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white.withOpacity(.6),
+        elevation: 0,
+      ),
+      backgroundColor: Color(0xffebebeb),
+      body: SceneBuilderWidget(
+        builder: () => SceneController(front: MenuScene()),
+        child: Scrollbar(
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(vertical: 54, horizontal: 0),
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
+            itemBuilder: (context, index) => InnerCardItem(data: posts[index]),
+            itemCount: posts.length,
           ),
         ),
       ),
-      backgroundColor: Colors.white.withOpacity(.6),
-      elevation: 0,
-    ),
-    backgroundColor: Color(0xffebebeb),
-    body: SceneBuilderWidget(
-    builder: () => SceneController(front: MenuScene()),
-    child: Scrollbar(
-    child: ListView.separated(
-    padding: EdgeInsets.symmetric(vertical: 54, horizontal: 0),
-    separatorBuilder: (context, index) => const SizedBox(height: 8),
-    itemBuilder: (context, index) => InnerCardItem(data: posts[index]),
-    itemCount: posts.length,
-    )
-    ,
-    )
-    ,
-    )
-    ,
     );
   }
 }
@@ -80,6 +80,7 @@ class InnerCardItem extends StatelessWidget {
                   CircleAvatar(
                     backgroundColor: Colors.grey.withOpacity(.3),
                     radius: 24,
+
                     /// dev channel
                     // foregroundImage: NetworkImage(data.profileImageUrl),
                     child: Text(data!.username[0].toUpperCase()),

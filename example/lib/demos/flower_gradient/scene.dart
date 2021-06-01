@@ -54,15 +54,15 @@ class FlowerScene extends GSprite {
     GTween.delayedCall(
       2,
       () {
-        for (var i = 0; i < numLines; ++i) {
+        for (var i = 0; i < flower.numChildren; ++i) {
           var j = numLines - i;
-          flower.children[i].tween(
-            duration: .6,
-            rotation: 0,
-            delay: j * .08,
-            // overwrite: 1,
-            ease: GEase.easeInBack,
-          );
+          flower.getChildAt(i).tween(
+                duration: .6,
+                rotation: 0,
+                delay: j * .08,
+                // overwrite: 1,
+                ease: GEase.easeInBack,
+              );
         }
       },
     );

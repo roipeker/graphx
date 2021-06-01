@@ -71,4 +71,3 @@ class RatingStarsScene extends GSprite {
     }
   }
 }
-

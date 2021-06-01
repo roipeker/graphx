@@ -35,9 +35,10 @@ class FeelingSwitch extends GSprite {
         .endFill();
 
     var smile = GShape();
+
     /// for now, we avoid saving based on object bounds, as it will
     /// crop the line edges.
-    smile.$useSaveLayerBounds = false ;
+    smile.$useSaveLayerBounds = false;
     smile.graphics.lineStyle(
       3,
       Color(0xff71a745).withOpacity(.8),

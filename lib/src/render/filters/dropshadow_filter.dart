@@ -9,6 +9,8 @@ class GDropShadowFilter extends GComposerFilter {
   double _angle = 0;
   double _distance = 0;
   Color _color = kColorBlack;
+  bool innerShadow = false;
+
   // todo: find a way to define the strength of the filter.
   // double _strength = 0.0;
 
@@ -71,6 +73,7 @@ class GDropShadowFilter extends GComposerFilter {
     double distance = 0,
     Color color = kColorBlack,
     bool hideObject = false,
+    this.innerShadow = false,
   ]) {
     this.blurX = blurX;
     this.blurY = blurY;
@@ -131,13 +134,38 @@ class GDropShadowFilter extends GComposerFilter {
   }
 
   @override
-  void process(Canvas? canvas, Function applyPaint, [int processCount = 1]) {
-    canvas!.saveLayer(null, paint);
-    // final bb = layerBounds.clone();
-    // bb.inflate(_strength, _strength);
-    canvas.translate(_dx, _dy);
-    applyPaint(canvas);
-    canvas.restore();
+  void process(Canvas canvas, Function applyPaint, [int processCount = 1]) {
+    /// compute outer rect.
+    if (innerShadow) {
+      /// TODO: rework logic for bounds.
+      /// todo: too many save layer calls for inner shadows.
+      ///
+      // var rectOuter = _rect.clone();
+      // rectOuter.x= rectOuter.y=0;
+      // var rectInner = rectOuter.clone();
+      // rectInner.width = rectOuter.width-_dx;
+      // rectInner.height = rectOuter.height-_dy;
+      canvas.saveLayer(null, Paint());
+      applyPaint(canvas);
+      final shadowPaint = Paint()
+        ..blendMode = BlendMode.srcATop
+        ..imageFilter = ImageFilter.blur(sigmaX: blurX, sigmaY: blurY)
+        ..colorFilter = ColorFilter.mode(color, BlendMode.srcOut);
+      canvas.saveLayer(null, shadowPaint);
+      canvas.saveLayer(null, Paint());
+      canvas.translate(_dx, _dy);
+      applyPaint(canvas);
+      canvas.restore();
+      canvas.restore();
+      canvas.restore();
+    } else {
+      canvas.saveLayer(null, paint);
+      // final bb = layerBounds.clone();
+      // bb.inflate(_strength, _strength);
+      canvas.translate(_dx, _dy);
+      applyPaint(canvas);
+      canvas.restore();
+    }
     if (++processCount <= iterations) {
       process(canvas, applyPaint, processCount);
     }

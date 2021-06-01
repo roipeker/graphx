@@ -57,7 +57,7 @@ class SceneController {
 
   /// gets widget's global coordinates.
   /// useful to compute interactions with children Widgets that gets
-  GRect? Function()? resolveWindowBounds;
+  WindowBoundsResolver? resolveWindowBounds;
 
   int id = -1;
 
@@ -86,7 +86,7 @@ class SceneController {
     if (front != null) {
       frontScene = ScenePainter(this, front);
     }
-    this.config = config??SceneConfig.defaultConfig;
+    this.config = config ?? SceneConfig.defaultConfig;
   }
 
   /// WARNING: Internal method
@@ -109,7 +109,12 @@ class SceneController {
 
   void setup() {
     if (!GTween.initializedCommonWraps) {
-      GTween.registerCommonWraps();
+      /// you can add your own `CustomTween.wrap()` registering.
+      GTween.registerCommonWraps([
+        GTweenableBlur.wrap,
+        GTweenableDropShadowFilter.wrap,
+        GTweenableGlowFilter.wrap,
+      ]);
     }
     backScene?.$setup();
     frontScene?.$setup();
@@ -178,3 +183,5 @@ class SceneController {
 
   bool _hasTicker() => _anySceneAutoUpdate() || _config.useTicker;
 }
+
+typedef WindowBoundsResolver = GRect? Function();

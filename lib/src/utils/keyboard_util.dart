@@ -364,7 +364,7 @@ class GKeyboard {
   }
 
   static void _onKey(KeyboardEventData input) {
-    final k = input.rawEvent!.logicalKey;
+    final k = input.rawEvent.logicalKey;
     if (input.type == KeyEventType.down) {
       _pressed[k] = true;
     } else {

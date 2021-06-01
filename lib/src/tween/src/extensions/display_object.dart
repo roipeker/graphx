@@ -76,7 +76,7 @@ extension GTweenDiplayObjectExt on GDisplayObject {
     );
   }
 
-  /// Shortcut to assign multiple properties and render immeditatly.
+  /// Shortcut to assign multiple properties and render immediately.
   /// Doesn't wait for the next tick update.
   void setProps({
     Object? x,

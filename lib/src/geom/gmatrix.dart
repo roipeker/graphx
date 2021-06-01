@@ -4,28 +4,23 @@ import 'geom.dart';
 
 class GMatrix {
   double a = 0.0, b = 0.0, c = 0.0, d = 0.0, tx = 0.0, ty = 0.0;
-  Matrix4? _native;
+  final Matrix4 _native = Matrix4.identity();
   @override
-  String toString() {
-    return 'GxMatrix {a: $a, b: $b, c: $c, d: $d, tx: $tx, ty: $ty}';
-  }
+  String toString() => 'GMatrix {a: $a, b: $b, c: $c, d: $d, tx: $tx, ty: $ty}';
 
-  Matrix4? toNative() {
-    _native ??= Matrix4.identity();
-    _native!.setValues(a, b, 0, 0, c, d, 0, 0, 0, 0, 1, 0, tx, ty, 0, 1);
+  Matrix4 toNative() {
+    _native.setValues(a, b, 0, 0, c, d, 0, 0, 0, 0, 1, 0, tx, ty, 0, 1);
     return _native;
   }
 
-  static GMatrix fromNative(Matrix4 m) {
-    return GMatrix(
-      m.storage[0],
-      m.storage[4],
-      m.storage[1],
-      m.storage[5],
-      m.storage[12],
-      m.storage[13],
-    );
-  }
+  static GMatrix fromNative(Matrix4 m) => GMatrix(
+        m.storage[0],
+        m.storage[4],
+        m.storage[1],
+        m.storage[5],
+        m.storage[12],
+        m.storage[13],
+      );
 
   GMatrix zoomAroundPoint(GPoint center, double zoomFactor) {
     var t1 = GMatrix();
@@ -143,16 +138,16 @@ class GMatrix {
 
   GMatrix concat(GMatrix matrix) {
     double a1, c1, tx1;
-    a1 = a * matrix.a+ b* matrix.c;
-    b = a* matrix.b+ b* matrix.d;
+    a1 = a * matrix.a + b * matrix.c;
+    b = a * matrix.b + b * matrix.d;
     a = a1;
 
-    c1 = c* matrix.a+ d* matrix.c;
-    d = c* matrix.b+ d* matrix.d;
+    c1 = c * matrix.a + d * matrix.c;
+    d = c * matrix.b + d * matrix.d;
     c = c1;
 
-    tx1 = tx* matrix.a+ ty* matrix.c+ matrix.tx;
-    ty = tx* matrix.b+ ty* matrix.d+ matrix.ty;
+    tx1 = tx * matrix.a + ty * matrix.c + matrix.tx;
+    ty = tx * matrix.b + ty * matrix.d + matrix.ty;
     tx = tx1;
     return this;
 
@@ -186,20 +181,20 @@ class GMatrix {
 //}
 
   GMatrix invert() {
-    var n = a* d- b* c;
+    var n = a * d - b * c;
     if (n == 0) {
       a = b = c = d = 0;
       tx = -tx;
       ty = -ty;
     } else {
       n = 1 / n;
-      var a1 = d* n;
-      d = a* n;
+      var a1 = d * n;
+      d = a * n;
       a = a1;
       b *= -n;
       c *= -n;
-      var tx1 = -a* tx- c* ty;
-      ty = -b* tx- d* ty;
+      var tx1 = -a * tx - c * ty;
+      ty = -b * tx - d * ty;
       tx = tx1;
     }
     return this;
@@ -225,12 +220,12 @@ class GMatrix {
     var sinY = math.sin(skewY);
     var cosY = math.cos(skewY);
     setTo(
-      a* cosY - b* sinX,
-      a* sinY + b* cosX,
-      c* cosY - d* sinX,
-      c* sinY + d* cosX,
-      tx* cosY - ty* sinX,
-      tx* sinY + ty* cosX,
+      a * cosY - b * sinX,
+      a * sinY + b * cosX,
+      c * cosY - d * sinX,
+      c * sinY + d * cosX,
+      tx * cosY - ty * sinX,
+      tx * sinY + ty * cosX,
     );
   }
 
@@ -238,16 +233,16 @@ class GMatrix {
     final cos = math.cos(angle);
     final sin = math.sin(angle);
 
-    var a1 = a* cos - b* sin;
-    b = a* sin + b* cos;
+    var a1 = a * cos - b * sin;
+    b = a * sin + b * cos;
     a = a1;
 
-    var c1 = c* cos - d* sin;
-    d = c* sin + d* cos;
+    var c1 = c * cos - d * sin;
+    d = c * sin + d * cos;
     c = c1;
 
-    var tx1 = tx* cos - ty* sin;
-    ty = tx* sin + ty* cos;
+    var tx1 = tx * cos - ty * sin;
+    ty = tx * sin + ty * cos;
     tx = tx1;
   }
 
@@ -267,16 +262,16 @@ class GMatrix {
 
   GPoint transformInverseCoords(double x, double y, [GPoint? out]) {
     out ??= GPoint();
-    final id = 1 / ((a* d) + (c* -b));
-    out.x = (d* id * x) + (-c* id * y) + (((ty* c) - (tx* d)) * id);
-    out.y = (a* id * y) + (-b* id * x) + (((-ty* a) + (tx* b)) * id);
+    final id = 1 / ((a * d) + (c * -b));
+    out.x = (d * id * x) + (-c * id * y) + (((ty * c) - (tx * d)) * id);
+    out.y = (a * id * y) + (-b * id * x) + (((-ty * a) + (tx * b)) * id);
     return out;
   }
 
   GPoint transformCoords(double x, double y, [GPoint? out]) {
     out ??= GPoint();
-    out.x = a* x + c* y + tx;
-    out.y = d* y + b* x + ty;
+    out.x = a * x + c * y + tx;
+    out.y = d * y + b * x + ty;
     return out;
   }
 }

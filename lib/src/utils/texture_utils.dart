@@ -77,7 +77,8 @@ mixin GTextureUtils {
     double rotation = 0,
     String? id,
   }) async {
-    _g.clear()
+    _g
+        .clear()
         .beginFill(color)
         .drawPolygonFaces(0, 0, w / 2, 3, rotation)
         .endFill();
@@ -109,8 +110,8 @@ mixin GTextureUtils {
     h ??= w;
 
     /// create SubTextures from the main Texture.
-    var cols = base.sourceRect!.width/ w;
-    var rows = base.sourceRect!.height/ h;
+    var cols = base.sourceRect!.width / w;
+    var rows = base.sourceRect!.height / h;
     var total = cols * rows;
     var output = <GTexture>[];
     final _w = w.toDouble();

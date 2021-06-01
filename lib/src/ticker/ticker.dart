@@ -1,12 +1,12 @@
 import 'package:flutter/scheduler.dart';
+
 import '../events/events.dart';
 
 class GTicker {
   GTicker();
 
   Ticker? _ticker;
-  EventSignal<double>? _onFrame;
-  EventSignal<double> get onFrame => _onFrame ??= EventSignal();
+  final onFrame = EventSignal<double>();
 
   VoidCallback? _nextFrameCallback;
 
@@ -25,7 +25,9 @@ class GTicker {
   bool get isTicking => _ticker?.isTicking ?? false;
 
   bool get isActive => _ticker?.isActive ?? false;
+
   double get currentDeltaTime => _currentDeltaTime;
+
   double get currentDeltaRatio => _currentDeltaRatio;
 
   void resume() {
@@ -43,6 +45,7 @@ class GTicker {
   /// process timeframe in integer MS
   double _currentTime = 0;
   double _currentDeltaTime = 0;
+
   // 0-100%
   double _currentDeltaRatio = 0.0;
 
@@ -64,32 +67,23 @@ class GTicker {
       _nextFrameCallback = null;
       callback?.call();
     }
-    _onFrame?.dispatch(_currentDeltaTime);
+    onFrame.dispatch(_currentDeltaTime);
 //    advanceTime(_currentDeltaTime);
 //    render();
   }
 
   void dispose() {
-    _onFrame?.removeAll();
-    _onFrame = null;
-
+    onFrame.removeAll();
+    // onFrame = null;
     _ticker?.stop(canceled: true);
     _ticker?.dispose();
     _ticker = null;
   }
 }
 
-Stopwatch? _stopwatch;
-
-void _initTimer() {
-  if (_stopwatch != null) return;
-  _stopwatch = Stopwatch();
-  _stopwatch!.start();
-}
+Stopwatch _stopwatch = Stopwatch();
 
 int getTimer() {
-  if (_stopwatch == null) {
-    _initTimer();
-  }
-  return _stopwatch!.elapsedMilliseconds;
+  if (!_stopwatch.isRunning) _stopwatch.start();
+  return _stopwatch.elapsedMilliseconds;
 }

@@ -207,7 +207,7 @@ class SnakeGameScene extends GSprite {
   }
 
   void onKeyDown(KeyboardEventData event) {
-    final key = event.rawEvent!.logicalKey;
+    final key = event.rawEvent.logicalKey;
     if (key == Keys.LEFT_KEY) {
       changeState(SnakeCommands.left);
     }

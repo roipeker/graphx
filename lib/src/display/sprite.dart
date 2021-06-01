@@ -5,8 +5,8 @@ import '../../graphx.dart';
 class GSprite extends GDisplayObjectContainer {
   @override
   String toString() {
-    final msg = name != null ? ' {name: $name}' : '';
-    return '$runtimeType (Sprite)$msg';
+    final msg = name != null ? '(name:"$name")' : '';
+    return '$runtimeType#$hashCode$msg';
   }
 
   static final _sHelperMatrix = GMatrix();
@@ -44,7 +44,7 @@ class GSprite extends GDisplayObjectContainer {
   }
 
   @override
-  void $applyPaint(ui.Canvas? canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (!$hasVisibleArea) return;
     _graphics?.alpha = worldAlpha;
     _graphics?.paint(canvas);

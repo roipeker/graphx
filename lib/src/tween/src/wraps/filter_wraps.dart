@@ -1,7 +1,7 @@
 part of gtween;
 
 class GTweenableBlur with GTweenable {
-  static GTweenable? wrap(Object target) {
+  static GTweenable? wrap(Object? target) {
     if (target is! GBlurFilter) return null;
     return GTweenableBlur(target);
   }
@@ -63,7 +63,7 @@ class GTweenableBlur with GTweenable {
 }
 
 class GTweenableDropShadowFilter with GTweenable {
-  static GTweenable? wrap(Object target) {
+  static GTweenable? wrap(Object? target) {
     if (target is! GDropShadowFilter) return null;
     return GTweenableDropShadowFilter(target);
   }
@@ -141,7 +141,7 @@ class GTweenableDropShadowFilter with GTweenable {
 }
 
 class GTweenableGlowFilter with GTweenable {
-  static GTweenable? wrap(Object target) {
+  static GTweenable? wrap(Object? target) {
     if (target is! GlowFilter) return null;
     return GTweenableGlowFilter(target);
   }

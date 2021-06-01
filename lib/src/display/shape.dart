@@ -63,7 +63,7 @@ class GShape extends GDisplayObject {
   }
 
   @override
-  void $applyPaint(ui.Canvas? canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (isMask && _graphics != null) {
       GMatrix matrix;
       var paths = _graphics!.getPaths();
@@ -72,7 +72,7 @@ class GShape extends GDisplayObject {
       } else {
         matrix = transformationMatrix;
       }
-      var clipPath = paths.transform(matrix.toNative()!.storage);
+      var clipPath = paths.transform(matrix.toNative().storage);
       final inverted = maskInverted || $maskee!.maskInverted;
       if (inverted) {
         _initInversePath();
@@ -82,12 +82,12 @@ class GShape extends GDisplayObject {
         if (SystemUtils.usingSkia) {
           clipPath = ui.Path.combine(
               ui.PathOperation.difference, _inverseHugePath!, clipPath);
-          canvas!.clipPath(clipPath);
+          canvas.clipPath(clipPath);
         } else {
           trace('Shape.maskInverted is unsupported in the current platform');
         }
       } else {
-        canvas!.clipPath(clipPath);
+        canvas.clipPath(clipPath);
       }
     } else {
       _graphics?.isMask = isMask;

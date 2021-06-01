@@ -24,7 +24,7 @@ To get some extended, boring explanations, and eventually some sample codes, che
 
 #### news!
 
-- WIP Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety)
+- Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety)
   
 - Support for HotReload
 

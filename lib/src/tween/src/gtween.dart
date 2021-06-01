@@ -285,7 +285,7 @@ class GTween {
     _inited = true;
   }
 
-  /// initialiazes the PropTween to be used in the target Object.
+  /// initializes the PropTween to be used in the target Object.
   void _initProps(Object? target) {
     if (target == null) return;
     for (final key in vars!.keys) {

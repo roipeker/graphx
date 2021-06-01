@@ -11,13 +11,12 @@ enum PointerEventType {
   enter,
   exit,
   hover,
-  // mouse stuffs.
 }
 
 class PointerEventData {
   final double stageX;
   final double stageY;
-  final PointerEventType? type;
+  final PointerEventType type;
   final PointerEvent rawEvent;
 
   /// local position in DisplayObject
@@ -32,7 +31,7 @@ class PointerEventData {
   /// 300 milliseconds for double click
   static int doubleClickTime = 300;
 
-  PointerEventData({this.type, required this.rawEvent})
+  PointerEventData({required this.type, required this.rawEvent})
       : stageX = rawEvent.localPosition.dx,
         stageY = rawEvent.localPosition.dy {
     localPosition = GPoint(stageX, stageY);
@@ -128,8 +127,8 @@ class MouseInputData {
 
   /// display objects
   GDisplayObject? target;
-  GDisplayObject? dispatcher;
-  MouseInputType? type;
+  GDisplayObject dispatcher;
+  MouseInputType type;
   bool buttonDown = false;
   bool mouseOut = false;
   double time = 0;
@@ -172,11 +171,11 @@ class MouseInputData {
   }
 
   static int uniqueId = 0;
-  int? uid;
-  MouseInputData({this.target, this.dispatcher, this.type});
+  late int uid;
+  MouseInputData({this.target, required this.dispatcher, required this.type});
 
   MouseInputData clone(
-      GDisplayObject target, GDisplayObject dispatcher, MouseInputType? type) {
+      GDisplayObject target, GDisplayObject dispatcher, MouseInputType type) {
     var input = MouseInputData(
       target: target,
       dispatcher: dispatcher,
@@ -191,19 +190,9 @@ class MouseInputData {
     input._stagePosition.setTo(_stagePosition.x, _stagePosition.y);
     input.scrollDelta.setTo(scrollDelta.x, scrollDelta.y);
     input.localPosition.setTo(localPosition.x, localPosition.y);
-//    input.scrollDeltaX = scrollDeltaX;
-//    input.scrollDeltaY = scrollDeltaY;
     input.mouseOut = mouseOut;
     return input;
   }
-
-//  Offset get scrollDelta {
-//    if (rawEvent.rawEvent is PointerScrollEvent) {
-//      return (rawEvent.rawEvent as PointerScrollEvent).scrollDelta;
-//    }
-//    return null;
-//  }
-//  int get time => rawEvent.rawEvent.timeStamp.inMilliseconds;
 
   static MouseInputType fromNativeType(PointerEventType? nativeType) {
     if (nativeType == PointerEventType.down) {

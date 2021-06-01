@@ -136,7 +136,7 @@ class GTextureAtlas {
   List<GTexture?> getTextures({String? prefix, List<GTexture?>? out}) {
     prefix ??= '';
     out ??= [];
-    final list = getNames(prefix: prefix, out: _names);
+    final list = getNames(prefix: prefix);
     for (var name in list) {
       out.add(getTexture(name));
     }

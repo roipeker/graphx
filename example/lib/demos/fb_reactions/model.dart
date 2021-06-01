@@ -51,16 +51,16 @@ class PostVo {
   );
 
   static PostVo random() {
-    var vo =  PostVo._(
+    var vo = PostVo._(
       randomName(),
       randomTitle(),
       randomProfilePic(),
       randomImage(),
       randomTime(),
     );
-    vo.numLikes=Math.randomRangeInt(2, 40);
-    vo.numComments=Math.randomRangeInt(1, 234);
-    vo.shares= '${Math.randomRangeInt(2, 500)} Shares';
+    vo.numLikes = Math.randomRangeInt(2, 40);
+    vo.numComments = Math.randomRangeInt(1, 234);
+    vo.shares = '${Math.randomRangeInt(2, 500)} Shares';
     return vo;
   }
 
@@ -87,10 +87,10 @@ class PostVo {
     return 'https://randomuser.me/api/portraits/$value/$id.jpg';
   }
 
-  static String randomTitle(){
+  static String randomTitle() {
     var numWords = Math.randomRangeInt(5, 20);
-    var offset = Math.randomRangeInt(0, _kLoremWords.length-22);
-    var phrase = _kLoremWords.sublist(offset, offset+numWords).join(' ');
+    var offset = Math.randomRangeInt(0, _kLoremWords.length - 22);
+    var phrase = _kLoremWords.sublist(offset, offset + numWords).join(' ');
     return phrase[0].toUpperCase() + phrase.substring(1);
   }
 }
@@ -101,4 +101,5 @@ Etiam nec malesuada dolor. Cras auctor malesuada lorem vitae mollis. Fusce odio 
 Morbi fringilla lacus nunc, at blandit odio eleifend sit amet. Suspendisse scelerisque bibendum hendrerit. Duis suscipit dictum massa, pharetra fermentum sapien placerat a. Integer gravida aliquam congue. Morbi maximus in mauris eu consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam pulvinar massa eget pellentesque feugiat. Mauris interdum, massa et consequat tempus, neque nibh convallis odio, et tempus lorem erat eu quam. Maecenas condimentum dapibus orci, quis ultricies velit. Phasellus laoreet mattis elit eu facilisis. In id blandit nisl. Mauris posuere tellus in lectus ornare varius.
 Vivamus nulla risus, mattis quis rutrum et, iaculis ut felis. Mauris lobortis dui vel metus dictum, eu auctor purus ullamcorper. Sed neque nulla, faucibus sed consequat in, rutrum sed felis. Suspendisse ut ligula dignissim, laoreet tellus sit amet, molestie eros. Nullam turpis tortor, rhoncus a nisi et, ornare euismod leo. Aliquam dictum, sapien et ultrices facilisis, quam orci interdum arcu, quis sodales sapien mauris non nibh. Aenean rutrum erat mi, at egestas neque vulputate a. Maecenas vel sollicitudin ipsum. Suspendisse varius tortor neque, vitae laoreet purus vulputate ut. Nulla pulvinar accumsan rhoncus.
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus et faucibus turpis. Duis maximus enim lacus, vitae commodo leo ultrices non. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis tristique quam in dolor rhoncus laoreet. Fusce malesuada sit amet augue non facilisis. Phasellus vitae molestie sapien. Duis egestas sem vitae vestibulum euismod. Nunc vulputate luctus ipsum, a aliquam eros maximus ac. Praesent sit amet luctus erat. Phasellus et eleifend ipsum, non placerat purus. Donec convallis a arcu eu aliquam. Nullam sagittis, diam ac porta sodales, purus dui aliquet nisl, nec lobortis mi ex id sapien. Pellentesque id faucibus purus, nec ultricies tortor.
-'''.split(' ');
+'''
+    .split(' ');

@@ -9,7 +9,7 @@ void main() {
       // home: SimpleTweenMain(),
       // home: DemoSvgIconsMain(),
       // home: SimpleInteractionsMain(),
-      // home: GraphicsClipperDemo(),
+      home: GraphicsClipperDemo(),
       // home: FacebookReactionsMain(),
       // home: DrippingIVMain(),
       // home: ChartMountainMain(),
@@ -55,9 +55,8 @@ void main() {
       // home: MouseRepulsionMain(),
       // home: Globe3dMain(),
       // home: LungsAnimationMain(),
-      // home: PathChartStressTestMain(),
       // home: ExpanderFabMenu(),
-      home: PageIndicatorMain(),
+      // home: PageIndicatorMain(),
     ),
   );
 }

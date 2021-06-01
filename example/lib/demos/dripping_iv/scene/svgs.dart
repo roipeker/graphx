@@ -1,4 +1,3 @@
-
 const tubeSvgString = '''
 <svg width="64" height="193" viewBox="0 0 64 193" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="30" width="4" height="36" fill="#C4C4C4" fill-opacity="0.56"/>

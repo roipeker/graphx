@@ -127,7 +127,7 @@ abstract class GDisplayObject
   }
 
   void $dispatchMouseCallback(
-    MouseInputType? type,
+    MouseInputType type,
     GDisplayObject object,
     MouseInputData input,
   ) {
@@ -174,8 +174,11 @@ abstract class GDisplayObject
           break;
         case MouseInputType.out:
           $mouseOverObj = null;
+
+          /// TODO: check if other object on top receives the event
+          /// todo. before this one, and Cursor loses the stage.
           if (useCursor && GMouse.isShowing()) {
-            GMouse.cursor = null;
+            GMouse.basic();
           }
           $onMouseOut?.dispatch(mouseInput);
           break;
@@ -290,7 +293,7 @@ abstract class GDisplayObject
   double get height => getBounds($parent, _sHelperRect)!.height;
 
   set width(double? value) {
-    if (value == null) throw 'width can not be null';
+    if (value?.isNaN ?? true) throw '[$this.width] can not be NaN nor null';
     double? actualW;
     var zeroScale = _scaleX < 1e-8 && _scaleX > -1e-8;
     if (zeroScale) {
@@ -299,11 +302,11 @@ abstract class GDisplayObject
     } else {
       actualW = (width / _scaleX).abs();
     }
-    scaleX = value / actualW;
+    scaleX = value! / actualW;
   }
 
   set height(double? value) {
-    if (value == null) throw 'height can not be null';
+    if (value?.isNaN ?? true) throw '[$this.height] can not be NaN nor null';
     double? actualH;
     var zeroScale = _scaleY < 1e-8 && _scaleY > -1e-8;
     if (zeroScale) {
@@ -312,71 +315,92 @@ abstract class GDisplayObject
     } else {
       actualH = (height / _scaleY).abs();
     }
-    scaleY = value / actualH;
+    scaleY = value! / actualH;
   }
 
   set x(double? value) {
-    if (value == null) throw 'x can not be null';
+    if (value?.isNaN ?? true) throw '[$this.x] can not be NaN nor null';
     if (_x == value) return;
-    _x = value;
+    _x = value!;
     $setTransformationChanged();
   }
 
   set y(double? value) {
-    if (value == null) throw 'y can not be null';
+    if (value?.isNaN ?? true) throw '[$this.y] can not be NaN nor null';
     if (_y == value) return;
-    _y = value;
+    _y = value!;
     $setTransformationChanged();
   }
 
   set scaleX(double? value) {
-    if (value == null) throw 'scaleX can not be null';
+    if (value?.isNaN ?? true) throw '[$this.scaleX] can not be NaN nor null';
     if (_scaleX == value) return;
-    _scaleX = value;
+    _scaleX = value!;
     $setTransformationChanged();
   }
 
   set scaleY(double? value) {
-    if (value == null) throw 'scaleY can not be null';
+    if (value?.isNaN ?? true) throw '[$this.scaleY] can not be NaN nor null';
     if (_scaleY == value) return;
-    _scaleY = value;
+    _scaleY = value!;
     $setTransformationChanged();
   }
 
   set pivotX(double value) {
+    if (value.isNaN) throw '[$this.pivotX] can not be NaN nor null';
     if (_pivotX == value) return;
     _pivotX = value;
     $setTransformationChanged();
   }
 
   set pivotY(double value) {
+    if (value.isNaN) throw '[$this.pivotY] can not be NaN nor null';
     if (_pivotY == value) return;
     _pivotY = value;
     $setTransformationChanged();
   }
 
   set skewX(double value) {
+    if (value.isNaN) throw '[$this.skewX] can not be NaN nor null';
     if (_skewX == value) return;
     _skewX = value;
     $setTransformationChanged();
   }
 
   set skewY(double value) {
+    if (value.isNaN) throw '[$this.skewY] can not be NaN';
     if (_skewY == value) return;
     _skewY = value;
     $setTransformationChanged();
   }
 
   set rotation(double? value) {
-    if (value == null) throw 'rotation can not be null';
+    if (value?.isNaN ?? true) throw '[$this.rotation] can not be NaN nor null';
     if (_rotation == value) return;
-    _rotation = value;
+    _rotation = value!;
     $setTransformationChanged();
   }
 
   set rotationX(double value) {
+    if (value.isNaN) throw '[$this.rotationX] can not be NaN';
     if (_rotationX == value) return;
     _rotationX = value;
+    if (!_isWarned3d) _warn3d();
+    $setTransformationChanged();
+  }
+
+  set rotationY(double value) {
+    if (value.isNaN) throw '[$this.rotationY] can not be NaN';
+    if (_rotationY == value) return;
+    _rotationY = value;
+    if (!_isWarned3d) _warn3d();
+    $setTransformationChanged();
+  }
+
+  set z(double value) {
+    if (value.isNaN) throw '[$this.z] can not be NaN';
+    if (_z == value) return;
+    _z = value;
     if (!_isWarned3d) _warn3d();
     $setTransformationChanged();
   }
@@ -386,20 +410,6 @@ abstract class GDisplayObject
   void _warn3d() {
     print('Warning: 3d transformations still not properly supported');
     _isWarned3d = true;
-  }
-
-  set rotationY(double value) {
-    if (_rotationY == value) return;
-    _rotationY = value;
-    if (!_isWarned3d) _warn3d();
-    $setTransformationChanged();
-  }
-
-  set z(double value) {
-    if (_z == value) return;
-    _z = value;
-    if (!_isWarned3d) _warn3d();
-    $setTransformationChanged();
   }
 
   double $alpha = 1;
@@ -823,7 +833,7 @@ abstract class GDisplayObject
   /// Do not override this method as it applies the basic
   /// transformations. Override $applyPaint() if you wanna use
   /// `Canvas` directly.
-  void paint(ui.Canvas? canvas) {
+  void paint(ui.Canvas canvas) {
     if (!$hasVisibleArea || !visible) {
       return;
     }
@@ -905,16 +915,16 @@ abstract class GDisplayObject
       if ($useSaveLayerBounds) {
         nativeLayerBounds = layerBounds!.toNative();
       }
-      canvas!.saveLayer(nativeLayerBounds, alphaPaint);
+      canvas.saveLayer(nativeLayerBounds, alphaPaint);
     }
     if (needSave) {
       // onPreTransform.dispatch();
-      canvas!.save();
-      var m = transformationMatrix.toNative()!;
+      canvas.save();
+      var m = transformationMatrix.toNative();
       canvas.transform(m.storage);
       if (_is3D) {
         /// TODO: experimental, just transforms
-        m = GMatrix().toNative()!;
+        m = GMatrix().toNative();
         m.setEntry(3, 2, 0.004);
         m.rotateX(_rotationX);
         m.rotateY(_rotationY);
@@ -926,7 +936,7 @@ abstract class GDisplayObject
     }
 
     if (hasMask) {
-      canvas!.save();
+      canvas.save();
       if (maskRect != null) {
         $applyMaskRect(canvas);
       } else {
@@ -938,7 +948,8 @@ abstract class GDisplayObject
 
     if (_composerFilters != null) {
       for (var filter in _composerFilters) {
-        if (filter.hideObject) {
+        if (filter.hideObject ||
+            (filter is GDropShadowFilter && filter.innerShadow)) {
           filterHidesObject = true;
         }
         filter.process(canvas, $applyPaint);
@@ -950,22 +961,22 @@ abstract class GDisplayObject
     $onPostPaint?.dispatch(canvas);
 
     if (hasMask) {
-      canvas!.restore();
+      canvas.restore();
     }
     if (showDebugBounds) {
       final _paint = $debugBoundsPaint ?? _debugPaint;
       final linePaint = _paint.clone();
       linePaint.color = linePaint.color.withOpacity(.3);
       final rect = _cacheLocalBoundsRect!.toNative();
-      canvas!.drawLine(rect.topLeft, rect.bottomRight, linePaint);
+      canvas.drawLine(rect.topLeft, rect.bottomRight, linePaint);
       canvas.drawLine(rect.topRight, rect.bottomLeft, linePaint);
       canvas.drawRect(rect, _paint);
     }
     if (needSave) {
-      canvas!.restore();
+      canvas.restore();
     }
     if (_saveLayer) {
-      canvas!.restore();
+      canvas.restore();
     }
   }
 
@@ -978,7 +989,7 @@ abstract class GDisplayObject
 
   /// override this method for custom drawing using Flutter's API.
   /// Access `$canvas` from here.
-  void $applyPaint(ui.Canvas? canvas) {}
+  void $applyPaint(ui.Canvas canvas) {}
 
   @mustCallSuper
   void dispose() {

@@ -4,15 +4,12 @@ import 'point.dart';
 
 class BezierDraw {
   static BezierDraw fromPoints(List<PadPoint> points, double w1, double w2) {
-    var c2 =
-        BezierDraw.controlPoints(points[0], points[1], points[2])[1];
-    var c3 =
-        BezierDraw.controlPoints(points[1], points[2], points[3])[0];
+    var c2 = BezierDraw.controlPoints(points[0], points[1], points[2])[1];
+    var c3 = BezierDraw.controlPoints(points[1], points[2], points[3])[0];
     return BezierDraw(points[1], c2, c3, points[2], w1, w2);
   }
 
-  static List<PadPoint> controlPoints(
-      PadPoint s1, PadPoint s2, PadPoint s3) {
+  static List<PadPoint> controlPoints(PadPoint s1, PadPoint s2, PadPoint s3) {
     final dx1 = s1.x - s2.x;
     final dy1 = s1.y - s2.y;
     final dx2 = s2.x - s3.x;

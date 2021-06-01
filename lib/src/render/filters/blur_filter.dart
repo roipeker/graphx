@@ -1,4 +1,4 @@
-import 'dart:ui' as ui ;
+import 'dart:ui' as ui;
 
 import '../../../graphx.dart';
 

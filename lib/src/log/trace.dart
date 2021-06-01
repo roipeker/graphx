@@ -127,10 +127,10 @@ String _stackCommon(String stack) {
       output += '↪ $callLine ';
     }
   }
-  const _sufixCall = '()';
+  const _suffixCall = '()';
   if (elements.length == 1) {
     /// global method.
-    methodName = '${elements[0]}$_sufixCall';
+    methodName = '${elements[0]}$_suffixCall';
     if (_showMethodname) {
       output += '‣ $methodName ';
     }
@@ -138,7 +138,7 @@ String _stackCommon(String stack) {
     className = elements.removeAt(0);
     methodName = elements.join('.');
     methodName =
-        '${methodName.replaceAll(_anonymousMethodTag, '<⁕>')}$_sufixCall';
+        '${methodName.replaceAll(_anonymousMethodTag, '<⁕>')}$_suffixCall';
     if (_showClassname) {
       output += '‣ $className ';
     }

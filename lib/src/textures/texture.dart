@@ -89,10 +89,10 @@ class GTexture {
 
   static ui.Paint sDefaultPaint = ui.Paint();
 
-  void render(ui.Canvas? canvas, [ui.Paint? paint]) {
+  void render(ui.Canvas canvas, [ui.Paint? paint]) {
     paint ??= sDefaultPaint;
     if (scale != 1) {
-      canvas!.save();
+      canvas.save();
       canvas.scale(1 / scale!);
       // canvas.drawImage(root, Offset.zero, paint);
       _drawImage(canvas, paint);
@@ -102,10 +102,11 @@ class GTexture {
     }
   }
 
-  void _drawImage(ui.Canvas? canvas, ui.Paint paint) {
+  void _drawImage(ui.Canvas canvas, ui.Paint paint) {
+    if (_disposed) return;
     if (scale9Grid != null) {
       // print('src: $scale9Grid, dst: $scale9GridDest');
-      canvas!.drawImageNine(
+      canvas.drawImageNine(
         root!,
         scale9Grid!.toNative(),
         scale9GridDest!.toNative(),
@@ -113,7 +114,7 @@ class GTexture {
         paint,
       );
     } else {
-      canvas!.drawImage(root!, ui.Offset.zero, paint);
+      canvas.drawImage(root!, ui.Offset.zero, paint);
     }
   }
 

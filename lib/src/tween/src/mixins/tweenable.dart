@@ -26,18 +26,17 @@ mixin GTweenable {
   /// Also used by [GTween] to reference internally the "_nativeTarget" instead
   /// of the [GTweenable] instance. So you can "kill" the tween by [GTweenable]
   /// or using the actual object that you plan to Tween.
-  Object? target;
+  late Object? target;
 
   /// override to know which properties will change.
   void setTweenProp(PropTween tweenProp) {
     final key = '${tweenProp.p}';
-    if( !_lerps.containsKey(key)) return ;
+    if (!_lerps.containsKey(key)) return;
     final lerpObj = _lerps[key]!;
     lerpObj.to = tweenProp.cObj;
     tweenProp.c = 1.0;
   }
 
-  // final Set<String> _lerpsProps = <String>{};
   final Map<String, GTweenLerpProp> _lerps = {};
 
   @override
@@ -58,7 +57,7 @@ mixin GTweenable {
 
   void setProperty(Object prop, double value) {
     final key = '$prop';
-    if (_lerps.containsKey(key)){
+    if (_lerps.containsKey(key)) {
       _lerps[key]?.resolve(value);
     } else {
       if (_accessors == null) initProps();

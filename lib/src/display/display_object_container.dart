@@ -282,7 +282,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   }
 
   @override
-  void $applyPaint(ui.Canvas? canvas) {
+  void $applyPaint(ui.Canvas canvas) {
     if (!$hasVisibleArea) return;
     for (var child in children) {
       if (child.$hasVisibleArea) {
