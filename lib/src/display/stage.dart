@@ -132,11 +132,14 @@ class Stage extends GDisplayObjectContainer
   /// Access the keyboard instance of the owner `SceneController`,
   /// Only available when [SceneConfig.useKeyboard] is true.
   KeyboardManager? get keyboard {
+    /// TODO this condition is useless since the scene.core.keyboard is non-nullable
+    /*
     if (scene.core.keyboard == null) {
       throw Exception(
           'You need to enable keyboard capture, define useKeyboard=true '
           'in your SceneController');
     }
+    */
     return scene.core.keyboard;
   }
 
@@ -144,10 +147,13 @@ class Stage extends GDisplayObjectContainer
   /// owner `SceneController`,
   /// Only available when [SceneConfig.usePointer] is true.
   PointerManager? get pointer {
+    /// TODO this condition is useless since the scene.core.pointer is non-nullable
+    /*
     if (scene.core.pointer == null) {
       throw 'You need to enable pointer capture, define usePointer=true '
           'in your SceneController';
     }
+    */
     return scene.core.pointer;
   }
 

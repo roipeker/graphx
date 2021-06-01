@@ -136,9 +136,9 @@ class ScenePainter with EventDispatcherMixin {
     $currentFrameDeltaTime = deltaTime;
     $accumulatedFrameDeltaTime += $currentFrameDeltaTime;
     _stage!.$tick(deltaTime);
-    if (_hasPointer) {
-      _detectMouseMove();
-    }
+    // if (_hasPointer) {
+    _detectMouseMove();
+    // }
   }
 
   void _detectMouseMove() {
@@ -248,7 +248,7 @@ class ScenePainter with EventDispatcherMixin {
     super.dispose();
   }
 
-  bool get _hasPointer => core.pointer.onInput != null;
+  // bool get _hasPointer => core.pointer.onInput != null;
   bool shouldRepaint() => needsRepaint;
 }
 
