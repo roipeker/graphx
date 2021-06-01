@@ -839,7 +839,7 @@ abstract class GDisplayObject
     }
     final _hasScale = _scaleX != 1 || _scaleY != 1;
     final _hasTranslate = _x != 0 || _y != 0;
-    final _hasPivot = _pivotX != 0 || _pivotX != 0;
+    final _hasPivot = _pivotX != 0 || _pivotY != 0;
     final _hasSkew = _skewX != 0 || _skewY != 0;
     final needSave = _hasTranslate ||
         _hasScale ||
