@@ -137,12 +137,7 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
   EventSignal<T> get onMouseOver => $onMouseOver ??= EventSignal();
   EventSignal<T> get onMouseOut => $onMouseOut ??= EventSignal();
   EventSignal<T> get onMouseScroll => $onMouseWheel ??= EventSignal();
-
-  EventSignal<T> onLongPress([Duration duration =
-  const Duration(milliseconds: 600),double distance = 1]) {
-    $onLongPress = EventSignal<T>.longPress(duration,distance);
-    return $onLongPress;
-  }
+  EventSignal<T> get onLongPress => $onLongPress ??= EventSignal();
 
   void $disposePointerSignals() {
     $onRightMouseDown?.removeAll();

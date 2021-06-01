@@ -213,15 +213,12 @@ There are a bunch of signals to listen on each object... taken from AS3, and JS.
 - onMouseOver
 - onMouseOut
 - onMouseScroll
-- onLongPress(Duration duration,double distance)
+- onLongPress
 
 They all emit a `MouseInputData` with all the needed info inside, like stage coordinates, or translated local coordinates, which "mouse" button is pressed, etc.
 
-Specially on event `onLongPress`, the handler register function differcent others, it’s includes two params for configure the event, one of `Duration duration`, it’s mean keep press how long for trigg the event, another is `distance`. 
-
-Why need `distance` ?
-
-Beacuse of human can not keep static on screen, so, we are always trigged event `MouseMove`, but event `LongPress` will be cancelled automaticlly other event happed. It’s also mean when I pressed screen and other event happed before `duration`, So, it’s NOT LONG PRESS.
+Class `DisplayObject` has two param to control the `LongPress` event how to works.
+one of `longPressDuration`, another is `longPressDistance`.
 
 ---
 

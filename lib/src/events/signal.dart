@@ -64,20 +64,7 @@ class Signal {
   }
 }
 
-enum EventSignalConfKey {
-  LongPressDuration,
-  LongPressShakingDistance,
-}
-
 class EventSignal<T> {
-  Map<EventSignalConfKey,Object> configure = {};
-  EventSignal();
- factory   EventSignal.longPress(Duration duration,double distance) {
-    var signal = EventSignal<T>();
-    signal.configure[EventSignalConfKey.LongPressDuration] = duration;
-    signal.configure[EventSignalConfKey.LongPressShakingDistance] = distance;
-    return signal;
-  }
   void call(EventSignalCallback<T> callback) {
     add(callback);
   }

@@ -16,6 +16,9 @@ abstract class GDisplayObject
   static GRect $currentDragBounds;
   GPoint _dragCenterOffset;
   MouseInputData _lastMouseInput;
+  Duration longPressDelay =  Duration(milliseconds: 600);
+  double longPressDistance = 1.0;
+
   /// Lets the user drag the specified sprite.
   /// The sprite remains draggable until explicitly stopped through a call to
   /// the Sprite.stopDrag() method, or until another sprite is made draggable.
@@ -146,7 +149,7 @@ abstract class GDisplayObject
             _longPressTimer = null;
           }
           if($onLongPress != null) {
-            _longPressTimer = Timer($onLongPress.configure[EventSignalConfKey.LongPressDuration], () {
+            _longPressTimer = Timer(longPressDelay, () {
               mouseInput.type = MouseInputType.longPress;
               $onLongPress?.dispatch(mouseInput);
             });
@@ -162,11 +165,9 @@ abstract class GDisplayObject
           if(_lastMouseInput != null && $onLongPress != null) {
             // ignore: lines_longer_than_80_chars
             if((_lastMouseInput.localX - input.localX).abs() >
-                // ignore: lines_longer_than_80_chars
-                $onLongPress.configure[EventSignalConfKey.LongPressShakingDistance] ||
+                longPressDistance ||
                 (_lastMouseInput.localY - input.localY).abs() >
-                    // ignore: lines_longer_than_80_chars
-                    $onLongPress.configure[EventSignalConfKey.LongPressShakingDistance]
+                    longPressDistance
             ) {
               _longPressTimer?.cancel();
               _longPressTimer = null;
