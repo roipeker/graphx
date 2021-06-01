@@ -16,13 +16,12 @@ class Signal {
   bool hasListeners() => _listeners.isNotEmpty || _listenersOnce.isNotEmpty;
 
   void add(Function callback) {
-//    if (callback == null || _listenersOnce.contains(callback)) return;
     if (callback == null || has(callback)) return;
     _listeners.add(callback);
   }
 
   void addOnce(Function callback) {
-    if (callback == null || _listeners.contains(callback)) return;
+    if (callback == null || has(callback)) return;
     _listenersOnce.add(callback);
   }
 
@@ -72,6 +71,7 @@ class EventSignal<T> {
   final _listenersOnce = <EventSignalCallback<T>>[];
   final _listeners = <EventSignalCallback<T>>[];
   int _iterDispatchers = 0;
+  int _iterLen = 0;
   int id = -1;
 
   bool has(EventSignalCallback<T> callback) {
@@ -94,9 +94,10 @@ class EventSignal<T> {
     final idx = _listeners.indexOf(callback);
     if (idx > -1) {
       if (idx <= _iterDispatchers) _iterDispatchers--;
-      _listeners?.removeAt(idx);
+      --_iterLen;
+      _listeners.removeAt(idx);
     } else {
-      _listenersOnce?.remove(callback);
+      _listenersOnce.remove(callback);
     }
   }
 
@@ -106,12 +107,16 @@ class EventSignal<T> {
   }
 
   void dispatch(T data) {
-    for (var i = 0; i < _listeners.length; ++i) {
-//      if (id > 0) print('Calling ::: $i - ${_listeners.length}');
-      _listeners[i]?.call(data);
+    _iterLen = _listeners.length;
+    for (_iterDispatchers = 0;
+        _iterDispatchers < _iterLen;
+        ++_iterDispatchers) {
+      _listeners[_iterDispatchers]?.call(data);
     }
-    for (var i = 0; i < _listenersOnce.length; i++) {
-      _listenersOnce?.removeAt(i)?.call(data);
+    _iterLen = _listenersOnce.length;
+    while (_iterLen > 0) {
+      _listenersOnce.removeAt(0).call(data);
+      _iterLen--;
     }
   }
 }

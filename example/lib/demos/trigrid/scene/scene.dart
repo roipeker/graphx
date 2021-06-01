@@ -25,13 +25,11 @@ class DrawTriangleGridScene extends GSprite {
   @override
   Future<void> addedToStage() async {
     stage.color = Colors.grey.shade800;
-
     container = GSprite();
     addChild(container);
     mouseChildren = false;
     var texture = await ResourceLoader.loadTexture(
         'assets/trigrid/cute_dog.png', 1, 'dog');
-
     cols = texture.width ~/ sep;
     rows = texture.height ~/ sep;
     var total = cols * rows;
@@ -53,8 +51,7 @@ class DrawTriangleGridScene extends GSprite {
     triGrid = TriangleGrid(res: sep, cols: cols, rows: rows);
 
     /// show the triangles lines
-    triGrid.debugTriangles = true;
-
+    triGrid.debugTriangles = false;
     container.addChildAt(triGrid, 0);
     triGrid.texture = texture;
     triGrid.draw();

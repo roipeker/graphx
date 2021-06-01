@@ -7,8 +7,6 @@ class GTextureAtlas {
   Map<String, GSubTexture> _subTextures;
   List<String> _subTexturesNames;
 
-  static final List<String> _names = <String>[];
-
   static bool attrBoolean(xml.XmlElement el, String name, {bool defaultValue}) {
     var val = el.getAttribute(name);
     if (val == null) return defaultValue;
@@ -135,7 +133,7 @@ class GTextureAtlas {
   List<GTexture> getTextures({String prefix, List<GTexture> out}) {
     prefix ??= '';
     out ??= [];
-    final list = getNames(prefix: prefix, out: _names);
+    final list = getNames(prefix: prefix);
     for (var name in list) {
       out.add(getTexture(name));
     }

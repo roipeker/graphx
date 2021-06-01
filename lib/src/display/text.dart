@@ -1,5 +1,7 @@
 import 'dart:ui' as ui;
+
 import 'package:flutter/painting.dart' as painting;
+
 import '../../graphx.dart';
 
 class GText extends GDisplayObject {
@@ -218,7 +220,9 @@ class GText extends GDisplayObject {
 
   void _layout() {
     //// Web has a bug for double.infinity for text layout.
-    final paragraphWidth = _width.isInfinite && !SystemUtils.usingSkia ? _maxTextWidthForWeb : _width;
+    final paragraphWidth = _width.isInfinite && !SystemUtils.usingSkia
+        ? _maxTextWidthForWeb
+        : _width;
     _paragraph?.layout(ui.ParagraphConstraints(width: paragraphWidth));
     _invalidSize = false;
   }

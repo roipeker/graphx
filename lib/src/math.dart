@@ -125,7 +125,7 @@ abstract class Math {
   /// Returns a pseudo-random element `<E>` from the parameter `list`.
   /// Using the `Random()` class to compute the List index.
   static E randomList<E>(List<E> list) =>
-      list[randomRangeInt(0, list.length - 1)];
+      list[randomRangeInt(0, list.length)];
 
   /// Returns a pseudo-random `double` number between parameters `min` and
   /// `max`.

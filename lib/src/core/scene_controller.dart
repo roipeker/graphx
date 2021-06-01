@@ -110,7 +110,12 @@ class SceneController {
 
   void setup() {
     if (!GTween.initialized) {
-      GTween.registerCommonWraps();
+      /// you can add your own `CustomTween.wrap()` registering.
+      GTween.registerCommonWraps([
+        GTweenableBlur.wrap,
+        GTweenableDropShadowFilter.wrap,
+        GTweenableGlowFilter.wrap,
+      ]);
     }
     backScene?.$setup();
     frontScene?.$setup();

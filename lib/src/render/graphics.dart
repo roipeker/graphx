@@ -132,11 +132,11 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
-  Graphics beginFill(Color color) {
+  Graphics beginFill(Color color, [bool antiAlias = true]) {
     if (_holeMode) return this;
     final fill = Paint();
     fill.style = PaintingStyle.fill;
-    fill.isAntiAlias = true;
+    fill.isAntiAlias = antiAlias;
     // fill.color = Color(color).withOpacity(alpha.clamp(0.0, 1.0));
     fill.color = color;
     _addFill(fill);
@@ -484,7 +484,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
   Graphics drawPoly(List<GPoint> points, [bool closePolygon = true]) {
     final len = points.length;
-    final list = List<Offset>(len);
+    final list = List<Offset>.filled(len, Offset.zero);
     for (var i = 0; i < len; ++i) {
       list[i] = points[i].toNative();
     }
@@ -587,7 +587,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     int sides, [
     double rotation = 0,
   ]) {
-    final points = List<Offset>(sides);
+    final points = List<Offset>.filled(sides, Offset.zero);
     final rel = 2 * Math.PI / sides;
     for (var i = 1; i <= sides; ++i) {
       final px = x + radius * Math.cos(i * rel + rotation);
@@ -1007,7 +1007,7 @@ class _GraphVertices {
       /// make a ratio of the image size
       var imgW = shaderTexture.width;
       var imgH = shaderTexture.height;
-      adjustedUvtData = List<double>(uvtData.length);
+      adjustedUvtData = List.from(uvtData);
       for (var i = 0; i < uvtData.length; i += 2) {
         adjustedUvtData[i] = uvtData[i] * imgW;
         adjustedUvtData[i + 1] = uvtData[i + 1] * imgH;
@@ -1105,7 +1105,7 @@ class _GraphUtils {
     if (ind == null) {
       /// calculate
       var len = ver.length;
-      var out = List<double>(len * 2);
+      var out = List<double>.filled(len * 2, 0.0);
       var j = 0;
       for (var i = 0; i < len; i += 6) {
         out[j++] = ver[i + 0];
@@ -1124,7 +1124,7 @@ class _GraphUtils {
       return out;
     } else {
       var len = ind.length;
-      var out = List<double>(len * 4);
+      var out = List<double>.filled(len * 4, 0.0);
       var j = 0;
       for (var i = 0; i < len; i += 3) {
         var i0 = ind[i + 0];

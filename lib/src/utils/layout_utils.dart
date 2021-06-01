@@ -19,8 +19,7 @@ class LayoutUtils {
   /// `fit` behaves pretty much the same as in Flutter.
   /// the optional `reposition` has a very rustic implementation to center or
   /// not the object after the resize... (only validates for `Alignment.center`)
-  static void objectFit(
-    GDisplayObject object, {
+  static void objectFit(GDisplayObject object, {
     BoxFit fit = BoxFit.cover,
     double objW,
     double objH,
@@ -91,8 +90,7 @@ class LayoutUtils {
 
   /// basic wrap functionality, if you define `width` it will be horizontal
   /// if you define the `height` it will be vertical.
-  static void wrap(
-    List<GDisplayObject> items, {
+  static void wrap(List<GDisplayObject> items, {
     double gapX = 0,
     double gapY = 0,
     double width = 0,
@@ -102,7 +100,9 @@ class LayoutUtils {
   }) {
     assert(width > 0 || height > 0);
     final numItems = items.length;
-    var cx = .0, cy = .0, lineS = .0;
+    var cx = .0,
+        cy = .0,
+        lineS = .0;
     if (width <= 0) {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
@@ -138,8 +138,7 @@ class LayoutUtils {
 
   /// Simplistic grid approach that requires you pass the amount
   /// of `cols`.
-  static void grid(
-    List<GDisplayObject> items, {
+  static void grid(List<GDisplayObject> items, {
     double gapX = 0,
     double gapY = 0,
     int rows = 0,
@@ -152,7 +151,8 @@ class LayoutUtils {
     final numItems = items.length;
 
     /// calculate max item width.
-    var maxItemW = .0, maxItemH = .0;
+    var maxItemW = .0,
+        maxItemH = .0;
 
     /// default to start.
     for (var i = 0; i < numItems; ++i) {
@@ -173,8 +173,7 @@ class LayoutUtils {
   /// define the "padding" with `gap`. If you `mask` the items parent will be
   /// clipped. Make sure all items belongs to the same parent.
   ///   /// `debug` will show a red rectangle in the area defined by the items.
-  static void col(
-    List<GDisplayObject> items, {
+  static void col(List<GDisplayObject> items, {
     double gap = 0,
     double startX = 0,
     double startY = 0,
@@ -185,9 +184,14 @@ class LayoutUtils {
     bool mask = false,
     bool debug = false,
   }) {
-    var currentY = .0, maxW = .0, maxH = .0, itemsH = .0;
+    var currentY = .0,
+        maxW = .0,
+        maxH = .0,
+        itemsH = .0;
     final numItems = items.length;
-
+    if(numItems==0){
+      return ;
+    }
     /// default to start.
     for (var i = 0; i < numItems; ++i) {
       var itm = items[i];
@@ -273,8 +277,7 @@ class LayoutUtils {
   /// define the "padding" with `gap`. If you `mask` the items parent will be
   /// clipped. Make sure all items belongs to the same parent.
   /// `debug` will show a red rectangle in the area defined by the items.
-  static void row(
-    List<GDisplayObject> items, {
+  static void row(List<GDisplayObject> items, {
     double gap = 0,
     double startX = 0,
     double startY = 0,
@@ -285,8 +288,14 @@ class LayoutUtils {
     bool mask = false,
     bool debug = false,
   }) {
-    var currentX = .0, maxH = .0, maxW = .0, itemsW = .0;
+    var currentX = .0,
+        maxH = .0,
+        maxW = .0,
+        itemsW = .0;
     final numItems = items.length;
+    if(numItems==0){
+      return ;
+    }
 
     /// default to start.
     for (var i = 0; i < numItems; ++i) {
@@ -294,7 +303,10 @@ class LayoutUtils {
       itm.y = startY;
       itm.x = startX + currentX;
       maxH = Math.max(maxH, itm.height);
-      var itmW = itm.width;
+      double itmW = itm.width;
+      if (itm is GText && itmW.isInfinite) {
+        itmW = itm.textWidth;
+      }
       itemsW += itmW;
       currentX += itmW + gap;
     }
@@ -333,14 +345,22 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        double itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.end) {
       startX += width - maxW;
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        double itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceEvenly) {
       /// calcaulte gap.
@@ -349,14 +369,22 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        double itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceBetween) {
       gap = (width - itemsW) / (numItems - 1);
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        double itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceAround) {
       gap = (width - itemsW) / (numItems);
@@ -364,7 +392,11 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        double itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     }
   }

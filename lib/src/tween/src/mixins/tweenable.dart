@@ -31,7 +31,7 @@ mixin GTweenable {
   /// override to know which properties will change.
   void setTweenProp(PropTween tweenProp) {
     final key = '${tweenProp.p}';
-    if( !_lerps.containsKey(key)) return ;
+    if (!_lerps.containsKey(key)) return;
     final lerpObj = _lerps[key];
     if (lerpObj == null) return;
     lerpObj.to = tweenProp.cObj;
