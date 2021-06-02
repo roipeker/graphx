@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart' as painting;
+import 'package:graphx/src/events/events.dart';
 import '../../graphx.dart';
 
 abstract class GDisplayObject
@@ -14,6 +16,9 @@ abstract class GDisplayObject
   static GDisplayObject $currentDrag;
   static GRect $currentDragBounds;
   GPoint _dragCenterOffset;
+  MouseInputData _lastMouseInput;
+  Duration longPressDelay =  Duration(milliseconds: 600);
+  double longPressDistance = 1.0;
 
   /// Lets the user drag the specified sprite.
   /// The sprite remains draggable until explicitly stopped through a call to
@@ -76,6 +81,7 @@ abstract class GDisplayObject
 
   bool $debugBounds = false;
   bool mouseUseShape = false;
+  Timer _longPressTimer;
 
   List<GBaseFilter> $filters;
 
@@ -137,6 +143,16 @@ abstract class GDisplayObject
           $onMouseWheel?.dispatch(mouseInput);
           break;
         case MouseInputType.down:
+          if(_longPressTimer != null) {
+            _longPressTimer.cancel();
+            _longPressTimer = null;
+          }
+          if($onLongPress != null) {
+            _longPressTimer = Timer(longPressDelay, () {
+              mouseInput.type = MouseInputType.longPress;
+              $onLongPress?.dispatch(mouseInput);
+            });
+          }
           $mouseDownObj = object;
           $onMouseDown?.dispatch(mouseInput);
           break;
@@ -145,14 +161,27 @@ abstract class GDisplayObject
 //          $onRightMouseDown?.dispatch(mouseInput);
 //          break;
         case MouseInputType.move:
+          if(_lastMouseInput != null && $onLongPress != null) {
+            // ignore: lines_longer_than_80_chars
+            if((_lastMouseInput.localX - input.localX).abs() >
+                longPressDistance ||
+                (_lastMouseInput.localY - input.localY).abs() >
+                    longPressDistance
+            ) {
+              _longPressTimer?.cancel();
+              _longPressTimer = null;
+            }
+          }
           $onMouseMove?.dispatch(mouseInput);
           break;
         case MouseInputType.up:
+          _longPressTimer?.cancel();
+          _longPressTimer = null;
+
           if ($mouseDownObj == object &&
               ($onMouseClick != null || $onMouseDoubleClick != null)) {
             var mouseClickInput = input.clone(this, object, MouseInputType.up);
             $onMouseClick?.dispatch(mouseClickInput);
-
             if ($lastClickTime > 0 &&
                 input.time - $lastClickTime < MouseInputData.doubleClickTime) {
               $onMouseDoubleClick?.dispatch(mouseClickInput);
@@ -165,6 +194,7 @@ abstract class GDisplayObject
           $onMouseUp?.dispatch(mouseInput);
           break;
         case MouseInputType.over:
+          _longPressTimer?.cancel();
           $mouseOverObj = object;
           if (useCursor && GMouse.isShowing()) {
             GMouse.setClickCursor();
@@ -172,6 +202,8 @@ abstract class GDisplayObject
           $onMouseOver?.dispatch(mouseInput);
           break;
         case MouseInputType.out:
+          _longPressTimer?.cancel();
+          _longPressTimer = null;
           $mouseOverObj = null;
           if (useCursor && GMouse.isShowing()) {
             GMouse.cursor = null;
@@ -183,6 +215,7 @@ abstract class GDisplayObject
       }
     }
     $parent?.$dispatchMouseCallback(type, object, input);
+    _lastMouseInput = input.clone(this, object, type);
   }
 
   /// todo: add caching to local bounds (Rect).

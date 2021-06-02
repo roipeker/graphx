@@ -213,8 +213,12 @@ There are a bunch of signals to listen on each object... taken from AS3, and JS.
 - onMouseOver
 - onMouseOut
 - onMouseScroll
+- onLongPress
 
 They all emit a `MouseInputData` with all the needed info inside, like stage coordinates, or translated local coordinates, which "mouse" button is pressed, etc.
+
+Class `DisplayObject` has two param to control the `LongPress` event how to works.
+one of `longPressDuration`, another is `longPressDistance`.
 
 ---
 

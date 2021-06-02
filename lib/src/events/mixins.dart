@@ -125,6 +125,7 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
   EventSignal<T> $onMouseOut;
   EventSignal<T> $onMouseOver;
   EventSignal<T> $onMouseWheel;
+  EventSignal<T> $onLongPress;
 
   EventSignal<T> get onMouseClick => $onMouseClick ??= EventSignal();
   EventSignal<T> get onMouseDoubleClick =>
@@ -136,6 +137,7 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
   EventSignal<T> get onMouseOver => $onMouseOver ??= EventSignal();
   EventSignal<T> get onMouseOut => $onMouseOut ??= EventSignal();
   EventSignal<T> get onMouseScroll => $onMouseWheel ??= EventSignal();
+  EventSignal<T> get onLongPress => $onLongPress ??= EventSignal();
 
   void $disposePointerSignals() {
     $onRightMouseDown?.removeAll();
@@ -156,6 +158,8 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
     $onMouseOut = null;
     $onMouseWheel?.removeAll();
     $onMouseWheel = null;
+    $onLongPress?.removeAll();
+    $onLongPress = null;
   }
 }
 

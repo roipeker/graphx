@@ -97,6 +97,7 @@ enum MouseInputType {
   click,
   still,
   wheel,
+  longPress,
 
   /// check button directly with: isPrimaryDown, isSecondaryDown...
 //  rightDown,

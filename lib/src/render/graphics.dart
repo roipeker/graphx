@@ -700,7 +700,6 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     }
     _constrainAlpha();
     if (!_isVisible) return;
-
     // trace("en", _drawingQueue.length);
     for (var graph in _drawingQueue) {
       if (graph.hasPicture) {

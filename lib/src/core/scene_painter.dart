@@ -41,6 +41,7 @@ class ScenePainter with EventDispatcherMixin {
   /// Runs on the first "render".
   bool _isReady = false;
 
+
   bool get isReady => _isReady;
 
   /// Automatically manage the `tick()` and `render()` requests.
