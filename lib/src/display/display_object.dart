@@ -80,7 +80,7 @@ abstract class GDisplayObject
 
   bool $debugBounds = false;
   bool mouseUseShape = false;
-  Timer _longPressTimer;
+  Timer? _longPressTimer;
 
   List<GBaseFilter>? $filters;
 
@@ -145,7 +145,7 @@ abstract class GDisplayObject
           break;
         case MouseInputType.down:
           if(_longPressTimer != null) {
-            _longPressTimer.cancel();
+            _longPressTimer?.cancel();
             _longPressTimer = null;
           }
           if($onLongPress != null) {
@@ -164,9 +164,9 @@ abstract class GDisplayObject
         case MouseInputType.move:
           if(_lastMouseInput != null && $onLongPress != null) {
             // ignore: lines_longer_than_80_chars
-            if((_lastMouseInput.localX - input.localX).abs() >
+            if((_lastMouseInput!.localX - input.localX).abs() >
                 longPressDistance ||
-                (_lastMouseInput.localY - input.localY).abs() >
+                (_lastMouseInput!.localY - input.localY).abs() >
                     longPressDistance
             ) {
               _longPressTimer?.cancel();
