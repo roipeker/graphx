@@ -20,17 +20,15 @@ class PathChartScene extends GSprite {
       var label = section.label;
       var idx = colors.indexOf(c);
       if (idx == 0) {
-        addChild(label);
+        addChild(label!);
         label.x = 30;
         label.y = 80 + 20.0 * idx;
       }
     });
 
-    container.x = stage.stageWidth * .8;
-    container.y = stage.stageHeight * .5;
-    var scaleR = 0.0;
-    var tw = container.x;
-    stage.onEnterFrame.add((event) {
+    container.x = stage!.stageWidth * .8;
+    container.y = stage!.stageHeight * .5;
+    stage!.onEnterFrame.add((event) {
       // if (container.width > container.x + 100) {
       //   tw = container.x + 100;
       //   container.width = tw;
@@ -72,7 +70,7 @@ class ChartSection extends GShape {
     // List.generate(19, (index) => addSlot());
   }
 
-  GText label;
+  GText? label;
   int frameCount = 0;
   double targetX = 0;
   Path maskPath = Path();
@@ -84,11 +82,9 @@ class ChartSection extends GShape {
 
     label = GText.build(
         text: 'color', color: color, fontSize: 14, fontWeight: FontWeight.bold);
-    stage.onEnterFrame.add((event) {
+    stage!.onEnterFrame.add((event) {
       if (++frameCount % 3 == 0) {
         addSlot();
-        var maxPos = stage.stageWidth * .7;
-        var tempW = width;
         pivotX = width;
         // x = maxPos;
         // if (tempW > maxPos) {
@@ -111,32 +107,7 @@ class ChartSection extends GShape {
 
   void addSlot() {
     ++numQuads;
-    label.text = '$numQuads rects';
-    var rects = List.generate(1, (index) {
-      var pw = Math.randomRange(20, 40);
-      var ph = Math.randomRange(20, 80);
-      var py = Math.randomRange(
-          lastRect.y - ph / 2, lastRect.y + lastRect.height / 2);
-      final rect = GRect(lastRect.right, py, pw, ph);
-      myPath = Path.combine(
-        PathOperation.union,
-        myPath,
-        Path()..addRect(rect.toNative()),
-      );
-
-      outputPath = myPath;
-
-      // outputPath = Path.combine(
-      //   PathOperation.intersect,
-      //   outputPath,
-      //   maskPath,
-      // );
-
-      // lastX += pw;
-      lastRect = rect;
-      return rect;
-    });
-
+    label!.text = '$numQuads rects';
     graphics.clear();
     graphics.beginFill(color.withOpacity(.3));
     graphics.lineStyle(2, color);

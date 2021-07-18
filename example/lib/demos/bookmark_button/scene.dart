@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class BookmarkButton extends GSprite {
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
-  GShape bg;
-  GText label;
+  double get sh => stage!.stageHeight;
+  late GShape bg;
+  late GText label;
   bool isOn = false;
-  static List<GTexture> _gifFrames;
-  GMovieClip bookmarkIco;
-  GDropShadowFilter shadow;
+  static List<GTexture>? _gifFrames;
+  late GMovieClip bookmarkIco;
+  GDropShadowFilter? shadow;
 
   /// remove if not in debug? (hot reload).
   @override
@@ -27,7 +27,7 @@ class BookmarkButton extends GSprite {
 
   @override
   void addedToStage() {
-    stage.color = Color(0xffEDEFFB);
+    stage!.color = Color(0xffEDEFFB);
     bg = addChild(GShape()) as GShape;
     shadow = GDropShadowFilter(
       6,
@@ -37,7 +37,7 @@ class BookmarkButton extends GSprite {
       Color(0xffA4AADB).withOpacity(.43),
     );
     bg.$useSaveLayerBounds = false;
-    bg.filters = [shadow];
+    bg.filters = [shadow!];
     label = GText.build(
       text: 'Bookmark',
       color: Colors.black.withOpacity(.7),
@@ -49,10 +49,10 @@ class BookmarkButton extends GSprite {
     label.setPosition(sw - label.textWidth - 32, (sh - label.textHeight) / 2);
     _loadTexture();
     onMouseDown.add((e) {
-      shadow.tween(duration: .3, blurX: 2, blurY: 2, distance: 1);
+      shadow!.tween(duration: .3, blurX: 2, blurY: 2, distance: 1);
       bg.tween(duration: .3, scale: .95);
-      stage.onMouseUp.addOnce((e) {
-        shadow.tween(duration: .5, blurX: 6, blurY: 6, distance: 6);
+      stage!.onMouseUp.addOnce((e) {
+        shadow!.tween(duration: .5, blurX: 6, blurY: 6, distance: 6);
         bg.tween(duration: .5, scale: 1);
       });
     });
@@ -69,14 +69,14 @@ class BookmarkButton extends GSprite {
 
   Future<void> _loadTexture() async {
     if (_gifFrames == null) {
-      var atlas = await ResourceLoader.loadGif(
+      var atlas = await (ResourceLoader.loadGif(
           'assets/bookmark_button/bookmark.gif',
           resolution: 2,
-          cacheId: 'bookmark');
+          cacheId: 'bookmark') as Future<GifAtlas>);
       _gifFrames = atlas.textureFrames;
     }
     bookmarkIco =
-        addChild(GMovieClip(frames: _gifFrames, fps: 50)) as GMovieClip;
+        addChild(GMovieClip(frames: _gifFrames!, fps: 50)) as GMovieClip;
     bookmarkIco.repeatable = false;
     bookmarkIco.alignPivot();
     bookmarkIco.setPosition(label.x / 2 + 2, sh / 2);

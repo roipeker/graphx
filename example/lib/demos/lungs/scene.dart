@@ -1,4 +1,3 @@
-import 'package:exampleGraphx/utils/svg_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
@@ -38,7 +37,7 @@ class LungsScene extends GSprite {
     traquea.y = traquea.pivotY;
 
     double totalDuration = 2;
-    var baseY = stage.stageHeight / 2;
+    var baseY = stage!.stageHeight / 2;
     bool isExpanded = false;
 
     void _twnTrackea() {
@@ -94,8 +93,8 @@ class LungsScene extends GSprite {
 
     lung.alignPivot();
     lung.setPosition(
-      stage.stageWidth / 2,
-      stage.stageHeight / 2,
+      stage!.stageWidth / 2,
+      stage!.stageHeight / 2,
     );
   }
 }

@@ -4,11 +4,11 @@ import '../events/events.dart';
 class GTicker {
   GTicker();
 
-  Ticker _ticker;
-  EventSignal<double> _onFrame;
+  Ticker? _ticker;
+  EventSignal<double>? _onFrame;
   EventSignal<double> get onFrame => _onFrame ??= EventSignal();
 
-  VoidCallback _nextFrameCallback;
+  VoidCallback? _nextFrameCallback;
 
   // ignore: use_setters_to_change_properties
   void callNextFrame(VoidCallback callback) {
@@ -18,8 +18,8 @@ class GTicker {
   void _createTicker() {
     if (_ticker != null) return;
     _ticker = Ticker(_onTick);
-    _ticker.start();
-    _ticker.muted = true;
+    _ticker!.start();
+    _ticker!.muted = true;
   }
 
   bool get isTicking => _ticker?.isTicking ?? false;
@@ -47,7 +47,7 @@ class GTicker {
   double _currentDeltaRatio = 0.0;
 
   double frameRate = 60.0;
-  double _expectedDelta;
+  late double _expectedDelta;
 
   /// enterframe ticker
   void _onTick(Duration elapsed) {
@@ -79,17 +79,17 @@ class GTicker {
   }
 }
 
-Stopwatch _stopwatch;
+Stopwatch? _stopwatch;
 
 void _initTimer() {
   if (_stopwatch != null) return;
   _stopwatch = Stopwatch();
-  _stopwatch.start();
+  _stopwatch!.start();
 }
 
 int getTimer() {
   if (_stopwatch == null) {
     _initTimer();
   }
-  return _stopwatch.elapsedMilliseconds;
+  return _stopwatch!.elapsedMilliseconds;
 }

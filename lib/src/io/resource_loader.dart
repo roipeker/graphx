@@ -9,7 +9,7 @@ import 'network_image_loader.dart';
 
 abstract class ResourceLoader {
   static Map<String, SvgData> svgs = <String, SvgData>{};
-  static Map<String, GTexture> textures = <String, GTexture>{};
+  static Map<String?, GTexture?> textures = <String?, GTexture?>{};
   static Map<String, GTextureAtlas> atlases = <String, GTextureAtlas>{};
   static Map<String, GifAtlas> gifs = <String, GifAtlas>{};
 
@@ -18,7 +18,7 @@ abstract class ResourceLoader {
       vo.dispose();
     }
     for (var vo in textures.values) {
-      vo.dispose();
+      vo!.dispose();
     }
     for (var vo in atlases.values) {
       vo.dispose();
@@ -28,26 +28,26 @@ abstract class ResourceLoader {
     }
   }
 
-  static GTexture getTexture(String cacheId) {
+  static GTexture? getTexture(String cacheId) {
     return textures[cacheId];
   }
 
-  static SvgData getSvg(String cacheId) {
+  static SvgData? getSvg(String cacheId) {
     return svgs[cacheId];
   }
 
-  static GTextureAtlas getAtlas(String cacheId) {
+  static GTextureAtlas? getAtlas(String cacheId) {
     return atlases[cacheId];
   }
 
-  static GifAtlas getGif(String cacheId) {
+  static GifAtlas? getGif(String cacheId) {
     return gifs[cacheId];
   }
 
-  static Future<GifAtlas> loadGif(
+  static Future<GifAtlas?> loadGif(
     String path, {
     double resolution = 1.0,
-    String cacheId,
+    String? cacheId,
   }) async {
     if (cacheId != null && gifs.containsKey(cacheId)) {
       return gifs[cacheId];
@@ -56,7 +56,6 @@ abstract class ResourceLoader {
     final data = await rootBundle.load(path);
     final bytes = Uint8List.view(data.buffer);
     final codec = await ui.instantiateImageCodec(bytes, allowUpscaling: false);
-    resolution ??= GTextureUtils.resolution;
 
     final atlas = GifAtlas();
     atlas.scale = resolution;
@@ -73,12 +72,12 @@ abstract class ResourceLoader {
     return atlas;
   }
 
-  static Future<GTexture> loadNetworkTextureSimple(
+  static Future<GTexture?> loadNetworkTextureSimple(
     String url, {
-    int width,
-    int height,
+    int? width,
+    int? height,
     double resolution = 1.0,
-    String cacheId,
+    String? cacheId,
   }) async {
     if (cacheId != null && textures.containsKey(cacheId)) {
       return textures[cacheId];
@@ -123,15 +122,15 @@ abstract class ResourceLoader {
   //   return response.svgData;
   // }
 
-  static Future<GTexture> loadNetworkTexture(
+  static Future<GTexture?> loadNetworkTexture(
     String url, {
-    int width,
-    int height,
+    int? width,
+    int? height,
     double resolution = 1.0,
-    String cacheId,
-    Function(NetworkImageEvent) onComplete,
-    Function(NetworkImageEvent) onProgress,
-    Function(NetworkImageEvent) onError,
+    String? cacheId,
+    Function(NetworkImageEvent)? onComplete,
+    Function(NetworkImageEvent)? onProgress,
+    Function(NetworkImageEvent)? onError,
   }) async {
     if (cacheId != null && textures.containsKey(cacheId)) {
       return textures[cacheId];
@@ -151,10 +150,10 @@ abstract class ResourceLoader {
     return response.texture;
   }
 
-  static Future<GTexture> loadTexture(
+  static Future<GTexture?> loadTexture(
     String path, [
     double resolution = 1.0,
-    String cacheId,
+    String? cacheId,
   ]) async {
     if (cacheId != null && textures.containsKey(cacheId)) {
       return textures[cacheId];
@@ -175,11 +174,11 @@ abstract class ResourceLoader {
   //   return svgs[cacheId];
   // }
 
-  static Future<GTextureAtlas> loadTextureAtlas(
+  static Future<GTextureAtlas?> loadTextureAtlas(
     String imagePath, {
-    String dataPath,
+    String? dataPath,
     double resolution = 1.0,
-    String cacheId,
+    String? cacheId,
   }) async {
     if (cacheId != null && atlases.containsKey(cacheId)) {
       return atlases[cacheId];
@@ -210,8 +209,8 @@ abstract class ResourceLoader {
   /// load local assets.
   static Future<ui.Image> loadImage(
     String path, {
-    int targetWidth,
-    int targetHeight,
+    int? targetWidth,
+    int? targetHeight,
   }) async {
     final data = await rootBundle.load(path);
     final bytes = Uint8List.view(data.buffer);

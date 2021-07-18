@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 abstract class GameObj extends GShape {
-  double w, h;
-  Color color;
+  double w = 0, h = 0;
+  Color? color;
 
-  void init(double w, double h, Color color) {
+  void init(double w, double h, Color? color) {
     this.w = w;
     this.h = h;
     this.color = color;
@@ -28,7 +28,7 @@ class Ball extends GameObj {
 
   @override
   void _draw() {
-    graphics.beginFill(color).drawCircle(0, 0, w / 2).endFill();
+    graphics.beginFill(color!).drawCircle(0, 0, w / 2).endFill();
   }
 }
 
@@ -38,7 +38,7 @@ class Paddle extends GameObj {
 
   @override
   void _draw() {
-    graphics.beginFill(color).drawRect(0, 0, w, h).endFill();
+    graphics.beginFill(color!).drawRect(0, 0, w, h).endFill();
   }
 }
 
@@ -47,6 +47,6 @@ class Brick extends GameObj {
 
   @override
   void _draw() {
-    graphics.beginFill(color).drawRect(0, 0, w, h).endFill();
+    graphics.beginFill(color!).drawRect(0, 0, w, h).endFill();
   }
 }

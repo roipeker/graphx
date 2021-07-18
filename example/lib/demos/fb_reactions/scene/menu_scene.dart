@@ -36,34 +36,34 @@ class MenuScene extends GSprite {
       'assets/fb_reactions/angry.gif',
     ),
   ];
-  List<MenuItem> _items;
+  late List<MenuItem> _items;
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   /// calculated based on bigSize and menuW
-  double itemSize;
-  double bigSizeScale;
+  double? itemSize;
+  double? bigSizeScale;
 
   double bigSize = 120.0;
   int numItems = emotions.length;
 
-  GShape bg;
-  GSprite menuContainer;
+  late GShape bg;
+  late GSprite menuContainer;
   double menuWidth = 400;
   double itemSep = 10;
   double bgPadding = 20;
-  MenuItem currentItem;
+  MenuItem? currentItem;
 
   @override
   Future<void> addedToStage() async {
     final availableMenuW =
         (menuWidth - bgPadding * 2 - (numItems - 1) * itemSep);
     itemSize = (availableMenuW - bigSize) / (numItems - 1);
-    bigSizeScale = bigSize / itemSize;
+    bigSizeScale = bigSize / itemSize!;
 
-    final bgH = itemSize + bgPadding * 2;
+    final bgH = itemSize! + bgPadding * 2;
     menuContainer = GSprite();
     addChild(menuContainer);
     bg = GShape();
@@ -98,7 +98,7 @@ class MenuScene extends GSprite {
         rotation: 0,
         ease: GEase.elasticOut);
 
-    stage.onMouseUp.addOnce((event) {
+    stage!.onMouseUp.addOnce((event) {
       menuContainer.tween(
           duration: .5,
           delay: .2,
@@ -145,26 +145,26 @@ class MenuScene extends GSprite {
     var prevX = bgPadding;
     for (var i = 0; i < _items.length; ++i) {
       var itm = _items[i];
-      var size2 = itm.size / 2;
+      var size2 = itm.size! / 2;
       itm.y = bgPadding + size2;
       size2 *= itm.scale;
       itm.x = prevX + size2;
       prevX += size2 * 2 + itemSep;
-      itm.onMouseOver.add((signal) => _selectItem(signal.target as MenuItem));
+      itm.onMouseOver.add((signal) => _selectItem(signal.target as MenuItem?));
     }
   }
 
-  void _selectItem(MenuItem item) {
+  void _selectItem(MenuItem? item) {
     if (item == currentItem) return;
     if (currentItem != null) {
-      currentItem.showTooltip(false);
+      currentItem!.showTooltip(false);
       GTween.killTweensOf(currentItem);
-      currentItem.tween(duration: .3, scale: 1);
+      currentItem!.tween(duration: .3, scale: 1);
     }
     currentItem = item;
-    currentItem.showTooltip(true);
+    currentItem!.showTooltip(true);
     GTween.killTweensOf(currentItem);
-    currentItem.tween(
+    currentItem!.tween(
       duration: .3,
       scale: bigSizeScale,
       onUpdate: positionItems,

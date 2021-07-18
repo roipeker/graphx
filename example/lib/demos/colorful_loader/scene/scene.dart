@@ -11,7 +11,7 @@ import 'bubble_preloader.dart';
 
 /// just a wrapper scene class.
 class ColorLoaderScene extends GSprite {
-  BubblePreloader loader;
+  late BubblePreloader loader;
 
   @override
   void addedToStage() {
@@ -21,11 +21,11 @@ class ColorLoaderScene extends GSprite {
 
     loader = BubblePreloader(w: 385, h: 14);
     addChild(loader);
-    stage.onResized.add(_handleStageResize);
+    stage!.onResized.add(_handleStageResize);
   }
 
   void _handleStageResize() {
-    loader.x = (stage.stageWidth - loader.w) / 2;
-    loader.y = (stage.stageHeight - loader.h) / 2;
+    loader.x = (stage!.stageWidth - loader.w) / 2;
+    loader.y = (stage!.stageHeight - loader.h) / 2;
   }
 }

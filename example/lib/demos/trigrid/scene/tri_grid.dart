@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
@@ -7,10 +6,14 @@ class TriangleGrid extends GShape {
   int rows, cols;
   bool debugTriangles = false;
 
-  GTexture texture;
+  late List<double> vertices;
+  late List<double> uvData;
+  late List<int> indices;
+
+  GTexture? texture;
 
   TriangleGrid({
-    GSprite doc,
+    GSprite? doc,
     this.res = 10,
     this.cols = 5,
     this.rows = 5,
@@ -20,15 +23,11 @@ class TriangleGrid extends GShape {
     draw();
   }
 
-  List<double> vertices;
-  List<double> uvData;
-  List<int> indices;
-
   void draw() {
     graphics.clear();
     if (texture != null) {
       graphics
-          .beginBitmapFill(texture, null, false, true)
+          .beginBitmapFill(texture!, null, false, true)
           .drawTriangles(vertices, indices, uvData)
           .endFill();
     }
@@ -53,12 +52,11 @@ class TriangleGrid extends GShape {
         j / (cols - 1),
         i / (rows - 1),
       ]);
-
       if (i < rows - 1 && j < cols - 1) {
-        ///first tri
+        ///first triangle
         indices.addAll([i * cols + j, i * cols + j + 1, (i + 1) * cols + j]);
 
-        ///first tri
+        ///second triangle
         indices.addAll(
             [i * cols + j + 1, (i + 1) * cols + j + 1, (i + 1) * cols + j]);
       }

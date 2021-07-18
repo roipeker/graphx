@@ -4,13 +4,13 @@ import 'package:graphx/graphx.dart';
 import '../utils.dart';
 
 class HueScene extends GSprite {
-  GShape colorSelector;
-  GShape arrowSelector;
-  GShape lineSelector;
-  Color _selectedColor;
+  late GShape colorSelector;
+  late GShape arrowSelector;
+  GShape? lineSelector;
+  Color? _selectedColor;
 
-  double sw, sh;
-  ByteData colorsBytes;
+  double sw = 0.0, sh = 0.0;
+  ByteData? colorsBytes;
 
   HueScene() {
     // config(usePointer: true, autoUpdateAndRender: true);
@@ -22,8 +22,8 @@ class HueScene extends GSprite {
     var hvsList = List.generate(numHues, (index) {
       return HSVColor.fromAHSV(1, index / numHues * 360, 1, 1).toColor();
     });
-    sw = stage.stageWidth;
-    sh = stage.stageHeight;
+    sw = stage!.stageWidth;
+    sh = stage!.stageHeight;
 
     colorSelector = GShape();
     colorSelector.graphics
@@ -40,9 +40,9 @@ class HueScene extends GSprite {
     arrowSelector = GShape();
     lineSelector = GShape();
 
-    lineSelector.graphics.beginFill(kColorWhite).drawRect(0, 0, sw, 10);
-    lineSelector.alignPivot(Alignment.center);
-    lineSelector.x = sw / 2;
+    lineSelector!.graphics.beginFill(kColorWhite).drawRect(0, 0, sw, 10);
+    lineSelector!.alignPivot(Alignment.center);
+    lineSelector!.x = sw / 2;
 
     /// create the arrow GShape first
     arrowSelector.graphics.beginFill(kColorBlack).drawPolygonFaces(
@@ -67,24 +67,24 @@ class HueScene extends GSprite {
 
     addChild(colorSelector);
     addChild(arrowSelector);
-    addChild(lineSelector);
-    lineSelector.alpha = 0;
+    addChild(lineSelector!);
+    lineSelector!.alpha = 0;
 
     mouseChildren = false;
-    lineSelector.scaleX = 0;
-    stage.onMouseDown.add((input) {
+    lineSelector!.scaleX = 0;
+    stage!.onMouseDown.add((input) {
       // lineSelector.y = sh / 2;
       GTween.killTweensOf(lineSelector);
-      lineSelector.height = 8;
-      lineSelector.tween(
+      lineSelector!.height = 8;
+      lineSelector!.tween(
         duration: .8,
         height: 2,
         scaleX: 1,
         alpha: 1,
         ease: GEase.easeOutExpo,
       );
-      stage.onMouseUp.addOnce((input) {
-        lineSelector.tween(
+      stage!.onMouseUp.addOnce((input) {
+        lineSelector!.tween(
           duration: .8,
           scaleX: 0,
           height: 0,
@@ -92,7 +92,7 @@ class HueScene extends GSprite {
       });
       _updatePosition();
     });
-    stage.onMouseMove.add(_onMouseMove);
+    stage!.onMouseMove.add(_onMouseMove);
 
     /// get the image bytes from capturing the GShape snapshot.
     /// so we can get the colors from the bytes List.
@@ -109,13 +109,13 @@ class HueScene extends GSprite {
   }
 
   void _updatePosition() {
-    lineSelector.y = arrowSelector.y = mouseY.clamp(0.0, sh - 1);
+    lineSelector!.y = arrowSelector.y = mouseY.clamp(0.0, sh - 1);
     updateColor();
   }
 
   void updateColor() {
     _selectedColor = getPixelColor(
-      colorsBytes,
+      colorsBytes!,
       sw.toInt(),
       sh.toInt(),
       0,
@@ -123,6 +123,6 @@ class HueScene extends GSprite {
     );
 
     /// emit the event to update the UI.
-    pickerMPS.emit1<Color>(ColorPickerEmitter.changeHue, _selectedColor);
+    pickerMPS.emit1<Color?>(ColorPickerEmitter.changeHue, _selectedColor);
   }
 }

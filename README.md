@@ -24,7 +24,8 @@ To get some extended, boring explanations, and eventually some sample codes, che
 
 #### news!
 
-- WIP Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety) in the other branch.
+- WIP Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety)
+  
 - Support for HotReload
 
 #### prototyping
@@ -32,6 +33,7 @@ To get some extended, boring explanations, and eventually some sample codes, che
 GraphX is all about visuals, here you have some screen captures of random prototypes I've been doing, while developing and testing graphx.
 
 For your GraphX scene to support **Hot Reload**, you should initialize your variables and DisplayObjects inside `addedToStage`, and optionally clean them in `dispose`.
+
 
 [![artificial horizon](https://media.giphy.com/media/NMG8gfpJxFiu1eALZo/giphy.gif)](https://media.giphy.com/media/NMG8gfpJxFiu1eALZo/source.mp4)
 [![parallax game](https://media.giphy.com/media/RIrvhfZoDtal41Tb4e/giphy-downsized.gif)](https://media.giphy.com/media/RIrvhfZoDtal41Tb4e/source.mp4)
@@ -213,12 +215,8 @@ There are a bunch of signals to listen on each object... taken from AS3, and JS.
 - onMouseOver
 - onMouseOut
 - onMouseScroll
-- onLongPress
 
 They all emit a `MouseInputData` with all the needed info inside, like stage coordinates, or translated local coordinates, which "mouse" button is pressed, etc.
-
-Class `DisplayObject` has two param to control the `LongPress` event how to works.
-one of `longPressDuration`, another is `longPressDistance`.
 
 ---
 

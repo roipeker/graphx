@@ -1,5 +1,6 @@
-## [0.9.10]
-- start port to null-safety.
+## [1.0.0-nullsafety.0]
+- initial migration to null-safety
+- fix non-working examples.
 - fix a bug with GText layout.
 
 ## [0.9.9]

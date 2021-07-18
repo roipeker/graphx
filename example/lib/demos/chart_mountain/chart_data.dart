@@ -11,8 +11,8 @@ const sampleGraphData = <GraphModel>[
 ];
 
 class GraphModel {
-  final List<double> data;
-  final Color color;
-  final String name;
+  final List<double>? data;
+  final Color? color;
+  final String? name;
   const GraphModel({this.data, this.color, this.name});
 }

@@ -5,7 +5,7 @@ import '../../graphx.dart';
 import '../core/core.dart';
 
 class SceneBuilderWidget extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
 
   final SceneController Function() builder;
 
@@ -22,8 +22,8 @@ class SceneBuilderWidget extends StatefulWidget {
   final HitTestBehavior pointerBehaviour;
 
   const SceneBuilderWidget({
-    Key key,
-    this.builder,
+    Key? key,
+    required this.builder,
     this.child,
     this.painterIsComplex = true,
     this.mouseOpaque = true,
@@ -35,24 +35,25 @@ class SceneBuilderWidget extends StatefulWidget {
 }
 
 class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
-  SceneController _controller;
+  late SceneController _controller;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.builder();
+
     _controller.resolveWindowBounds = _getRenderObjectWindowBounds;
     _controller.$init();
   }
 
-  GRect _getRenderObjectWindowBounds() {
+  GRect? _getRenderObjectWindowBounds() {
     if (!mounted) return null;
     return ContextUtils.getRenderObjectBounds(context);
   }
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 

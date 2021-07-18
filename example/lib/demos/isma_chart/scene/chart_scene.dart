@@ -7,21 +7,21 @@ import 'chart_cell.dart';
 import 'chart_sprite.dart';
 
 class ChartScene extends GSprite {
-  GSprite boxCFR1;
-  GSprite boxCFR2;
-  ChartTableCell boxCell;
-  Chart boxLineChart;
+  late GSprite boxCFR1;
+  late GSprite boxCFR2;
+  late ChartTableCell boxCell;
+  late Chart boxLineChart;
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
-  double get chartH => stage.stageHeight - monthYearBarH;
+  double get chartH => stage!.stageHeight - monthYearBarH;
   double monthYearBarH = 26;
 
-  GText cfr1;
-  GText monthYear;
-  GSprite cfr2;
+  late GText cfr1;
+  late GText monthYear;
+  late GSprite cfr2;
 
   double valuesYW = 17;
 
@@ -97,7 +97,7 @@ class ChartScene extends GSprite {
     boxLineChart.x = boxCell.x;
   }
 
-  GSprite valuesYContainer;
+  late GSprite valuesYContainer;
 
   void _buildYValues() {
     valuesYContainer = GSprite();

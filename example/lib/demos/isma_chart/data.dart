@@ -13,7 +13,7 @@ final valueTextStyle = TextStyle(
   fontWeight: FontWeight.w600,
 );
 
-List<double> cfrData;
+late List<double> cfrData;
 
 Future<void> loadJson() async {
   // var id = 'assets/isma_chart/chart_data.json';
@@ -29,7 +29,7 @@ void buildData() {
 }
 
 class DotDataModel {
-  double value;
+  double? value;
   String year = '2020';
   String value2 = '11';
   String name = 'Ismail';

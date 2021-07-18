@@ -6,14 +6,14 @@ export 'package:flutter/rendering.dart' show SystemMouseCursor;
 
 /// Accessible from `pointer_manager.dart`
 abstract class GMouse {
-  static SystemMouseCursor _cursor;
-  static SystemMouseCursor _lastCursor;
+  static SystemMouseCursor? _cursor;
+  static SystemMouseCursor? _lastCursor;
 
-  static SystemMouseCursor get cursor => _cursor;
+  static SystemMouseCursor? get cursor => _cursor;
 
   static void setClickCursor()=> cursor = SystemMouseCursors.click;
 
-  static set cursor(SystemMouseCursor value) {
+  static set cursor(SystemMouseCursor? value) {
     value ??= SystemMouseCursors.basic;
     if (_cursor == value) return;
     if (_cursor != SystemMouseCursors.none) {
@@ -24,7 +24,7 @@ abstract class GMouse {
       'activateSystemCursor',
       <String, dynamic>{
         'device': 1,
-        'kind': cursor.kind,
+        'kind': cursor!.kind,
       },
     );
   }

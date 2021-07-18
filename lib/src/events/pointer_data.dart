@@ -17,11 +17,11 @@ enum PointerEventType {
 class PointerEventData {
   final double stageX;
   final double stageY;
-  final PointerEventType type;
+  final PointerEventType? type;
   final PointerEvent rawEvent;
 
   /// local position in DisplayObject
-  GPoint localPosition;
+  late GPoint localPosition;
 
   double get localX => localPosition.x;
 
@@ -32,7 +32,7 @@ class PointerEventData {
   /// 300 milliseconds for double click
   static int doubleClickTime = 300;
 
-  PointerEventData({this.type, this.rawEvent})
+  PointerEventData({this.type, required this.rawEvent})
       : stageX = rawEvent.localPosition.dx,
         stageY = rawEvent.localPosition.dy {
     localPosition = GPoint(stageX, stageY);
@@ -40,14 +40,14 @@ class PointerEventData {
 
   int get time => rawEvent.timeStamp.inMilliseconds;
 
-  Offset get scrollDelta {
+  Offset? get scrollDelta {
     if (rawEvent is PointerScrollEvent) {
       return (rawEvent as PointerScrollEvent).scrollDelta;
     }
     return null;
   }
 
-  GPoint get windowPosition => GPoint.fromNative(rawEvent.original.position);
+  GPoint get windowPosition => GPoint.fromNative(rawEvent.original!.position);
 
   GPoint get stagePosition => GPoint.fromNative(rawEvent.localPosition);
 
@@ -66,8 +66,8 @@ class PointerEventData {
 
   /// new properties.
   /// TODO: decide how to name mouse/pointer events.
-  GDisplayObject target;
-  GDisplayObject dispatcher;
+  GDisplayObject? target;
+  GDisplayObject? dispatcher;
 
   bool captured = false;
   bool mouseOut = false;
@@ -128,23 +128,23 @@ class MouseInputData {
   }
 
   /// display objects
-  GDisplayObject target;
-  GDisplayObject dispatcher;
-  MouseInputType type;
+  GDisplayObject? target;
+  GDisplayObject? dispatcher;
+  MouseInputType? type;
   bool buttonDown = false;
   bool mouseOut = false;
   double time = 0;
-  PointerEventData rawEvent;
+  PointerEventData? rawEvent;
 
   /// defines which button is pressed...
-  int buttonsFlags;
+  int? buttonsFlags;
 
   bool get isSecondaryDown =>
-      buttonsFlags & kSecondaryButton == kSecondaryButton;
+      buttonsFlags! & kSecondaryButton == kSecondaryButton;
 
-  bool get isPrimaryDown => buttonsFlags & kPrimaryButton == kPrimaryButton;
+  bool get isPrimaryDown => buttonsFlags! & kPrimaryButton == kPrimaryButton;
 
-  bool get isTertiaryDown => buttonsFlags & 0x04 == 0x04;
+  bool get isTertiaryDown => buttonsFlags! & 0x04 == 0x04;
 
   GPoint get stagePosition => _stagePosition;
   final GPoint _stagePosition = GPoint();
@@ -156,16 +156,16 @@ class MouseInputData {
 
   double get localY => localPosition.y;
 
-  double get windowX => rawEvent?.rawEvent?.original?.position?.dx ?? 0;
+  double get windowX => rawEvent?.rawEvent.original?.position.dx ?? 0;
 
-  double get windowY => rawEvent?.rawEvent?.original?.position?.dy ?? 0;
+  double get windowY => rawEvent?.rawEvent.original?.position.dy ?? 0;
 
-  double get stageX => _stagePosition?.x ?? 0;
+  double get stageX => _stagePosition.x;
 
-  double get stageY => _stagePosition?.y ?? 0;
+  double get stageY => _stagePosition.y;
 
   GPoint get localDelta {
-    final d = rawEvent?.rawEvent?.localDelta;
+    final d = rawEvent?.rawEvent.localDelta;
     if (d == null) {
       return _localDelta.setEmpty();
     }
@@ -173,11 +173,11 @@ class MouseInputData {
   }
 
   static int uniqueId = 0;
-  int uid;
+  int? uid;
   MouseInputData({this.target, this.dispatcher, this.type});
 
   MouseInputData clone(
-      GDisplayObject target, GDisplayObject dispatcher, MouseInputType type) {
+      GDisplayObject target, GDisplayObject dispatcher, MouseInputType? type) {
     var input = MouseInputData(
       target: target,
       dispatcher: dispatcher,
@@ -206,7 +206,7 @@ class MouseInputData {
 //  }
 //  int get time => rawEvent.rawEvent.timeStamp.inMilliseconds;
 
-  static MouseInputType fromNativeType(PointerEventType nativeType) {
+  static MouseInputType fromNativeType(PointerEventType? nativeType) {
     if (nativeType == PointerEventType.down) {
       return MouseInputType.down;
     } else if (nativeType == PointerEventType.up) {

@@ -5,37 +5,26 @@ import 'bezier_points.dart';
 
 class CurvedGraphScene extends GSprite {
   List<double> graphPositions = [.2, .4, .9, .3, .6, .7, .9, .3];
-  List<GPoint> bezierPoints;
+  List<GPoint> bezierPoints = [];
 
-  double get graphW => stage.stageWidth;
-  double get graphH => stage.stageHeight;
+  double get graphW => stage!.stageWidth;
 
-  GSprite graph, dots;
-  GShape lines, filled;
-  List<GPoint> coords;
+  double get graphH => stage!.stageHeight;
 
-  GTweenableList myTweenList;
-  List<double> lastPercents;
+  late GSprite graph, dots;
+  late GShape lines, filled;
+  late List<GPoint> coords;
 
-  GShape drawCircle(double px, double py) {
-    var sh = GShape();
-    dots.addChild(sh);
-    sh.graphics.beginFill(Colors.red).drawCircle(0, 0, 2).endFill();
-    sh.setPosition(px, py);
-    return sh;
-  }
+  late GTweenableList myTweenList;
+  late List<double> lastPercents;
 
   @override
   void addedToStage() {
-    bezierPoints = [];
-    // stage.color = Colors.black;
-    stage.maskBounds=true;
-
+    stage!.maskBounds = true;
     graph = GSprite();
     dots = GSprite();
     lines = GShape();
     filled = GShape();
-
     addChild(filled);
     addChild(lines);
     addChild(graph);
@@ -54,11 +43,10 @@ class CurvedGraphScene extends GSprite {
     lastPercents = List.from(graphPositions);
     myTweenList = lastPercents.twn;
     randomNumbers();
-    stage.onMouseClick.add((e) => randomNumbers());
+    stage!.onMouseClick.add((e) => randomNumbers());
   }
 
   void randomNumbers() {
-    var newValues = lastPercents.map((e) => Math.random()).toList();
     for (var i = 0; i < dots.children.length; ++i) {
       var dot = dots.children[i];
       dot.tween(
@@ -80,6 +68,7 @@ class CurvedGraphScene extends GSprite {
         colorize: Colors.red,
       );
     }
+    final newValues = lastPercents.map((e) => Math.random()).toList();
     myTweenList.tween(
       newValues,
       duration: 2,
@@ -94,10 +83,11 @@ class CurvedGraphScene extends GSprite {
   void renderPositions(List<double> percents) {
     for (var i = 0; i < percents.length; ++i) {
       coords[i].y = percents[i] * graphH;
-      dots.getChildAt(i).y = coords[i].y;
+      final dot = dots.getChildAt(i);
+      dot.y = coords[i].y;
     }
     lines.graphics.clear();
-    lines.graphics.lineStyle(1, Colors.black);
+    lines.graphics.lineStyle(1, Colors.blue);
     lines.graphics.lineGradientStyle(
       GradientType.linear,
       [
@@ -126,5 +116,13 @@ class CurvedGraphScene extends GSprite {
         .lineTo(0, graphH)
         .lineTo(bezierPoints[0].x, bezierPoints[0].y)
         .endFill();
+  }
+
+  GShape drawCircle(double px, double py) {
+    var sh = GShape();
+    dots.addChild(sh);
+    sh.graphics.beginFill(Colors.red).drawCircle(0, 0, 2).endFill();
+    sh.setPosition(px, py);
+    return sh;
   }
 }

@@ -1,7 +1,7 @@
 part of gtween;
 
 class GTweenableDisplayObject with GTweenable {
-  static GTweenable wrap(Object target) {
+  static GTweenable? wrap(Object? target) {
     if (target is! GDisplayObject) return null;
     return GTweenableDisplayObject(target);
   }
@@ -20,5 +20,5 @@ class GTweenableDisplayObject with GTweenable {
 
   @override
   Map<String, List<Function>> getTweenableAccessors() =>
-      CommonTweenWraps.displayObject(target);
+      CommonTweenWraps.displayObject(target as GDisplayObject?);
 }

@@ -4,21 +4,21 @@ import 'package:graphx/graphx.dart';
 import '../utils.dart';
 
 class ValueScene extends GSprite {
-  GShape bgColor;
-  GShape bgBrightness;
-  GShape bgValue;
-  GSprite colorsContainer;
-  ByteData colorsBytes;
-  GShape selector;
-  Color _selectedColor;
-  double sw, sh;
+  late GShape bgColor;
+  late GShape bgBrightness;
+  late GShape bgValue;
+  late GSprite colorsContainer;
+  ByteData? colorsBytes;
+  late GShape selector;
+  Color? _selectedColor;
+  double sw = 0.0, sh = 0.0;
 
   ValueScene();
 
   @override
   void addedToStage() {
-    sw = stage.stageWidth;
-    sh = stage.stageHeight;
+    sw = stage!.stageWidth;
+    sh = stage!.stageHeight;
 
     bgColor = GShape();
     bgColor.graphics
@@ -52,16 +52,16 @@ class ValueScene extends GSprite {
     addChild(selector);
 
     mouseChildren = false;
-    stage.onMouseDown.add((e) {
+    stage!.onMouseDown.add((e) {
       _updateColor();
       selector.tween(duration: .4, scale: 1.5);
       GMouse.hide();
-      stage.onMouseUp.addOnce((e) {
+      stage!.onMouseUp.addOnce((e) {
         GMouse.show();
         selector.tween(duration: .3, scale: 1);
       });
     });
-    stage.onMouseMove.add(_handleMouseMove);
+    stage!.onMouseMove.add(_handleMouseMove);
     pickerMPS.on(ColorPickerEmitter.changeHue, handleChangeHue);
   }
 
@@ -77,7 +77,8 @@ class ValueScene extends GSprite {
     updateColor();
   }
 
-  void drawGradient(Graphics graphics, {Color color, bool isHorizontal}) {
+  void drawGradient(Graphics graphics,
+      {required Color color, required bool isHorizontal}) {
     var from = isHorizontal ? Alignment.centerLeft : Alignment.bottomCenter;
     var to = isHorizontal ? Alignment.centerRight : Alignment.topCenter;
     graphics
@@ -109,7 +110,7 @@ class ValueScene extends GSprite {
   void updateColor() {
     if (colorsBytes == null) return;
     _selectedColor = getPixelColor(
-      colorsBytes,
+      colorsBytes!,
       sw.toInt(),
       sh.toInt(),
       selector.x.toInt(),
@@ -117,7 +118,7 @@ class ValueScene extends GSprite {
     );
 
     /// emit the event to update the UI.
-    pickerNotifier.value = _selectedColor;
+    pickerNotifier.value = _selectedColor!;
     // pickerMPS.emit1<Color>(ColorPickerEmitter.changeValue, _selectedColor);
   }
 }

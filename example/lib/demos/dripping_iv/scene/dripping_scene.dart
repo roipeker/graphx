@@ -1,17 +1,16 @@
-import '../../../utils/svg_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 import 'svgs.dart';
 
 class DrippingScene extends GSprite {
-  GSvgShape drop;
+  late GSvgShape drop;
   double tubeW = 38, tubeH = 157, tubeOffset = 4.0;
-  GSprite tubeContainer;
-  GShape water, tubeMask;
+  late GSprite tubeContainer;
+  GShape? water, tubeMask;
 
   @override
   Future<void> addedToStage() async {
-    stage.color = Colors.red;
+    stage!.color = Colors.red;
     var dropData = await SvgUtils.svgDataFromString(dropSvg);
     var tubeData = await SvgUtils.svgDataFromString(tubeSvgString);
     final waterColor = Colors.white;
@@ -19,16 +18,16 @@ class DrippingScene extends GSprite {
     var tube = GSvgShape(tubeData);
     addChild(tube);
     tubeMask = GShape();
-    tubeMask.setPosition(13, 29);
-    tubeMask.graphics
+    tubeMask!.setPosition(13, 29);
+    tubeMask!.graphics
         .beginFill(Colors.white.withOpacity(.2))
         .drawRoundRect(tubeOffset, tubeOffset, tubeW - tubeOffset * 2,
             tubeH - tubeOffset * 2, tubeW / 2)
         .endFill();
-    addChild(tubeMask);
+    addChild(tubeMask!);
 
     tubeContainer = GSprite();
-    tubeContainer.setPosition(tubeMask.x, tubeMask.y);
+    tubeContainer.setPosition(tubeMask!.x, tubeMask!.y);
     tubeContainer.mask = tubeMask;
     addChild(tubeContainer);
 
@@ -39,12 +38,12 @@ class DrippingScene extends GSprite {
     tubeContainer.addChild(drop);
 
     water = GShape();
-    water.graphics
+    water!.graphics
         .beginFill(waterColor.withOpacity(.5))
         .drawRect(0, 0, tubeW, 30);
-    water.alignPivot(Alignment.bottomLeft);
-    water.y = tubeH;
-    tubeContainer.addChild(water);
+    water!.alignPivot(Alignment.bottomLeft);
+    water!.y = tubeH;
+    tubeContainer.addChild(water!);
 
     addParticles();
     // moveWater();
@@ -52,7 +51,7 @@ class DrippingScene extends GSprite {
 
     /// This shouldnt be needed... if u wrap in a Sized widget.
     alignPivot();
-    setPosition(stage.stageWidth / 2, stage.stageHeight / 2);
+    setPosition(stage!.stageWidth / 2, stage!.stageHeight / 2);
   }
 
   void resetDripping() {
@@ -63,10 +62,10 @@ class DrippingScene extends GSprite {
   }
 
   void moveWater() {
-    double targetH = water.height > 10 ? 5 : tubeH / 2;
+    double targetH = water!.height > 10 ? 5 : tubeH / 2;
 
     /// toggle water box height up and down...
-    water.tween(
+    water!.tween(
         duration: 6,
         height: targetH,
         ease: GEase.linearToEaseOut,

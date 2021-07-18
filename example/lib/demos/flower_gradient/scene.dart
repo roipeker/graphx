@@ -10,7 +10,7 @@ class FlowerScene extends GSprite {
   void createFlower() {
     var flower = GSprite();
     addChild(flower);
-    flower.setPosition(stage.stageWidth / 2, stage.stageHeight / 2);
+    flower.setPosition(stage!.stageWidth / 2, stage!.stageHeight / 2);
 
     var numLines = 8;
 
@@ -28,7 +28,7 @@ class FlowerScene extends GSprite {
       shape.name = 's$i';
 
       var color1 = Colors.primaries[i % Colors.primaries.length];
-      var color2 = Color.lerp(color1, Colors.black, .4);
+      var color2 = Color.lerp(color1, Colors.black, .4)!;
 
       shape.graphics.beginGradientFill(
         GradientType.linear,

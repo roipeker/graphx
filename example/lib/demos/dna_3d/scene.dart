@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class DnaScene extends GSprite {
-  double spiralRadius, centerX, centerY, centerZ;
+  double spiralRadius = 0.0, centerX = 0.0, centerY = 0.0, centerZ = 0.0;
   double fl = 150;
 
-  List<Dot> dots;
+  late List<Dot> dots;
 
   @override
   void addedToStage() async {
-    stage.color = Colors.white;
+    stage!.color = Colors.white;
     dots = List.generate(80, (index) {
       var dot = Dot();
       addChild(dot);
@@ -22,8 +22,8 @@ class DnaScene extends GSprite {
   @override
   void update(double delta) {
     super.update(delta);
-    centerX = stage.stageWidth / 2;
-    centerY = stage.stageHeight / 2;
+    centerX = stage!.stageWidth / 2;
+    centerY = stage!.stageHeight / 2;
     centerZ = 100.0;
     spiralRadius = (mouseX - centerX) / 4;
 
@@ -47,7 +47,7 @@ class DnaScene extends GSprite {
 /// we just make a class to store the basic properties
 /// for the calculations.
 class Dot extends GShape {
-  double py, angle, speed = 5;
+  double py = 0.0, angle = 0.0, speed = 5;
 
   Dot() {
     graphics.beginFill(kColorBlack).drawCircle(0, 0, 10).endFill();
