@@ -41,9 +41,13 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
   void initState() {
     super.initState();
     _controller = widget.builder();
-
     _controller.resolveWindowBounds = _getRenderObjectWindowBounds;
     _controller.$init();
+    _controller.onUpdate = ((){
+      setState(() {
+        print("Update .....");
+      });
+    });
   }
 
   GRect? _getRenderObjectWindowBounds() {
@@ -81,21 +85,25 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
 
     var converter = _controller.$inputConverter;
     if (_controller.config.usePointer) {
-      child = MouseRegion(
-        onEnter: converter.pointerEnter,
-        onExit: converter.pointerExit,
-        onHover: converter.pointerHover,
-        cursor: MouseCursor.defer,
-        opaque: widget.mouseOpaque,
-        child: Listener(
-          child: child,
-          behavior: widget.pointerBehaviour,
-          onPointerDown: converter.pointerDown,
-          onPointerUp: converter.pointerUp,
-          onPointerCancel: converter.pointerCancel,
-          onPointerMove: converter.pointerMove,
-          onPointerSignal: converter.pointerSignal,
+      child = GestureDetector(
+        child: MouseRegion(
+          onEnter: converter.pointerEnter,
+          onExit: converter.pointerExit,
+          onHover: converter.pointerHover,
+          cursor: MouseCursor.defer,
+          opaque: widget.mouseOpaque,
+          child: Listener(
+            child: child,
+            behavior: widget.pointerBehaviour,
+            onPointerDown: converter.pointerDown,
+            onPointerUp: converter.pointerUp,
+            onPointerCancel: converter.pointerCancel,
+            onPointerMove: converter.pointerMove,
+            onPointerSignal: converter.pointerSignal,
+          ),
         ),
+        onVerticalDragUpdate: (d){},
+        onHorizontalDragUpdate: (d){},
       );
     }
     if (_controller.config.useKeyboard) {

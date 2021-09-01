@@ -25,6 +25,19 @@ class SceneController {
 
   ScenePainter? backScene, frontScene;
 
+  MouseCursor? _currentCursor;
+
+
+  MouseCursor? get currentCursor => _currentCursor;
+
+  // ignore: unnecessary_getters_setters
+  set currentCursor(MouseCursor? value) {
+    _currentCursor = value;
+    if(onUpdate != null) {
+      onUpdate!();
+    }
+  }
+
   /// Access the `ticker` (if any) created by this SceneController.
   GTicker? get ticker {
     if (_ticker == null) {
@@ -46,6 +59,8 @@ class SceneController {
 
   late KeyboardManager _keyboard;
   late PointerManager _pointer;
+
+  Function? onUpdate;
 
   GTicker? _ticker;
 
