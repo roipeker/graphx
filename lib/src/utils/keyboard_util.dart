@@ -4,7 +4,7 @@ import '../../graphx.dart';
 
 /// Utility class to work easily with keyboard events.
 class GKeyboard {
-  final LogicalKeyboardKey value;
+  final KeyboardKey value;
 
   const GKeyboard._(this.value);
 
@@ -13,25 +13,24 @@ class GKeyboard {
   static const right = GKeyboard._(LogicalKeyboardKey.arrowRight);
   static const down = GKeyboard._(LogicalKeyboardKey.arrowDown);
 
-  static const none = GKeyboard._(LogicalKeyboardKey.none);
   static const hyper = GKeyboard._(LogicalKeyboardKey.hyper);
   static const superKey = GKeyboard._(LogicalKeyboardKey.superKey);
   static const fnLock = GKeyboard._(LogicalKeyboardKey.fnLock);
   static const suspend = GKeyboard._(LogicalKeyboardKey.suspend);
   static const resume = GKeyboard._(LogicalKeyboardKey.resume);
-  static const turbo = GKeyboard._(LogicalKeyboardKey.turbo);
+  static const turbo = GKeyboard._(PhysicalKeyboardKey.turbo);
   static const privacyScreenToggle =
-      GKeyboard._(LogicalKeyboardKey.privacyScreenToggle);
+      GKeyboard._(PhysicalKeyboardKey.privacyScreenToggle);
   static const sleep = GKeyboard._(LogicalKeyboardKey.sleep);
   static const wakeUp = GKeyboard._(LogicalKeyboardKey.wakeUp);
   static const displayToggleIntExt =
-      GKeyboard._(LogicalKeyboardKey.displayToggleIntExt);
-  static const usbReserved = GKeyboard._(LogicalKeyboardKey.usbReserved);
+      GKeyboard._(PhysicalKeyboardKey.displayToggleIntExt);
+  static const usbReserved = GKeyboard._(PhysicalKeyboardKey.usbReserved);
   static const usbErrorRollOver =
-      GKeyboard._(LogicalKeyboardKey.usbErrorRollOver);
-  static const usbPostFail = GKeyboard._(LogicalKeyboardKey.usbPostFail);
+      GKeyboard._(PhysicalKeyboardKey.usbErrorRollOver);
+  static const usbPostFail = GKeyboard._(PhysicalKeyboardKey.usbPostFail);
   static const usbErrorUndefined =
-      GKeyboard._(LogicalKeyboardKey.usbErrorUndefined);
+      GKeyboard._(PhysicalKeyboardKey.usbErrorUndefined);
   static const keyA = GKeyboard._(LogicalKeyboardKey.keyA);
   static const keyB = GKeyboard._(LogicalKeyboardKey.keyB);
   static const keyC = GKeyboard._(LogicalKeyboardKey.keyC);
@@ -175,22 +174,22 @@ class GKeyboard {
   static const numpadParenRight =
       GKeyboard._(LogicalKeyboardKey.numpadParenRight);
   static const numpadBackspace =
-      GKeyboard._(LogicalKeyboardKey.numpadBackspace);
+      GKeyboard._(PhysicalKeyboardKey.numpadBackspace);
   static const numpadMemoryStore =
-      GKeyboard._(LogicalKeyboardKey.numpadMemoryStore);
+      GKeyboard._(PhysicalKeyboardKey.numpadMemoryStore);
   static const numpadMemoryRecall =
-      GKeyboard._(LogicalKeyboardKey.numpadMemoryRecall);
+      GKeyboard._(PhysicalKeyboardKey.numpadMemoryRecall);
   static const numpadMemoryClear =
-      GKeyboard._(LogicalKeyboardKey.numpadMemoryClear);
+      GKeyboard._(PhysicalKeyboardKey.numpadMemoryClear);
   static const numpadMemoryAdd =
-      GKeyboard._(LogicalKeyboardKey.numpadMemoryAdd);
+      GKeyboard._(PhysicalKeyboardKey.numpadMemoryAdd);
   static const numpadMemorySubtract =
-      GKeyboard._(LogicalKeyboardKey.numpadMemorySubtract);
+      GKeyboard._(PhysicalKeyboardKey.numpadMemorySubtract);
   static const numpadSignChange =
-      GKeyboard._(LogicalKeyboardKey.numpadSignChange);
-  static const numpadClear = GKeyboard._(LogicalKeyboardKey.numpadClear);
+      GKeyboard._(PhysicalKeyboardKey.numpadSignChange);
+  static const numpadClear = GKeyboard._(PhysicalKeyboardKey.numpadClear);
   static const numpadClearEntry =
-      GKeyboard._(LogicalKeyboardKey.numpadClearEntry);
+      GKeyboard._(PhysicalKeyboardKey.numpadClearEntry);
   static const controlLeft = GKeyboard._(LogicalKeyboardKey.controlLeft);
   static const shiftLeft = GKeyboard._(LogicalKeyboardKey.shiftLeft);
   static const altLeft = GKeyboard._(LogicalKeyboardKey.altLeft);
@@ -205,17 +204,17 @@ class GKeyboard {
   static const brightnessUp = GKeyboard._(LogicalKeyboardKey.brightnessUp);
   static const brightnessDown = GKeyboard._(LogicalKeyboardKey.brightnessDown);
   static const brightnessToggle =
-      GKeyboard._(LogicalKeyboardKey.brightnessToggle);
+      GKeyboard._(PhysicalKeyboardKey.brightnessToggle);
   static const brightnessMinimum =
-      GKeyboard._(LogicalKeyboardKey.brightnessMinimum);
+      GKeyboard._(PhysicalKeyboardKey.brightnessMinimum);
   static const brightnessMaximum =
-      GKeyboard._(LogicalKeyboardKey.brightnessMaximum);
-  static const brightnessAuto = GKeyboard._(LogicalKeyboardKey.brightnessAuto);
-  static const kbdIllumUp = GKeyboard._(LogicalKeyboardKey.kbdIllumUp);
-  static const kbdIllumDown = GKeyboard._(LogicalKeyboardKey.kbdIllumDown);
+      GKeyboard._(PhysicalKeyboardKey.brightnessMaximum);
+  static const brightnessAuto = GKeyboard._(PhysicalKeyboardKey.brightnessAuto);
+  static const kbdIllumUp = GKeyboard._(PhysicalKeyboardKey.kbdIllumUp);
+  static const kbdIllumDown = GKeyboard._(PhysicalKeyboardKey.kbdIllumDown);
   static const mediaLast = GKeyboard._(LogicalKeyboardKey.mediaLast);
   static const launchPhone = GKeyboard._(LogicalKeyboardKey.launchPhone);
-  static const programGuide = GKeyboard._(LogicalKeyboardKey.programGuide);
+  static const programGuide = GKeyboard._(PhysicalKeyboardKey.programGuide);
   static const exit = GKeyboard._(LogicalKeyboardKey.exit);
   static const channelUp = GKeyboard._(LogicalKeyboardKey.channelUp);
   static const channelDown = GKeyboard._(LogicalKeyboardKey.channelDown);
@@ -233,8 +232,8 @@ class GKeyboard {
   static const mediaPlayPause = GKeyboard._(LogicalKeyboardKey.mediaPlayPause);
   static const speechInputToggle =
       GKeyboard._(LogicalKeyboardKey.speechInputToggle);
-  static const bassBoost = GKeyboard._(LogicalKeyboardKey.bassBoost);
-  static const mediaSelect = GKeyboard._(LogicalKeyboardKey.mediaSelect);
+  static const bassBoost = GKeyboard._(PhysicalKeyboardKey.bassBoost);
+  static const mediaSelect = GKeyboard._(PhysicalKeyboardKey.mediaSelect);
   static const launchWordProcessor =
       GKeyboard._(LogicalKeyboardKey.launchWordProcessor);
   static const launchSpreadsheet =
@@ -242,26 +241,26 @@ class GKeyboard {
   static const launchMail = GKeyboard._(LogicalKeyboardKey.launchMail);
   static const launchContacts = GKeyboard._(LogicalKeyboardKey.launchContacts);
   static const launchCalendar = GKeyboard._(LogicalKeyboardKey.launchCalendar);
-  static const launchApp2 = GKeyboard._(LogicalKeyboardKey.launchApp2);
-  static const launchApp1 = GKeyboard._(LogicalKeyboardKey.launchApp1);
+  static const launchApp2 = GKeyboard._(PhysicalKeyboardKey.launchApp2);
+  static const launchApp1 = GKeyboard._(PhysicalKeyboardKey.launchApp1);
   static const launchInternetBrowser =
-      GKeyboard._(LogicalKeyboardKey.launchInternetBrowser);
+      GKeyboard._(PhysicalKeyboardKey.launchInternetBrowser);
   static const logOff = GKeyboard._(LogicalKeyboardKey.logOff);
-  static const lockScreen = GKeyboard._(LogicalKeyboardKey.lockScreen);
+  static const lockScreen = GKeyboard._(PhysicalKeyboardKey.lockScreen);
   static const launchControlPanel =
       GKeyboard._(LogicalKeyboardKey.launchControlPanel);
-  static const selectTask = GKeyboard._(LogicalKeyboardKey.selectTask);
+  static const selectTask = GKeyboard._(PhysicalKeyboardKey.selectTask);
   static const launchDocuments =
-      GKeyboard._(LogicalKeyboardKey.launchDocuments);
+      GKeyboard._(PhysicalKeyboardKey.launchDocuments);
   static const spellCheck = GKeyboard._(LogicalKeyboardKey.spellCheck);
   static const launchKeyboardLayout =
-      GKeyboard._(LogicalKeyboardKey.launchKeyboardLayout);
+      GKeyboard._(PhysicalKeyboardKey.launchKeyboardLayout);
   static const launchScreenSaver =
       GKeyboard._(LogicalKeyboardKey.launchScreenSaver);
   static const launchAssistant =
       GKeyboard._(LogicalKeyboardKey.launchAssistant);
   static const launchAudioBrowser =
-      GKeyboard._(LogicalKeyboardKey.launchAudioBrowser);
+      GKeyboard._(PhysicalKeyboardKey.launchAudioBrowser);
   static const newKey = GKeyboard._(LogicalKeyboardKey.newKey);
   static const close = GKeyboard._(LogicalKeyboardKey.close);
   static const save = GKeyboard._(LogicalKeyboardKey.save);
@@ -282,8 +281,8 @@ class GKeyboard {
   static const mailForward = GKeyboard._(LogicalKeyboardKey.mailForward);
   static const mailSend = GKeyboard._(LogicalKeyboardKey.mailSend);
   static const keyboardLayoutSelect =
-      GKeyboard._(LogicalKeyboardKey.keyboardLayoutSelect);
-  static const showAllWindows = GKeyboard._(LogicalKeyboardKey.showAllWindows);
+      GKeyboard._(PhysicalKeyboardKey.keyboardLayoutSelect);
+  static const showAllWindows = GKeyboard._(PhysicalKeyboardKey.showAllWindows);
   static const gameButton1 = GKeyboard._(LogicalKeyboardKey.gameButton1);
   static const gameButton2 = GKeyboard._(LogicalKeyboardKey.gameButton2);
   static const gameButton3 = GKeyboard._(LogicalKeyboardKey.gameButton3);
