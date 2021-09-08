@@ -306,7 +306,7 @@ SKIA is pretty powerful!
 
 | **Discord**                                                                                                                                      | **Telegram**                                                                                                                                            |
 | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [![Discord Shield](https://img.shields.io/discord/777232130991718440.svg?style=for-the-badge&logo=discord)](https://discord.com/invite/ed5szwuK) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg?style=for-the-badge&logo=telegram)](https://t.me/joinchat/Mbc7jBxxAm4K1uhaVPIR-Q) |
+| [![Discord Shield](https://img.shields.io/discord/777232130991718440.svg?style=for-the-badge&logo=discord)](https://discord.gg/5aTX6HzS5Q) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg?style=for-the-badge&logo=telegram)](https://t.me/joinchat/Mbc7jBxxAm4K1uhaVPIR-Q) |
 
 ---
 
