@@ -21,8 +21,9 @@ class SceneBuilderWidget extends StatefulWidget {
   /// defaults to capture translucent("empty") areas.
   final HitTestBehavior pointerBehaviour;
 
-  /// Wraps the [CustomPaint] in an expanded SizedBox
+  /// Wraps the [CustomPaint] in an [SizedBox.expand()]
   /// so it takes the available space in the parent.
+  /// Warning: will not work with inside Flex Widgets.
   final bool autoSize;
 
   const SceneBuilderWidget({
@@ -32,7 +33,7 @@ class SceneBuilderWidget extends StatefulWidget {
     this.painterIsComplex = true,
     this.mouseOpaque = true,
     this.pointerBehaviour = HitTestBehavior.translucent,
-    this.autoSize = true,
+    this.autoSize = false,
   }) : super(key: key);
 
   @override
@@ -48,6 +49,18 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
     _controller = widget.builder();
     _controller.resolveWindowBounds = _getRenderObjectWindowBounds;
     _controller.$init();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      if (context.size?.isEmpty == true) {
+        trace("""WARNING:
+`SceneBuilderWidget` is being rendered without layout, empty sized.
+You will not be able to interact with touches or mouse and the Stage dimensions will report 0.
+To fix this, you can wrap `SceneBuilderWidget()` in a `SizedBox()` or any other Widget to constrain the size.
+Or you can set `SceneBuilderWidget(autoSize: true)`, which will use internally a `SizedBox.expand()` as parent widget.
+Use `Expanded()` or `Flexible()` in Flex Widgets like Column() or Row().
+"""
+        );
+      }
+    });
   }
 
   GRect? _getRenderObjectWindowBounds() {
@@ -87,7 +100,6 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
         child: child,
       );
     }
-
     var converter = _controller.$inputConverter;
     if (_controller.config.usePointer) {
       child = MouseRegion(

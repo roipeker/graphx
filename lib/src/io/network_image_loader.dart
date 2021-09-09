@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 import '../../graphx.dart';
-// import '../utils/svg_utils.dart';
+import '../utils/svg_utils.dart';
+
+typedef NetworkEventCallback = Function(NetworkImageEvent);
 
 /// Utility class to load Network Images.
 /// Doesn't handle CORS on web.
@@ -60,11 +63,11 @@ class NetworkImageLoader {
     int? width,
     int? height,
     double scale = 1,
-    Function(NetworkImageEvent)? onComplete,
-    Function(NetworkImageEvent)? onProgress,
-    Function(NetworkImageEvent)? onError,
+    NetworkEventCallback? onComplete,
+    NetworkEventCallback? onProgress,
+    NetworkEventCallback? onError,
   }) async {
-    Completer completer = Completer<NetworkImageEvent>();
+    final completer = Completer<NetworkImageEvent>();
     var loadedBytes = <int>[];
     var bytesLoaded = 0;
 
@@ -126,63 +129,51 @@ class NetworkImageLoader {
         );
       },
     );
-    return completer.future as FutureOr<NetworkImageEvent>;
-    // var result = await client.get(url);
-    // var bytes = result.bodyBytes;
-    // final codec = await instantiateImageCodec(
-    //   bytes,
-    //   allowUpscaling: false,
-    //   targetWidth: width,
-    //   targetHeight: height,
-    // );
-    // var img = (await codec.getNextFrame()).image;
-    // callback?.call(img);
-    // return img;
+    return completer.future;
   }
 
-  // static Future<NetworkImageEvent> loadSvg(
-  //   String url, {
-  //   Function(NetworkImageEvent) onComplete,
-  //   Function(NetworkImageEvent) onProgress,
-  //   Function(NetworkImageEvent) onError,
-  // }) async {
-  //   Completer completer = Completer<NetworkImageEvent>();
-  //   var loadedBytes = <int>[];
-  //   var bytesLoaded = 0;
-  //   var _request = http.Request('GET', Uri.parse(url));
-  //   var response = _client.send(_request);
-  //   void dispatchError(NetworkImageEvent eventData) {
-  //     if (onError != null) {
-  //       onError?.call(eventData);
-  //       completer.complete(eventData);
-  //     } else {
-  //       completer.completeError(eventData);
-  //     }
-  //   }
-  //   response.asStream().listen((r) {
-  //     var eventData = NetworkImageEvent(r);
-  //     eventData.scale = 1.0;
-  //     r.stream.listen((chunk) {
-  //       loadedBytes.addAll(chunk);
-  //       bytesLoaded += chunk.length;
-  //       eventData.bytesLoaded = bytesLoaded;
-  //       onProgress?.call(eventData);
-  //     }, onError: (error) {
-  //       dispatchError(eventData);
-  //     }, onDone: () async {
-  //       if (eventData.isError) {
-  //         dispatchError(eventData);
-  //         return null;
-  //       }
-  //       var bytes = Uint8List.fromList(loadedBytes);
-  //       var svgString = utf8.decode(bytes);
-  //       eventData.svgString = svgString;
-  //       eventData.svgData = await SvgUtils.svgDataFromString(svgString);
-  //       onComplete?.call(eventData);
-  //       completer.complete(eventData);
-  //       return eventData;
-  //     });
-  //   });
-  //   return completer.future;
-  // }
+  static Future<NetworkImageEvent> loadSvg(
+    String url, {
+    NetworkEventCallback? onComplete,
+    NetworkEventCallback? onProgress,
+    NetworkEventCallback? onError,
+  }) async {
+    final completer = Completer<NetworkImageEvent>();
+    var loadedBytes = <int>[];
+    var bytesLoaded = 0;
+    var _request = http.Request('GET', Uri.parse(url));
+    var response = _client.send(_request);
+    void dispatchError(NetworkImageEvent eventData) {
+      if (onError != null) {
+        onError.call(eventData);
+        completer.complete(eventData);
+      } else {
+        completer.completeError(eventData);
+      }
+    }
+
+    response.asStream().listen((r) {
+      var eventData = NetworkImageEvent(r);
+      eventData.scale = 1.0;
+      r.stream.listen((chunk) {
+        loadedBytes.addAll(chunk);
+        bytesLoaded += chunk.length;
+        eventData.bytesLoaded = bytesLoaded;
+        onProgress?.call(eventData);
+      }, onError: (error) {
+        dispatchError(eventData);
+      }, onDone: () async {
+        if (eventData.isError) {
+          dispatchError(eventData);
+          return null;
+        }
+        var svgString = utf8.decode(Uint8List.fromList(loadedBytes));
+        eventData.svgString = svgString;
+        eventData.svgData = await SvgUtils.svgDataFromString(svgString);
+        onComplete?.call(eventData);
+        completer.complete(eventData);
+      });
+    });
+    return completer.future;
+  }
 }

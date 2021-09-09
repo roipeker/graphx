@@ -1,5 +1,7 @@
 import 'dart:ui' as ui;
+
 import 'package:flutter/painting.dart' as painting;
+
 import '../../graphx.dart';
 
 class GText extends GDisplayObject {

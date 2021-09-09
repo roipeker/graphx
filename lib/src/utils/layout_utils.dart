@@ -186,6 +186,9 @@ class LayoutUtils {
   }) {
     var currentY = .0, maxW = .0, maxH = .0, itemsH = .0;
     final numItems = items.length;
+    if (numItems == 0) {
+      return;
+    }
 
     /// default to start.
     for (var i = 0; i < numItems; ++i) {
@@ -349,7 +352,11 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        currentX += itm.width + gap;
+        var itmW = itm.width;
+        if (itm is GText && itmW.isInfinite) {
+          itmW = itm.textWidth;
+        }
+        currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceEvenly) {
       /// calculate gap.

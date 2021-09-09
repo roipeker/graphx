@@ -25,6 +25,7 @@ class DemoSingleSceneWidget extends StatelessWidget {
       /// takes the entire body area.
       body: Center(
         child: SceneBuilderWidget(
+          autoSize: true,
           builder: () => SceneController(
             back: root,
             config: config ?? SceneConfig.interactive,

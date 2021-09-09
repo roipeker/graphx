@@ -7,8 +7,6 @@ class GTextureAtlas {
   Map<String?, GSubTexture>? _subTextures;
   List<String?>? _subTexturesNames;
 
-  static final List<String> _names = <String>[];
-
   static bool? attrBoolean(xml.XmlElement el, String name,
       {bool? defaultValue}) {
     var val = el.getAttribute(name);

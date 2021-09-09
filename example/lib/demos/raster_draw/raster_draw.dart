@@ -16,6 +16,7 @@ class RasterDrawMain extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: SceneBuilderWidget(
           builder: () => SceneController(back: DrawingScene()),
+          autoSize: true,
         ),
       ),
     );

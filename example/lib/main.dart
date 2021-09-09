@@ -5,11 +5,11 @@ import 'demos/demos.dart';
 void main() {
   runApp(
     MaterialApp(
-      // home: SimpleShapesMain(),
+      home: SimpleShapesMain(),
       // home: SimpleTweenMain(),
       // home: DemoSvgIconsMain(),
       // home: SimpleInteractionsMain(),
-      home: GraphicsClipperDemo(),
+      // home: GraphicsClipperDemo(),
       // home: FacebookReactionsMain(),
       // home: DrippingIVMain(),
       // home: ChartMountainMain(),
@@ -36,9 +36,7 @@ void main() {
       // home: SimpleRadialMenuMain(),
       // home: MuratCoffeeMain(),
       // home: PieChartMain(),
-
       // home: ChartBezierMain(),
-
       // home: RunHeroCanvasMain(),
       // home: ElasticBandMain(),
       // home: FlowerGradientMain(),

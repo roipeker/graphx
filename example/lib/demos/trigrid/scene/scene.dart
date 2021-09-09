@@ -31,10 +31,12 @@ class DrawTriangleGridScene extends GSprite {
     container = GSprite();
     addChild(container);
     mouseChildren = false;
-    final texture = await ResourceLoader.loadTexture(
-        'assets/trigrid/cute_dog.png', 1, 'dog');
-    if (texture == null) {
-      throw "We have an error loading the image";
+    late GTexture texture;
+    try {
+      texture = await ResourceLoader.loadTexture(
+          'assets/trigrid/cute_dog.png', 1, 'dog');
+    } catch(e) {
+      throw "We have an error loading the image $e";
     }
     textureW = texture.width!;
     textureH = texture.height!;
@@ -63,7 +65,7 @@ class DrawTriangleGridScene extends GSprite {
     triGrid = TriangleGrid(res: sep, cols: cols, rows: rows);
 
     /// show the triangles lines
-    // triGrid.debugTriangles = true;
+    triGrid.debugTriangles = false;
     container.addChildAt(triGrid, 0);
     triGrid.texture = texture;
     triGrid.draw();

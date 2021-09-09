@@ -29,7 +29,7 @@ class MobileControlButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onPressed as void Function()?,
         child: CircleAvatar(
-          backgroundColor: Theme.of(context).accentColor.withOpacity(.4),
+          backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(.4),
           child: Icon(
             icon,
             color: Colors.white,

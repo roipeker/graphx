@@ -15,6 +15,7 @@ class Dna3dMain extends StatelessWidget {
       appBar: AppBar(title: Text('DNA 2.5D')),
       body: SceneBuilderWidget(
         builder: () => SceneController(front: DnaScene()),
+        autoSize: true,
       ),
     );
   }

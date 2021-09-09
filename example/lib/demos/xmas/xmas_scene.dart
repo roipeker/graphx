@@ -33,7 +33,7 @@ class SnowScene extends GSprite {
       );
       return flake;
     });
-    Timer.periodic(Duration(milliseconds: 900), (timer) {
+    _snowDirectionTimer = Timer.periodic(Duration(milliseconds: 900), (timer) {
       _snowDirectionTimer = timer;
       _changeSnowDirection();
     });

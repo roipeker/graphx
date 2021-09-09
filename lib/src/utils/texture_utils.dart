@@ -95,7 +95,7 @@ mixin GTextureUtils {
       GTextureUtils.resolution,
     );
     if (id != null) {
-      ResourceLoader.textures[id] = tx;
+      ResourceLoader.textureCache[id] = tx;
     }
     return tx;
   }

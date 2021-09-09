@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:graphx/graphx.dart';
 
 import 'ui/my_button.dart';
@@ -68,10 +67,10 @@ class SimpleInteractionsScene extends GSprite {
 
     /// or for custom keys, we can use the other ways to check for the
     /// current pressed key.
-    if (event.isKey(LogicalKeyboardKey.arrowUp)) {
+    if (event.isKey(GKey.arrowUp)) {
       // arrow key UP
       ball.y -= pixelsToMove;
-    } else if (event.rawEvent.logicalKey == LogicalKeyboardKey.arrowDown) {
+    } else if (event.rawEvent.logicalKey == GKey.arrowDown) {
       // arrow key DOWN
       ball.y += pixelsToMove;
     }
@@ -81,9 +80,9 @@ class SimpleInteractionsScene extends GSprite {
   /// keystroke. use the A for scale down the ball, and S to scale it up
   /// by 20% on each event.
   void _onKeyboardUp(KeyboardEventData event) {
-    if (event.isKey(LogicalKeyboardKey.keyS)) {
+    if (event.isKey(GKey.keyS)) {
       ball.scale += .2;
-    } else if (event.isKey(LogicalKeyboardKey.keyA)) {
+    } else if (event.isKey(GKey.keyA)) {
       ball.scale -= .2;
     }
   }

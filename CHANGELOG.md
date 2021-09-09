@@ -1,3 +1,13 @@
+## [1.0.2]
+- merged null-safety branch.
+- upgraded Dart constraints >= 2.13
+- changed `GKeyboard` to use `GKeys` alias for `LogicalKeyboardKey` (breaking change in Flutter 2.5).
+- defaults `SceneBuilderWidget.autoSize` to false, avoid exceptions on Flex widgets.
+- added warning message for empty sized widget layout in `SceneBuilderWidget`. 
+- put back `ResourceLoader.loadNetworkSvg` and remove most nullable Futures for non network assets.
+- cleanup some code + dart analysis.
+- cleanup examples code
+
 ## [1.0.1]
 - more null safety migrations.
 - experimental GDropShadowFilter.innerShadow (hurts performance).

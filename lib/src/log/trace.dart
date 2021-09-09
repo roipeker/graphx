@@ -44,16 +44,16 @@ void traceConfig({
 /// object to be printed. The way trace() shows output in the console can be
 /// defined with [traceConfig()].
 void trace(
-  dynamic arg1, [
-  dynamic? arg2,
-  dynamic? arg3,
-  dynamic? arg4,
-  dynamic? arg5,
-  dynamic? arg6,
-  dynamic? arg7,
-  dynamic? arg8,
-  dynamic? arg9,
-  dynamic? arg10,
+    dynamic arg1, [
+  dynamic arg2,
+  dynamic arg3,
+  dynamic arg4,
+  dynamic arg5,
+  dynamic arg6,
+  dynamic arg7,
+  dynamic arg8,
+  dynamic arg9,
+  dynamic arg10,
 ]) {
   ++_traceCount;
   final outputList = <String>[

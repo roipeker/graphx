@@ -24,6 +24,7 @@ class FeelingSwitchMain extends StatelessWidget {
           padding: const EdgeInsets.all(48.0),
           child: SceneBuilderWidget(
             builder: () => SceneController(front: FeelingSwitch()),
+            autoSize: true,
           ),
         ),
       ),

@@ -16,11 +16,10 @@ class CardRotation3dMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('3d card rotation')),
-      body: Center(
-        child: SceneBuilderWidget(
-          builder: () => SceneController(
-            front: CardRotation3dScene(),
-          ),
+      body: SceneBuilderWidget(
+        autoSize: true,
+        builder: () => SceneController(
+          front: CardRotation3dScene(),
         ),
       ),
     );

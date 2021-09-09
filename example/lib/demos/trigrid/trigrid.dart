@@ -19,6 +19,7 @@ class TriGridMain extends StatelessWidget {
       body: Center(
         child: SceneBuilderWidget(
           builder: () => SceneController(front: DrawTriangleGridScene()),
+          autoSize: true,
         ),
       ),
     );

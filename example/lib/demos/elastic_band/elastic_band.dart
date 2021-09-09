@@ -18,9 +18,12 @@ class ElasticBandMain extends StatelessWidget {
       ),
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.grey.shade800,
-      body: Center(
+      body: SizedBox.expand(
         child: SceneBuilderWidget(
-            builder: () => SceneController(front: ElasticBandScene())),
+          builder: () => SceneController(
+            front: ElasticBandScene(),
+          ),
+        ),
       ),
     );
   }

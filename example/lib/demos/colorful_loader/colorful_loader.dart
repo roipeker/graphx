@@ -23,6 +23,7 @@ class ColorfulLoaderMain extends StatelessWidget {
             front: ColorLoaderScene(),
             config: SceneConfig.autoRender,
           ),
+          autoSize: true,
         ),
       ),
     );

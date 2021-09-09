@@ -28,7 +28,7 @@ class FacebookReactionsMain extends StatelessWidget {
             sigmaY: 16,
           ),
           child: Text(
-            'Facebook Reactions',
+            'Facebook Reactions (long press a photo!)',
             style: TextStyle(
               color: _kBlue,
               fontSize: 18,

@@ -825,7 +825,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     _path!.addPath(
       path,
       Offset(x, y),
-      matrix4: transform?.toNative()?.storage,
+      matrix4: transform?.toNative().storage,
     );
     return this;
   }

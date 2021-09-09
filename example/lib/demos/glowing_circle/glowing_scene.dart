@@ -14,19 +14,21 @@ extension MyGlowingExt on Widget {
     Function(Graphics graphics, Size size)? graphicBuilder,
   }) {
     return SceneBuilderWidget(
-        builder: () => SceneController(
-              back: MyGlowingEffect(
-                color: color,
-                duration: duration,
-                startScale: startScale,
-                endScale: endScale,
-                endScaleInterval: endScaleInterval,
-                circleInterval: circleInterval,
-                replayDelay: replayDelay,
-                graphicBuilder: graphicBuilder,
-              ),
-            ),
-        child: this);
+      builder: () => SceneController(
+        back: MyGlowingEffect(
+          color: color,
+          duration: duration,
+          startScale: startScale,
+          endScale: endScale,
+          endScaleInterval: endScaleInterval,
+          circleInterval: circleInterval,
+          replayDelay: replayDelay,
+          graphicBuilder: graphicBuilder,
+        ),
+      ),
+      autoSize: false,
+      child: this,
+    );
   }
 }
 

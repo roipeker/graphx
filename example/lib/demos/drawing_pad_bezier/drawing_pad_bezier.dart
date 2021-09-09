@@ -12,9 +12,13 @@ class DrawingPadBezierMain extends StatelessWidget {
       child: Scaffold(
         body: Stack(
           children: [
-            SceneBuilderWidget(
-              builder: () => SceneController(
-                  back: DrawPadScene(), config: SceneConfig.tools),
+            Positioned.fill(
+              child: SceneBuilderWidget(
+                builder: () => SceneController(
+                  back: DrawPadScene(),
+                  config: SceneConfig.tools,
+                ),
+              ),
             ),
             Positioned(left: 0, right: 0, bottom: 0, child: PadSettings()),
           ],

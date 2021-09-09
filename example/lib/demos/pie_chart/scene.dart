@@ -27,7 +27,7 @@ class PieChartScene extends GSprite {
     for (var i = 0; i < numPieces; ++i) {
       var color = Colors.primaries[(i) % Colors.primaries.length].value;
       var color1 = Color(color);
-      var color2 = Color.lerp(color1, Colors.black, .8)!;
+      var color2 = Color.lerp(color1, Colors.black, .2)!;
       var percent = data[i] / total;
       var myAngle = percent * totalRad;
       var pieceLine = GSprite();

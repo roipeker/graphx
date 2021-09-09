@@ -69,10 +69,10 @@ class BookmarkButton extends GSprite {
 
   Future<void> _loadTexture() async {
     if (_gifFrames == null) {
-      var atlas = await (ResourceLoader.loadGif(
+      var atlas = await ResourceLoader.loadGif(
           'assets/bookmark_button/bookmark.gif',
           resolution: 2,
-          cacheId: 'bookmark') as Future<GifAtlas>);
+          cacheId: 'bookmark');
       _gifFrames = atlas.textureFrames;
     }
     bookmarkIco =

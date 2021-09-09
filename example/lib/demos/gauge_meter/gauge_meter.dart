@@ -16,6 +16,7 @@ class GaugeMeterMain extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: SceneBuilderWidget(
           builder: () => SceneController(back: GaugeMeterScene()),
+          autoSize: true,
         ),
       ),
     );
