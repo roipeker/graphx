@@ -65,7 +65,9 @@ class ToastScene extends GSprite {
       ..addChild(text)
       ..addChild(myIcon)
       ..addChild(button);
-    button..addChild(buttonGShape)..addChild(buttonText);
+    button
+      ..addChild(buttonGShape)
+      ..addChild(buttonText);
   }
 
   void _onShowSnackbar(Map<String, dynamic> value) {
