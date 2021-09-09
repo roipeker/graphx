@@ -25,7 +25,6 @@ To get some extended, boring explanations, and eventually some sample codes, che
 #### news!
 
 - Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety)
-  
 - Support for HotReload
 
 #### prototyping
@@ -76,6 +75,7 @@ ResourceLoader.loadSvg(assetId)
 ```
 
 As well as network images (SVG is not supported on non-SKIA targets):
+
 ```dart
 ResourceLoader.loadNetworkTexture(url);
 ResourceLoader.loadNetworkSvg(url);
@@ -90,8 +90,6 @@ ResourceLoader.getSvg(id);
 ResourceLoader.getAtlas(id);
 ResourceLoader.getGif(id);
 ```
-
-
 
 GraphX™ also provides "raw" support for Text rendering, using the `StaticText` class.
 
@@ -224,27 +222,22 @@ They all emit a `MouseInputData` with all the needed info inside, like stage coo
 _Some demos are only using **GraphX™** partially_
 
 - [snake game ⇢](https://graphx-snake-game.surge.sh/)
-  
 - [breakout game ⇢](https://graphx-breakout-v4.surge.sh/)
 
 - [3d card with shadow ⇢](https://graphx-dropshadow-card.surge.sh/)
-  
 - [rating ⇢](https://graphx-star-rating.surge.sh/) ([dribbble design](https://dribbble.com/shots/12287144-Rating))
 
-- [drawpad ⇢](https://graphx-drawpad3.surge.sh/) // [creepy version ⇢](https://graphx-drawpad2.surge.sh/) 
+- [drawpad ⇢](https://graphx-drawpad3.surge.sh/) // [creepy version ⇢](https://graphx-drawpad2.surge.sh/)
 
-- [node garden ⇢](https://graphx-node-garden.surge.sh/) 
+- [node garden ⇢](https://graphx-node-garden.surge.sh/)
 
-- [fb reactions ⇢](https://graphx-fb-reactions.surge.sh/) 
+- [fb reactions ⇢](https://graphx-fb-reactions.surge.sh/)
 
 - [puzzle pieces ⇢](https://roi-puzzle-v2.surge.sh/)
 
 - [lines repulsion ⇢](https://roi-graphx-mouse-repulsion.surge.sh/)
-  
-- [liquify dog ⇢](http://roi-graphx-liquify-dog.surge.sh/)
-  
+- [liquify dog ⇢](https://roi-graphx-liquify-dog.surge.sh/)
 - [image transform triangles ⇢](https://roi-graphx-image-transform-triangles.surge.sh/)
-  
 - [jelly green ⇢](https://roi-graphx-jelly-green.surge.sh/) ([source](https://gist.github.com/roipeker/dbf792b862ad8dfb526c227c2e1d4ad9))
 
 - [drawing-ball collision ⇢](https://roi-graphx-balls-collision.surge.sh/) ([source](https://gist.github.com/roipeker/d0fbbb1fa5409594f18c8e280ac39d93))
@@ -303,8 +296,8 @@ SKIA is pretty powerful!
 
 ### help & socialize.
 
-| **Discord**                                                                                                                                      | **Telegram**                                                                                                                                            |
-| :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Discord**                                                                                                                                | **Telegram**                                                                                                                                            |
+| :----------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [![Discord Shield](https://img.shields.io/discord/777232130991718440.svg?style=for-the-badge&logo=discord)](https://discord.gg/5aTX6HzS5Q) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg?style=for-the-badge&logo=telegram)](https://t.me/joinchat/Mbc7jBxxAm4K1uhaVPIR-Q) |
 
 ---
@@ -323,61 +316,61 @@ direct `Canvas` calls).\_
   [![neumorphic button](https://media.giphy.com/media/tX24wynwPRVm6cymjy/giphy.gif)](https://media.giphy.com/media/tX24wynwPRVm6cymjy/source.mov)
 
 - 3d card shadow
-  
+
   [![3d card shadow](https://media.giphy.com/media/18XFI8lY9Uj6cgoF66/giphy-downsized.gif)](https://media.giphy.com/media/18XFI8lY9Uj6cgoF66/source.mp4)
 
 - 3d pizza box
-  
+
   [![3d pizza box](https://media.giphy.com/media/8OUnKDJ2ujT9pBpylj/giphy.gif)](https://media.giphy.com/media/8OUnKDJ2ujT9pBpylj/source.mp4)
 
 - pendulum
-  
+
   [![pendulum](https://media.giphy.com/media/6D946gz1PkF0zZV697/giphy.gif)](https://media.giphy.com/media/6D946gz1PkF0zZV697/source.mp4)
-  
+
 - rating stars
-  
+
   [![rating stars](https://media.giphy.com/media/2ZK44FneclymOpyEXR/giphy.gif)](https://media.giphy.com/media/2ZK44FneclymOpyEXR/source.mov)
 
 - rotating dial
-  
+
   [![rotating dial](https://media.giphy.com/media/xC8rB3jR9nXDJDMwQM/giphy.gif)](https://media.giphy.com/media/xC8rB3jR9nXDJDMwQM/source.mp4)
 
 - intro "universo flutter"
-  
+
   [![intro "universo flutter"](https://media.giphy.com/media/ZyVw45nnrQ49Ig3NCb/giphy.gif)](https://media.giphy.com/media/ZyVw45nnrQ49Ig3NCb/source.mp4)
-  
+
 - 3d spiral loader
-  
+
   [![3d spiral loader](https://media.giphy.com/media/eT1pePI6NqpEg3rBmA/giphy.gif)](https://media.giphy.com/media/eT1pePI6NqpEg3rBmA/source.mov)
 
 - breakout game
-  
+
   [![breakout game](https://media.giphy.com/media/roLsn44mOUpbOhV0Da/giphy.gif)](https://media.giphy.com/media/roLsn44mOUpbOhV0Da/source.mov)
 
 - gauges
-  
+
   [![gauges](https://media.giphy.com/media/rWF1Sc4CGLf3zfYlXn/giphy-downsized.gif)](https://media.giphy.com/media/rWF1Sc4CGLf3zfYlXn/source.mp4)
 
 - bubble loader
-  
+
   [![bubble loader](https://media.giphy.com/media/pKXa68pcv2H1dSjxYX/giphy.gif)](https://media.giphy.com/media/pKXa68pcv2H1dSjxYX/source.mp4)
-  
+
 - xmas counter
-  
+
   [![xmas counter](https://media.giphy.com/media/yTNXKR5BHbQKOKpfrS/giphy-downsized.gif)](https://media.giphy.com/media/yTNXKR5BHbQKOKpfrS/source.mp4)
 
 - google fonts
-  
+
   [![google fonts](https://media.giphy.com/media/oUoYS87SzOldcI5itX/giphy.gif)](https://media.giphy.com/media/oUoYS87SzOldcI5itX/source.mp4)
 
 - graphics.drawTriangles
-  
+
   [![graphics.drawTriangles](https://media.giphy.com/media/Dh7i3D5z1kbWpc4bn3/giphy-downsized.gif)](https://media.giphy.com/media/Dh7i3D5z1kbWpc4bn3/source.mp4)
-  
+
 - image transform
-  
+
   [![image transform](https://media.giphy.com/media/s9BcsLdSGMU0ARvOQX/giphy.gif)](https://media.giphy.com/media/s9BcsLdSGMU0ARvOQX/source.mp4)
-  
+
 - svg sample demo
 
   [![svg sample demo](https://media.giphy.com/media/OtGpmd1fAVzw3pK7kD/giphy.gif)](https://media.giphy.com/media/wLuFm9xlXXmkllWJQt/source.mp4)
