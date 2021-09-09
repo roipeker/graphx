@@ -32,7 +32,16 @@ fvm list
 .packages
 .pub-cache/
 .pub/
-/build/
+build/
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Mac
+.DS_Store
 
 # Web related
 lib/generated_plugin_registrant.dart
