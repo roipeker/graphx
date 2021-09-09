@@ -8,7 +8,6 @@ import 'scene.dart';
 class PageIndicatorMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     Widget buildPageIndicator() {
       return Center(
         child: Container(

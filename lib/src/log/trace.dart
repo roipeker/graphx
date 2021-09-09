@@ -44,7 +44,7 @@ void traceConfig({
 /// object to be printed. The way trace() shows output in the console can be
 /// defined with [traceConfig()].
 void trace(
-    dynamic arg1, [
+  dynamic arg1, [
   dynamic arg2,
   dynamic arg3,
   dynamic arg4,

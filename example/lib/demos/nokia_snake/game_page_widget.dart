@@ -58,7 +58,8 @@ class _GamePageState extends State<GamePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => mps.emit1('COMMAND', SnakeCommands.pause),
-        backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(.4),
+        backgroundColor:
+            Theme.of(context).colorScheme.secondary.withOpacity(.4),
         elevation: 0,
         highlightElevation: 0,
         focusElevation: 0,

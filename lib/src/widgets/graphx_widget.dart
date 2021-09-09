@@ -57,8 +57,7 @@ You will not be able to interact with touches or mouse and the Stage dimensions 
 To fix this, you can wrap `SceneBuilderWidget()` in a `SizedBox()` or any other Widget to constrain the size.
 Or you can set `SceneBuilderWidget(autoSize: true)`, which will use internally a `SizedBox.expand()` as parent widget.
 Use `Expanded()` or `Flexible()` in Flex Widgets like Column() or Row().
-"""
-        );
+""");
       }
     });
   }

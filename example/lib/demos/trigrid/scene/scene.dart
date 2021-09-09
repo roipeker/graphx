@@ -35,7 +35,7 @@ class DrawTriangleGridScene extends GSprite {
     try {
       texture = await ResourceLoader.loadTexture(
           'assets/trigrid/cute_dog.png', 1, 'dog');
-    } catch(e) {
+    } catch (e) {
       throw "We have an error loading the image $e";
     }
     textureW = texture.width!;

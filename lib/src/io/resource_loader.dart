@@ -97,7 +97,7 @@ abstract class ResourceLoader {
       }
       return texture;
     } finally {
-        throw FlutterError('Unable to texture $url.');
+      throw FlutterError('Unable to texture $url.');
     }
   }
 
@@ -114,8 +114,9 @@ abstract class ResourceLoader {
       onProgress: onProgress,
       onError: onError,
     );
-    if( response.isError){
-      throw FlutterError('Unable to load SVG $url.\nReason: ${response.reasonPhrase}');
+    if (response.isError) {
+      throw FlutterError(
+          'Unable to load SVG $url.\nReason: ${response.reasonPhrase}');
     }
     if (response.isSvg && cacheId != null) {
       svgCache[cacheId] = response.svgData!;
@@ -145,8 +146,9 @@ abstract class ResourceLoader {
       onProgress: onProgress,
       onError: onError,
     );
-    if( response.isError){
-      throw FlutterError('Unable to load network texture $url.\nReason: ${response.reasonPhrase}');
+    if (response.isError) {
+      throw FlutterError(
+          'Unable to load network texture $url.\nReason: ${response.reasonPhrase}');
     }
     if (response.isImage && cacheId != null) {
       textureCache[cacheId] = response.texture!;
