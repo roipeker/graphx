@@ -24,7 +24,8 @@ To get some extended, boring explanations, and eventually some sample codes, che
 
 #### news!
 
-- WIP Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety) in the other branch.
+- Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety)
+  
 - Support for HotReload
 
 #### prototyping
@@ -33,6 +34,10 @@ GraphX is all about visuals, here you have some screen captures of random protot
 
 For your GraphX scene to support **Hot Reload**, you should initialize your variables and DisplayObjects inside `addedToStage`, and optionally clean them in `dispose`.
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 [![artificial horizon](https://media.giphy.com/media/NMG8gfpJxFiu1eALZo/giphy.gif)](https://media.giphy.com/media/NMG8gfpJxFiu1eALZo/source.mp4)
 [![parallax game](https://media.giphy.com/media/RIrvhfZoDtal41Tb4e/giphy-downsized.gif)](https://media.giphy.com/media/RIrvhfZoDtal41Tb4e/source.mp4)
 [![charts pie color 2](https://media.giphy.com/media/pQdeurUOAqWdZuxxUK/giphy.gif)](https://media.giphy.com/media/pQdeurUOAqWdZuxxUK/source.mp4)

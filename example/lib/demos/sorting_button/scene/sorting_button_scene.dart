@@ -8,27 +8,27 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class SortingButtonScene extends GSprite {
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   @override
   void dispose() {
-    stage?.onMouseDown?.removeAll();
+    stage?.onMouseDown.removeAll();
     super.dispose();
   }
 
   @override
   void addedToStage() {
-    stage.color = const Color(0xffdededede);
+    stage!.color = const Color(0xffdededede);
     var btn = SortingButton(195, 50);
 
     /// as we need to detect global touches on the window, we listen the event
     /// from a "root" scene on top of MaterialApp.
     var lastPress = 0;
-    stage.onMouseDown.add((event) {
+    stage!.onMouseDown.add((event) {
       lastPress = getTimer();
-      if (!btn.bounds.containsPoint(btn.mousePosition)) {
+      if (!btn.bounds!.containsPoint(btn.mousePosition)) {
         if (btn.isOpen) btn.closeDropdown();
       }
     });
@@ -52,18 +52,18 @@ class SortingButton extends GSprite {
   ];
 
   double w, h;
-  GSprite options;
-  GShape bg, menuMask, clickArea;
-  GText label, sortBy;
-  GIcon arrow;
+  late GSprite options;
+  GShape? bg, menuMask, clickArea;
+  late GText label, sortBy;
+  late GIcon arrow;
 
   double labelPaddingX = 18;
-  double labelMaxW;
+  late double labelMaxW;
 
   bool isOpen = false;
   double optionH = 40;
   double optionSep = 0;
-  double menuOpenH;
+  late double menuOpenH;
   final tweenMenuSize = 0.0.twn;
   int _selectedIndex = -1;
   final highlighColor = const Color(0xff99979D);
@@ -93,15 +93,15 @@ class SortingButton extends GSprite {
     menuMask = GShape();
     bg = GShape();
     clickArea = GShape();
-    addChild(bg);
-    addChild(menuMask);
-    addChild(clickArea);
+    addChild(bg!);
+    addChild(menuMask!);
+    addChild(clickArea!);
     tweenMenuSize.value = h;
-    drawBackground(bg.graphics, h, 5, Colors.black);
-    drawBackground(menuMask.graphics, h, 5, Colors.black);
-    drawBackground(clickArea.graphics, h, 0, Colors.red.withOpacity(.4));
+    drawBackground(bg!.graphics, h, 5, Colors.black);
+    drawBackground(menuMask!.graphics, h, 5, Colors.black);
+    drawBackground(clickArea!.graphics, h, 0, Colors.red.withOpacity(.4));
 
-    clickArea.alpha = 0;
+    clickArea!.alpha = 0;
 
     arrow = GIcon(Icons.arrow_back_ios, Colors.white, 14);
     arrow.alignPivot(Alignment.centerLeft);
@@ -132,14 +132,14 @@ class SortingButton extends GSprite {
     );
     sortBy.mouseEnabled = false;
     arrow.mouseEnabled =
-        label.mouseEnabled = menuMask.mouseEnabled = bg.mouseEnabled = false;
+        label.mouseEnabled = menuMask!.mouseEnabled = bg!.mouseEnabled = false;
 
     options = GSprite();
     addChild(options);
     options.y = h;
     options.mask = menuMask;
     _createOptions();
-    clickArea.onMouseDown.add(_onMousePress);
+    clickArea!.onMouseDown.add(_onMousePress);
     _selectItem(0);
   }
 
@@ -152,7 +152,7 @@ class SortingButton extends GSprite {
     }
     var offset = 14.0;
 
-    bg.tween(
+    bg!.tween(
       duration: .25,
       width: w + offset,
       height: h + offset,
@@ -161,12 +161,12 @@ class SortingButton extends GSprite {
       ease: GEase.easeOutQuart,
       overwrite: 0,
     );
-    stage.onMouseUp.addOnce(_onMouseUp);
+    stage!.onMouseUp.addOnce(_onMouseUp);
   }
 
   void _onMouseUp(MouseInputData event) {
     GTween.killTweensOf(_delayedOpen);
-    bg.tween(
+    bg!.tween(
       duration: 1.3,
       width: w,
       height: h,
@@ -181,7 +181,7 @@ class SortingButton extends GSprite {
 
   void _delayedOpen() {
     GTween.killTweensOf(bg);
-    bg.setProps(scale: 1, x: 0, y: 0);
+    bg!.setProps(scale: 1, x: 0, y: 0);
     GTween.killTweensOf(tweenMenuSize);
     openDropdown();
   }
@@ -190,16 +190,16 @@ class SortingButton extends GSprite {
     if (_selectedIndex == idx) return;
     if (_selectedIndex > -1) {
       var o = items[_selectedIndex];
-      var dot = o.getChildByName('dot');
-      var label = o.getChildByName('label');
+      var dot = o.getChildByName('dot')!;
+      var label = o.getChildByName('label')!;
       dot.tween(duration: .2, x: labelPaddingX / 2, alpha: 0);
       label.tween(duration: .2, x: labelPaddingX);
     }
     _selectedIndex = idx;
     if (_selectedIndex > -1) {
       var o = items[_selectedIndex];
-      var dot = o.getChildByName('dot');
-      var label = o.getChildByName('label');
+      var dot = o.getChildByName('dot')!;
+      var label = o.getChildByName('label')!;
       dot.tween(duration: .4, x: labelPaddingX, alpha: 1);
       label.tween(duration: .4, x: labelPaddingX + 10);
     }
@@ -223,13 +223,13 @@ class SortingButton extends GSprite {
       arrow.tween(duration: .6, alpha: 1, overwrite: 0);
       sortBy.tween(duration: .8, alpha: 1);
       _writeLabel(dataModel[_selectedIndex]);
-      bg.tween(duration: .4, y: 0);
+      bg!.tween(duration: .4, y: 0);
     });
 
     /// make background bounce a few times.
     void _bounceBg() {
-      var ty = bg.y > 0 ? -1.5 : 3;
-      bg.tween(
+      var ty = bg!.y > 0 ? -1.5 : 3;
+      bg!.tween(
         duration: .16,
         y: ty,
         onComplete: _bounceBg,
@@ -302,7 +302,7 @@ class SortingButton extends GSprite {
       });
       itm.onMouseDown.add((event) {
         subBg.tween(duration: .3, alpha: .5);
-        stage.onMouseUp.addOnce((event) {
+        stage!.onMouseUp.addOnce((event) {
           if (event.dispatcher == itm) {
             subBg.tween(duration: .3, alpha: .25);
             _selectItem(i);
@@ -337,8 +337,8 @@ class SortingButton extends GSprite {
       duration: .7,
       ease: GEase.fastLinearToSlowEaseIn,
       onUpdate: () {
-        drawBackground(bg.graphics, tweenMenuSize.value, 5);
-        drawBackground(menuMask.graphics, tweenMenuSize.value, 5);
+        drawBackground(bg!.graphics, tweenMenuSize.value, 5);
+        drawBackground(menuMask!.graphics, tweenMenuSize.value, 5);
       },
     );
     final len = items.length;
@@ -357,7 +357,7 @@ class SortingButton extends GSprite {
   void openDropdown() {
     if (isOpen) return;
     isOpen = true;
-    bg.setProps(scale: 1, x: 0, y: 0);
+    bg!.setProps(scale: 1, x: 0, y: 0);
     arrow.tween(
       duration: .4,
       rotation: deg2rad(isOpen ? 90 : 360.0 - 90),
@@ -369,8 +369,8 @@ class SortingButton extends GSprite {
       duration: 2,
       ease: GEase.fastLinearToSlowEaseIn,
       onUpdate: () {
-        drawBackground(bg.graphics, tweenMenuSize.value, 5);
-        drawBackground(menuMask.graphics, tweenMenuSize.value, 5);
+        drawBackground(bg!.graphics, tweenMenuSize.value, 5);
+        drawBackground(menuMask!.graphics, tweenMenuSize.value, 5);
       },
     );
 
@@ -387,14 +387,14 @@ class SortingButton extends GSprite {
   }
 
   GText createLabel({
-    String text,
-    double targetW,
-    double containerH,
+    String? text,
+    required double targetW,
+    double? containerH,
     double letterSpacing = 0.2,
-    double fontSize,
+    double? fontSize,
     Color color = Colors.white,
     FontWeight weight = FontWeight.w600,
-    GSprite doc,
+    GSprite? doc,
   }) {
     var tf = GText(
       text: text,

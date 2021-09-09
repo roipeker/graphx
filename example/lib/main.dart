@@ -5,7 +5,7 @@ import 'demos/demos.dart';
 void main() {
   runApp(
     MaterialApp(
-      // home: SimpleShapesMain(),
+      home: SimpleShapesMain(),
       // home: SimpleTweenMain(),
       // home: DemoSvgIconsMain(),
       // home: SimpleInteractionsMain(),
@@ -47,13 +47,12 @@ void main() {
       // home: PizzaBoxMain(),
       // home: DrawingPadBezierMain(),
       // home: IsmaChartMain(),
-      home: TriGridMain(),
+      // home: TriGridMain(),
       // home: NicoLoadingIndicatorMain(),
       // home: FeelingSwitchMain(),
       // home: MouseRepulsionMain(),
       // home: Globe3dMain(),
       // home: LungsAnimationMain(),
-      // home: PathChartStressTestMain(),
       // home: ExpanderFabMenu(),
       // home: PageIndicatorMain(),
     ),

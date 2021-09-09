@@ -12,7 +12,7 @@ import 'package:graphx/graphx.dart';
 const pinkColor = Color(0xffDD3D5C);
 
 class DialerScene extends GSprite {
-  Dialer dialer;
+  late Dialer dialer;
 
   @override
   void addedToStage() {
@@ -26,11 +26,11 @@ class Dialer extends GSprite {
   double radius = 700 / 2;
   bool isPressed = false;
   GPoint pressed = GPoint();
-  GShape bg;
+  late GShape bg;
   double prevRot = 0.0;
   double pressRot = 0.0;
 
-  Dialer([GSprite doc]) {
+  Dialer([GSprite? doc]) {
     _draw();
     doc?.addChild(this);
 
@@ -42,7 +42,7 @@ class Dialer extends GSprite {
       pressed.setTo(mouseX, mouseY);
       prevRot = bg.rotation;
       pressRot = Math.atan2(mouseY, mouseX); //bg.rotation;
-      stage.onMouseUp.add(
+      stage!.onMouseUp.add(
         (event) => isPressed = false,
       );
     });

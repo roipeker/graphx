@@ -11,7 +11,6 @@ import 'dart:ui';
 /// ```
 
 class GPoint {
-
   /// Creates a point instance from an dart `Offset`.
   static GPoint fromNative(Offset nativeOffset) {
     return GPoint(nativeOffset.dx, nativeOffset.dy);
@@ -43,8 +42,10 @@ class GPoint {
 
   /// The horizontal coordinate of the point.
   double x;
+
   /// The vertical coordinate of the point.
   double y;
+
   /// create a new GPoint instance.
   GPoint([this.x = 0, this.y = 0]);
 

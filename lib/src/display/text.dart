@@ -5,9 +5,9 @@ import 'package:flutter/painting.dart' as painting;
 import '../../graphx.dart';
 
 class GText extends GDisplayObject {
-  ui.Paragraph _paragraph;
+  ui.Paragraph? _paragraph;
 
-  Signal _onFontLoaded;
+  Signal? _onFontLoaded;
 
   Signal get onFontLoaded => _onFontLoaded ??= Signal();
 
@@ -17,7 +17,7 @@ class GText extends GDisplayObject {
   final _alphaPaint = ui.Paint();
 
   @override
-  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+  GRect getBounds(GDisplayObject? targetSpace, [GRect? out]) {
     validate();
     out ??= GRect();
     out.setTo(0, 0, intrinsicWidth, textHeight);
@@ -44,27 +44,27 @@ class GText extends GDisplayObject {
 //    return r;
 //  }
 
-  ui.Paragraph get paragraph => _paragraph;
+  ui.Paragraph? get paragraph => _paragraph;
 
   // ui.TextStyle _style;
-  painting.TextStyle _style;
+  painting.TextStyle? _style;
 
-  double _width;
+  double _width = 0.0;
 
-  ui.ParagraphBuilder _builder;
-  ui.ParagraphStyle _paragraphStyle;
+  late ui.ParagraphBuilder _builder;
+  ui.ParagraphStyle? _paragraphStyle;
 
   bool _invalidSize = true;
   bool _invalidBuilder = true;
-  String _text;
-  ui.Color backgroundColor;
+  String? _text;
+  ui.Color? backgroundColor;
 
-  ui.Color get color {
-    return _style.color;
+  ui.Color? get color {
+    return _style!.color;
   }
 
-  set color(ui.Color value) {
-    _style = _style.copyWith(color: value);
+  set color(ui.Color? value) {
+    _style = _style!.copyWith(color: value);
     _invalidBuilder = true;
     // _invalidateBuilder();
   }
@@ -79,7 +79,7 @@ class GText extends GDisplayObject {
 
   String get text => _text ?? '';
 
-  set text(String value) {
+  set text(String? value) {
     if (_text == value) return;
     _text = value ?? '';
     _invalidBuilder = true;
@@ -90,7 +90,7 @@ class GText extends GDisplayObject {
   double get width => _width;
 
   @override
-  set width(double value) {
+  set width(double? value) {
     if (value == null || _width == value) return;
     _width = value;
     _invalidSize = true;
@@ -160,15 +160,15 @@ class GText extends GDisplayObject {
   // }
 
   GText({
-    String text,
-    ui.ParagraphStyle paragraphStyle,
-    painting.TextStyle textStyle,
+    String? text,
+    ui.ParagraphStyle? paragraphStyle,
+    painting.TextStyle? textStyle,
     double width = double.infinity,
   }) {
-    painting.PaintingBinding.instance.systemFonts.addListener(_fontLoaded);
+    painting.PaintingBinding.instance!.systemFonts.addListener(_fontLoaded);
     this.text = text;
 
-    _width = width ?? double.infinity;
+    _width = width;
     _invalidBuilder = true;
     _invalidSize = true;
     setTextStyle(textStyle ?? defaultTextStyle);
@@ -184,32 +184,32 @@ class GText extends GDisplayObject {
   @override
   void dispose() {
     super.dispose();
-    painting.PaintingBinding.instance.systemFonts.removeListener(_fontLoaded);
+    painting.PaintingBinding.instance!.systemFonts.removeListener(_fontLoaded);
     _onFontLoaded?.removeAll();
     _onFontLoaded = null;
   }
 
   void setTextStyle(painting.TextStyle style) {
-    if (style == null || _style == style) return;
+    if (_style == style) return;
     _style = style;
     _invalidBuilder = true;
   }
 
-  painting.TextStyle getTextStyle() => _style;
+  painting.TextStyle? getTextStyle() => _style;
 
-  ui.ParagraphStyle getParagraphStyle() => _paragraphStyle;
+  ui.ParagraphStyle? getParagraphStyle() => _paragraphStyle;
 
   void setParagraphStyle(ui.ParagraphStyle style) {
-    if (style == null || _paragraphStyle == style) return;
+    if (_paragraphStyle == style) return;
     _paragraphStyle = style;
     _invalidBuilder = true;
   }
 
   void _invalidateBuilder() {
     _paragraphStyle ??= defaultParagraphStyle;
-    _builder = ui.ParagraphBuilder(_paragraphStyle);
+    _builder = ui.ParagraphBuilder(_paragraphStyle!);
     // if (_style != null) _builder.pushStyle(_style);
-    if (_style != null) _builder.pushStyle(_style.getTextStyle());
+    if (_style != null) _builder.pushStyle(_style!.getTextStyle());
     _builder.addText(_text ?? '');
     _paragraph = _builder.build();
     _invalidBuilder = false;
@@ -229,16 +229,16 @@ class GText extends GDisplayObject {
 
   /// Warning: Internal method.
   /// applies the painting after the DisplayObject transformations.
-  /// Should be overriden by subclasses.
+  /// Should be override by subclasses.
   @override
   void $applyPaint(ui.Canvas canvas) {
     super.$applyPaint(canvas);
     if (_text == '') return;
     validate();
-    if (backgroundColor != null && backgroundColor.alpha > 0) {
+    if (backgroundColor != null && backgroundColor!.alpha > 0) {
       canvas.drawRect(
         ui.Rect.fromLTWH(0, 0, intrinsicWidth, textHeight),
-        ui.Paint()..color = backgroundColor,
+        ui.Paint()..color = backgroundColor!,
       );
     }
     if (_paragraph != null) {
@@ -248,17 +248,17 @@ class GText extends GDisplayObject {
 //        final alphaPaint = _alphaPaint;
 //        var bounds = Rect.fromLTWH(0, 0, textWidth, textHeight);
         canvas.saveLayer(null, _alphaPaint);
-        canvas.drawParagraph(_paragraph, ui.Offset.zero);
+        canvas.drawParagraph(_paragraph!, ui.Offset.zero);
         canvas.restore();
       } else {
-        canvas.drawParagraph(_paragraph, ui.Offset.zero);
+        canvas.drawParagraph(_paragraph!, ui.Offset.zero);
       }
     }
   }
 
   @override
   set alpha(double value) {
-    final changed = value != $alpha && value != null;
+    final changed = value != $alpha;
     super.alpha = value;
     if (changed) {
       _alphaPaint.color = _alphaPaint.color.withOpacity($alpha);
@@ -282,34 +282,33 @@ class GText extends GDisplayObject {
   /// Factory method to simplify the initialization of a StaticText instance.
   /// You can pass the parent object directly in the `doc` parameter.
   static GText build({
-    String text,
-    GDisplayObjectContainer doc,
-    ui.Color color,
+    String? text,
+    GDisplayObjectContainer? doc,
+    ui.Color? color,
     double w = double.infinity,
-    ui.TextDecoration decoration,
-    ui.Color decorationColor,
-    ui.TextDecorationStyle decorationStyle,
-    double decorationThickness,
-    ui.FontWeight fontWeight,
-    ui.FontStyle fontStyle,
-    ui.TextBaseline textBaseline,
-    String fontFamily,
-    List<String> fontFamilyFallback,
-    double fontSize,
-    double letterSpacing,
-    double wordSpacing,
-    double height,
-    ui.Locale locale,
-    ui.Paint background,
-    ui.Paint foreground,
-    String ellipsis,
-    int maxLines,
-    List<ui.Shadow> shadows,
-    List<ui.FontFeature> fontFeatures,
+    ui.TextDecoration? decoration,
+    ui.Color? decorationColor,
+    ui.TextDecorationStyle? decorationStyle,
+    double? decorationThickness,
+    ui.FontWeight? fontWeight,
+    ui.FontStyle? fontStyle,
+    ui.TextBaseline? textBaseline,
+    String? fontFamily,
+    List<String>? fontFamilyFallback,
+    double? fontSize,
+    double? letterSpacing,
+    double? wordSpacing,
+    double? height,
+    ui.Locale? locale,
+    ui.Paint? background,
+    ui.Paint? foreground,
+    String? ellipsis,
+    int? maxLines,
+    List<ui.Shadow>? shadows,
+    List<ui.FontFeature>? fontFeatures,
     ui.TextAlign textAlign = ui.TextAlign.left,
     ui.TextDirection direction = ui.TextDirection.ltr,
   }) {
-    w ??= double.infinity;
     if (w == double.infinity && textAlign != ui.TextAlign.left) {
       throw "[StaticText] To use $textAlign you need to specify the width";
     }
@@ -339,10 +338,10 @@ class GText extends GDisplayObject {
       width: w,
       textStyle: style,
       paragraphStyle: ui.ParagraphStyle(
-        textAlign: textAlign,
-        textDirection: direction,
         maxLines: maxLines,
         ellipsis: ellipsis,
+        textAlign: textAlign,
+        textDirection: direction,
       ),
     );
     doc?.addChild(tf);

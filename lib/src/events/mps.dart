@@ -10,15 +10,12 @@ final mps = MPS();
 /// - publish(N) = emit(N)
 /// Accepts a "once()" event like signals.
 class MPS {
-  final _cache = <String, List<Function>>{};
+  final _cache = <String, List<Function?>>{};
   final _cacheOnce = <String, List<Function>>{};
 
   void publishParams(String topic, CallbackParams args) {
-//    final subs = _cache[topic];
-//    subs?.forEach((fn) => Function.apply(fn, args?.positional, args?.named));
-
-    void _send(Function fn) =>
-        Function.apply(fn, args?.positional, args?.named);
+    void _send(Function? fn) =>
+        Function.apply(fn!, args.positional, args.named);
 
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
@@ -27,7 +24,7 @@ class MPS {
 
   void publish1<T>(String topic, T arg1) {
 //    _cache[topic]?.forEach((fn) => fn.call(arg1));
-    void _send(Function fn) => fn.call(arg1);
+    void _send(Function? fn) => fn!.call(arg1);
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
     _cacheOnce.remove(topic);
@@ -35,7 +32,7 @@ class MPS {
 
   void publish2<T, S>(String topic, T arg1, S arg2) {
 //    _cache[topic]?.forEach((fn) => fn.call(arg1, arg2));
-    void _send(Function fn) => fn.call(arg1, arg2);
+    void _send(Function? fn) => fn!.call(arg1, arg2);
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
     _cacheOnce.remove(topic);
@@ -43,7 +40,7 @@ class MPS {
 
   void publish(String topic) {
 //    _cache[topic]?.forEach((fn) => fn.call());
-    void _send(Function fn) => fn.call();
+    void _send(Function? fn) => fn!.call();
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
     _cacheOnce.remove(topic);
@@ -72,8 +69,8 @@ class MPS {
     if (!_cacheOnce.containsKey(topic)) {
       _cacheOnce[topic] = [];
     }
-    if (!_cacheOnce[topic].contains(callback)) {
-      _cacheOnce[topic].add(callback);
+    if (!_cacheOnce[topic]!.contains(callback)) {
+      _cacheOnce[topic]!.add(callback);
       return true;
     }
     return false;
@@ -84,16 +81,16 @@ class MPS {
       _cache[topic] = [];
 //      cache[topic] = LinkedList();
     }
-    if (!_cache[topic].contains(callback)) {
+    if (!_cache[topic]!.contains(callback)) {
 //      cache[topic].add(Callback(callback));
-      _cache[topic].add(callback);
+      _cache[topic]!.add(callback);
       return true;
     }
     return false;
   }
 
   bool unsubscribe(String topic, Function callback) {
-    final subs = _cache[topic];
+    final subs = _cache[topic]!;
     return subs.remove(callback);
 //    subs.remove(Callback._hash[callback]);
 //    int len = subs?.length ?? 0;
@@ -114,53 +111,53 @@ class MPS {
     return _cacheOnce[topic]?.length ?? 0;
   }
 
-  void off(String topic, Function callback) {
+  void off(String topic, Function? callback) {
     _cache[topic]?.remove(callback);
     _cacheOnce[topic]?.remove(callback);
   }
 
   MPS emit(String topic) {
-    void _send(Function fn) => fn.call();
+    void _send(Function? fn) => fn!.call();
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
-    _cacheOnce?.remove(topic);
+    _cacheOnce.remove(topic);
     return this;
   }
 
-  MPS on(String topic, Function callback) {
+  MPS on(String topic, Function? callback) {
     if (!_cache.containsKey(topic)) {
       _cache[topic] = [];
     }
-    if (!_cache[topic].contains(callback)) {
-      _cache[topic].add(callback);
+    if (!_cache[topic]!.contains(callback)) {
+      _cache[topic]!.add(callback);
     }
     return this;
   }
 
   void emit1<T>(String topic, T arg1) {
-    void _send(Function fn) => fn.call(arg1);
+    void _send(Function? fn) => fn!.call(arg1);
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
     _cacheOnce.remove(topic);
   }
 
   void emit2<T, S>(String topic, T arg1, S arg2) {
-    void _send(Function fn) => fn.call(arg1, arg2);
+    void _send(Function? fn) => fn!.call(arg1, arg2);
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
     _cacheOnce.remove(topic);
   }
 
   void emit3<A, B, C>(String topic, A arg1, B arg2, C arg3) {
-    void _send(Function fn) => fn.call(arg1, arg2, arg3);
+    void _send(Function? fn) => fn!.call(arg1, arg2, arg3);
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
     _cacheOnce.remove(topic);
   }
 
   void emitParams(String topic, CallbackParams args) {
-    void _send(Function fn) =>
-        Function.apply(fn, args?.positional, args?.named);
+    void _send(Function? fn) =>
+        Function.apply(fn!, args.positional, args.named);
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
     _cacheOnce.remove(topic);

@@ -6,16 +6,16 @@ import 'chart_graph.dart';
 import 'chart_title.dart';
 
 class SampleMountainChart extends GSprite {
-  MyGraph graph;
-  GraphTitle titles;
+  late MyGraph graph;
+  late GraphTitle titles;
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   @override
   void addedToStage() {
-    stage.showBoundsRect = true;
+    stage!.showBoundsRect = true;
     graph = MyGraph(data: sampleGraphData);
     graph.x = 40;
     graph.y = 20;

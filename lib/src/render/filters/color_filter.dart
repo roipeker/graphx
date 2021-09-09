@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../../geom/gxrect.dart';
+import '../../geom/grect.dart';
 import 'blur_filter.dart';
 
 class GColorFilters {
@@ -48,7 +48,7 @@ class GColorFilters {
 }
 
 class GColorMatrixFilter extends GBaseFilter {
-  ColorFilter colorFilter;
+  ColorFilter? colorFilter;
 
   GColorMatrixFilter(this.colorFilter);
 

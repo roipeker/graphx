@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class DnaScene extends GSprite {
-  double spiralRadius, centerX, centerY, centerZ;
+  double spiralRadius = 0.0, centerX = 0.0, centerY = 0.0, centerZ = 0.0;
   double fl = 120;
 
-  List<Dot> dots;
-  Bar bar;
-  GSprite container;
+  late List<Dot> dots;
+  late Bar bar;
+  late GSprite container;
   double sizeCounter = 0;
 
   @override
@@ -25,7 +25,7 @@ class DnaScene extends GSprite {
     bar = Bar();
     container.addChild(bar);
     bar.x = 30;
-    container.y = stage.stageHeight / 2;
+    container.y = stage!.stageHeight / 2;
   }
 
   @override
@@ -33,7 +33,7 @@ class DnaScene extends GSprite {
     super.update(delta);
     sizeCounter += delta;
 
-    centerX = stage.stageWidth / 2;
+    centerX = stage!.stageWidth / 2;
     centerY = 0; //stage.stageHeight / 2;
     centerZ = 160.0;
     bar.pz = centerZ;

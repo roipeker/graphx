@@ -2,19 +2,17 @@ import 'package:flutter/rendering.dart';
 
 import '../../graphx.dart';
 
-export 'package:flutter/rendering.dart' show SystemMouseCursor;
-
 /// Accessible from `pointer_manager.dart`
 abstract class GMouse {
-  static SystemMouseCursor _cursor;
-  static SystemMouseCursor _lastCursor;
+  static SystemMouseCursor _cursor = SystemMouseCursors.basic;
+  static SystemMouseCursor? _lastCursor;
 
   static SystemMouseCursor get cursor => _cursor;
 
-  static void setClickCursor()=> cursor = SystemMouseCursors.click;
+  static void setClickCursor() => cursor = SystemMouseCursors.click;
 
   static set cursor(SystemMouseCursor value) {
-    value ??= SystemMouseCursors.basic;
+    // value ??= SystemMouseCursors.basic;
     if (_cursor == value) return;
     if (_cursor != SystemMouseCursors.none) {
       _lastCursor = _cursor;
@@ -33,5 +31,7 @@ abstract class GMouse {
 
   static void hide() => cursor = SystemMouseCursors.none;
 
-  static void show() => cursor = _lastCursor;
+  static void show() => cursor = (_lastCursor ?? SystemMouseCursors.basic);
+
+  static void basic() => cursor = SystemMouseCursors.basic;
 }

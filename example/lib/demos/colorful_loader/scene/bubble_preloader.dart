@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class BubblePreloader extends GSprite {
-
   static const gradientColors = <Color>[
     Color(0xFF9874D3),
     Color(0xFF6E7CCC),
@@ -13,9 +12,9 @@ class BubblePreloader extends GSprite {
   ];
 
   double w, h;
-  GShape bg, percentMask, bgGradient;
-  GSprite percentContainer, bubblesContainer;
-  double borderRadius, percent = 0.25, gradientShift = 0.0;
+  GShape? bg, percentMask, bgGradient;
+  late GSprite percentContainer, bubblesContainer;
+  double borderRadius = 0.0, percent = 0.25, gradientShift = 0.0;
   Color bgColor = const Color(0xffDEE0E3);
   int numBubbles = 50;
 
@@ -37,11 +36,11 @@ class BubblePreloader extends GSprite {
     bgGradient = GShape();
     percentMask = GShape();
 
-    percentContainer.addChild(bgGradient);
+    percentContainer.addChild(bgGradient!);
     percentContainer.addChild(bubblesContainer);
-    addChild(bg);
+    addChild(bg!);
     addChild(percentContainer);
-    addChild(percentMask);
+    addChild(percentMask!);
     percentContainer.mask = percentMask;
 
     _drawBack();
@@ -96,7 +95,7 @@ class BubblePreloader extends GSprite {
   }
 
   void _drawMask() {
-    percentMask.graphics
+    percentMask!.graphics
         .clear()
         .beginFill(bgColor)
         .drawRoundRect(0, 0, w * percent, h, borderRadius)
@@ -114,7 +113,7 @@ class BubblePreloader extends GSprite {
   }
 
   void _drawBack() {
-    bg.graphics
+    bg!.graphics
         .beginFill(bgColor)
         .drawRoundRect(0, 0, w, h, borderRadius)
         .endFill();
@@ -125,7 +124,7 @@ class BubblePreloader extends GSprite {
     gradientShift %= 3;
     var a1 = -1.0 - gradientShift;
     var a2 = 4.0 - gradientShift;
-    bgGradient.graphics
+    bgGradient!.graphics
         .clear()
         .beginGradientFill(
           GradientType.linear,

@@ -23,42 +23,42 @@ class FacebookReactionsMain extends StatelessWidget {
       appBar: AppBar(
         centerTitle: false,
         title: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16,),
+          filter: ImageFilter.blur(
+            sigmaX: 16,
+            sigmaY: 16,
+          ),
           child: Text(
-            'Facebook Reactions',
+            'Facebook Reactions (long press a photo!)',
             style: TextStyle(
-                color: _kBlue,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              color: _kBlue,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white.withOpacity(.6),
+        elevation: 0,
+      ),
+      backgroundColor: Color(0xffebebeb),
+      body: SceneBuilderWidget(
+        builder: () => SceneController(front: MenuScene()),
+        child: Scrollbar(
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(vertical: 54, horizontal: 0),
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
+            itemBuilder: (context, index) => InnerCardItem(data: posts[index]),
+            itemCount: posts.length,
           ),
         ),
       ),
-      backgroundColor: Colors.white.withOpacity(.6),
-      elevation: 0,
-    ),
-    backgroundColor: Color(0xffebebeb),
-    body: SceneBuilderWidget(
-    builder: () => SceneController(front: MenuScene()),
-    child: Scrollbar(
-    child: ListView.separated(
-    padding: EdgeInsets.symmetric(vertical: 54, horizontal: 0),
-    separatorBuilder: (context, index) => const SizedBox(height: 8),
-    itemBuilder: (context, index) => InnerCardItem(data: posts[index]),
-    itemCount: posts.length,
-    )
-    ,
-    )
-    ,
-    )
-    ,
     );
   }
 }
 
 class InnerCardItem extends StatelessWidget {
-  final PostVo data;
+  final PostVo? data;
 
-  const InnerCardItem({Key key, this.data}) : super(key: key);
+  const InnerCardItem({Key? key, this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,16 +80,17 @@ class InnerCardItem extends StatelessWidget {
                   CircleAvatar(
                     backgroundColor: Colors.grey.withOpacity(.3),
                     radius: 24,
+
                     /// dev channel
                     // foregroundImage: NetworkImage(data.profileImageUrl),
-                    child: Text(data.username[0].toUpperCase()),
+                    child: Text(data!.username[0].toUpperCase()),
                   ),
                   const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        data.username,
+                        data!.username,
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -97,7 +98,7 @@ class InnerCardItem extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        data.time,
+                        data!.time,
                         style: const TextStyle(
                           fontSize: 10,
                           color: Colors.black38,
@@ -111,7 +112,7 @@ class InnerCardItem extends StatelessWidget {
               const SizedBox(height: 8),
 
               Text(
-                data.title,
+                data!.title,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
@@ -133,7 +134,7 @@ class InnerCardItem extends StatelessWidget {
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: Image.network(
-                  data.imageUrl,
+                  data!.imageUrl,
                   height: 240,
                   fit: BoxFit.cover,
                 ),
@@ -143,12 +144,12 @@ class InnerCardItem extends StatelessWidget {
 
               Row(
                 children: [
-                  _IconReaction.likes(count: data.numLikes),
+                  _IconReaction.likes(count: data!.numLikes),
                   const SizedBox(width: 12),
-                  _IconReaction.comments(count: data.numComments),
+                  _IconReaction.comments(count: data!.numComments),
                   Spacer(),
                   Text(
-                    data.shares,
+                    data!.shares,
                     style: const TextStyle(
                       fontSize: 10,
                       color: Colors.black,
@@ -167,12 +168,12 @@ class InnerCardItem extends StatelessWidget {
 }
 
 class _IconReaction extends StatelessWidget {
-  final IconData iconData;
+  final IconData? iconData;
   final Color color;
-  final int count;
+  final int? count;
 
   const _IconReaction({
-    Key key,
+    Key? key,
     this.iconData,
     this.color = Colors.black,
     this.count,
@@ -194,7 +195,7 @@ class _IconReaction extends StatelessWidget {
       children: [
         Icon(
           iconData,
-          color: color ?? Colors.black,
+          color: color,
           size: 16,
         ),
         const SizedBox(width: 2),

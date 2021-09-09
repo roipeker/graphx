@@ -69,7 +69,8 @@ class _TweenMenu extends StatelessWidget {
     );
   }
 
-  Widget _addButton({String label, IconData icon, VoidCallback onPressed}) {
+  Widget _addButton(
+      {required String label, IconData? icon, VoidCallback? onPressed}) {
     return TextButton(
       // color: Colors.red,
       child: Row(

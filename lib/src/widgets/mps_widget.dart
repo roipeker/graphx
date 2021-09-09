@@ -5,7 +5,7 @@ import '../../graphx.dart';
 typedef MPSFunctionBuilder<T> = Widget Function(
   BuildContext context,
   MPSEvent<T> event,
-  Widget child,
+  Widget? child,
 );
 
 /// [MPSBuilder] allows you to subscribe to multiple MinPubSub topics.
@@ -18,16 +18,16 @@ typedef MPSFunctionBuilder<T> = Widget Function(
 /// or 1 parameter[T] `ems.emit1(topic, value)`. Data is captured and sent as
 /// 2nd parameter ([MPSEvent] event object) in the [build] function.
 class MPSBuilder<T> extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
   final MPS mps;
   final MPSFunctionBuilder<T> builder;
   final List<String> topics;
 
   const MPSBuilder({
-    Key key,
-    @required this.builder,
-    @required this.topics,
-    @required this.mps,
+    Key? key,
+    required this.builder,
+    required this.topics,
+    required this.mps,
     this.child,
   }) : super(key: key);
 
@@ -79,7 +79,7 @@ class _MPSBuilderState<T> extends State<MPSBuilder<T>> {
 /// Model object passed as 2nd argument in [MPSBuilder.builder].
 class MPSEvent<T> {
   final String type;
-  final T data;
+  final T? data;
 
   factory MPSEvent.empty() => const MPSEvent('');
 

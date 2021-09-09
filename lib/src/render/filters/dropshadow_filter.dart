@@ -8,8 +8,9 @@ class GDropShadowFilter extends GComposerFilter {
   double _blurY = 0;
   double _angle = 0;
   double _distance = 0;
-  bool innerShadow = false;
   Color _color = kColorBlack;
+  bool innerShadow = false;
+
   // todo: find a way to define the strength of the filter.
   // double _strength = 0.0;
 
@@ -28,7 +29,7 @@ class GDropShadowFilter extends GComposerFilter {
   Color get color => _color;
 
   double _dx = 0, _dy = 0;
-  set color(Color value) {
+  set color(Color? value) {
     if (_color == value) return;
     _color = value ?? kColorBlack;
     dirty = true;
@@ -42,7 +43,6 @@ class GDropShadowFilter extends GComposerFilter {
   }
 
   set distance(double value) {
-    value ??= 0;
     if (_distance == value) return;
     _distance = value;
     _calculatePosition();
@@ -83,9 +83,9 @@ class GDropShadowFilter extends GComposerFilter {
     this.hideObject = hideObject;
   }
 
-  ColorFilter _colorFilter;
-  MaskFilter _maskFilter;
-  ImageFilter _imageFilter;
+  ColorFilter? _colorFilter;
+  MaskFilter? _maskFilter;
+  ImageFilter? _imageFilter;
 
   final _rect = GRect();
   GRect get filterRect => _rect;
@@ -119,7 +119,7 @@ class GDropShadowFilter extends GComposerFilter {
     /// if it goes under a threshold (I tried .2 and lower), it flickers.
     /// idk which logic uses, but 1.0 seems like a stable min number for the
     /// mask.
-    _maskFilter = MaskFilter.blur(style ?? BlurStyle.inner, maxBlur);
+    _maskFilter = MaskFilter.blur(style, maxBlur);
     _imageFilter = ImageFilter.blur(
       sigmaX: Math.max(_blurX, _minBlur),
       sigmaY: Math.max(_blurY, _minBlur),
@@ -147,7 +147,7 @@ class GDropShadowFilter extends GComposerFilter {
       // rectInner.height = rectOuter.height-_dy;
       canvas.saveLayer(null, Paint());
       applyPaint(canvas);
-      final Paint shadowPaint = Paint()
+      final shadowPaint = Paint()
         ..blendMode = BlendMode.srcATop
         ..imageFilter = ImageFilter.blur(sigmaX: blurX, sigmaY: blurY)
         ..colorFilter = ColorFilter.mode(color, BlendMode.srcOut);

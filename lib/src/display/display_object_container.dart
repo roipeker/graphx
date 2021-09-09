@@ -41,7 +41,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   }
 
   @override
-  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+  GRect? getBounds(GDisplayObject? targetSpace, [GRect? out]) {
     out ??= GRect();
     final len = children.length;
     if (len == 0) {
@@ -76,7 +76,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
       return result;
     }
     final numChild = children.length;
-    GDisplayObject target;
+    GDisplayObject? target;
     for (var i = numChild - 1; i >= 0; --i) {
       var child = children[i];
       if (child.isMask) continue;
@@ -99,7 +99,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   }
 
   @override
-  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
+  GDisplayObject? hitTest(GPoint localPoint, [bool useShape = false]) {
     if (!$hasTouchableArea || !mouseEnabled || !hitTestMask(localPoint)) {
       return null;
     }
@@ -133,7 +133,6 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   }
 
   GDisplayObject addChildAt(GDisplayObject child, int index) {
-    if (child == null) throw "::child can't be null";
     if (index < 0 || index > children.length) {
       throw RangeError('Invalid child index');
     }
@@ -209,7 +208,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
     throw RangeError('Invalid child index');
   }
 
-  GDisplayObject getChildByName(String name) {
+  GDisplayObject? getChildByName(String name) {
     for (final child in children) {
       if (child.name == name) return child;
     }
@@ -237,7 +236,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
 
   bool get hasChildren => children.isNotEmpty;
 
-  bool contains(GDisplayObject child, [bool recursive = true]) {
+  bool contains(GDisplayObject? child, [bool recursive = true]) {
     if (!recursive) return children.contains(child);
     while (child != null) {
       if (child == this) return true;
@@ -267,8 +266,8 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
     throw 'Invalid child index';
   }
 
-  GDisplayObject removeChild(GDisplayObject child, [bool dispose = false]) {
-    if (child == null || child?.$parent != this) return null;
+  GDisplayObject? removeChild(GDisplayObject child, [bool dispose = false]) {
+    if (child.$parent != this) return null;
     final index = getChildIndex(child);
     if (index > -1) return removeChildAt(index, dispose);
     throw 'Invalid child index';
@@ -304,7 +303,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   @mustCallSuper
   void dispose() {
     for (final child in children) {
-      child?.dispose();
+      child.dispose();
     }
     children.clear();
     super.dispose();

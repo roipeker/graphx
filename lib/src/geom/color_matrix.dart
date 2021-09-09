@@ -50,9 +50,9 @@ class ColorMatrix {
 
   // ignore: non_constant_identifier_names
   static final int LENGTH = IDENTITY_MATRIX.length;
-  final _storage = List<double>(25);
+  final _storage = List<double>.filled(25, 0);
 
-  ColorMatrix([List<double> matrix]) {
+  ColorMatrix([List<double> matrix = IDENTITY_MATRIX]) {
     matrix = _fixMatrix(matrix);
     copyMatrix(((matrix.length == LENGTH) ? matrix : IDENTITY_MATRIX));
   }
@@ -77,7 +77,7 @@ class ColorMatrix {
   }
 
   void adjustBrightness(double percent) {
-    if (percent == null || percent == 0 || percent.isNaN) return;
+    if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
       percent *= 100;
     }
@@ -96,7 +96,7 @@ class ColorMatrix {
   }
 
   void adjustContrast(double percent) {
-    if (percent == null || percent == 0 || percent.isNaN) return;
+    if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
       percent *= 100;
     }
@@ -132,7 +132,7 @@ class ColorMatrix {
   }
 
   void adjustSaturation(double percent) {
-    if (percent == null || percent == 0 || percent.isNaN) return;
+    if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
       percent *= 100;
     }
@@ -156,7 +156,7 @@ class ColorMatrix {
   }
 
   void adjustHue(double percent) {
-    if (percent == null || percent == 0 || percent.isNaN) return;
+    if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
       percent *= 180;
     }
@@ -204,7 +204,7 @@ class ColorMatrix {
   String toString() => "ColorMatrix [ ${_storage.join(" , ")} ]";
 
   /// return a length 20 array (5x4):
-  List<double> get storage =>
+  List<double?> get storage =>
       _storage.sublist(0, math.min(_storage.length, 20)).toList();
 
   /// private methods:
@@ -217,7 +217,7 @@ class ColorMatrix {
 
   /// multiplies one matrix against another:
   void multiplyMatrix(List<double> pMatrix) {
-    var col = List<double>(25);
+    var col = List<double>.filled(25, 0);
 
     for (var i = 0; i < 5; i++) {
       for (var j = 0; j < 5; j++) {
@@ -238,9 +238,8 @@ class ColorMatrix {
   double _cleanValue(double pVal, double pLimit) =>
       math.min(pLimit, math.max(-pLimit, pVal));
 
-  /// makes sure matrixes are 5x5 (25 long):
-  List<double> _fixMatrix([List<double> pMatrix]) {
-    if (pMatrix == null) return IDENTITY_MATRIX;
+  /// makes sure Matrices are 5x5 (25 long):
+  List<double> _fixMatrix(List<double> pMatrix) {
     if (pMatrix.length < LENGTH) {
       pMatrix = List.from(pMatrix)
         ..addAll(IDENTITY_MATRIX.getRange(pMatrix.length, LENGTH));

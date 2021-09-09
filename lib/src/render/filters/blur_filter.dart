@@ -1,4 +1,4 @@
-import 'dart:ui' as ui ;
+import 'dart:ui' as ui;
 
 import '../../../graphx.dart';
 
@@ -17,7 +17,7 @@ class GBaseFilter {
 
   void buildFilter() {}
   bool get isValid => true;
-  GRect layerBounds;
+  GRect? layerBounds;
   void expandBounds(GRect layerBounds, GRect outputBounds) {
     this.layerBounds = layerBounds;
   }
@@ -51,8 +51,8 @@ class GBlurFilter extends GBaseFilter {
     this.blurY = blurY;
   }
 
-  ui.MaskFilter _maskFilter;
-  ui.ImageFilter _imageFilter;
+  ui.MaskFilter? _maskFilter;
+  ui.ImageFilter? _imageFilter;
   final _rect = GRect();
   GRect get filterRect => _rect;
 
@@ -76,7 +76,7 @@ class GBlurFilter extends GBaseFilter {
     /// if it goes under a threshold (I tried .2 and lower), it flickers.
     /// idk which logic uses, but 1.0 seems like a stable min number for the
     /// mask.
-    _maskFilter = ui.MaskFilter.blur(style ?? ui.BlurStyle.inner, maxBlur);
+    _maskFilter = ui.MaskFilter.blur(style, maxBlur);
     _imageFilter = ui.ImageFilter.blur(sigmaX: _blurX, sigmaY: _blurY);
   }
 

@@ -1,9 +1,8 @@
 library graphx;
 
-// export 'dart:math';
-// export 'dart:ui';
-export 'package:flutter/services.dart';
 export 'package:flutter/foundation.dart';
+
+export 'package:flutter/services.dart';
 
 export 'src/core/core.dart';
 export 'src/debug/debug.dart';

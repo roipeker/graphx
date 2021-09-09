@@ -13,11 +13,11 @@ class SnakeGameScene extends GSprite {
 
   GRect foodRect = GRect();
 
-  double get sw => stage.stageWidth ?? 0;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight ?? 0;
+  double get sh => stage!.stageHeight;
 
-  GText scoreSt;
+  late GText scoreSt;
   final List<List<double>> snake = <List<double>>[
     [0, 0],
     [0, 0],
@@ -41,7 +41,7 @@ class SnakeGameScene extends GSprite {
   @override
   void addedToStage() {
     // stage.color = boardBackground;
-    stage.maskBounds = true;
+    stage!.maskBounds = true;
     mps.on('RESET', gameOver);
     mps.on('COMMAND', changeState);
     scoreSt = GText.build(
@@ -55,7 +55,7 @@ class SnakeGameScene extends GSprite {
     scoreSt.setPosition(20.0, 20.0);
     generateFood();
     resetSnake();
-    stage.keyboard.onDown.add(onKeyDown);
+    stage!.keyboard!.onDown.add(onKeyDown);
   }
 
   @override
@@ -194,14 +194,14 @@ class SnakeGameScene extends GSprite {
   }
 
   void _togglePause() {
-    if (stage.controller.ticker.isTicking) {
+    if (stage!.controller.ticker!.isTicking) {
       scoreSt.text = 'PAUSED';
-      stage.controller.ticker.callNextFrame(() {
-        stage.controller.ticker.pause();
+      stage!.controller.ticker!.callNextFrame(() {
+        stage!.controller.ticker!.pause();
       });
     } else {
       _updateScore();
-      stage.controller.ticker.resume();
+      stage!.controller.ticker!.resume();
     }
     mps.publish1('Score', scoreSt.text);
   }
@@ -249,7 +249,7 @@ class SnakeGameScene extends GSprite {
     }
   }
 
-  void changeState([SnakeCommands command]) {
+  void changeState([SnakeCommands? command]) {
     if (command == SnakeCommands.pause) {
       _togglePause();
     }

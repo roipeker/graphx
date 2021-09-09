@@ -19,7 +19,7 @@ abstract class MatrixUtils {
   }
 
   static GRect getTransformedBoundsRect(GMatrix matrix, GRect rect,
-      [GRect out]) {
+      [GRect? out]) {
     out ??= GRect();
     var minX = 10000000.0;
     var maxX = -10000000.0;

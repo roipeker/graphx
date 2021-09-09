@@ -37,8 +37,7 @@ class IsmaChartMain extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: Stack(
                       children: [
-                        Container(
-                          // color: Colors.grey.withOpacity(.05),
+                        Positioned.fill(
                           child: SceneBuilderWidget(
                             builder: () => SceneController(back: ChartScene()),
                           ),

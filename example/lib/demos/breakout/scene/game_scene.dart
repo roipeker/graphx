@@ -9,7 +9,7 @@ class BreakoutAtari extends GSprite {
   static const double gameW = 160;
   static const double gameH = 192;
 
-  static BreakoutAtari instance;
+  static late BreakoutAtari instance;
 
   final bricks = <Brick>[];
 
@@ -26,22 +26,22 @@ class BreakoutAtari extends GSprite {
   double brickH = 12.0;
   final wallW = 4.0;
 
-  int cols, rows;
-  double totalBrickSep;
+  int cols = 0, rows = 0;
+  late double totalBrickSep;
 
-  Paddle paddle;
-  Ball ball;
-  GSprite bicksContainer;
-  HUD hud;
+  late Paddle paddle;
+  late Ball ball;
+  late GSprite bicksContainer;
+  late HUD hud;
 
   bool movingLeft = false;
   bool movingRight = false;
   bool _isGameOver = false;
   int brokenBricksCount = 0;
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   BreakoutAtari() {
     instance = this;
@@ -122,18 +122,18 @@ class BreakoutAtari extends GSprite {
         _updatePause();
       }
     });
-    stage.onMouseDown.add((event) {
+    stage!.onMouseDown.add((event) {
       isDragging = true;
       stagePressX = mouseX;
       paddlePressX = paddle.x;
-      stage.onMouseUp.addOnce((event) {
+      stage!.onMouseUp.addOnce((event) {
         isDragging = false;
       });
     });
     // stage.color = Colors.black.value;
     // stage.showBoundsRect = true;
-    stage.maskBounds = true;
-    stage.keyboard.onUp.add((input) {
+    stage!.maskBounds = true;
+    stage!.keyboard!.onUp.add((input) {
       if (input.isKey(LogicalKeyboardKey.escape)) {
         isPaused = !isPaused;
         mps.emit1(GameEvents.action, isPaused);
@@ -146,7 +146,7 @@ class BreakoutAtari extends GSprite {
       }
     });
 
-    stage.keyboard.onDown.add((input) {
+    stage!.keyboard!.onDown.add((input) {
       if (input.arrowLeft || input.isKey(LogicalKeyboardKey.keyA)) {
         movingLeft = true;
       } else if (input.arrowRight || input.isKey(LogicalKeyboardKey.keyD)) {
@@ -195,8 +195,8 @@ class BreakoutAtari extends GSprite {
     paddle.y = gameH - paddle.h - 10;
 
     alignPivot();
-    stage.onResized.add(() {
-      var graphBounds = bounds;
+    stage!.onResized.add(() {
+      var graphBounds = bounds!;
       var r1 = sw / sh;
       var r2 = graphBounds.width / graphBounds.height;
       if (r1 < r2) {
@@ -217,7 +217,7 @@ class BreakoutAtari extends GSprite {
     if (isDragging) {
       paddle.x = paddlePressX + (mouseX - stagePressX);
     } else {
-      var thrust = stage.keyboard.isShiftPressed ? 2.0 : 1.0;
+      var thrust = stage!.keyboard!.isShiftPressed ? 2.0 : 1.0;
       if (movingLeft) {
         paddle.vx = -paddle.speed;
       } else if (movingRight) {
@@ -261,7 +261,7 @@ class BreakoutAtari extends GSprite {
     bricks.forEach((b) {
       if (!collides(b, ball)) return;
       removeBricks.add(b);
-      hud.showPoints(b.points, b.getBounds(this));
+      hud.showPoints(b.points, b.getBounds(this)!);
       b.removeFromParent();
 
       /// check speed
@@ -295,8 +295,8 @@ class BreakoutAtari extends GSprite {
   }
 
   bool collides(GDisplayObject obj1, GDisplayObject obj2) {
-    var bounds1 = obj1.getBounds(this);
-    var bounds2 = obj2.getBounds(this);
+    var bounds1 = obj1.getBounds(this)!;
+    var bounds2 = obj2.getBounds(this)!;
     return bounds1.intersects(bounds2);
   }
 
@@ -322,11 +322,11 @@ class BreakoutAtari extends GSprite {
 
   void _updatePause() {
     hud.showPause(isPaused);
-    final ticker = stage.scene.core.ticker;
+    final ticker = stage!.scene.core.ticker;
     if (isPaused) {
-      ticker.callNextFrame(ticker.pause);
+      ticker!.callNextFrame(ticker.pause);
     } else {
-      ticker.resume();
+      ticker!.resume();
     }
   }
 }

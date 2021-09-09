@@ -3,11 +3,11 @@ import 'package:graphx/graphx.dart';
 
 //// each face
 class MenuItem extends GSprite {
-  double size, targetTooltipY;
-  GSprite pill;
-  GShape bg, msk;
-  GText label;
-  GMovieClip emoji;
+  double? size, targetTooltipY;
+  late GSprite pill;
+  GShape? bg, msk;
+  late GText label;
+  late GMovieClip emoji;
 
   MenuItem([this.size = 60]) {
     _init();
@@ -18,16 +18,16 @@ class MenuItem extends GSprite {
 
     /// bg is the emoji face.
     bg = GShape();
-    addChild(bg);
-    bg.graphics
+    addChild(bg!);
+    bg!.graphics
         .beginFill(Colors.black.withOpacity(.5))
-        .drawCircle(0, 0, size / 2)
+        .drawCircle(0, 0, size! / 2)
         .endFill();
 
     msk = GShape();
-    addChild(msk);
-    msk.graphics.copyFrom(bg.graphics);
-    msk.mouseEnabled = false;
+    addChild(msk!);
+    msk!.graphics.copyFrom(bg!.graphics);
+    msk!.mouseEnabled = false;
     emoji = GMovieClip(frames: <GTexture>[]);
     addChild(emoji);
     mouseChildren = false;
@@ -50,7 +50,7 @@ class MenuItem extends GSprite {
     pill.mouseEnabled = false;
     pill.scale = .75;
     pill.addChild(label);
-    targetTooltipY = -size * .9;
+    targetTooltipY = -size! * .9;
   }
 
   void showTooltip(bool flag) {
@@ -69,7 +69,7 @@ class MenuItem extends GSprite {
     pill.scale = .75;
     pill.addChild(label);
     pill.alignPivot();
-    targetTooltipY = -size * .9;
+    targetTooltipY = -size! * .9;
   }
 
   void drawBackground() {
@@ -87,9 +87,9 @@ class MenuItem extends GSprite {
   }
 
   void _setGifAtlas(String gifId) {
-    final myAtlas = ResourceLoader.getGif(gifId);
+    final myAtlas = ResourceLoader.getGif(gifId)!;
     emoji.setFrameTextures(myAtlas.textureFrames);
-    emoji.width = size + 2;
+    emoji.width = size! + 2;
     emoji.mask = bg;
     emoji.scaleY = emoji.scaleX;
     emoji.mouseEnabled = false;

@@ -44,7 +44,7 @@ class TestIcons extends GSprite {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [Colors.red, Colors.blue],
-    ).createShader(icon3.bounds.toNative());
+    ).createShader(icon3.bounds!.toNative());
     // take the bounding box from the icon.
     // GraphX has a nifty method to check bounding boxes.
 //    icon3.$debugBounds = true;

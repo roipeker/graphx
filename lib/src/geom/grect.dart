@@ -4,21 +4,17 @@ import 'dart:ui';
 import 'geom.dart';
 
 class GRect {
-  static GRect fromNative(Rect nativeRect) {
-    return GRect(
-        nativeRect.left, nativeRect.top, nativeRect.width, nativeRect.height);
-  }
+  static GRect fromNative(Rect nativeRect) => GRect(
+      nativeRect.left, nativeRect.top, nativeRect.width, nativeRect.height);
 
   @override
-  String toString() {
-    return 'GxRect {x: $x, y: $y, w: $width, h: $height}';
-  }
+  String toString() => 'GRect {x: $x, y: $y, w: $width, h: $height}';
 
   Rect toNative() {
     return Rect.fromLTWH(x, y, width, height);
   }
 
-  double x, y, width, height;
+  double x = 0.0, y = 0.0, width = 0.0, height = 0.0;
 
   double get bottom => y + height;
 
@@ -54,10 +50,10 @@ class GRect {
     return this;
   }
 
-  static List<GPoint> _sHelperPositions;
+  static List<GPoint>? _sHelperPositions;
   static final _sHelperPoint = GPoint();
 
-  GRect getBounds(GMatrix matrix, [GRect out]) {
+  GRect getBounds(GMatrix matrix, [GRect? out]) {
     out ??= GRect();
     var minX = 10000000.0;
     var maxX = -10000000.0;
@@ -74,10 +70,10 @@ class GRect {
     return out.setTo(minX, minY, maxX - minX, maxY - minY);
   }
 
-  List<GPoint> getPositions([List<GPoint> out]) {
+  List<GPoint> getPositions([List<GPoint>? out]) {
     out ??= List.generate(4, (i) => GPoint());
     for (var i = 0; i < 4; ++i) {
-      out[i] ??= GPoint();
+      out[i];
     }
     out[2].x = out[0].x = left;
     out[1].y = out[0].y = top;
@@ -181,16 +177,18 @@ class GRect {
   }
 
   /// --- Round Rect implementation ---
-  GxRectCornerRadius _corners;
+  GxRectCornerRadius? _corners;
+
   bool get hasCorners => _corners?.isNotEmpty ?? false;
-  GxRectCornerRadius get corners {
+
+  GxRectCornerRadius? get corners {
     _corners ??= GxRectCornerRadius();
     return _corners;
   }
 
-  set corners(GxRectCornerRadius value) => _corners = value;
+  set corners(GxRectCornerRadius? value) => _corners = value;
 
-  RRect toRoundNative() => corners.toNative(this);
+  RRect toRoundNative() => corners!.toNative(this);
 
   /// Creates a GxRect from a `RRect` assigning the `GxRectCornerRadius`
   /// properties from the tr, tl, br, bl radiusX axis.
@@ -200,7 +198,7 @@ class GRect {
       nativeRect.top,
       nativeRect.width,
       nativeRect.height,
-    )..corners.setTo(
+    )..corners!.setTo(
         nativeRect.tlRadiusX,
         nativeRect.trRadiusX,
         nativeRect.brRadiusX,
@@ -211,6 +209,7 @@ class GRect {
 
 class GxRectCornerRadius {
   double topLeft, topRight, bottomRight, bottomLeft;
+
   GxRectCornerRadius([
     this.topLeft = 0,
     this.topRight = 0,

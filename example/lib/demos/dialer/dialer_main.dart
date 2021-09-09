@@ -60,8 +60,6 @@ class DialerMain extends StatelessWidget {
                     _buildCircButton(Icons.wb_sunny, false),
                   ]),
                   SizedBox(height: 30),
-
-                  _buildSlider(),
                   Spacer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,13 +160,6 @@ class DialerMain extends StatelessWidget {
           size: 14,
         ),
       ),
-    );
-  }
-
-  Widget _buildSlider() {
-    return Slider(
-      value: .5,
-      onChanged: (a) {},
     );
   }
 }

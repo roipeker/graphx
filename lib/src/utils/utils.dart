@@ -13,5 +13,6 @@ export 'painter_utils.dart';
 export 'pools.dart';
 export 'string_utils.dart';
 export 'svg_utils.dart';
+export 'svg_utils.dart';
 export 'system_utils.dart';
 export 'texture_utils.dart';

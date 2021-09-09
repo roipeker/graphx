@@ -3,29 +3,24 @@ import 'package:flutter/material.dart';
 import 'geom.dart';
 
 class GMatrix {
-  double a, b, c, d, tx, ty;
-  Matrix4 _native;
+  double a = 0.0, b = 0.0, c = 0.0, d = 0.0, tx = 0.0, ty = 0.0;
+  final Matrix4 _native = Matrix4.identity();
   @override
-  String toString() {
-    return 'GxMatrix {a: $a, b: $b, c: $c, d: $d, tx: $tx, ty: $ty}';
-  }
+  String toString() => 'GMatrix {a: $a, b: $b, c: $c, d: $d, tx: $tx, ty: $ty}';
 
   Matrix4 toNative() {
-    _native ??= Matrix4.identity();
     _native.setValues(a, b, 0, 0, c, d, 0, 0, 0, 0, 1, 0, tx, ty, 0, 1);
     return _native;
   }
 
-  static GMatrix fromNative(Matrix4 m) {
-    return GMatrix(
-      m.storage[0],
-      m.storage[4],
-      m.storage[1],
-      m.storage[5],
-      m.storage[12],
-      m.storage[13],
-    );
-  }
+  static GMatrix fromNative(Matrix4 m) => GMatrix(
+        m.storage[0],
+        m.storage[4],
+        m.storage[1],
+        m.storage[5],
+        m.storage[12],
+        m.storage[13],
+      );
 
   GMatrix zoomAroundPoint(GPoint center, double zoomFactor) {
     var t1 = GMatrix();
@@ -205,7 +200,7 @@ class GMatrix {
     return this;
   }
 
-  GMatrix scale(double scaleX, [double scaleY]) {
+  GMatrix scale(double scaleX, [double? scaleY]) {
     scaleY ??= scaleX;
     a *= scaleX;
     b *= scaleY;
@@ -257,15 +252,15 @@ class GMatrix {
     return this;
   }
 
-  GPoint transformPoint(GPoint point, [GPoint out]) {
+  GPoint transformPoint(GPoint point, [GPoint? out]) {
     return transformCoords(point.x, point.y, out);
   }
 
-  GPoint transformInversePoint(GPoint point, [GPoint out]) {
+  GPoint transformInversePoint(GPoint point, [GPoint? out]) {
     return transformInverseCoords(point.x, point.y, out);
   }
 
-  GPoint transformInverseCoords(double x, double y, [GPoint out]) {
+  GPoint transformInverseCoords(double x, double y, [GPoint? out]) {
     out ??= GPoint();
     final id = 1 / ((a * d) + (c * -b));
     out.x = (d * id * x) + (-c * id * y) + (((ty * c) - (tx * d)) * id);
@@ -273,7 +268,7 @@ class GMatrix {
     return out;
   }
 
-  GPoint transformCoords(double x, double y, [GPoint out]) {
+  GPoint transformCoords(double x, double y, [GPoint? out]) {
     out ??= GPoint();
     out.x = a * x + c * y + tx;
     out.y = d * y + b * x + ty;

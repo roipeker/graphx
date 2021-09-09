@@ -9,7 +9,7 @@ import 'nokia_snake.dart';
 class GamePage extends StatefulWidget {
   final int speed;
 
-  const GamePage({Key key, @required this.speed}) : super(key: key);
+  const GamePage({Key? key, required this.speed}) : super(key: key);
 
   @override
   _GamePageState createState() => _GamePageState();
@@ -58,7 +58,7 @@ class _GamePageState extends State<GamePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => mps.emit1('COMMAND', SnakeCommands.pause),
-        backgroundColor: Theme.of(context).accentColor.withOpacity(.4),
+        backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(.4),
         elevation: 0,
         highlightElevation: 0,
         focusElevation: 0,
@@ -71,12 +71,14 @@ class _GamePageState extends State<GamePage> {
       ),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: SceneBuilderWidget(
-              builder: () => SceneController(
-                config: SceneConfig.games,
-                back: SnakeGameScene(widget.speed),
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: SceneBuilderWidget(
+                builder: () => SceneController(
+                  config: SceneConfig.games,
+                  back: SnakeGameScene(widget.speed),
+                ),
               ),
             ),
           ),

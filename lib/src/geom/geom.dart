@@ -1,3 +1,3 @@
-export 'gxmatrix.dart';
-export 'gxpoint.dart';
-export 'gxrect.dart';
+export 'gmatrix.dart';
+export 'gpoint.dart';
+export 'grect.dart';

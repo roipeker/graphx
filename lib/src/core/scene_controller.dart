@@ -19,14 +19,14 @@ class SceneController {
   /// `stage.onHotReload.add((){
   ///   // your logic here
   ///  });`
-  Signal _onHotReload;
+  Signal? _onHotReload;
 
   Signal get onHotReload => _onHotReload ??= Signal();
 
-  ScenePainter backScene, frontScene;
+  ScenePainter? backScene, frontScene;
 
   /// Access the `ticker` (if any) created by this SceneController.
-  GTicker get ticker {
+  GTicker? get ticker {
     if (_ticker == null) {
       throw 'You need to enable ticker usage with '
           'SceneBuilderWidget( useTicker=true ) or '
@@ -44,13 +44,12 @@ class SceneController {
   /// [SceneController].
   PointerManager get pointer => _pointer;
 
-  KeyboardManager _keyboard;
+  late KeyboardManager _keyboard;
+  late PointerManager _pointer;
 
-  PointerManager _pointer;
+  GTicker? _ticker;
 
-  GTicker _ticker;
-
-  InputConverter $inputConverter;
+  late InputConverter $inputConverter;
 
   SceneConfig get config => _config;
 
@@ -58,27 +57,27 @@ class SceneController {
 
   /// gets widget's global coordinates.
   /// useful to compute interactions with children Widgets that gets
-  GRect Function() resolveWindowBounds;
+  WindowBoundsResolver? resolveWindowBounds;
 
   int id = -1;
 
   bool _isInited = false;
 
   set config(SceneConfig sceneConfig) {
-    _config.rebuildOnHotReload = sceneConfig.rebuildOnHotReload ?? true;
-    _config.autoUpdateRender = sceneConfig.autoUpdateRender ?? true;
-    _config.isPersistent = sceneConfig.isPersistent ?? false;
-    _config.painterWillChange = sceneConfig.painterWillChange ?? true;
-    _config.useKeyboard = sceneConfig.useKeyboard ?? false;
-    _config.usePointer = sceneConfig.usePointer ?? false;
-    _config.useTicker = sceneConfig.useTicker ?? false;
+    _config.rebuildOnHotReload = sceneConfig.rebuildOnHotReload;
+    _config.autoUpdateRender = sceneConfig.autoUpdateRender;
+    _config.isPersistent = sceneConfig.isPersistent;
+    _config.painterWillChange = sceneConfig.painterWillChange;
+    _config.useKeyboard = sceneConfig.useKeyboard;
+    _config.usePointer = sceneConfig.usePointer;
+    _config.useTicker = sceneConfig.useTicker;
   }
 
   /// constructor.
   SceneController({
-    GSprite back,
-    GSprite front,
-    SceneConfig config,
+    GSprite? back,
+    GSprite? front,
+    SceneConfig? config,
   }) {
     assert(back != null || front != null);
     if (back != null) {
@@ -99,9 +98,9 @@ class SceneController {
     setup();
     if (_hasTicker()) {
       _ticker = GTicker();
-      _ticker.onFrame.add(_onTick);
+      _ticker!.onFrame.add(_onTick);
       if (_anySceneAutoUpdate()) {
-        _ticker.resume();
+        _ticker!.resume();
       }
     }
     _initInput();
@@ -109,7 +108,7 @@ class SceneController {
   }
 
   void setup() {
-    if (!GTween.initialized) {
+    if (!GTween.initializedCommonWraps) {
       /// you can add your own `CustomTween.wrap()` registering.
       GTween.registerCommonWraps([
         GTweenableBlur.wrap,
@@ -145,20 +144,24 @@ class SceneController {
     _isInited = false;
   }
 
-  CustomPainter buildBackPainter() => backScene?.buildPainter();
+  CustomPainter? buildBackPainter() => backScene?.buildPainter();
 
-  CustomPainter buildFrontPainter() => frontScene?.buildPainter();
+  CustomPainter? buildFrontPainter() => frontScene?.buildPainter();
 
   void _initInput() {
-    if (_config.useKeyboard) {
-      _keyboard ??= KeyboardManager();
-    }
-    if (_config.usePointer) {
-      _pointer ??= PointerManager();
-    }
-    if (_config.useKeyboard || _config.usePointer) {
-      $inputConverter ??= InputConverter(_pointer, _keyboard);
-    }
+    // if (_config.useKeyboard) {
+    //   _keyboard ??= KeyboardManager();
+    // }
+    // if (_config.usePointer) {
+    //   _pointer ??= PointerManager();
+    // }
+
+    _keyboard = KeyboardManager();
+    _pointer = PointerManager();
+    // if (_config.useKeyboard ?? false || (_config.usePointer ?? false)) {
+    //   trace("CREATE INPUT!");
+    // }
+    $inputConverter = InputConverter(_pointer, _keyboard);
   }
 
   void reassembleWidget() {
@@ -172,7 +175,7 @@ class SceneController {
     }
   }
 
-  bool _sceneAutoUpdate(ScenePainter scene) =>
+  bool _sceneAutoUpdate(ScenePainter? scene) =>
       scene?.autoUpdateAndRender ?? false;
 
   bool _anySceneAutoUpdate() =>
@@ -180,3 +183,5 @@ class SceneController {
 
   bool _hasTicker() => _anySceneAutoUpdate() || _config.useTicker;
 }
+
+typedef WindowBoundsResolver = GRect? Function();

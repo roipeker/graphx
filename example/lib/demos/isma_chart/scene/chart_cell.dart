@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,11 +6,11 @@ import 'package:graphx/graphx.dart';
 import '../data.dart';
 
 class ChartTableCell extends GSprite {
-  double w, h;
+  double w = 0.0, h = 0.0;
   double cellH = 12;
-  double cellW;
+  late double cellW;
 
-  ChartTableCell([GSprite doc]) {
+  ChartTableCell([GSprite? doc]) {
     doc?.addChild(this);
   }
 
@@ -40,7 +39,7 @@ class ChartTableCell extends GSprite {
     }
   }
 
-  void initDraw({double w, double h}) {
+  void initDraw({required double w, required double h}) {
     this.w = w;
     this.h = h;
     graphics

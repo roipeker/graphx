@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
 
-/// roipeker 2021...
+/// roipeker 2021
 /// some utility functions to layout DisplayObjects:
 ///   - LayoutUtils.row
 ///   - LayoutUtils.col
@@ -13,33 +13,33 @@ class LayoutUtils {
   static Color debugColor = kColorMagenta.withOpacity(.1);
 
   /// behaviour to image resizing in a parent container.
-  /// `objW` and `objH` if provided, shuold be the original size of the asset.
+  /// `objW` and `objH` if provided, should be the original size of the asset.
   /// `canvasW` and `canvasH`, are the actual target bounds where you wanna
   /// resize your image.
   /// `fit` behaves pretty much the same as in Flutter.
   /// the optional `reposition` has a very rustic implementation to center or
   /// not the object after the resize... (only validates for `Alignment.center`)
-  static void objectFit(GDisplayObject object, {
+  static void objectFit(
+    GDisplayObject object, {
     BoxFit fit = BoxFit.cover,
-    double objW,
-    double objH,
-    @required double canvasW,
-    @required double canvasH,
+    double? objW,
+    double? objH,
+    required double canvasW,
+    required double canvasH,
     bool reposition = false,
   }) {
-    assert(canvasW != null && canvasH != null);
     if (objW == null || objH == null) {
       /// calculate real objects bounds.
       if (object is GBitmap) {
-        objW ??= object.texture.width;
-        objH ??= object.texture.height;
+        objW ??= object.texture!.width;
+        objH ??= object.texture!.height;
       } else {
-        final bounds = object.bounds;
+        final bounds = object.bounds!;
         objW ??= bounds.width;
         objH ??= bounds.height;
       }
     }
-    var r1 = objW / objH;
+    var r1 = objW! / objH!;
     var r2 = canvasW / canvasH;
 
     if (fit == BoxFit.scaleDown) {
@@ -90,7 +90,8 @@ class LayoutUtils {
 
   /// basic wrap functionality, if you define `width` it will be horizontal
   /// if you define the `height` it will be vertical.
-  static void wrap(List<GDisplayObject> items, {
+  static void wrap(
+    List<GDisplayObject> items, {
     double gapX = 0,
     double gapY = 0,
     double width = 0,
@@ -100,9 +101,7 @@ class LayoutUtils {
   }) {
     assert(width > 0 || height > 0);
     final numItems = items.length;
-    var cx = .0,
-        cy = .0,
-        lineS = .0;
+    var cx = .0, cy = .0, lineS = .0;
     if (width <= 0) {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
@@ -138,11 +137,12 @@ class LayoutUtils {
 
   /// Simplistic grid approach that requires you pass the amount
   /// of `cols`.
-  static void grid(List<GDisplayObject> items, {
+  static void grid(
+    List<GDisplayObject> items, {
     double gapX = 0,
     double gapY = 0,
     int rows = 0,
-    @required int cols,
+    required int cols,
     double width = 0,
     double height = 0,
     double startX = 0,
@@ -151,8 +151,7 @@ class LayoutUtils {
     final numItems = items.length;
 
     /// calculate max item width.
-    var maxItemW = .0,
-        maxItemH = .0;
+    var maxItemW = .0, maxItemH = .0;
 
     /// default to start.
     for (var i = 0; i < numItems; ++i) {
@@ -173,7 +172,8 @@ class LayoutUtils {
   /// define the "padding" with `gap`. If you `mask` the items parent will be
   /// clipped. Make sure all items belongs to the same parent.
   ///   /// `debug` will show a red rectangle in the area defined by the items.
-  static void col(List<GDisplayObject> items, {
+  static void col(
+    List<GDisplayObject> items, {
     double gap = 0,
     double startX = 0,
     double startY = 0,
@@ -184,14 +184,12 @@ class LayoutUtils {
     bool mask = false,
     bool debug = false,
   }) {
-    var currentY = .0,
-        maxW = .0,
-        maxH = .0,
-        itemsH = .0;
+    var currentY = .0, maxW = .0, maxH = .0, itemsH = .0;
     final numItems = items.length;
-    if(numItems==0){
-      return ;
+    if (numItems == 0) {
+      return;
     }
+
     /// default to start.
     for (var i = 0; i < numItems; ++i) {
       var itm = items[i];
@@ -207,7 +205,7 @@ class LayoutUtils {
       width = maxW;
     }
 
-    final parent = items?.first?.parent as GSprite;
+    final parent = items.first.parent as GSprite?;
     final hasSize = width > 0 && height > 0;
     if (debug && parent != null && hasSize) {
       final g = parent.graphics;
@@ -247,7 +245,7 @@ class LayoutUtils {
         currentY += itm.height + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceEvenly) {
-      /// calcaulte gap.
+      /// calculate gap.
       gap = (height - itemsH) / (numItems + 1);
       startY += gap;
       for (var i = 0; i < numItems; ++i) {
@@ -277,7 +275,8 @@ class LayoutUtils {
   /// define the "padding" with `gap`. If you `mask` the items parent will be
   /// clipped. Make sure all items belongs to the same parent.
   /// `debug` will show a red rectangle in the area defined by the items.
-  static void row(List<GDisplayObject> items, {
+  static void row(
+    List<GDisplayObject> items, {
     double gap = 0,
     double startX = 0,
     double startY = 0,
@@ -288,13 +287,10 @@ class LayoutUtils {
     bool mask = false,
     bool debug = false,
   }) {
-    var currentX = .0,
-        maxH = .0,
-        maxW = .0,
-        itemsW = .0;
+    var currentX = .0, maxH = .0, maxW = .0, itemsW = .0;
     final numItems = items.length;
-    if(numItems==0){
-      return ;
+    if (numItems == 0) {
+      return;
     }
 
     /// default to start.
@@ -303,7 +299,7 @@ class LayoutUtils {
       itm.y = startY;
       itm.x = startX + currentX;
       maxH = Math.max(maxH, itm.height);
-      double itmW = itm.width;
+      var itmW = itm.width;
       if (itm is GText && itmW.isInfinite) {
         itmW = itm.textWidth;
       }
@@ -315,7 +311,7 @@ class LayoutUtils {
       height = maxH;
     }
 
-    final parent = items?.first?.parent as GSprite;
+    final parent = items.first.parent as GSprite?;
     final hasSize = width > 0 && height > 0;
     if (debug && parent != null && hasSize) {
       final g = parent.graphics;
@@ -345,7 +341,7 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        double itmW = itm.width;
+        var itmW = itm.width;
         if (itm is GText && itmW.isInfinite) {
           itmW = itm.textWidth;
         }
@@ -356,20 +352,20 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        double itmW = itm.width;
+        var itmW = itm.width;
         if (itm is GText && itmW.isInfinite) {
           itmW = itm.textWidth;
         }
         currentX += itmW + gap;
       }
     } else if (axisAlign == MainAxisAlignment.spaceEvenly) {
-      /// calcaulte gap.
+      /// calculate gap.
       gap = (width - itemsW) / (numItems + 1);
       startX += gap;
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        double itmW = itm.width;
+        var itmW = itm.width;
         if (itm is GText && itmW.isInfinite) {
           itmW = itm.textWidth;
         }
@@ -380,7 +376,7 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        double itmW = itm.width;
+        var itmW = itm.width;
         if (itm is GText && itmW.isInfinite) {
           itmW = itm.textWidth;
         }
@@ -392,7 +388,7 @@ class LayoutUtils {
       for (var i = 0; i < numItems; ++i) {
         var itm = items[i];
         itm.x = startX + currentX;
-        double itmW = itm.width;
+        var itmW = itm.width;
         if (itm is GText && itmW.isInfinite) {
           itmW = itm.textWidth;
         }

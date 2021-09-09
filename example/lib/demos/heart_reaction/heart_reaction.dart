@@ -49,6 +49,7 @@ class HeartReactionMain extends StatelessWidget {
           builder: () => SceneController(
             back: HeartScene(key: _key),
           ),
+          autoSize: true,
         ),
       ),
     );

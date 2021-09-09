@@ -13,6 +13,7 @@ class PizzaBoxMain extends StatelessWidget {
       ),
       body: SceneBuilderWidget(
         builder: () => SceneController(back: PizzaBoxScene()),
+        autoSize: true,
       ),
     );
   }

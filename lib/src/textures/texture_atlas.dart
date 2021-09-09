@@ -3,14 +3,15 @@ import 'package:xml/xml.dart' as xml;
 import '../../graphx.dart';
 
 class GTextureAtlas {
-  GTexture _atlasTexture;
-  Map<String, GSubTexture> _subTextures;
-  List<String> _subTexturesNames;
+  GTexture? _atlasTexture;
+  Map<String?, GSubTexture>? _subTextures;
+  List<String?>? _subTexturesNames;
 
-  static bool attrBoolean(xml.XmlElement el, String name, {bool defaultValue}) {
+  static bool? attrBoolean(xml.XmlElement el, String name,
+      {bool? defaultValue}) {
     var val = el.getAttribute(name);
     if (val == null) return defaultValue;
-    return StringUtils.parseBoolean(val) ?? defaultValue;
+    return StringUtils.parseBoolean(val);
   }
 
   static double attrDouble(xml.XmlElement el, String name,
@@ -20,11 +21,11 @@ class GTextureAtlas {
     return double.tryParse(val) ?? defaultValue;
   }
 
-  double _atlasXmlRatio;
+  late double _atlasXmlRatio;
 
   GTextureAtlas(
-    GTexture texture, [
-    Object data,
+    GTexture? texture, [
+    Object? data,
     double adjustXmlSizesRatio = 1,
   ]) {
     _subTextures = {};
@@ -38,7 +39,7 @@ class GTextureAtlas {
   void parseAtlasData(Object data) {
     if (data is String) {
       /// parse json or xml.
-      if ((data as String).contains('</TextureAtlas>')) {
+      if (data.contains('</TextureAtlas>')) {
         data = xml.XmlDocument.parse(data);
       }
     }
@@ -52,14 +53,14 @@ class GTextureAtlas {
 
   /// Parse the XML tree and defines all SubTextures areas.
   void parseAtlasXml(xml.XmlDocument atlasXml) {
-    var scale = _atlasTexture.scale;
+    var scale = _atlasTexture!.scale;
     var region = GRect();
     var frame = GRect();
-    final pivots = <String, GPoint>{};
+    final pivots = <String?, GPoint>{};
     final nodeList = atlasXml.findAllElements('SubTexture');
     for (var subTexture in nodeList) {
       var name = subTexture.getAttribute('name');
-      var x = attrDouble(subTexture, 'x') / scale * _atlasXmlRatio;
+      var x = attrDouble(subTexture, 'x') / scale! * _atlasXmlRatio;
       var y = attrDouble(subTexture, 'y') / scale * _atlasXmlRatio;
       var width = attrDouble(subTexture, 'width') / scale * _atlasXmlRatio;
       var height = attrDouble(subTexture, 'height') / scale * _atlasXmlRatio;
@@ -79,9 +80,9 @@ class GTextureAtlas {
       region.setTo(x, y, width, height);
       frame.setTo(frameX, frameY, frameWidth, frameHeight);
       if (frameWidth > 0 && frameHeight > 0) {
-        addRegion(name, region, frame, rotated);
+        addRegion(name, region, frame, rotated!);
       } else {
-        addRegion(name, region, null, rotated);
+        addRegion(name, region, null, rotated!);
       }
       if (pivotX != 0 || pivotY != 0) {
         /// image bind pivot point to texture!
@@ -92,12 +93,12 @@ class GTextureAtlas {
     /// adobe animate workaround.
   }
 
-  void addRegion(String name, GRect region,
-      [GRect frame, bool rotated = false]) {
+  void addRegion(String? name, GRect region,
+      [GRect? frame, bool rotated = false]) {
     addSubTexture(
         name,
         GSubTexture(
-          _atlasTexture,
+          _atlasTexture!,
           region: region,
           ownsParent: false,
           frame: frame,
@@ -106,31 +107,31 @@ class GTextureAtlas {
   }
 
   void removeRegion(String name) {
-    var subTexture = _subTextures[name];
+    var subTexture = _subTextures![name];
     subTexture?.dispose();
-    _subTextures.remove(name);
+    _subTextures!.remove(name);
     _subTexturesNames = null;
   }
 
-  GTexture get texture => _atlasTexture;
+  GTexture? get texture => _atlasTexture;
 
   bool getRotation(String name) {
-    return _subTextures[name]?.rotated ?? false;
+    return _subTextures![name]?.rotated ?? false;
   }
 
-  GRect getFrame(String name) {
-    return _subTextures[name]?.frame;
+  GRect? getFrame(String name) {
+    return _subTextures![name]?.frame;
   }
 
-  GSubTexture getTexture(String name) {
-    return _subTextures[name];
+  GSubTexture? getTexture(String? name) {
+    return _subTextures![name];
   }
 
-  GRect getRegion(String name) {
-    return _subTextures[name]?.region;
+  GRect? getRegion(String name) {
+    return _subTextures![name]?.region;
   }
 
-  List<GTexture> getTextures({String prefix, List<GTexture> out}) {
+  List<GTexture?> getTextures({String? prefix, List<GTexture?>? out}) {
     prefix ??= '';
     out ??= [];
     final list = getNames(prefix: prefix);
@@ -140,29 +141,29 @@ class GTextureAtlas {
     return out;
   }
 
-  List<String> getNames({String prefix, List<String> out}) {
+  List<String?> getNames({String? prefix, List<String?>? out}) {
     prefix ??= '';
     out ??= [];
     if (_subTexturesNames == null) {
       _subTexturesNames = [];
-      for (var name in _subTextures.keys) {
-        _subTexturesNames.add(name);
+      for (var name in _subTextures!.keys) {
+        _subTexturesNames!.add(name);
       }
-      _subTexturesNames.sort();
+      _subTexturesNames!.sort();
     }
-    for (var name in _subTexturesNames) {
-      if (name.indexOf(prefix) == 0) {
+    for (var name in _subTexturesNames!) {
+      if (name!.indexOf(prefix) == 0) {
         out.add(name);
       }
     }
     return out;
   }
 
-  void addSubTexture(String name, GSubTexture subTexture) {
-    if (subTexture.root != _atlasTexture.root) {
+  void addSubTexture(String? name, GSubTexture subTexture) {
+    if (subTexture.root != _atlasTexture!.root) {
       throw 'SubTexture\'s root must be an Atlas Texture.';
     }
-    _subTextures[name] = subTexture;
+    _subTextures![name] = subTexture;
     _subTexturesNames = null;
   }
 

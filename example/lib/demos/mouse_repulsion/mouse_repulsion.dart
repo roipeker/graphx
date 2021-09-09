@@ -21,6 +21,7 @@ class MouseRepulsionMain extends StatelessWidget {
       body: Center(
         child: SceneBuilderWidget(
           builder: () => SceneController(front: MouseRepulsionScene()),
+          autoSize: true,
         ),
       ),
     );

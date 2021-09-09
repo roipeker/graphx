@@ -1,14 +1,14 @@
 import 'package:flutter/scheduler.dart';
+
 import '../events/events.dart';
 
 class GTicker {
   GTicker();
 
-  Ticker _ticker;
-  EventSignal<double> _onFrame;
-  EventSignal<double> get onFrame => _onFrame ??= EventSignal();
+  Ticker? _ticker;
+  final onFrame = EventSignal<double>();
 
-  VoidCallback _nextFrameCallback;
+  VoidCallback? _nextFrameCallback;
 
   // ignore: use_setters_to_change_properties
   void callNextFrame(VoidCallback callback) {
@@ -18,14 +18,16 @@ class GTicker {
   void _createTicker() {
     if (_ticker != null) return;
     _ticker = Ticker(_onTick);
-    _ticker.start();
-    _ticker.muted = true;
+    _ticker!.start();
+    _ticker!.muted = true;
   }
 
   bool get isTicking => _ticker?.isTicking ?? false;
 
   bool get isActive => _ticker?.isActive ?? false;
+
   double get currentDeltaTime => _currentDeltaTime;
+
   double get currentDeltaRatio => _currentDeltaRatio;
 
   void resume() {
@@ -43,11 +45,12 @@ class GTicker {
   /// process timeframe in integer MS
   double _currentTime = 0;
   double _currentDeltaTime = 0;
+
   // 0-100%
   double _currentDeltaRatio = 0.0;
 
   double frameRate = 60.0;
-  double _expectedDelta;
+  late double _expectedDelta;
 
   /// enterframe ticker
   void _onTick(Duration elapsed) {
@@ -64,32 +67,23 @@ class GTicker {
       _nextFrameCallback = null;
       callback?.call();
     }
-    _onFrame?.dispatch(_currentDeltaTime);
+    onFrame.dispatch(_currentDeltaTime);
 //    advanceTime(_currentDeltaTime);
 //    render();
   }
 
   void dispose() {
-    _onFrame?.removeAll();
-    _onFrame = null;
-
+    onFrame.removeAll();
+    // onFrame = null;
     _ticker?.stop(canceled: true);
     _ticker?.dispose();
     _ticker = null;
   }
 }
 
-Stopwatch _stopwatch;
-
-void _initTimer() {
-  if (_stopwatch != null) return;
-  _stopwatch = Stopwatch();
-  _stopwatch.start();
-}
+Stopwatch _stopwatch = Stopwatch();
 
 int getTimer() {
-  if (_stopwatch == null) {
-    _initTimer();
-  }
+  if (!_stopwatch.isRunning) _stopwatch.start();
   return _stopwatch.elapsedMilliseconds;
 }

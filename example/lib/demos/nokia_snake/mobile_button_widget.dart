@@ -1,15 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class MobileControlButton extends StatelessWidget {
   const MobileControlButton({
-    Key key,
+    Key? key,
     this.icon,
     this.onPressed,
   }) : super(key: key);
-  final IconData icon;
-  final Function onPressed;
+  final IconData? icon;
+  final Function? onPressed;
 
   MobileControlButton.left(this.onPressed)
       : icon = Icons.keyboard_arrow_left_outlined;
@@ -28,9 +27,9 @@ class MobileControlButton extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: onPressed,
+        onTap: onPressed as void Function()?,
         child: CircleAvatar(
-          backgroundColor: Theme.of(context).accentColor.withOpacity(.4),
+          backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(.4),
           child: Icon(
             icon,
             color: Colors.white,

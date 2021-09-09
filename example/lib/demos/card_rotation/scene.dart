@@ -11,7 +11,7 @@ import 'package:graphx/graphx.dart';
 class CardRotation3dScene extends GSprite {
   @override
   void addedToStage() {
-    stage.color = Color(0xffF8F6F4);
+    stage!.color = Color(0xffF8F6F4);
     initUi();
   }
 
@@ -103,7 +103,7 @@ Just 89.- THB''', 0x9E7878, 12.0, FontWeight.normal, 20 / 12);
     cardItemParent.mouseChildren = false;
     cardItemParent.useCursor = true;
 
-    stage.onEnterFrame.add((event) {
+    stage!.onEnterFrame.add((event) {
       var dx = cardItemParent.mouseX;
       var dy = cardItemParent.mouseY;
       var angle = Math.atan2(dy, dx);
@@ -126,7 +126,7 @@ Just 89.- THB''', 0x9E7878, 12.0, FontWeight.normal, 20 / 12);
         ease: GEase.easeOutExpo,
       );
 
-      stage.onMouseUp.addOnce((event) {
+      stage!.onMouseUp.addOnce((event) {
         cardItemParent.tween(
           duration: 1.2,
           scale: 1,
@@ -144,13 +144,13 @@ Just 89.- THB''', 0x9E7878, 12.0, FontWeight.normal, 20 / 12);
     });
 
     cardItemParent.alignPivot();
-    stage.onResized.add(() {
-      cardItemParent.x = stage.stageWidth / 2;
-      cardItemParent.y = stage.stageHeight / 2;
+    stage!.onResized.add(() {
+      cardItemParent.x = stage!.stageWidth / 2;
+      cardItemParent.y = stage!.stageHeight / 2;
     });
 
-    cardItemParent.x = stage.stageWidth / 2;
-    cardItemParent.y = stage.stageHeight / 2;
+    cardItemParent.x = stage!.stageWidth / 2;
+    cardItemParent.y = stage!.stageHeight / 2;
     // cardItemParent.rotationX = .2;
   }
 

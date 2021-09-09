@@ -10,6 +10,7 @@ class RatingStarsMain extends StatelessWidget {
       appBar: AppBar(title: Text('rating stars')),
       body: SceneBuilderWidget(
         builder: () => SceneController(back: RatingStarsScene()),
+        autoSize: true,
       ),
     );
   }

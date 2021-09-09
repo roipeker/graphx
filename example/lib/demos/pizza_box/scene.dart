@@ -4,20 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class PizzaBoxScene extends GSprite {
+  double get sw => stage!.stageWidth;
+  double get sh => stage!.stageHeight;
 
-  double get sw => stage.stageWidth;
-  double get sh => stage.stageHeight;
-
-  GBitmap pizza;
-  GSprite container, pizzaContainer;
+  late GBitmap pizza;
+  late GSprite container, pizzaContainer;
   double boxS = 80;
   bool isOpen = true;
-  GShape sideTop, sideBottom;
-  GTexture pizzaTexture;
+  late GShape sideTop, sideBottom;
+  GTexture? pizzaTexture;
 
   @override
   void addedToStage() async {
-    stage.color = Colors.grey.shade50;
+    stage!.color = Colors.grey.shade50;
     pizzaTexture =
         await ResourceLoader.loadTexture('assets/pizza_box/pizza.png', 2);
     run();

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class CustomLoadingIndicator extends StatelessWidget {
-  const CustomLoadingIndicator({Key key}) : super(key: key);
+  const CustomLoadingIndicator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +17,8 @@ class CustomLoadingIndicator extends StatelessWidget {
 }
 
 class CustomLoadingIndicatorSprite extends GSprite {
-  GShape fillSquare;
-  GSprite corners;
+  late GShape fillSquare;
+  late GSprite corners;
 
   static const expandTo = 60.0;
   static const colapseTo = 45.0;
@@ -35,10 +35,9 @@ class CustomLoadingIndicatorSprite extends GSprite {
 
   @override
   void addedToStage() {
-
-    stage.onResized.add((){
-      x = stage.stageWidth / 2;
-      y = stage.stageHeight / 2;
+    stage!.onResized.add(() {
+      x = stage!.stageWidth / 2;
+      y = stage!.stageHeight / 2;
     });
 
     corners = GSprite();
@@ -88,7 +87,7 @@ class CustomLoadingIndicatorSprite extends GSprite {
   }
 
   void positionCorners() {
-    final size = currentSize / 2;
+    final size = currentSize! / 2;
 
     corners.children[0].x = -size;
     corners.children[0].y = -size;
@@ -119,5 +118,5 @@ class CustomLoadingIndicatorSprite extends GSprite {
     addChild(fillSquare);
   }
 
-  double get currentSize => _currentSizeCorner.value;
+  double? get currentSize => _currentSizeCorner.value;
 }

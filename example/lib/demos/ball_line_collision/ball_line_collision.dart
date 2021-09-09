@@ -15,6 +15,7 @@ class BallVsLineMain extends StatelessWidget {
       appBar: AppBar(title: Text('ball vs line collisions')),
       body: SceneBuilderWidget(
         builder: () => SceneController(front: CollisionScene()),
+        autoSize: true,
       ),
     );
   }

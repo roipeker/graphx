@@ -11,7 +11,7 @@ import 'package:graphx/graphx.dart';
 import 'game_page_widget.dart';
 
 class NokiaSnakeMain extends StatefulWidget {
-  const NokiaSnakeMain({Key key}) : super(key: key);
+  const NokiaSnakeMain({Key? key}) : super(key: key);
 
   @override
   _NokiaSnakeMainState createState() => _NokiaSnakeMainState();
@@ -85,7 +85,7 @@ class _NokiaSnakeMainState extends State<NokiaSnakeMain> {
               },
               trailing: PopupMenuButton(
                 initialValue: speed,
-                onSelected: (value) => setState(() {
+                onSelected: (dynamic value) => setState(() {
                   speed = value;
                 }),
                 itemBuilder: (_) => levels

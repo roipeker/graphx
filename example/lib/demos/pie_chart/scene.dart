@@ -14,7 +14,7 @@ class PieChartScene extends GSprite {
     lineContainer.mouseChildren = false;
     lineContainer.mouseEnabled = false;
 
-    var sw2 = stage.stageWidth / 2;
+    var sw2 = stage!.stageWidth / 2;
     var numPieces = 5;
     var data = List.generate(numPieces, (index) => Math.randomRange(10, 50));
     var total = data.reduce((value, element) => value + element);
@@ -23,11 +23,11 @@ class PieChartScene extends GSprite {
 
     var totalRad = deg2rad(360);
     var currentAngle = 0.0;
-    GSprite currentPiece;
+    GSprite? currentPiece;
     for (var i = 0; i < numPieces; ++i) {
       var color = Colors.primaries[(i) % Colors.primaries.length].value;
       var color1 = Color(color);
-      var color2 = Color.lerp(color1, Colors.black, .8);
+      var color2 = Color.lerp(color1, Colors.black, .2)!;
       var percent = data[i] / total;
       var myAngle = percent * totalRad;
       var pieceLine = GSprite();
@@ -54,22 +54,22 @@ class PieChartScene extends GSprite {
       piece.userData = pieceLine;
       piece.mouseChildren = false;
       piece.onMouseOver.add((e) {
-        GDisplayObject line;
+        GDisplayObject? line;
         if (currentPiece != null) {
-          line = currentPiece.userData as GDisplayObject;
+          line = currentPiece!.userData as GDisplayObject?;
           GTween.killTweensOf(currentPiece);
           GTween.killTweensOf(line);
-          currentPiece.tween(duration: .35, scale: 1, ease: GEase.easeInBack);
-          line.tween(duration: .35, scale: 1, ease: GEase.easeInBack);
+          currentPiece!.tween(duration: .35, scale: 1, ease: GEase.easeInBack);
+          line!.tween(duration: .35, scale: 1, ease: GEase.easeInBack);
         }
 //        var p = e.target;
         currentPiece = piece;
-        line = currentPiece.userData as GDisplayObject;
+        line = currentPiece!.userData as GDisplayObject?;
 //        e.target.scale = 1.4;
         GTween.killTweensOf(line);
         GTween.killTweensOf(piece);
         piece.tween(duration: .35, scale: .9, ease: GEase.easeOutExpo);
-        line.tween(duration: .35, scale: .9, ease: GEase.easeOutExpo);
+        line!.tween(duration: .35, scale: .9, ease: GEase.easeOutExpo);
       });
 
       var percentText = (percent * 100.0).toStringAsPrecision(2);
@@ -115,6 +115,6 @@ class PieChartScene extends GSprite {
 extension MyObject on GDisplayObject {
   void centerInStage() {
     if (!inStage) return;
-    setPosition(stage.stageWidth / 2, stage.stageHeight / 2);
+    setPosition(stage!.stageWidth / 2, stage!.stageHeight / 2);
   }
 }

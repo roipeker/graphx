@@ -10,10 +10,10 @@ abstract class GDisplayObject
         RenderSignalMixin,
         MouseSignalsMixin,
         DisplayMasking {
-  GDisplayObjectContainer $parent;
-  static GDisplayObject $currentDrag;
-  static GRect $currentDragBounds;
-  GPoint _dragCenterOffset;
+  GDisplayObjectContainer? $parent;
+  static GDisplayObject? $currentDrag;
+  static GRect? $currentDragBounds;
+  late GPoint _dragCenterOffset;
 
   /// Lets the user drag the specified sprite.
   /// The sprite remains draggable until explicitly stopped through a call to
@@ -24,7 +24,7 @@ abstract class GDisplayObject
   /// the user first clicked the sprite (false).
   /// [bounds] Value relative to the coordinates of the Sprite's parent that
   /// specify a constraint rectangle for the Sprite.
-  void startDrag([bool lockCenter = false, GRect bounds]) {
+  void startDrag([bool lockCenter = false, GRect? bounds]) {
     if (!inStage || !$hasTouchableArea) {
       throw 'to drag an object, it has to be visible and enabled in the stage.';
     }
@@ -34,9 +34,9 @@ abstract class GDisplayObject
     $currentDragBounds = bounds;
     _dragCenterOffset = GPoint();
     if (lockCenter) {
-      _dragCenterOffset.setTo(x - parent.mouseX, y - parent.mouseY);
+      _dragCenterOffset.setTo(x - parent!.mouseX, y - parent!.mouseY);
     }
-    stage.onMouseMove.add(_handleDrag);
+    stage!.onMouseMove.add(_handleDrag);
   }
 
 // DisplayObject get dropTarget {
@@ -51,14 +51,14 @@ abstract class GDisplayObject
 
   void _handleDrag(MouseInputData input) {
     if (this != $currentDrag) {
-      stage?.onMouseMove?.remove(_handleDrag);
+      stage?.onMouseMove.remove(_handleDrag);
     }
     if ($currentDrag == null) {
       $currentDragBounds = null;
       return;
     }
-    var tx = $currentDrag.parent.mouseX + _dragCenterOffset.x;
-    var ty = $currentDrag.parent.mouseY + _dragCenterOffset.y;
+    var tx = $currentDrag!.parent!.mouseX + _dragCenterOffset.x;
+    var ty = $currentDrag!.parent!.mouseY + _dragCenterOffset.y;
     final rect = $currentDragBounds;
     if (rect != null) {
       tx = tx.clamp(rect.left, rect.right);
@@ -69,7 +69,7 @@ abstract class GDisplayObject
 
   void stopDrag() {
     if (this == $currentDrag) {
-      stage.onMouseMove.remove(_handleDrag);
+      stage!.onMouseMove.remove(_handleDrag);
       $currentDrag = null;
     }
   }
@@ -77,26 +77,26 @@ abstract class GDisplayObject
   bool $debugBounds = false;
   bool mouseUseShape = false;
 
-  List<GBaseFilter> $filters;
+  List<GBaseFilter>? $filters;
 
-  List<GBaseFilter> get filters => $filters;
+  List<GBaseFilter>? get filters => $filters;
 
-  set filters(List<GBaseFilter> value) => $filters = value;
+  set filters(List<GBaseFilter>? value) => $filters = value;
 
-  GDisplayObject $mouseDownObj;
-  GDisplayObject $mouseOverObj;
+  GDisplayObject? $mouseDownObj;
+  GDisplayObject? $mouseOverObj;
 
   double $lastClickTime = -1;
 
   bool useCursor = false;
 
-  ui.Color $colorize = kColorTransparent;
+  ui.Color? $colorize = kColorTransparent;
 
-  bool get $hasColorize => $colorize != null && $colorize.alpha > 0;
+  bool get $hasColorize => $colorize != null && $colorize!.alpha > 0;
 
-  ui.Color get colorize => $colorize;
+  ui.Color? get colorize => $colorize;
 
-  set colorize(ui.Color value) {
+  set colorize(ui.Color? value) {
     if ($colorize == value) return;
     $colorize = value;
     requiresRedraw();
@@ -127,9 +127,11 @@ abstract class GDisplayObject
     }
   }
 
-  void $dispatchMouseCallback(MouseInputType type,
-      GDisplayObject object,
-      MouseInputData input,) {
+  void $dispatchMouseCallback(
+    MouseInputType type,
+    GDisplayObject object,
+    MouseInputData input,
+  ) {
     if (mouseEnabled) {
       var mouseInput = input.clone(this, object, type);
       switch (type) {
@@ -173,8 +175,11 @@ abstract class GDisplayObject
           break;
         case MouseInputType.out:
           $mouseOverObj = null;
+
+          /// TODO: check if other object on top receives the event
+          /// todo. before this one, and Cursor loses the stage.
           if (useCursor && GMouse.isShowing()) {
-            GMouse.cursor = null;
+            GMouse.basic();
           }
           $onMouseOut?.dispatch(mouseInput);
           break;
@@ -197,7 +202,7 @@ abstract class GDisplayObject
 
   double get mouseX {
     if (inStage) {
-      return globalToLocal(_sHelperPoint.setTo(stage.pointer.mouseX, 0)).x;
+      return globalToLocal(_sHelperPoint.setTo(stage!.pointer!.mouseX, 0)).x;
     } else {
       throw 'To get mouseX object needs to be a descendant of Stage.';
     }
@@ -205,7 +210,7 @@ abstract class GDisplayObject
 
   double get mouseY {
     if (inStage) {
-      return globalToLocal(_sHelperPoint.setTo(0, stage.pointer.mouseY)).y;
+      return globalToLocal(_sHelperPoint.setTo(0, stage!.pointer!.mouseY)).y;
     } else {
       throw 'To get mouseY object needs to be a descendant of Stage.';
     }
@@ -216,27 +221,19 @@ abstract class GDisplayObject
       throw 'To get mousePosition, the object needs to be in the Stage.';
     }
     return globalToLocal(_sHelperPoint.setTo(
-      stage.pointer.mouseX,
-      stage.pointer.mouseY,
+      stage!.pointer!.mouseX,
+      stage!.pointer!.mouseY,
     ));
   }
 
   /// You can store any user defined data in this property for easy access.
-  Object userData;
-  String name;
+  Object? userData;
+  String? name;
 
-  double _x = 0,
-      _y = 0,
-      _scaleX = 1,
-      _scaleY = 1,
-      _rotation = 0;
-  double _pivotX = 0,
-      _pivotY = 0;
-  double _skewX = 0,
-      _skewY = 0;
-  double _z = 0,
-      _rotationX = 0,
-      _rotationY = 0;
+  double _x = 0, _y = 0, _scaleX = 1, _scaleY = 1, _rotation = 0;
+  double _pivotX = 0, _pivotY = 0;
+  double _skewX = 0, _skewY = 0;
+  double _z = 0, _rotationX = 0, _rotationY = 0;
 
   double get rotationX => _rotationX;
 
@@ -277,7 +274,7 @@ abstract class GDisplayObject
   /// ```
   /// A display object with no content (such as an empty sprite) has a width
   /// of 0, even if you try to set width to a different value.
-  double get width => getBounds($parent, _sHelperRect).width;
+  double get width => getBounds($parent, _sHelperRect)!.width;
 
   /// Indicates the height of the display object, in dp.
   /// The `height` is calculated based on the bounds of the content of the
@@ -294,11 +291,11 @@ abstract class GDisplayObject
   /// ```
   /// A display object with no content (such as an empty sprite) has a height
   /// of 0, even if you try to set height to a different value.
-  double get height => getBounds($parent, _sHelperRect).height;
+  double get height => getBounds($parent, _sHelperRect)!.height;
 
-  set width(double value) {
-    if (value == null) throw 'width can not be null';
-    double actualW;
+  set width(double? value) {
+    if (value?.isNaN ?? true) throw '[$this.width] can not be NaN nor null';
+    double? actualW;
     var zeroScale = _scaleX < 1e-8 && _scaleX > -1e-8;
     if (zeroScale) {
       scaleX = 1.0;
@@ -306,12 +303,12 @@ abstract class GDisplayObject
     } else {
       actualW = (width / _scaleX).abs();
     }
-    if (actualW != null) scaleX = value / actualW;
+    scaleX = value! / actualW;
   }
 
-  set height(double value) {
-    if (value == null) throw 'height can not be null';
-    double actualH;
+  set height(double? value) {
+    if (value?.isNaN ?? true) throw '[$this.height] can not be NaN nor null';
+    double? actualH;
     var zeroScale = _scaleY < 1e-8 && _scaleY > -1e-8;
     if (zeroScale) {
       scaleY = 1.0;
@@ -319,110 +316,92 @@ abstract class GDisplayObject
     } else {
       actualH = (height / _scaleY).abs();
     }
-    if (actualH != null) scaleY = value / actualH;
+    scaleY = value! / actualH;
   }
 
-  set x(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.x] can not be NaN nor null');
-      return;
-    }
-    // if (value == null) throw '$this:x can not be null';
-    if (value.isNaN) throw '$this:x can not be NaN';
+  set x(double? value) {
+    if (value?.isNaN ?? true) throw '[$this.x] can not be NaN nor null';
     if (_x == value) return;
-    _x = value;
+    _x = value!;
     $setTransformationChanged();
   }
 
-  set y(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.y] can not be NaN nor null');
-      return;
-    }
+  set y(double? value) {
+    if (value?.isNaN ?? true) throw '[$this.y] can not be NaN nor null';
     if (_y == value) return;
-    _y = value;
+    _y = value!;
     $setTransformationChanged();
   }
 
-  set scaleX(double value) {
-    /// TODO: somehow is not throwing errors.
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.scaleX] can not be NaN nor null');
-      return;
-    }
-    // if (value == null) throw 'scaleX can not be null';
+  set scaleX(double? value) {
+    if (value?.isNaN ?? true) throw '[$this.scaleX] can not be NaN nor null';
     if (_scaleX == value) return;
-    _scaleX = value;
+    _scaleX = value!;
     $setTransformationChanged();
   }
 
-  set scaleY(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.scaleY] can not be NaN nor null');
-      return;
-    }
+  set scaleY(double? value) {
+    if (value?.isNaN ?? true) throw '[$this.scaleY] can not be NaN nor null';
     if (_scaleY == value) return;
-    _scaleY = value;
+    _scaleY = value!;
     $setTransformationChanged();
   }
 
   set pivotX(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.pivotX] can not be NaN nor null');
-      return;
-    }
+    if (value.isNaN) throw '[$this.pivotX] can not be NaN nor null';
     if (_pivotX == value) return;
-    _pivotX = value ?? 0.0;
+    _pivotX = value;
     $setTransformationChanged();
   }
 
   set pivotY(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.pivotY] can not be NaN nor null');
-      return;
-    }
+    if (value.isNaN) throw '[$this.pivotY] can not be NaN nor null';
     if (_pivotY == value) return;
-    _pivotY = value ?? 0.0;
+    _pivotY = value;
     $setTransformationChanged();
   }
 
   set skewX(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.skewX] can not be NaN nor null');
-      return;
-    }
+    if (value.isNaN) throw '[$this.skewX] can not be NaN nor null';
     if (_skewX == value) return;
     _skewX = value;
     $setTransformationChanged();
   }
 
   set skewY(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.skewY] can not be NaN nor null');
-      return;
-    }
+    if (value.isNaN) throw '[$this.skewY] can not be NaN';
     if (_skewY == value) return;
     _skewY = value;
     $setTransformationChanged();
   }
 
-  set rotation(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.rotation] can not be NaN nor null');
-      return;
-    }
+  set rotation(double? value) {
+    if (value?.isNaN ?? true) throw '[$this.rotation] can not be NaN nor null';
     if (_rotation == value) return;
-    _rotation = value;
+    _rotation = value!;
     $setTransformationChanged();
   }
 
   set rotationX(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.rotationX] can not be NaN nor null');
-      return;
-    }
+    if (value.isNaN) throw '[$this.rotationX] can not be NaN';
     if (_rotationX == value) return;
-    _rotationX = value ?? 0.0;
+    _rotationX = value;
+    if (!_isWarned3d) _warn3d();
+    $setTransformationChanged();
+  }
+
+  set rotationY(double value) {
+    if (value.isNaN) throw '[$this.rotationY] can not be NaN';
+    if (_rotationY == value) return;
+    _rotationY = value;
+    if (!_isWarned3d) _warn3d();
+    $setTransformationChanged();
+  }
+
+  set z(double value) {
+    if (value.isNaN) throw '[$this.z] can not be NaN';
+    if (_z == value) return;
+    _z = value;
     if (!_isWarned3d) _warn3d();
     $setTransformationChanged();
   }
@@ -434,39 +413,13 @@ abstract class GDisplayObject
     _isWarned3d = true;
   }
 
-  set rotationY(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.rotationY] can not be NaN nor null');
-      return;
-    }
-    if (_rotationY == value) return;
-    _rotationY = value ?? 0.0;
-    if (!_isWarned3d) _warn3d();
-    $setTransformationChanged();
-  }
-
-  set z(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.z] can not be NaN nor null');
-      return;
-    }
-    if (_z == value) return;
-    _z = value ?? 0.0;
-    if (!_isWarned3d) _warn3d();
-    $setTransformationChanged();
-  }
-
   double $alpha = 1;
 
   double get alpha => $alpha;
 
   set alpha(double value) {
-    if (value?.isNaN ?? true) {
-      print('Error: [$this.alpha] can not be NaN nor null');
-      return;
-    }
     if ($alpha != value) {
-      value ??= 1;
+      // value ??= 1;
       $alpha = value.clamp(0.0, 1.0);
       requiresRedraw();
     }
@@ -477,8 +430,8 @@ abstract class GDisplayObject
   bool $matrixDirty = true;
   bool mouseEnabled = true;
 
-  GDisplayObject $maskee;
-  GShape $mask;
+  GDisplayObject? $maskee;
+  GShape? $mask;
 
   /// optimization.
   bool $hasTouchableArea = true;
@@ -486,14 +439,14 @@ abstract class GDisplayObject
 
   bool get isMask => $maskee != null;
 
-  GShape get mask => $mask;
+  GShape? get mask => $mask;
 
   /// can be set on the Shape mask, or the maskee DisplayObject.
   bool maskInverted = false;
 
-  set mask(GShape value) {
+  set mask(GShape? value) {
     if ($mask != value) {
-      if ($mask != null) $mask.$maskee = null;
+      if ($mask != null) $mask!.$maskee = null;
       value?.$maskee = this;
       value?.$hasVisibleArea = false;
       $mask = value;
@@ -556,7 +509,7 @@ abstract class GDisplayObject
   }
 
   void alignPivot([painting.Alignment alignment = painting.Alignment.center]) {
-    var bounds = getBounds(this, _sHelperRect);
+    var bounds = getBounds(this, _sHelperRect)!;
     if (bounds.isEmpty) return;
     var ax = 0.5 + alignment.x / 2;
     var ay = 0.5 + alignment.y / 2;
@@ -566,24 +519,24 @@ abstract class GDisplayObject
 
   /// local bounds
   /// todo: should be cached.
-  GRect get bounds => getBounds(this);
+  GRect? get bounds => getBounds(this);
 
-  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+  GRect? getBounds(GDisplayObject? targetSpace, [GRect? out]) {
     throw 'getBounds() is abstract in DisplayObject';
   }
 
-  GPoint globalToLocal(GPoint globalPoint, [GPoint out]) {
+  GPoint globalToLocal(GPoint globalPoint, [GPoint? out]) {
     getTransformationMatrix(base, _sHelperMatrixAlt);
     _sHelperMatrixAlt.invert();
     return _sHelperMatrixAlt.transformPoint(globalPoint, out);
   }
 
-  GPoint localToGlobal(GPoint localPoint, [GPoint out]) {
+  GPoint localToGlobal(GPoint localPoint, [GPoint? out]) {
     getTransformationMatrix(base, _sHelperMatrixAlt);
     return _sHelperMatrixAlt.transformPoint(localPoint, out);
   }
 
-  GMatrix _transformationMatrix;
+  GMatrix? _transformationMatrix;
 
   GMatrix get transformationMatrix {
     if (_transformationChanged || _transformationMatrix == null) {
@@ -610,10 +563,10 @@ abstract class GDisplayObject
         skewX,
         skewY,
         rotation,
-        _transformationMatrix,
+        _transformationMatrix!,
       );
     }
-    return _transformationMatrix;
+    return _transformationMatrix!;
   }
 
   set transformationMatrix(GMatrix matrix) {
@@ -621,7 +574,7 @@ abstract class GDisplayObject
     requiresRedraw();
     _transformationChanged = false;
     _transformationMatrix ??= GMatrix();
-    _transformationMatrix.copyFrom(matrix);
+    _transformationMatrix!.copyFrom(matrix);
     _pivotX = _pivotY = 0;
     _x = matrix.tx;
     _y = matrix.ty;
@@ -641,16 +594,18 @@ abstract class GDisplayObject
     }
   }
 
-  void $updateTransformationMatrices(double x,
-      double y,
-      double pivotX,
-      double pivotY,
-      double scaleX,
-      double scaleY,
-      double skewX,
-      double skewY,
-      double rotation,
-      GMatrix out,) {
+  void $updateTransformationMatrices(
+    double? x,
+    double? y,
+    double pivotX,
+    double pivotY,
+    double scaleX,
+    double scaleY,
+    double skewX,
+    double skewY,
+    double rotation,
+    GMatrix out,
+  ) {
     out.identity();
     if (skewX == 0 && skewY == 0) {
       /// optimization, no skewing.
@@ -660,8 +615,8 @@ abstract class GDisplayObject
           0,
           0,
           scaleY,
-          x - pivotX * scaleX,
-          y - pivotY * scaleY,
+          x! - pivotX * scaleX,
+          y! - pivotY * scaleY,
         );
       } else {
         final cos = Math.cos(rotation);
@@ -670,8 +625,8 @@ abstract class GDisplayObject
         final b = scaleX * sin;
         final c = scaleY * -sin;
         final d = scaleY * cos;
-        final tx = x - pivotX * a - pivotY * c;
-        final ty = y - pivotX * b - pivotY * d;
+        final tx = x! - pivotX * a - pivotY * c;
+        final ty = y! - pivotX * b - pivotY * d;
         out.setTo(a, b, c, d, tx, ty);
       }
     } else {
@@ -679,7 +634,7 @@ abstract class GDisplayObject
       out.scale(scaleX, scaleY);
       out.skew(skewX, skewY); // MatrixUtils.skew(out, skewX, skewY);
       out.rotate(rotation);
-      out.translate(x, y);
+      out.translate(x!, y!);
       if (pivotX != 0 || pivotY != 0) {
         out.tx = x - out.a * pivotX - out.c * pivotY;
         out.ty = y - out.b * pivotX - out.d * pivotY;
@@ -687,8 +642,8 @@ abstract class GDisplayObject
     }
   }
 
-  GMatrix getTransformationMatrix(GDisplayObject targetSpace, [GMatrix out]) {
-    GDisplayObject commonParent, currentObj;
+  GMatrix getTransformationMatrix(GDisplayObject? targetSpace, [GMatrix? out]) {
+    GDisplayObject? commonParent, currentObj;
     out?.identity();
     out ??= GMatrix();
     if (targetSpace == this) {
@@ -701,7 +656,7 @@ abstract class GDisplayObject
     if (targetSpace == null || targetSpace == base) {
       currentObj = this;
       while (currentObj != targetSpace) {
-        out.concat(currentObj.transformationMatrix);
+        out.concat(currentObj!.transformationMatrix);
         currentObj = currentObj.$parent;
       }
       return out;
@@ -719,7 +674,7 @@ abstract class GDisplayObject
     /// 2 - move up from this to common parent.````
     currentObj = this;
     while (currentObj != commonParent) {
-      out.concat(currentObj.transformationMatrix);
+      out.concat(currentObj!.transformationMatrix);
       currentObj = currentObj.$parent;
     }
 
@@ -729,7 +684,7 @@ abstract class GDisplayObject
     _sHelperMatrix.identity();
     currentObj = targetSpace;
     while (currentObj != commonParent) {
-      _sHelperMatrix.concat(currentObj.transformationMatrix);
+      _sHelperMatrix.concat(currentObj!.transformationMatrix);
       currentObj = currentObj.$parent;
     }
 
@@ -739,9 +694,9 @@ abstract class GDisplayObject
     return out;
   }
 
-  static GDisplayObject _findCommonParent(GDisplayObject obj1,
-      GDisplayObject obj2) {
-    var current = obj1;
+  static GDisplayObject _findCommonParent(
+      GDisplayObject obj1, GDisplayObject obj2) {
+    GDisplayObject? current = obj1;
 
     /// TODO: use faster Hash access.
     while (current != null) {
@@ -762,20 +717,20 @@ abstract class GDisplayObject
       return true;
     }
     if (maskRect != null) {
-      final isHit = maskRect.containsPoint(localPoint);
+      final isHit = maskRect!.containsPoint(localPoint);
       return maskRectInverted ? !isHit : isHit;
     }
-    if ($mask.inStage) {
+    if ($mask!.inStage) {
       getTransformationMatrix($mask, _sHelperMatrixAlt);
     } else {
-      _sHelperMatrixAlt.copyFrom($mask.transformationMatrix);
+      _sHelperMatrixAlt.copyFrom($mask!.transformationMatrix);
       _sHelperMatrixAlt.invert();
     }
 
     var helperPoint = localPoint == _sHelperPoint ? GPoint() : _sHelperPoint;
     _sHelperMatrixAlt.transformPoint(localPoint, helperPoint);
 
-    final isHit = mask.hitTest(helperPoint) != null;
+    final isHit = mask!.hitTest(helperPoint) != null;
 //    return maskInverted ? !isHit : isHit;
     return maskInverted ? !isHit : isHit;
   }
@@ -785,38 +740,38 @@ abstract class GDisplayObject
   }
 
   /// `useShape` is meant to be used by `Shape.graphics`.
-  GDisplayObject hitTest(GPoint localPoint, [bool useShape = false]) {
+  GDisplayObject? hitTest(GPoint localPoint, [bool useShape = false]) {
     if (!$hasTouchableArea || !mouseEnabled) {
       return null;
     }
     if (($mask != null || maskRect != null) && !hitTestMask(localPoint)) {
       return null;
     }
-    if (getBounds(this, _sHelperRect).containsPoint(localPoint)) {
+    if (getBounds(this, _sHelperRect)!.containsPoint(localPoint)) {
       return this;
     }
     return null;
   }
 
-  GDisplayObjectContainer get parent => $parent;
+  GDisplayObjectContainer? get parent => $parent;
 
   GDisplayObject get base {
     var current = this;
     while (current.$parent != null) {
-      current = current.$parent;
+      current = current.$parent!;
     }
     return current;
   }
 
   bool get inStage => base is Stage;
 
-  Stage get stage => base is Stage ? base : null;
+  Stage? get stage => base is Stage ? base as Stage? : null;
 
-  GDisplayObject get root {
+  GDisplayObject? get root {
     var current = this;
     while (current.$parent != null) {
       if (current.$parent is Stage) return current;
-      current = current.$parent;
+      current = current.$parent!;
     }
     return null;
   }
@@ -842,7 +797,7 @@ abstract class GDisplayObject
   void update(double delta) {}
 
   bool get hasFilters => filters?.isNotEmpty ?? false;
-  GRect $debugLastLayerBounds;
+  GRect? $debugLastLayerBounds;
 
   /// quick and dirty way to toggle saveLayer() feature for common
   /// display objects as well.
@@ -850,14 +805,14 @@ abstract class GDisplayObject
   /// Paint() so no need to use an expensive saveLayer().
   bool allowSaveLayer = false;
 
-  GRect getFilterBounds([GRect layerBounds, ui.Paint alphaPaint]) {
+  GRect? getFilterBounds([GRect? layerBounds, ui.Paint? alphaPaint]) {
     layerBounds ??= getBounds($parent);
-    if ($filters == null || $filters.isEmpty) {
+    if ($filters == null || $filters!.isEmpty) {
       return layerBounds;
     }
-    layerBounds = layerBounds.clone();
-    GRect resultBounds;
-    for (var filter in $filters) {
+    layerBounds = layerBounds!.clone();
+    GRect? resultBounds;
+    for (var filter in $filters!) {
       resultBounds ??= layerBounds.clone();
       if (alphaPaint != null) {
         filter.update();
@@ -910,13 +865,13 @@ abstract class GDisplayObject
         DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
             ($debugBounds || DisplayBoundsDebugger.debugAll);
 
-    GRect _cacheLocalBoundsRect;
+    GRect? _cacheLocalBoundsRect;
     if (showDebugBounds || _saveLayer) {
       // _cacheLocalBoundsRect = bounds.toNative();
       _cacheLocalBoundsRect = bounds;
     }
 
-    List<GComposerFilter> _composerFilters;
+    List<GComposerFilter>? _composerFilters;
     var filterHidesObject = false;
     if (_saveLayer) {
 //       TODO: static painter seems to have some issues, try local var later.
@@ -932,18 +887,18 @@ abstract class GDisplayObject
       alphaPaint.maskFilter = null;
       if ($hasColorize) {
         alphaPaint.colorFilter = ui.ColorFilter.mode(
-          $colorize,
+          $colorize!,
           ui.BlendMode.srcATop,
         );
       }
-      ui.Rect nativeLayerBounds;
+      ui.Rect? nativeLayerBounds;
       var layerBounds = getBounds($parent);
       if ($hasFilters) {
         /// TODO: Find a common implementation for filter bounds.
         // layerBounds = getFilterBounds(layerBounds, alphaPaint);
-        layerBounds = layerBounds.clone();
-        GRect resultBounds;
-        for (var filter in $filters) {
+        layerBounds = layerBounds!.clone();
+        GRect? resultBounds;
+        for (var filter in $filters!) {
           resultBounds ??= layerBounds.clone();
           filter.update();
           filter.expandBounds(layerBounds, resultBounds);
@@ -959,7 +914,7 @@ abstract class GDisplayObject
       $debugLastLayerBounds = layerBounds;
       // canvas.saveLayer(layerBounds.toNative(), alphaPaint);
       if ($useSaveLayerBounds) {
-        nativeLayerBounds = layerBounds.toNative();
+        nativeLayerBounds = layerBounds!.toNative();
       }
       canvas.saveLayer(nativeLayerBounds, alphaPaint);
     }
@@ -986,7 +941,7 @@ abstract class GDisplayObject
       if (maskRect != null) {
         $applyMaskRect(canvas);
       } else {
-        mask.$applyPaint(canvas);
+        mask!.$applyPaint(canvas);
       }
     }
 
@@ -1013,7 +968,7 @@ abstract class GDisplayObject
       final _paint = $debugBoundsPaint ?? _debugPaint;
       final linePaint = _paint.clone();
       linePaint.color = linePaint.color.withOpacity(.3);
-      final rect = _cacheLocalBoundsRect.toNative();
+      final rect = _cacheLocalBoundsRect!.toNative();
       canvas.drawLine(rect.topLeft, rect.bottomRight, linePaint);
       canvas.drawLine(rect.topRight, rect.bottomLeft, linePaint);
       canvas.drawRect(rect, _paint);
@@ -1031,7 +986,7 @@ abstract class GDisplayObject
     ..color = kColorMagenta
     ..strokeWidth = 1;
 
-  ui.Paint $debugBoundsPaint = _debugPaint.clone();
+  ui.Paint? $debugBoundsPaint = _debugPaint.clone();
 
   /// override this method for custom drawing using Flutter's API.
   /// Access `$canvas` from here.
@@ -1053,7 +1008,7 @@ abstract class GDisplayObject
   }
 
   /// internal
-  void $setParent(GDisplayObjectContainer value) {
+  void $setParent(GDisplayObjectContainer? value) {
     var ancestor = value;
     while (ancestor != this && ancestor != null) {
       ancestor = ancestor.$parent;
@@ -1061,7 +1016,7 @@ abstract class GDisplayObject
     if (ancestor == this) {
       throw ArgumentError(
           'An object cannot be added as a child to itself or one '
-              'of its children (or children\'s children, etc.)');
+          'of its children (or children\'s children, etc.)');
     } else {
       $parent = value;
     }
@@ -1082,7 +1037,7 @@ abstract class GDisplayObject
     $setTransformationChanged();
   }
 
-  void setScale(double scaleX, [double scaleY]) {
+  void setScale(double scaleX, [double? scaleY]) {
     _scaleX = scaleX;
     _scaleY = scaleY ?? scaleX;
     $setTransformationChanged();
@@ -1093,8 +1048,9 @@ abstract class GDisplayObject
   /// Beware to call this before applying any
   /// transformations (x, y, scale, etc) if you intend to use in it's "original"
   /// form.
-  ui.Picture createPicture([void Function(ui.Canvas) prePaintCallback,
-    void Function(ui.Canvas) postPaintCallback]) {
+  ui.Picture createPicture(
+      [void Function(ui.Canvas)? prePaintCallback,
+      void Function(ui.Canvas)? postPaintCallback]) {
     final r = ui.PictureRecorder();
     final c = ui.Canvas(r);
     prePaintCallback?.call(c);
@@ -1106,22 +1062,22 @@ abstract class GDisplayObject
   Future<GTexture> createImageTexture([
     bool adjustOffset = true,
     double resolution = 1,
-    GRect rect,
+    GRect? rect,
   ]) async {
     final img = await createImage(adjustOffset, resolution, rect);
     var tx = GTexture.fromImage(img, resolution);
-    tx.pivotX = bounds.x;
-    tx.pivotY = bounds.y;
+    tx.pivotX = bounds!.x;
+    tx.pivotY = bounds!.y;
     return tx;
   }
 
   Future<ui.Image> createImage([
     bool adjustOffset = true,
     double resolution = 1,
-    GRect rect,
+    GRect? rect,
   ]) async {
     rect ??= getFilterBounds(); //getBounds($parent);
-    rect = rect.clone();
+    rect = rect!.clone();
     if (resolution != 1) {
       rect *= resolution;
     }
@@ -1130,7 +1086,7 @@ abstract class GDisplayObject
     ui.Picture picture;
     if (needsAdjust) {
       picture = createPicture((canvas) {
-        if (adjustOffset) canvas.translate(-rect.left, -rect.top);
+        if (adjustOffset) canvas.translate(-rect!.left, -rect.top);
         if (resolution != 1) canvas.scale(resolution);
       }, (canvas) {
         if (adjustOffset) canvas.restore();

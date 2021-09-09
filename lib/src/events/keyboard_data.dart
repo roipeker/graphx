@@ -2,38 +2,25 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 enum KeyEventType { down, up }
+typedef GKey = LogicalKeyboardKey;
 
 class KeyboardEventData {
   final KeyEventType type;
   final RawKeyEvent rawEvent;
 
-  KeyboardEventData({this.type, this.rawEvent});
+  KeyboardEventData({required this.type, required this.rawEvent});
 
-  bool isPressed(LogicalKeyboardKey key) {
-    return rawEvent.isKeyPressed(key);
-  }
+  bool isPressed(GKey key) => rawEvent.isKeyPressed(key);
 
-  bool isKey(LogicalKeyboardKey key) {
-    return rawEvent.logicalKey == key;
-  }
+  bool isKey(GKey key) => rawEvent.logicalKey == key;
 }
 
 extension MyKeyEventExt on KeyboardEventData {
-  bool get arrowLeft {
-//    return rawEvent.isKeyPressed(LogicalKeyboardKey.arrowLeft);
-    return rawEvent.logicalKey == LogicalKeyboardKey.arrowLeft;
-  }
+  bool get arrowLeft => rawEvent.logicalKey == GKey.arrowLeft;
 
-  bool get arrowRight {
-    return rawEvent.logicalKey == LogicalKeyboardKey.arrowRight;
-//    return rawEvent.isKeyPressed(LogicalKeyboardKey.arrowRight);
-  }
+  bool get arrowRight => rawEvent.logicalKey == GKey.arrowRight;
 
-  bool get arrowUp {
-    return rawEvent.logicalKey == LogicalKeyboardKey.arrowUp;
-  }
+  bool get arrowUp => rawEvent.logicalKey == GKey.arrowUp;
 
-  bool get arrowDown {
-    return rawEvent.logicalKey == LogicalKeyboardKey.arrowDown;
-  }
+  bool get arrowDown => rawEvent.logicalKey == GKey.arrowDown;
 }

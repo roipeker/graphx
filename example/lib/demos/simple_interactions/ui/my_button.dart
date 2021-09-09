@@ -7,19 +7,19 @@ class MyButton extends GSprite {
   double h = 80;
 
   // backwards background (black)
-  GShape bg;
+  late GShape bg;
 
   // filled background that changes with [_fillPercent] (yellow)
-  GShape fillBg;
+  late GShape fillBg;
 
   // the light bulb icon that toggles when clicking the button
-  GIcon icon;
+  GIcon icon = GIcon(Icons.ac_unit);
 
   bool _isTouching = false;
   bool _isOn = false;
   double _fillPercent = 0.0;
 
-  GText _fillText;
+  late GText _fillText;
 
   MyButton() {
     _init();
@@ -34,7 +34,6 @@ class MyButton extends GSprite {
     fillBg = GShape();
     _dragBackground(fillBg.graphics, Colors.yellow.shade800);
 
-    icon = GIcon(null);
     _updateIcon();
 
     icon.alignPivot();
@@ -103,7 +102,7 @@ class MyButton extends GSprite {
   /// Handler for pointer down (mouse or touch).
   void _onMouseDown(MouseInputData input) {
     scale = .94;
-    stage.onMouseUp.addOnce(_onStageRelease);
+    stage!.onMouseUp.addOnce(_onStageRelease);
   }
 
   /// Handler for mouse scroll wheel (only desktop).

@@ -1,20 +1,20 @@
 part of gtween;
 
 class GVars {
-  EaseFunction ease;
-  double delay;
-  bool useFrames;
-  int overwrite;
-  Function onStart;
-  CallbackParams onStartParams;
-  Function onComplete;
-  CallbackParams onCompleteParams;
-  Function onUpdate;
-  CallbackParams onUpdateParams;
-  bool runBackwards;
-  bool immediateRender;
+  EaseFunction? ease;
+  double? delay;
+  bool? useFrames;
+  int? overwrite;
+  Function? onStart;
+  CallbackParams? onStartParams;
+  Function? onComplete;
+  CallbackParams? onCompleteParams;
+  Function? onUpdate;
+  CallbackParams? onUpdateParams;
+  bool? runBackwards;
+  bool? immediateRender;
 
-  Map startAt;
+  Map? startAt;
 
   /// TODO: maybe in future use vars from this object.
 //  Map vars;
@@ -27,9 +27,9 @@ class GVars {
     this.onStart,
     this.onComplete,
     this.onUpdate,
-    Object onStartParams,
-    Object onCompleteParams,
-    Object onUpdateParams,
+    Object? onStartParams,
+    Object? onCompleteParams,
+    Object? onUpdateParams,
     this.runBackwards,
     this.immediateRender,
     this.startAt,
@@ -50,13 +50,13 @@ class GVars {
 
   void _setTween(GTween gTween) {
     if (onStartParams != null) {
-      _setCallbackParams(gTween, onStartParams);
+      _setCallbackParams(gTween, onStartParams!);
     }
     if (onCompleteParams != null) {
-      _setCallbackParams(gTween, onCompleteParams);
+      _setCallbackParams(gTween, onCompleteParams!);
     }
     if (onUpdateParams != null) {
-      _setCallbackParams(gTween, onUpdateParams);
+      _setCallbackParams(gTween, onUpdateParams!);
     }
 //    onStartParams?._setTween(gTween);
 //    onCompleteParams?._setTween(gTween);
@@ -101,8 +101,8 @@ class GTween {
   ///   [GTweenableDouble.wrap, GTweenableInt.wrap, GTweenableList]
   /// );
   /// ```
-  static void registerCommonWraps([List<GxAnimatableBuilder> otherWraps]) {
-    if (initialized) return;
+  static void registerCommonWraps([List<GxAnimatableBuilder>? otherWraps]) {
+    if (initializedCommonWraps) return;
     GTween.registerWrap(GTweenableDisplayObject.wrap);
     GTween.registerWrap(GTweenableMap.wrap);
     GTween.registerWrap(GTweenableDouble.wrap);
@@ -111,7 +111,7 @@ class GTween {
     GTween.registerWrap(GTweenableList.wrap);
 //    GTween.registerWrap(GTweenableColor.wrap);
     otherWraps?.forEach(GTween.registerWrap);
-    initialized = true;
+    initializedCommonWraps = true;
   }
 
   static void hotReload() {
@@ -127,14 +127,14 @@ class GTween {
   /// or make GTicker global... being able to track unique refresh frames
   /// is a must.
   static void processTick(double elapsed) {
-    final ts = SchedulerBinding.instance.currentFrameTimeStamp;
+    final ts = SchedulerBinding.instance!.currentFrameTimeStamp;
     if (_lastFrameTimeStamp == ts) return;
     GTween.ticker.dispatch(elapsed);
     _lastFrameTimeStamp = ts;
   }
 
-  static bool initialized = false;
-
+  static bool initializedEngine = false;
+  static bool initializedCommonWraps = false;
   static double _time = 0;
   static double _frame = 0;
 
@@ -147,52 +147,55 @@ class GTween {
   static void registerWrap(GxAnimatableBuilder builder) =>
       _tweenableBuilders.add(builder);
 
-  static Map _reservedProps;
-  static GTween _first;
-  static GTween _last;
+  static void _initEngine() {
+    initializedEngine = true;
+    _time = getTimer() / 1000;
+    _frame = 0;
+    ticker.add(_updateRoot);
+  }
 
-  double _duration;
-  Map vars;
-  GVars nanoVars;
-  double _startTime;
+  static final Map _reservedProps = {
+    'delay': 1,
+    'ease': 1,
+    'usedFrames': 1,
+    'overwrite': 1,
+    'onComplete': 1,
+    'runBackwards': 1,
+    'immediateRender': 1,
+    'onUpdate': 1,
+    'startAt': 1,
+  };
 
-  Object target;
+  static GTween? _first;
+  static GTween? _last;
+
+  late double _duration;
+  Map? vars;
+  late GVars nanoVars;
+  late double _startTime;
+
+  Object? target;
 
   /// the real target
-  Object _animatableTarget;
+  Object? _animatableTarget;
 
-  bool _useFrames;
-  double ratio = 0;
+  late bool _useFrames;
+  double? ratio = 0;
 
-  Function _ease;
+  late Function _ease;
 
 //  Ease _rawEase;
   bool _inited = false;
 
-  PropTween _firstPT;
-  GTween _next;
-  GTween _prev;
-  List _targets;
+  PropTween? _firstPT;
+  GTween? _next;
+  GTween? _prev;
+  List? _targets;
 
   bool _gc = false;
 
-  GTween(this.target, double duration, this.vars, [GVars myVars]) {
-    if (_reservedProps == null) {
-      _reservedProps = {
-        'delay': 1,
-        'ease': 1,
-        'usedFrames': 1,
-        'overwrite': 1,
-        'onComplete': 1,
-        'runBackwards': 1,
-        'immediateRender': 1,
-        'onUpdate': 1,
-        'startAt': 1,
-      };
-      _time = getTimer() / 1000;
-      _frame = 0;
-      ticker.add(_updateRoot);
-    }
+  GTween(this.target, double duration, this.vars, [GVars? myVars]) {
+    if (!GTween.initializedEngine) GTween._initEngine();
 
     nanoVars = myVars ?? GVars();
     nanoVars.defaults();
@@ -206,7 +209,7 @@ class GTween {
       var targetList = target as List;
       if (targetList.first is Map<String, dynamic> ||
           targetList.first is GTweenable) {
-        _targets = List.of(target);
+        _targets = List.of(target as Iterable<dynamic>);
       }
 
       /// TODO : add wrap support.
@@ -217,7 +220,7 @@ class GTween {
         /// no process.
       } else {
         /// target can be a Function.
-        GTweenable result;
+        GTweenable? result;
         for (final builder in _tweenableBuilders) {
           result = builder(target);
           if (result != null) {
@@ -230,7 +233,7 @@ class GTween {
     }
 //    _rawEase = nanoVars.ease;
 //    _ease = _rawEase?.getRatio;
-    _ease = nanoVars.ease;
+    _ease = nanoVars.ease ?? GTween.defaultEase;
     _useFrames = nanoVars.useFrames ?? false;
     _startTime = (_useFrames ? _frame : _time) + (nanoVars.delay ?? 0);
 
@@ -241,19 +244,19 @@ class GTween {
         killTweensOf(target);
       }
     }
-    _prev = _last;
-    if (_last != null) {
-      _last._next = this;
+    _prev = GTween._last;
+    if (GTween._last != null) {
+      GTween._last!._next = this;
     } else {
-      _first = this;
+      GTween._first = this;
     }
-    _last = this;
+    GTween._last = this;
 
-    if (nanoVars.immediateRender ||
+    if (nanoVars.immediateRender! ||
         (duration == 0 &&
             nanoVars.delay == 0 &&
             nanoVars.immediateRender != false)) {
-      _render(0);
+      _render(0.0);
     }
   }
 
@@ -264,39 +267,43 @@ class GTween {
 //      GTween.to(target, 0, nanoVars.startAt.vars, nanoVars.startAt);
     }
     if (_targets != null) {
-      var i = _targets.length;
+      var i = _targets!.length;
       while (--i > -1) {
-        _initProps(_targets[i]);
+        _initProps(_targets![i]);
       }
     } else {
       _initProps(target);
     }
-    if (nanoVars.runBackwards) {
+    if (nanoVars.runBackwards!) {
       var pt = _firstPT;
       while (pt != null) {
-        pt.s += pt.c;
-        pt.c = -pt.c;
+        pt.s += pt.c!;
+        pt.c = -pt.c!;
         pt = pt._next;
       }
     }
     _inited = true;
   }
 
-  /// initialiazes the PropTween to be used in the target Object.
-  void _initProps(Object target) {
+  /// initializes the PropTween to be used in the target Object.
+  void _initProps(Object? target) {
     if (target == null) return;
-    for (final key in vars.keys) {
+    for (final key in vars!.keys) {
       final prop = '$key';
-      if (!_reservedProps.containsKey(prop)) {
-        _firstPT = PropTween(target: target, property: key, next: _firstPT);
-        var startVal = _getStartValue(target, key);
-        _firstPT.s = startVal;
-        var endValue = _getEndValue(vars, key, _firstPT.s);
-        _firstPT.cObj = vars[key];
-        _firstPT.c = endValue;
-        _firstPT.t.setTweenProp(_firstPT);
-        if (_firstPT._next != null) {
-          _firstPT._next._prev = _firstPT;
+      if (!GTween._reservedProps.containsKey(prop)) {
+        _firstPT = PropTween(
+          target: target as GTweenable,
+          property: key,
+          next: _firstPT,
+        );
+        final startVal = _getStartValue(target, key);
+        _firstPT!.s = startVal;
+        var endValue = _getEndValue(vars!, key, _firstPT!.s);
+        _firstPT!.cObj = vars![key];
+        _firstPT!.c = endValue;
+        _firstPT!.t!.setTweenProp(_firstPT!);
+        if (_firstPT!._next != null) {
+          _firstPT!._next!._prev = _firstPT;
         }
       }
     }
@@ -304,15 +311,15 @@ class GTween {
 
   /// Can be tweening a List asMap(), so `prop` is better to be
   /// dynamic.
-  double _getEndValue(Map pvars, dynamic prop, double start) {
+  double? _getEndValue(Map pvars, dynamic prop, double? start) {
     dynamic val = pvars[prop];
     if (val is num) {
-      double v = val + 0.0;
-      return v - start;
+      var v = val + 0.0;
+      return v - start!;
     } else if (val is String) {
       if (val.length > 2 && val[1] == '=') {
         var multiplier = double.tryParse('${val[0]}1') ?? 1;
-        var factor = double.tryParse(val.substring(2));
+        var factor = double.tryParse(val.substring(2))!;
         return multiplier * factor;
       } else {
         return double.tryParse(val);
@@ -322,11 +329,11 @@ class GTween {
   }
 
   void _setCurrentValue(PropTween pt, double ratio) {
-    var value = pt.c * ratio + pt.s;
+    var value = pt.c! * ratio + pt.s;
     if (pt.t is GTweenable) {
-      pt.t.setProperty(pt.p, value);
+      pt.t!.setProperty(pt.p!, value);
     } else {
-      pt.t[pt.p] = value;
+      pt.t![pt.p as String] = value;
     }
   }
 
@@ -336,13 +343,13 @@ class GTween {
     } else if (t is Map) {
       return t[prop];
     }
-    throw 'error';
+    throw 'GTween Error: property not found.';
   }
 
   void _render(double time) {
     if (!_inited) {
       _init();
-      time = 0;
+      time = 0.0;
     }
     var prevTime = time;
     if (time >= _duration) {
@@ -360,7 +367,7 @@ class GTween {
 
     var pt = _firstPT;
     while (pt != null) {
-      _setCurrentValue(pt, ratio);
+      _setCurrentValue(pt, ratio!);
       pt = pt._next;
     }
     _signal(nanoVars.onUpdate, nanoVars.onUpdateParams);
@@ -374,17 +381,17 @@ class GTween {
     }
   }
 
-  void _signal(Function callback, CallbackParams params) {
+  void _signal(Function? callback, CallbackParams? params) {
     if (callback != null) {
       /// It's a very slow approach.
       Function.apply(callback, params?.positional, params?.named);
     }
   }
 
-  Object _getAnimatable(Object searchTarget) {
+  Object? _getAnimatable(Object searchTarget) {
     if (_animatableTarget == searchTarget) return target;
     if (_targets != null) {
-      for (var t in _targets) {
+      for (var t in _targets!) {
         if (t is GTweenable) {
           if (t.target == searchTarget) return t;
         }
@@ -393,7 +400,7 @@ class GTween {
     return null;
   }
 
-  void kill([Object tg]) {
+  void kill([Object? tg]) {
     tg ??= _targets ?? target;
     var pt = _firstPT;
     if (tg is List) {
@@ -407,22 +414,22 @@ class GTween {
         return;
       }
     } else if (_targets != null) {
-      var i = _targets.length;
+      var i = _targets!.length;
       if (tg is! GTweenable) {
-        tg = _getAnimatable(tg);
+        tg = _getAnimatable(tg!);
       }
       while (--i > -1) {
-        if (tg == _targets[i]) {
-          _targets.removeAt(i);
+        if (tg == _targets![i]) {
+          _targets!.removeAt(i);
         }
       }
       while (pt != null) {
         if (pt.t == tg) {
           if (pt._next != null) {
-            pt._next._prev = pt._prev;
+            pt._next!._prev = pt._prev;
           }
           if (pt._prev != null) {
-            pt._prev._next = pt._next;
+            pt._prev!._next = pt._next;
           } else {
             _firstPT = pt._next;
           }
@@ -430,15 +437,15 @@ class GTween {
         pt = pt._next;
       }
     }
-    if (_targets == null || _targets.isEmpty) {
+    if (_targets == null || _targets!.isEmpty) {
       _gc = true;
       if (_prev != null) {
-        _prev._next = _next;
+        _prev!._next = _next;
       } else if (this == _first) {
         _first = _next;
       }
       if (_next != null) {
-        _next._prev = _prev;
+        _next!._prev = _prev;
       } else if (this == _last) {
         _last = _prev;
       }
@@ -462,7 +469,8 @@ class GTween {
   }
 
   /// Shortcut to start a tween on an `target`.
-  static GTween to(Object target, double duration, Map vars, [GVars nanoVars]) {
+  static GTween to(Object? target, double duration, Map? vars,
+      [GVars? nanoVars]) {
     nanoVars ??= GVars();
     return GTween(target, duration, vars, nanoVars);
   }
@@ -470,7 +478,7 @@ class GTween {
   /// Shortcut to start a tween on an `target`, start from the end values
   /// to the start values, this option flips the tweens.
   static GTween from(Object target, double duration, Map vars,
-      [GVars nanoVars]) {
+      [GVars? nanoVars]) {
     nanoVars ??= GVars();
     nanoVars.runBackwards = true;
     nanoVars.immediateRender ??= true;
@@ -483,7 +491,7 @@ class GTween {
   static GTween delayedCall(
     double delay,
     Function callback, {
-    Object params,
+    Object? params,
     bool useFrames = false,
   }) {
     var props = GVars()
@@ -506,11 +514,11 @@ class GTween {
     _frame += 1;
     // _time = getTimer() * .001;
     if (delta <= 0) delta = .016;
-    _time += delta * timeScale;
-    var tween = _first;
+    GTween._time += delta * GTween.timeScale;
+    var tween = GTween._first;
     while (tween != null) {
       var next = tween._next;
-      var t = tween._useFrames ? _frame : _time;
+      final t = tween._useFrames ? GTween._frame : GTween._time;
       if (t >= tween._startTime && !tween._gc) {
         tween._render(t - tween._startTime);
       }
@@ -518,20 +526,20 @@ class GTween {
     }
   }
 
-  static bool isTweening(Object target){
+  static bool isTweening(Object target) {
     var t = _first;
     while (t != null) {
       var next = t._next;
       if (t.target == target || t._animatableTarget == target) {
-        return true ;
+        return true;
       }
       t = next;
     }
-    return false ;
+    return false;
   }
 
   /// Removes a Tween based on the the target object.
-  static void killTweensOf(Object target) {
+  static void killTweensOf(Object? target) {
     var t = _first;
     while (t != null) {
       var next = t._next;
@@ -545,4 +553,4 @@ class GTween {
   }
 }
 
-typedef GxAnimatableBuilder = GTweenable Function(Object target);
+typedef GxAnimatableBuilder = GTweenable? Function(Object? target);

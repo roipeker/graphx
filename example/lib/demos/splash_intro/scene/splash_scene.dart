@@ -18,22 +18,22 @@ abstract class DemoEvents {
 }
 
 class SplashScene extends GSprite {
-  GSprite logoContainer;
-  GShape splashCircle;
-  LogoDrawer graphxLogo, byLogo, roipekerLogo, flutterLogo;
+  GSprite? logoContainer;
+  late GShape splashCircle;
+  late LogoDrawer graphxLogo, byLogo, roipekerLogo, flutterLogo;
 
   @override
   void addedToStage() {
     visible = false;
-    stage.onResized.add(_handleStageResize);
+    stage!.onResized.add(_handleStageResize);
     mps.on(DemoEvents.reset, _showDemo);
     loadSvg();
   }
 
   void _handleStageResize() {
     /// keep the logo centered.
-    logoContainer?.x = stage.stageWidth / 2;
-    logoContainer?.y = stage.stageHeight / 2;
+    logoContainer?.x = stage!.stageWidth / 2;
+    logoContainer?.y = stage!.stageHeight / 2;
   }
 
   void _showDemo() {
@@ -41,12 +41,12 @@ class SplashScene extends GSprite {
 
     splashCircle.graphics.clear();
     splashCircle.graphics.beginFill(Colors.redAccent);
-    splashCircle.graphics.drawCircle(0, 0, stage.stageWidth);
+    splashCircle.graphics.drawCircle(0, 0, stage!.stageWidth);
     splashCircle.graphics.endFill();
     splashCircle.scale = 0;
-    stage.color = kColorTransparent;
-    stage.addChild(splashCircle);
-    splashCircle.setPosition(stage.stageWidth / 2, stage.stageHeight / 2);
+    stage!.color = kColorTransparent;
+    stage!.addChild(splashCircle);
+    splashCircle.setPosition(stage!.stageWidth / 2, stage!.stageHeight / 2);
 
     splashCircle.tween(
       duration: 1,
@@ -64,7 +64,7 @@ class SplashScene extends GSprite {
     splashCircle = GShape();
 
     logoContainer = GSprite();
-    addChild(logoContainer);
+    addChild(logoContainer!);
 
     graphxLogo = await buildLogo(graphxSvgString);
     byLogo = await buildLogo(bySvgString);
@@ -121,15 +121,15 @@ class SplashScene extends GSprite {
     roipekerLogo.line.visible = true;
     flutterLogo.line.visible = true;
 
-    logoContainer.alignPivot();
-    logoContainer.x = stage.stageWidth / 2;
-    logoContainer.y = stage.stageHeight / 2;
+    logoContainer!.alignPivot();
+    logoContainer!.x = stage!.stageWidth / 2;
+    logoContainer!.y = stage!.stageHeight / 2;
   }
 
   void _runDemo() {
     mps.emit1(DemoEvents.run, true);
     visible = true;
-    stage.color = Colors.redAccent;
+    stage!.color = Colors.redAccent;
     _resetObjects();
     var t1 = 0.0.twn;
     var t2 = 0.0.twn;
@@ -251,11 +251,11 @@ class SplashScene extends GSprite {
   void _showGlobalMask() {
     splashCircle.graphics.clear();
     splashCircle.graphics.beginFill(Colors.white);
-    splashCircle.graphics.drawCircle(0, 0, stage.stageWidth);
+    splashCircle.graphics.drawCircle(0, 0, stage!.stageWidth);
     splashCircle.graphics.endFill();
-    stage.addChild(splashCircle);
+    stage!.addChild(splashCircle);
     splashCircle.scale = 0.1;
-    splashCircle.setPosition(stage.stageWidth / 2, stage.stageHeight / 2);
+    splashCircle.setPosition(stage!.stageWidth / 2, stage!.stageHeight / 2);
     splashCircle.tween(
       duration: .45,
       scale: 1,
@@ -268,8 +268,8 @@ class SplashScene extends GSprite {
   }
 
   void showFlutter() {
-    stage.addChild(splashCircle);
-    stage.color = kColorTransparent;
+    stage!.addChild(splashCircle);
+    stage!.color = kColorTransparent;
     splashCircle.tween(
       duration: .4,
       scale: 0,
@@ -321,7 +321,7 @@ class SplashScene extends GSprite {
   Future<LogoDrawer> buildLogo(String word) async {
     var logo = LogoDrawer();
     await logo.parseSvg(word);
-    logoContainer.addChild(logo);
+    logoContainer!.addChild(logo);
     return logo;
   }
 }

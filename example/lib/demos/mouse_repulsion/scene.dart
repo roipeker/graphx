@@ -8,21 +8,21 @@ class MouseRepulsionScene extends GSprite {
   var dots = <GraphPoint>[];
 
   double spring = .015, stiff = .02, damp = .95, radius = 150.0;
-  double radiusSq;
+  late double radiusSq;
 
-  double xoffset, yoffset;
-  GSprite container;
-  GShape mouseRadiusShape;
+  double? xoffset, yoffset;
+  late GSprite container;
+  late GShape mouseRadiusShape;
 
-  double get sw => stage.stageWidth;
-  double get sh => stage.stageHeight;
+  double get sw => stage!.stageWidth;
+  double get sh => stage!.stageHeight;
 
   @override
   void addedToStage() {
     mouseChildren = false;
     mouseRadiusShape = GShape();
     radiusSq = radius * radius;
-    sep = 6;
+    sep = 12;
     cols = 70;
     rows = 60;
 
@@ -34,8 +34,8 @@ class MouseRepulsionScene extends GSprite {
     var total = cols * rows;
     dots = List.generate(total, (index) {
       var d = GraphPoint();
-      var idx = index % cols ?? 0;
-      var idy = index ~/ cols ?? 0;
+      var idx = index % cols;
+      var idy = index ~/ cols;
       if (index == 0) {
         d.tx = d.x = 0;
         d.ty = d.y = 0;
@@ -62,7 +62,7 @@ class MouseRepulsionScene extends GSprite {
     container.x = (sw - cols * sep) / 2;
     container.y = (sh - rows * sep) / 2;
 
-    if (stage.pointer.isDown) {
+    if (stage!.pointer!.isDown) {
       radius = 60;
     } else {
       radius = 150;
@@ -75,6 +75,10 @@ class MouseRepulsionScene extends GSprite {
       var dy = d.y - my;
       var dsq = dx * dx + dy * dy;
       if (dsq < radiusSq) {
+        /// can't divide by 0
+        if (dsq == 0) {
+          dsq = 200;
+        }
         var dist = Math.sqrt(dsq);
         var tx = mx + dx / dist * radius;
         var ty = my + dy / dist * radius;
@@ -87,10 +91,7 @@ class MouseRepulsionScene extends GSprite {
       d.vy *= damp;
       d.x += d.vx;
       d.y += d.vy;
-      if (d.x.isNaN) d.x = 0;
-      if (d.y.isNaN) d.y = 0;
     }
-
     draw(container.graphics);
   }
 
@@ -125,7 +126,7 @@ class MouseRepulsionScene extends GSprite {
 }
 
 class GraphPoint extends GShape {
-  double tx = 0, ty = 0, vx = 0, vy = 0;
+  double tx = 0, ty = 0, vx = 0.0, vy = 0.0;
 
   GraphPoint() {
     mouseEnabled = false;

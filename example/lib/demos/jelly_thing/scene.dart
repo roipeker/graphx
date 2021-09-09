@@ -12,31 +12,30 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class JellyDotsScene extends GSprite {
-  List<Dot> points;
+  List<Dot>? points;
   int totalPoints = 120;
   double size = 18;
   double mouseRadius = 80.0, mouseStrength = .06, stiffness = .05;
   bool outlineJelly = false;
 
-  double get sw => stage.stageWidth;
+  double get sw => stage!.stageWidth;
 
-  double get sh => stage.stageHeight;
+  double get sh => stage!.stageHeight;
 
   void _toggleVisible(Dot d) => d.visible = !d.visible;
 
   @override
   void addedToStage() {
-    stage.keyboard.onDown.add((event) {
+    stage!.keyboard!.onDown.add((event) {
       if (event.isKey(LogicalKeyboardKey.keyD)) {
-        points.forEach(_toggleVisible);
+        points!.forEach(_toggleVisible);
       } else if (event.isKey(LogicalKeyboardKey.keyO)) {
         outlineJelly = !outlineJelly;
       } else if (event.isKey(LogicalKeyboardKey.keyR)) {
-        for (var dot in points) {
+        for (var dot in points!) {
           dot.x = dot.px = dot.ox;
           dot.y = dot.py = dot.oy;
           dot.vx = dot.vy = 0;
-
         }
       }
     });
@@ -63,7 +62,7 @@ class JellyDotsScene extends GSprite {
   @override
   void update(double delta) {
     super.update(delta);
-    if (stage.pointer.isDown) {
+    if (stage!.pointer!.isDown) {
       size = 20;
       stiffness = .15;
     } else {
@@ -71,13 +70,13 @@ class JellyDotsScene extends GSprite {
       stiffness = .05;
     }
     for (var i = 0; i < totalPoints - 1; ++i) {
-      var p0 = points[i];
+      var p0 = points![i];
       for (var j = i + 1; j < totalPoints; ++j) {
-        var p1 = points[j];
+        var p1 = points![j];
         compare(p0, p1, j == i + 1);
       }
     }
-    compare(points[totalPoints - 1], points[0], true);
+    compare(points![totalPoints - 1], points![0], true);
     updatePoints();
     draw(graphics);
   }
@@ -86,7 +85,7 @@ class JellyDotsScene extends GSprite {
     /// save touch coordinates, to avoid the matrix transformation.
     var mx = mouseX;
     var my = mouseY;
-    for (var dot in points) {
+    for (var dot in points!) {
       var dx = dot.x - mx;
       var dy = dot.y - my;
       var dist = Math.sqrt(dx * dx + dy * dy);
@@ -138,15 +137,15 @@ class JellyDotsScene extends GSprite {
     }
 
     /// get the middle points to get a smooth cubic bezier...
-    var pa = points[0];
-    var pz = points.last;
+    var pa = points![0];
+    var pz = points!.last;
     var mid1x = (pz.x + pa.x) / 2;
     var mid1y = (pz.y + pa.y) / 2;
 
     g.moveTo(mid1x, mid1y);
-    for (var i = 0; i < points.length - 1; ++i) {
-      var p0 = points[i];
-      var p1 = points[i + 1];
+    for (var i = 0; i < points!.length - 1; ++i) {
+      var p0 = points![i];
+      var p1 = points![i + 1];
       g.curveTo(
         p0.x,
         p0.y,
@@ -163,10 +162,10 @@ class JellyDotsScene extends GSprite {
 
 /// dot (point) reference.
 class Dot extends GShape {
-  double ox, oy;
-  double px, py, vx = 0, vy = 0, friction = .9;
+  double ox = 0, oy = 0;
+  double px = 0, py = 0, vx = 0, vy = 0, friction = .9;
 
-  Dot({this.px, this.py}) {
+  Dot({required this.px, required this.py}) {
     graphics
         .beginFill(Colors.yellowAccent)
         .lineStyle(2, Colors.green.withOpacity(.5))

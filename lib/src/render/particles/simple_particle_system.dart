@@ -16,7 +16,7 @@ class GSimpleParticleSystem extends GDisplayObject {
   }
 
   @override
-  GRect getBounds(GDisplayObject targetSpace, [GRect out]) {
+  GRect getBounds(GDisplayObject? targetSpace, [GRect? out]) {
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
@@ -73,7 +73,7 @@ class GSimpleParticleSystem extends GDisplayObject {
   double dispersionAngle = 0;
   double dispersionAngleVariance = 0;
   bool paused = false;
-  GTexture texture;
+  GTexture? texture;
 
   int get initialColor {
     final r = (initialRed * 0xff).toInt() << 16;
@@ -107,19 +107,17 @@ class GSimpleParticleSystem extends GDisplayObject {
   int $activeParticles = 0;
   double $lastUpdateTime = 0;
 
-  GSimpleParticle $firstParticle;
-  GSimpleParticle $lastParticle;
+  GSimpleParticle? $firstParticle;
+  GSimpleParticle? $lastParticle;
 
   void _setInitialParticlePosition(GSimpleParticle p) {
     p.x = useWorldSpace ? x : 0;
     if (dispersionXVariance > 0) {
-      p.x +=
-          dispersionXVariance * Math.random() - dispersionXVariance * .5;
+      p.x += dispersionXVariance * Math.random() - dispersionXVariance * .5;
     }
     p.y = useWorldSpace ? y : 0;
     if (dispersionYVariance > 0) {
-      p.y +=
-          dispersionYVariance * Math.random() - dispersionYVariance * .5;
+      p.y += dispersionYVariance * Math.random() - dispersionYVariance * .5;
     }
     p.rotation = initialAngle;
     if (initialAngleVariance > 0) {
@@ -151,16 +149,15 @@ class GSimpleParticleSystem extends GDisplayObject {
 
   void _setPivot() {
     /// used (texture.width)...
-    particlePivotX = texture.nativeWidth.toDouble() * .5;
-    particlePivotY = texture.nativeHeight.toDouble() * .5;
+    particlePivotX = texture!.nativeWidth.toDouble() * .5;
+    particlePivotY = texture!.nativeHeight.toDouble() * .5;
   }
 
-  double particlePivotX;
-  double particlePivotY;
+  double? particlePivotX;
+  late double particlePivotY;
 
   void forceBurst() {
-    var currentEmission =
-        (emission + emissionVariance * Math.random()).toInt();
+    var currentEmission = (emission + emissionVariance * Math.random()).toInt();
     for (var i = 0; i < currentEmission; ++i) {
       activateParticle();
     }
@@ -214,28 +211,28 @@ class GSimpleParticleSystem extends GDisplayObject {
   }
 
   @override
-  void $applyPaint(ui.Canvas canvas) {
+  void $applyPaint(ui.Canvas? canvas) {
     render(canvas);
   }
 
   bool useAlphaOnColorFilter = false;
 
-  void Function(ui.Canvas, ui.Paint) drawCallback;
+  void Function(ui.Canvas?, ui.Paint)? drawCallback;
 
   final nativePaint = ui.Paint()
     ..color = kColorBlack
     ..filterQuality = ui.FilterQuality.low;
 
-  void render(ui.Canvas canvas) {
+  void render(ui.Canvas? canvas) {
     if (texture == null) return;
     var particle = $firstParticle;
     while (particle != null) {
       var next = particle.$next;
-      double tx, ty, sx, sy;
+      double? tx, ty, sx, sy;
       tx = particle.x;
       ty = particle.y;
-      sx = particle.scaleX / texture.scale;
-      sy = particle.scaleY / texture.scale;
+      sx = particle.scaleX / texture!.scale!;
+      sy = particle.scaleY / texture!.scale!;
       if (useWorldSpace) {
         sx *= scaleX;
         sy *= scaleY;
@@ -252,20 +249,20 @@ class GSimpleParticleSystem extends GDisplayObject {
       var filterColor = useAlphaOnColorFilter ? _color : _color.withOpacity(1);
       nativePaint.colorFilter =
           ui.ColorFilter.mode(filterColor, particleBlendMode);
-      canvas.save();
+      canvas!.save();
       canvas.translate(tx, ty);
       canvas.rotate(particle.rotation);
       canvas.scale(sx, sy);
-      canvas.translate(-particlePivotX, -particlePivotY);
+      canvas.translate(-particlePivotX!, -particlePivotY);
 
       // $canvas.scale(particle.scaleX, particle.scaleY);
       // $canvas.rotate(particle.rotation);
       /// render in canvas.
       if (drawCallback != null) {
-        drawCallback(canvas, nativePaint);
+        drawCallback!(canvas, nativePaint);
 //        $canvas.drawImage(texture.source, Offset.zero, nativePaint);
       } else {
-        canvas.drawImage(texture.root, ui.Offset.zero, nativePaint);
+        canvas.drawImage(texture!.root!, ui.Offset.zero, nativePaint);
       }
       // $canvas.drawImage(texture.source, Offset(tx, ty), nativePaint);
       canvas.restore();
@@ -284,7 +281,7 @@ class GSimpleParticleSystem extends GDisplayObject {
     var p = GSimpleParticle.get();
     if ($firstParticle != null) {
       p.$next = $firstParticle;
-      $firstParticle.$prev = p;
+      $firstParticle!.$prev = p;
       $firstParticle = p;
     } else {
       $firstParticle = p;
@@ -294,8 +291,8 @@ class GSimpleParticleSystem extends GDisplayObject {
   }
 
   void $deactivateParticle(GSimpleParticle particle) {
-    if (particle == $lastParticle) $lastParticle = $lastParticle.$prev;
-    if (particle == $firstParticle) $firstParticle = $firstParticle.$next;
+    if (particle == $lastParticle) $lastParticle = $lastParticle!.$prev;
+    if (particle == $firstParticle) $firstParticle = $firstParticle!.$next;
     particle.dispose();
   }
 
@@ -304,7 +301,7 @@ class GSimpleParticleSystem extends GDisplayObject {
   @override
   void dispose() {
     while ($firstParticle != null) {
-      $deactivateParticle($firstParticle);
+      $deactivateParticle($firstParticle!);
     }
     ScenePainter.current.onUpdate.remove(update);
     super.dispose();
@@ -312,7 +309,7 @@ class GSimpleParticleSystem extends GDisplayObject {
 
   void clear() {
     while ($firstParticle != null) {
-      $deactivateParticle($firstParticle);
+      $deactivateParticle($firstParticle!);
     }
   }
 }

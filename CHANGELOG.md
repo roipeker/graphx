@@ -1,6 +1,15 @@
-## [0.9.11]
-- last non-nullsafety commit.
-- fix missing `pivotY` validation for transformations.
+## [1.0.2]
+- merged null-safety branch.
+- upgraded Dart constraints >= 2.13
+- changed `GKeyboard` to use `GKeys` alias for `LogicalKeyboardKey` (breaking change in Flutter 2.5).
+- defaults `SceneBuilderWidget.autoSize` to false, avoid exceptions on Flex widgets.
+- added warning message for empty sized widget layout in `SceneBuilderWidget`. 
+- put back `ResourceLoader.loadNetworkSvg` and remove most nullable Futures for non network assets.
+- cleanup some code + dart analysis.
+- cleanup examples code
+
+## [1.0.1]
+- more null safety migrations.
 - experimental GDropShadowFilter.innerShadow (hurts performance).
 - add SceneBuilderWidget.autoSize to auto expand the scene on the parent widget.
 - fix bug with GText in `LayoutUtils.row`.
@@ -8,8 +17,9 @@
 - prevents assigning `NaN` to GDisplayObject transform properties based on `double`.
 - some minor fixes and forced non-nullable properties.
 
-## [0.9.10]
-- start port to null-safety.
+## [1.0.0-nullsafety.0]
+- initial migration to null-safety
+- fix non-working examples.
 - fix a bug with GText layout.
 
 ## [0.9.9]

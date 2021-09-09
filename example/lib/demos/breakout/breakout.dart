@@ -19,9 +19,7 @@ class BreakoutMain extends StatelessWidget {
         body: Center(
           child: Stack(
             children: [
-              SizedBox(
-                // width: 160,
-                // height: 192,
+              Positioned.fill(
                 child: SceneBuilderWidget(
                   builder: () => SceneController(
                     front: BreakoutAtari(),

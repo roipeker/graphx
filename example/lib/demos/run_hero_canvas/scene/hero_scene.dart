@@ -6,20 +6,20 @@ import 'package:graphx/graphx.dart';
 class PainterRawScene extends GSprite {
   @override
   Future<void> addedToStage() async {
-    stage.color = Colors.black;
-    stage.maskBounds = true;
+    stage!.color = Colors.black;
+    stage!.maskBounds = true;
 
     /// load assets!
     await _loadAssets();
 
     addChild(ParallaxView());
 
-    stage.keyboard.onDown.add((e) {
+    stage!.keyboard!.onDown.add((e) {
       if (e.isKey(LogicalKeyboardKey.space)) {
         mps.emit('jump');
       }
     });
-    stage.onMouseDown.add((event) {
+    stage!.onMouseDown.add((event) {
       mps.emit('jump');
     });
   }
@@ -33,7 +33,10 @@ class PainterRawScene extends GSprite {
     await ResourceLoader.loadTexture(
         'assets/run_hero/parallax/layer_03.png', 2, 'l3');
     await ResourceLoader.loadTexture(
-        'assets/run_hero/parallax/layer_04.png', 2, 'l4',);
+      'assets/run_hero/parallax/layer_04.png',
+      2,
+      'l4',
+    );
     await ResourceLoader.loadGif(
       'assets/run_hero/run_outline.gif',
       resolution: 1,
@@ -48,13 +51,13 @@ class PainterRawScene extends GSprite {
 }
 
 class ParallaxView extends GDisplayObjectContainer {
-  List<GTexture> layers = [];
+  List<GTexture?> layers = [];
   List<Matrix4> matrices = <Matrix4>[];
   List<Paint> paintings = [];
 
   final jumpY = 0.0.twn;
   int heroFrame = 0;
-  GifAtlas hero;
+  GifAtlas? hero;
 
   final gradientPaint = Paint();
   final heroPaint = Paint();
@@ -90,11 +93,11 @@ class ParallaxView extends GDisplayObjectContainer {
   @override
   void addedToStage() {
     gradientPaint.blendMode = BlendMode.color;
-    final gradCenter = Offset(stage.stageWidth / 2, stage.stageHeight / 2);
+    final gradCenter = Offset(stage!.stageWidth / 2, stage!.stageHeight / 2);
     final gradMatrix = Matrix4.identity()..scale(.9);
     gradientPaint.shader = ui.Gradient.radial(
       gradCenter,
-      stage.stageWidth,
+      stage!.stageWidth,
       [Colors.red.withOpacity(.3), Colors.blue.withOpacity(1)],
       [0.1, .9],
       TileMode.clamp,
@@ -105,9 +108,9 @@ class ParallaxView extends GDisplayObjectContainer {
   void heroState(String id) => hero = ResourceLoader.getGif(id);
 
   @override
-  void $applyPaint(Canvas canvas) {
-    canvas.save();
-    canvas.scale(1 / (layers[0].scale));
+  void $applyPaint(Canvas? canvas) {
+    canvas!.save();
+    canvas.scale(1 / layers[0]!.scale!);
     matrices[0].translate(-.5);
     matrices[1].translate(-.8);
     matrices[2].translate(-3.0);
@@ -125,7 +128,7 @@ class ParallaxView extends GDisplayObjectContainer {
 
   void drawLayer(Canvas canvas, int index) {
     paintings[index].shader = ImageShader(
-      layers[index].root,
+      layers[index]!.root!,
       TileMode.repeated,
       TileMode.mirror,
       matrices[index].storage,
@@ -135,9 +138,9 @@ class ParallaxView extends GDisplayObjectContainer {
 
   void drawHero(Canvas canvas) {
     if (++heroFrame % 4 == 0) {
-      hero.nextFrame();
+      hero!.nextFrame();
     }
-    var img = hero.root;
+    var img = hero!.root!;
     // heroPaint.invertColors = true;
     // heroPaint.blendMode = BlendMode.colorDodge;
     var heroScale = 2.0;
@@ -145,7 +148,7 @@ class ParallaxView extends GDisplayObjectContainer {
     canvas.save();
     canvas.translate(300.0, floorY);
     canvas.scale(heroScale);
-    canvas.translate(-hero.width / 2, -hero.height);
+    canvas.translate(-hero!.width! / 2, -hero!.height!);
     canvas.drawImage(img, Offset(0, 0), heroPaint);
     canvas.restore();
   }
