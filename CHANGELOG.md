@@ -1,3 +1,6 @@
+## [1.0.3]
+- code updated to improve points.
+
 ## [1.0.2]
 - merged null-safety branch.
 - upgraded Dart constraints >= 2.13
