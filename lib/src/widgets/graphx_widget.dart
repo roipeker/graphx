@@ -91,7 +91,7 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
           onExit: converter.pointerExit,
           onHover: converter.pointerHover,
           cursor: _controller.currentCursor == null ? MouseCursor.defer
-              : _controller.currentCursor!,
+: _controller.currentCursor!,
           opaque: widget.mouseOpaque,
           child: Listener(
             child: child,
