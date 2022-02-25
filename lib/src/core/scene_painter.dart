@@ -142,8 +142,9 @@ class ScenePainter with EventDispatcherMixin {
   }
 
   void _detectMouseMove() {
-    // If there was no mouse move dispatch a still event this handles static mouse OVER/OUT for moving/hiding objects
-    if (!_mouseMoveInputDetected && _lastMouseX != -1000000) {
+    // If there was no mouse move, dispatch a still event.
+    // This handles static mouse OVER/OUT for moving/hiding objects.
+    if (_stage!.mouseEnableStillEvents && !_mouseMoveInputDetected && _lastMouseX != -1000000) {
       final input = MouseInputData(
         target: _stage,
         dispatcher: _stage!,

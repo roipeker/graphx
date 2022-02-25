@@ -31,6 +31,10 @@ class Stage extends GDisplayObjectContainer
 
   bool maskBounds = false;
 
+  /// This enable the system to track mouseover / mouseout when the mouse is not moving but objects on the scene are moving or appearing / disappearing
+  /// if you dont need this, you can turn it off to avoid streaming `MouseInputType.still` events to the stage.
+  bool mouseEnableStillEvents = true;
+
   @override
   String toString() {
     return '$runtimeType';
