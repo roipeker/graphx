@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 enum KeyEventType { down, up }
+
 typedef GKey = LogicalKeyboardKey;
 
 class KeyboardEventData {

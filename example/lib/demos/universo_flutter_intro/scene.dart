@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
@@ -28,10 +26,7 @@ class UniversoFlutterScene extends GSprite {
 
     planetCirc = GShape();
     logo.addChild(planetCirc);
-    planetCirc.graphics
-        .beginFill(const Color(0xff235998))
-        .drawCircle(0, 0, 415 / 2)
-        .endFill();
+    planetCirc.graphics.beginFill(const Color(0xff235998)).drawCircle(0, 0, 415 / 2).endFill();
 
     ringBack = _buildRing(0);
     ringFront = _buildRing(2);
@@ -62,10 +57,7 @@ class UniversoFlutterScene extends GSprite {
 
   GShape _buildPill(GSprite doc, double tw, double th) {
     var pill = GShape();
-    pill.graphics
-        .beginFill(Colors.white)
-        .drawRoundRect(0, 0, tw, th, 13)
-        .endFill();
+    pill.graphics.beginFill(Colors.white).drawRoundRect(0, 0, tw, th, 13).endFill();
     doc.addChild(pill);
     pill.pivotX = pill.pivotY = th / 2;
     return pill;
@@ -73,10 +65,7 @@ class UniversoFlutterScene extends GSprite {
 
   GShape _buildRing(int childIndex) {
     var ring = GShape();
-    ring.graphics
-        .lineStyle(28, const Color(0xff6ECEF7))
-        .drawCircle(0, 0, 100)
-        .endFill();
+    ring.graphics.lineStyle(28, const Color(0xff6ECEF7)).drawCircle(0, 0, 100).endFill();
     ring.scaleX = 2.7;
     ring.scaleY = .6;
     ring.rotation = deg2rad(-45 / 2);

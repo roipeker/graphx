@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 
 import '../../graphx.dart';
-import '../events/mixins.dart';
 
 /// The Stage class represents the main drawing area.
 /// The Stage represents the entire area where a GraphX `ScenePainter` content
@@ -122,8 +121,7 @@ class Stage extends GDisplayObjectContainer
           " or the parent is defining the constraints.",
         );
       }
-      _stageRectNative =
-          _stageRect.setTo(0, 0, _size!.width, _size!.height).toNative();
+      _stageRectNative = _stageRect.setTo(0, 0, _size!.width, _size!.height).toNative();
       _stageBoundsRectPath;
       _stageBoundsRectPath.reset();
       _stageBoundsRectPath.addRect(_stageRectNative!);

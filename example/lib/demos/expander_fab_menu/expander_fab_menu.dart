@@ -63,7 +63,7 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     menuScene.requestPositionCallback = getPosition;
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getPosition();
     });
   }

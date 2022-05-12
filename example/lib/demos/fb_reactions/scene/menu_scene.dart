@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide MenuItem;
 import 'package:graphx/graphx.dart';
 
 import 'menu_item.dart';
@@ -58,8 +58,7 @@ class MenuScene extends GSprite {
 
   @override
   Future<void> addedToStage() async {
-    final availableMenuW =
-        (menuWidth - bgPadding * 2 - (numItems - 1) * itemSep);
+    final availableMenuW = (menuWidth - bgPadding * 2 - (numItems - 1) * itemSep);
     itemSize = (availableMenuW - bigSize) / (numItems - 1);
     bigSizeScale = bigSize / itemSize!;
 
@@ -67,10 +66,7 @@ class MenuScene extends GSprite {
     menuContainer = GSprite();
     addChild(menuContainer);
     bg = GShape();
-    bg.graphics
-        .beginFill(Colors.blueAccent)
-        .drawRoundRect(0, 0, menuWidth, bgH, bgH / 2)
-        .endFill();
+    bg.graphics.beginFill(Colors.blueAccent).drawRoundRect(0, 0, menuWidth, bgH, bgH / 2).endFill();
     menuContainer.addChild(bg);
     menuContainer.alignPivot();
 
@@ -91,12 +87,7 @@ class MenuScene extends GSprite {
 
     /// scale it to 70%, looks better.
     menuContainer.tween(
-        duration: .8,
-        y: '-10',
-        scale: .7,
-        alpha: 1,
-        rotation: 0,
-        ease: GEase.elasticOut);
+        duration: .8, y: '-10', scale: .7, alpha: 1, rotation: 0, ease: GEase.elasticOut);
 
     stage!.onMouseUp.addOnce((event) {
       menuContainer.tween(

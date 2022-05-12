@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import '../../graphx.dart';
-import '../utils/utils.dart';
 
 class GSvgShape extends GDisplayObject {
   static final GMatrix _sHelperMatrix = GMatrix();

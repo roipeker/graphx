@@ -127,7 +127,7 @@ class GTween {
   /// or make GTicker global... being able to track unique refresh frames
   /// is a must.
   static void processTick(double elapsed) {
-    final ts = SchedulerBinding.instance!.currentFrameTimeStamp;
+    final ts = SchedulerBinding.instance.currentFrameTimeStamp;
     if (_lastFrameTimeStamp == ts) return;
     GTween.ticker.dispatch(elapsed);
     _lastFrameTimeStamp = ts;
@@ -144,8 +144,7 @@ class GTween {
 
   static final Set<GxAnimatableBuilder> _tweenableBuilders = {};
 
-  static void registerWrap(GxAnimatableBuilder builder) =>
-      _tweenableBuilders.add(builder);
+  static void registerWrap(GxAnimatableBuilder builder) => _tweenableBuilders.add(builder);
 
   static void _initEngine() {
     initializedEngine = true;
@@ -207,8 +206,7 @@ class GTween {
 
     if (target is List) {
       var targetList = target as List;
-      if (targetList.first is Map<String, dynamic> ||
-          targetList.first is GTweenable) {
+      if (targetList.first is Map<String, dynamic> || targetList.first is GTweenable) {
         _targets = List.of(target as Iterable<dynamic>);
       }
 
@@ -253,9 +251,7 @@ class GTween {
     GTween._last = this;
 
     if (nanoVars.immediateRender! ||
-        (duration == 0 &&
-            nanoVars.delay == 0 &&
-            nanoVars.immediateRender != false)) {
+        (duration == 0 && nanoVars.delay == 0 && nanoVars.immediateRender != false)) {
       _render(0.0);
     }
   }
@@ -405,8 +401,7 @@ class GTween {
     var pt = _firstPT;
     if (tg is List) {
       var targetList = tg;
-      if (targetList.first is Map<String, dynamic> ||
-          targetList.first is GTweenable) {
+      if (targetList.first is Map<String, dynamic> || targetList.first is GTweenable) {
         var i = targetList.length;
         while (--i > -1) {
           kill(targetList[i]);
@@ -469,16 +464,14 @@ class GTween {
   }
 
   /// Shortcut to start a tween on an `target`.
-  static GTween to(Object? target, double duration, Map? vars,
-      [GVars? nanoVars]) {
+  static GTween to(Object? target, double duration, Map? vars, [GVars? nanoVars]) {
     nanoVars ??= GVars();
     return GTween(target, duration, vars, nanoVars);
   }
 
   /// Shortcut to start a tween on an `target`, start from the end values
   /// to the start values, this option flips the tweens.
-  static GTween from(Object target, double duration, Map vars,
-      [GVars? nanoVars]) {
+  static GTween from(Object target, double duration, Map vars, [GVars? nanoVars]) {
     nanoVars ??= GVars();
     nanoVars.runBackwards = true;
     nanoVars.immediateRender ??= true;

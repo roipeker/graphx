@@ -1,15 +1,11 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart' as painting;
+
 import '../../graphx.dart';
 
 abstract class GDisplayObject
-    with
-        DisplayListSignalsMixin,
-        RenderSignalMixin,
-        MouseSignalsMixin,
-        DisplayMasking {
+    with DisplayListSignalsMixin, RenderSignalMixin, MouseSignalsMixin, DisplayMasking {
   GDisplayObjectContainer? $parent;
   static GDisplayObject? $currentDrag;
   static GRect? $currentDragBounds;
@@ -150,8 +146,7 @@ abstract class GDisplayObject
           $onMouseMove?.dispatch(mouseInput);
           break;
         case MouseInputType.up:
-          if ($mouseDownObj == object &&
-              ($onMouseClick != null || $onMouseDoubleClick != null)) {
+          if ($mouseDownObj == object && ($onMouseClick != null || $onMouseDoubleClick != null)) {
             var mouseClickInput = input.clone(this, object, MouseInputType.up);
             $onMouseClick?.dispatch(mouseClickInput);
 
@@ -694,8 +689,7 @@ abstract class GDisplayObject
     return out;
   }
 
-  static GDisplayObject _findCommonParent(
-      GDisplayObject obj1, GDisplayObject obj2) {
+  static GDisplayObject _findCommonParent(GDisplayObject obj1, GDisplayObject obj2) {
     GDisplayObject? current = obj1;
 
     /// TODO: use faster Hash access.
@@ -779,14 +773,9 @@ abstract class GDisplayObject
   /// rendering.
   void requiresRedraw() {
     /// TODO: notify parent the current state of this DisplayObject.
-    $hasTouchableArea =
-        visible && $maskee == null && _scaleX != 0 && _scaleY != 0;
+    $hasTouchableArea = visible && $maskee == null && _scaleX != 0 && _scaleY != 0;
 
-    $hasVisibleArea = $alpha != 0 &&
-        visible &&
-        $maskee == null &&
-        _scaleX != 0 &&
-        _scaleY != 0;
+    $hasVisibleArea = $alpha != 0 && visible && $maskee == null && _scaleX != 0 && _scaleY != 0;
   }
 
   void removedFromStage() {}
@@ -842,28 +831,21 @@ abstract class GDisplayObject
     final _hasTranslate = _x != 0 || _y != 0;
     final _hasPivot = _pivotX != 0 || _pivotY != 0;
     final _hasSkew = _skewX != 0 || _skewY != 0;
-    final needSave = _hasTranslate ||
-        _hasScale ||
-        rotation != 0 ||
-        _hasPivot ||
-        _hasSkew ||
-        _is3D;
+    final needSave = _hasTranslate || _hasScale || rotation != 0 || _hasPivot || _hasSkew || _is3D;
 
     final $hasFilters = hasFilters;
     // final hasColorize = $colorize?.alpha > 0 ?? false;
     // var _saveLayer = this is DisplayObjectContainer &&
     //     (this as DisplayObjectContainer).hasChildren &&
     //     ($alpha != 1 || $hasColorize || $hasFilters);
-    var _saveLayer =
-        allowSaveLayer && $alpha != 1 || $hasColorize || $hasFilters;
+    var _saveLayer = allowSaveLayer && $alpha != 1 || $hasColorize || $hasFilters;
     // if (this is DisplayObjectContainer &&
     //     (this as DisplayObjectContainer).hasChildren) {
     // }
 
     final hasMask = mask != null || maskRect != null;
-    final showDebugBounds =
-        DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
-            ($debugBounds || DisplayBoundsDebugger.debugAll);
+    final showDebugBounds = DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
+        ($debugBounds || DisplayBoundsDebugger.debugAll);
 
     GRect? _cacheLocalBoundsRect;
     if (showDebugBounds || _saveLayer) {
@@ -949,8 +931,7 @@ abstract class GDisplayObject
 
     if (_composerFilters != null) {
       for (var filter in _composerFilters) {
-        if (filter.hideObject ||
-            (filter is GDropShadowFilter && filter.innerShadow)) {
+        if (filter.hideObject || (filter is GDropShadowFilter && filter.innerShadow)) {
           filterHidesObject = true;
         }
         filter.process(canvas, $applyPaint);
@@ -1014,8 +995,7 @@ abstract class GDisplayObject
       ancestor = ancestor.$parent;
     }
     if (ancestor == this) {
-      throw ArgumentError(
-          'An object cannot be added as a child to itself or one '
+      throw ArgumentError('An object cannot be added as a child to itself or one '
           'of its children (or children\'s children, etc.)');
     } else {
       $parent = value;
@@ -1049,8 +1029,7 @@ abstract class GDisplayObject
   /// transformations (x, y, scale, etc) if you intend to use in it's "original"
   /// form.
   ui.Picture createPicture(
-      [void Function(ui.Canvas)? prePaintCallback,
-      void Function(ui.Canvas)? postPaintCallback]) {
+      [void Function(ui.Canvas)? prePaintCallback, void Function(ui.Canvas)? postPaintCallback]) {
     final r = ui.PictureRecorder();
     final c = ui.Canvas(r);
     prePaintCallback?.call(c);
@@ -1081,8 +1060,7 @@ abstract class GDisplayObject
     if (resolution != 1) {
       rect *= resolution;
     }
-    final needsAdjust =
-        (rect.left != 0 || rect.top != 0) && adjustOffset || resolution != 1;
+    final needsAdjust = (rect.left != 0 || rect.top != 0) && adjustOffset || resolution != 1;
     ui.Picture picture;
     if (needsAdjust) {
       picture = createPicture((canvas) {

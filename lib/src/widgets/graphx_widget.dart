@@ -1,8 +1,6 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
-import '../core/core.dart';
 
 class SceneBuilderWidget extends StatefulWidget {
   final Widget? child;
@@ -49,7 +47,7 @@ class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
     _controller = widget.builder();
     _controller.resolveWindowBounds = _getRenderObjectWindowBounds;
     _controller.$init();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (context.size?.isEmpty == true) {
         trace("""WARNING:
 `SceneBuilderWidget` is being rendered without layout, empty sized.

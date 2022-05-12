@@ -1,10 +1,7 @@
 import 'dart:collection';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 import '../../graphx.dart';
-import 'signal.dart';
 
 mixin EventDispatcherMixin implements Listenable {
   final _updaters = HashSet<VoidCallback>();
@@ -29,8 +26,7 @@ mixin EventDispatcherMixin implements Listenable {
 mixin TickerSignalMixin {
   EventSignal<double>? $onEnterFrame;
 
-  EventSignal<double> get onEnterFrame =>
-      $onEnterFrame ??= EventSignal<double>();
+  EventSignal<double> get onEnterFrame => $onEnterFrame ??= EventSignal<double>();
 
   void $disposeTickerSignals() {
     $onEnterFrame?.removeAll();
@@ -84,8 +80,7 @@ mixin RenderSignalMixin {
 
   EventSignal<Canvas?> get onPrePaint => $onPrePaint ??= EventSignal<Canvas?>();
 
-  EventSignal<Canvas?> get onPostPaint =>
-      $onPostPaint ??= EventSignal<Canvas?>();
+  EventSignal<Canvas?> get onPostPaint => $onPostPaint ??= EventSignal<Canvas?>();
 
 //  EventSignal<Canvas> get onPaint => $onPaint ??= EventSignal<Canvas>();
 
@@ -128,8 +123,7 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
   EventSignal<T>? $onMouseWheel;
 
   EventSignal<T> get onMouseClick => $onMouseClick ??= EventSignal();
-  EventSignal<T> get onMouseDoubleClick =>
-      $onMouseDoubleClick ??= EventSignal();
+  EventSignal<T> get onMouseDoubleClick => $onMouseDoubleClick ??= EventSignal();
   EventSignal<T> get onRightMouseDown => $onRightMouseDown ??= EventSignal();
   EventSignal<T> get onMouseDown => $onMouseDown ??= EventSignal();
   EventSignal<T> get onMouseUp => $onMouseUp ??= EventSignal();
