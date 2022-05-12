@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import '../../utils/utils.dart';

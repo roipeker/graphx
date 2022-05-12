@@ -1,12 +1,7 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
-import '../events/keyboard_data.dart';
-import '../events/pointer_data.dart';
-import 'keyboard_manager.dart';
-import 'pointer_manager.dart';
 
 class InputConverter {
   final PointerManager pointer;

@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
+
 import 'scene/rating_scene.dart';
 
 class RatingStarsMain extends StatelessWidget {

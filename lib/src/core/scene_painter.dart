@@ -170,8 +170,7 @@ class ScenePainter with EventDispatcherMixin {
     //   trace(input.type);
     // }
     /// process it.
-    if (input.type == MouseInputType.move ||
-        input.type == MouseInputType.exit) {
+    if (input.type == MouseInputType.move || input.type == MouseInputType.exit) {
       _mouseMoveInputDetected = true;
       _lastMouseX = input.stageX;
       _lastMouseY = input.stageY;
@@ -264,6 +263,5 @@ class _GraphicsPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) =>
-      scene.shouldRepaint();
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => scene.shouldRepaint();
 }

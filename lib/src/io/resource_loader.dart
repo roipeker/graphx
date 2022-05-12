@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/services.dart';
-
 import '../../graphx.dart';
 import 'network_image_loader.dart';
 
@@ -115,8 +113,7 @@ abstract class ResourceLoader {
       onError: onError,
     );
     if (response.isError) {
-      throw FlutterError(
-          'Unable to load SVG $url.\nReason: ${response.reasonPhrase}');
+      throw FlutterError('Unable to load SVG $url.\nReason: ${response.reasonPhrase}');
     }
     if (response.isSvg && cacheId != null) {
       svgCache[cacheId] = response.svgData!;
@@ -147,8 +144,7 @@ abstract class ResourceLoader {
       onError: onError,
     );
     if (response.isError) {
-      throw FlutterError(
-          'Unable to load network texture $url.\nReason: ${response.reasonPhrase}');
+      throw FlutterError('Unable to load network texture $url.\nReason: ${response.reasonPhrase}');
     }
     if (response.isImage && cacheId != null) {
       textureCache[cacheId] = response.texture!;
@@ -176,8 +172,7 @@ abstract class ResourceLoader {
     String? cacheId,
   ]) async {
     cacheId ??= path;
-    svgCache[cacheId] =
-        await SvgUtils.svgDataFromString(await loadString(path));
+    svgCache[cacheId] = await SvgUtils.svgDataFromString(await loadString(path));
     return svgCache[cacheId]!;
   }
 

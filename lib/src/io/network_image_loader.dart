@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
+
 import 'package:http/http.dart' as http;
+
 import '../../graphx.dart';
-import '../utils/svg_utils.dart';
 
 typedef NetworkEventCallback = Function(NetworkImageEvent);
 

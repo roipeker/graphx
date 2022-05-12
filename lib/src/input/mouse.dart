@@ -1,5 +1,3 @@
-import 'package:flutter/rendering.dart';
-
 import '../../graphx.dart';
 
 /// Accessible from `pointer_manager.dart`

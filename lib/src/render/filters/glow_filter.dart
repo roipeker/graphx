@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
+
 import '../../../graphx.dart';
-import 'composer_filter.dart';
 
 class GlowFilter extends GComposerFilter {
   double _blurX = 0;

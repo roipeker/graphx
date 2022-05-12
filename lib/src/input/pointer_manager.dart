@@ -1,6 +1,3 @@
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-
 import '../../graphx.dart';
 
 class PointerManager<T extends PointerEventData> {

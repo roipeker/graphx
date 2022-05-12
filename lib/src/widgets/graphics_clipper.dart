@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/rendering.dart';
+
 import '../../graphx.dart';
 
 /// Custom Clipper that uses [Graphics] API instead of [Path].
@@ -38,8 +37,7 @@ abstract class GraphicsClipper extends CustomClipper<Path> {
         pivotY != 1;
     if (!hasTransform) return p;
     final m = Pool.getMatrix();
-    m.setTransform(
-        x, y, pivotX, pivotY, scaleX, scaleY, skewX, skewY, rotation);
+    m.setTransform(x, y, pivotX, pivotY, scaleX, scaleY, skewX, skewY, rotation);
     final result = p.transform(m.toNative().storage);
     Pool.putMatrix(m);
     return result;

@@ -8,7 +8,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:graphx/graphx.dart';
 
 class AltitudIndicatorScene extends GSprite {
@@ -37,10 +36,7 @@ class AltitudIndicatorScene extends GSprite {
 
     var mainMask = GShape();
     var radius = meterSize / 2;
-    mainMask.graphics
-        .beginFill(Colors.red.withOpacity(.3))
-        .drawCircle(0, 0, radius)
-        .endFill();
+    mainMask.graphics.beginFill(Colors.red.withOpacity(.3)).drawCircle(0, 0, radius).endFill();
     addChild(mainMask);
     mainContainer.mask = mainMask;
 
@@ -57,11 +53,8 @@ class AltitudIndicatorScene extends GSprite {
   }
 
   Future<void> drawInnerCircle() async {
-    innerCircleSize = meterSize -
-        outlineThickness1 * 2 -
-        outlineThickness2 * 2 +
-        4 -
-        innerCircSeparation * 2;
+    innerCircleSize =
+        meterSize - outlineThickness1 * 2 - outlineThickness2 * 2 + 4 - innerCircSeparation * 2;
 
     var maskCircle = GShape()
       ..graphics
@@ -240,10 +233,7 @@ class AltitudIndicatorScene extends GSprite {
       }
 
       final underlineW = 28.0;
-      spr.graphics
-          .moveTo(-underlineW / 2, underlineY)
-          .lineTo(underlineW / 2, underlineY)
-          .endFill();
+      spr.graphics.moveTo(-underlineW / 2, underlineY).lineTo(underlineW / 2, underlineY).endFill();
 
       spr.addChild(tf1);
       spr.addChild(tf2);
@@ -301,9 +291,7 @@ class AltitudIndicatorScene extends GSprite {
 
     /// draw the floor.
     var skyFloor = GShape();
-    skyFloor.graphics
-        .beginFill(Color(0xff5ABAEC))
-        .drawRect(0, 0, meterSize, meterSize / 2);
+    skyFloor.graphics.beginFill(Color(0xff5ABAEC)).drawRect(0, 0, meterSize, meterSize / 2);
     skyFloor.graphics
         .beginFill(Color(0xff5E5351))
         .drawRect(0, meterSize / 2, meterSize, meterSize / 2);
@@ -369,8 +357,7 @@ class AltitudIndicatorScene extends GSprite {
   }
 
   GShape buildBox(Color color, double width, double height) {
-    return GShape()
-      ..graphics.beginFill(color).drawRect(0, 0, width, height).endFill();
+    return GShape()..graphics.beginFill(color).drawRect(0, 0, width, height).endFill();
   }
 
   GDisplayObject buildArrow({

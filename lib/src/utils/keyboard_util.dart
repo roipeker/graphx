@@ -1,5 +1,3 @@
-import 'package:flutter/services.dart';
-
 import '../../graphx.dart';
 
 /// Utility class to work easily with keyboard events.

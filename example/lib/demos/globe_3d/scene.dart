@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
@@ -22,8 +20,7 @@ class Globe3dScene extends GSprite {
   }
 
   Future<void> loadStuff() async {
-    await ResourceLoader.loadTexture(
-        'assets/globe_3d/world_texture.jpg', 1, 'map');
+    await ResourceLoader.loadTexture('assets/globe_3d/world_texture.jpg', 1, 'map');
     trace('map is:', ResourceLoader.getTexture('map'));
     makeTriangles();
     draw();

@@ -1,6 +1,6 @@
 name: graphx
 description: Render API on top of CustomPainter to power-up your Flutter apps to the next level.
-version: 1.0.3
+version: 1.0.4
 homepage: https://github.com/roipeker/graphx
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   xml: ^5.2.0
   http: ^0.13.3
-  flutter_svg: ^0.22.0
+  flutter_svg: ^1.0.1
 
 dev_dependencies:
   flutter_test:
