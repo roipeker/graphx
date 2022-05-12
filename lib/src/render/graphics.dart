@@ -378,8 +378,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double anchorX,
     double anchorY,
   ) {
-    _path!
-        .cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
+    _path!.cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
     return this;
   }
 
@@ -494,7 +493,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     for (var i = 0; i < len; ++i) {
       list[i] = points[i].toNative();
     }
-    _path!.addPolygon(list, true);
+    _path!.addPolygon(list, closePolygon);
     return this;
   }
 
@@ -991,8 +990,7 @@ class _GraphVertices {
     Int32List? _colors;
     Uint16List? _indices;
     if (uvtData != null && adjustedUvtData != null) {
-      _textureCoordinates =
-          Float32List.fromList(adjustedUvtData as List<double>);
+      _textureCoordinates = Float32List.fromList(adjustedUvtData as List<double>);
     }
     if (colors != null) _colors = Int32List.fromList(colors!);
     if (indices != null) _indices = Uint16List.fromList(indices!);
