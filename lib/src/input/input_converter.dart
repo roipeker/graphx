@@ -17,6 +17,7 @@ class InputConverter {
   void pointerEnter(PointerEnterEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.enter,
+      pointer: event.pointer,
       rawEvent: event,
     ));
   }
@@ -24,6 +25,7 @@ class InputConverter {
   void pointerExit(PointerExitEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.exit,
+      pointer: event.pointer,
       rawEvent: event,
     ));
   }
@@ -31,6 +33,7 @@ class InputConverter {
   void pointerHover(PointerHoverEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.hover,
+      pointer: event.pointer,
       rawEvent: event,
     ));
   }
@@ -40,6 +43,7 @@ class InputConverter {
   void pointerSignal(PointerSignalEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.scroll,
+      pointer: event.pointer,
       rawEvent: event as PointerScrollEvent,
     ));
   }
@@ -47,6 +51,7 @@ class InputConverter {
   void pointerMove(PointerMoveEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.move,
+      pointer: event.pointer,
       rawEvent: event,
     ));
   }
@@ -54,6 +59,7 @@ class InputConverter {
   void pointerCancel(PointerCancelEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.cancel,
+      pointer: event.pointer,
       rawEvent: event,
     ));
   }
@@ -61,6 +67,7 @@ class InputConverter {
   void pointerUp(PointerUpEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.up,
+      pointer: event.pointer,
       rawEvent: event,
     ));
   }
@@ -68,6 +75,7 @@ class InputConverter {
   void pointerDown(PointerDownEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.down,
+      pointer: event.pointer,
       rawEvent: event,
     ));
   }

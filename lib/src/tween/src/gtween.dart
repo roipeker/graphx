@@ -127,7 +127,7 @@ class GTween {
   /// or make GTicker global... being able to track unique refresh frames
   /// is a must.
   static void processTick(double elapsed) {
-    final ts = SchedulerBinding.instance!.currentFrameTimeStamp;
+    final ts = SchedulerBinding.instance.currentFrameTimeStamp;
     if (_lastFrameTimeStamp == ts) return;
     GTween.ticker.dispatch(elapsed);
     _lastFrameTimeStamp = ts;

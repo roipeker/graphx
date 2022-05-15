@@ -163,7 +163,7 @@ class GText extends GDisplayObject {
     painting.TextStyle? textStyle,
     double width = double.infinity,
   }) {
-    painting.PaintingBinding.instance!.systemFonts.addListener(_fontLoaded);
+    painting.PaintingBinding.instance.systemFonts.addListener(_fontLoaded);
     this.text = text;
 
     _width = width;
@@ -182,7 +182,7 @@ class GText extends GDisplayObject {
   @override
   void dispose() {
     super.dispose();
-    painting.PaintingBinding.instance!.systemFonts.removeListener(_fontLoaded);
+    painting.PaintingBinding.instance.systemFonts.removeListener(_fontLoaded);
     _onFontLoaded?.removeAll();
     _onFontLoaded = null;
   }

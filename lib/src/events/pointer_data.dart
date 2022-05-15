@@ -19,7 +19,7 @@ class PointerEventData {
   final double stageY;
   final PointerEventType? type;
   final PointerEvent rawEvent;
-
+  int pointer = 0;
   /// local position in DisplayObject
   late GPoint localPosition;
 
@@ -32,7 +32,7 @@ class PointerEventData {
   /// 300 milliseconds for double click
   static int doubleClickTime = 300;
 
-  PointerEventData({this.type, required this.rawEvent})
+  PointerEventData({this.type,this.pointer = 0, required this.rawEvent})
       : stageX = rawEvent.localPosition.dx,
         stageY = rawEvent.localPosition.dy {
     localPosition = GPoint(stageX, stageY);
