@@ -14,7 +14,7 @@ class BookmarkButtonMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('bookmark button')),
+      appBar: AppBar(title: Text('bookmark button animation')),
       body: Center(
         child: SizedBox(
           width: 200,

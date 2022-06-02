@@ -8,34 +8,44 @@ class GraphicsClipperDemo extends StatelessWidget {
       appBar: AppBar(
         title: Text('GraphX Graphics Clipper'),
       ),
-
-      /// takes the entire body area.
-      body: Center(
-          child: ClipPath(
-        clipper: MyCurvyPath(),
-        child: Container(
-          width: 300,
-          height: 300,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.red, Colors.blue],
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: ClipPath(
+                clipper: MyCurvyPath(),
+                child: Container(
+                  width: 300,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.red, Colors.blue],
+                    ),
+                  ),
+                  child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                    itemBuilder: (ctx, idx) {
+                      return Text(
+                        'graphics clipper demo',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
-          child: ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            itemBuilder: (ctx, idx) {
-              return Text(
-                'graphics clipper demo',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black26,
-                  fontWeight: FontWeight.bold,
-                ),
-              );
-            },
-          ),
-        ),
-      )),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+                'This sample shows how to use GraphX to output a Path to use as a ClipRect'),
+          )
+        ],
+      ),
     );
   }
 }

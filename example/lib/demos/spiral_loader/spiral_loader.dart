@@ -11,7 +11,7 @@ class SpiralLoaderMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('spiral loader')),
+      appBar: AppBar(title: Text('spiral loader sample')),
       body: Center(
         child: Material(
           color: Colors.transparent,

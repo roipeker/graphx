@@ -36,3 +36,25 @@ class DemoSingleSceneWidget extends StatelessWidget {
     );
   }
 }
+
+class ExampleInfo extends StatelessWidget {
+  final String text;
+  final Color? color;
+
+  const ExampleInfo({Key? key, required this.text, this.color})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          text,
+          style: TextStyle(color: color),
+        ),
+      ),
+    );
+  }
+}

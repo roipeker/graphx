@@ -33,11 +33,11 @@ class TestIcons extends GSprite {
     icon3.x = 32;
     icon3.y = 32;
 
-//    final linePaint = Paint();
-//    linePaint.strokeWidth = 0;
-//    linePaint.style = PaintingStyle.stroke;
-//    linePaint.color = Colors.blue;
-//    icon3.setPaint(linePaint);
+    // final linePaint = Paint();
+    // linePaint.strokeWidth = 0;
+    // linePaint.style = PaintingStyle.stroke;
+    // linePaint.color = Colors.blue;
+    // icon3.setPaint(linePaint);
 
     final gradientPaint = Paint();
     gradientPaint.shader = LinearGradient(
@@ -47,9 +47,9 @@ class TestIcons extends GSprite {
     ).createShader(icon3.bounds!.toNative());
     // take the bounding box from the icon.
     // GraphX has a nifty method to check bounding boxes.
-//    icon3.$debugBounds = true;
-
+    // icon3.$debugBounds = true;
     icon3.setPaint(gradientPaint);
+
     iconsContainer.tween(duration: 2, scale: 2);
   }
 }

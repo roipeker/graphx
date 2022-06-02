@@ -8,34 +8,38 @@ import 'package:graphx/graphx.dart';
 import 'assets.dart';
 import 'scene.dart';
 
-class HeartReactionMain extends StatelessWidget {
+class HeartReactionMain extends StatefulWidget {
+  @override
+  State<HeartReactionMain> createState() => _HeartReactionMainState();
+}
+
+class _HeartReactionMainState extends State<HeartReactionMain> {
   final GlobalKey _key = GlobalKey();
+  final onLiked = ValueNotifier(false);
+
+  Color get iconColor {
+    return onLiked.value ? Theme.of(context).disabledColor : Colors.red;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: MPSBuilder(
-        mps: mps,
-        topics: [
-          'like',
-          'animfinish',
-        ],
-        builder: (_, event, __) {
-          trace(event.type);
-          return FloatingActionButton(
-            key: _key,
-            onPressed: event.type == 'like' ? null : () => mps.emit('like'),
-            backgroundColor: event.type == 'like'
-                ? Theme.of(context).disabledColor
-                : Colors.red,
-            disabledElevation: 0,
-            elevation: 6,
-            child: SvgPicture.string(
-              SvgAssets.HEART,
-              color: event.type == 'like' ? Colors.red : Colors.white,
-            ),
-          );
-        },
+      floatingActionButton: AnimatedBuilder(
+        animation: onLiked,
+        builder: (_, __ ) => FloatingActionButton(
+          key: _key,
+          onPressed: () {
+            onLiked.value = !onLiked.value;
+            setState(() {});
+          },
+          backgroundColor: iconColor,
+          disabledElevation: 0,
+          elevation: 6,
+          child: SvgPicture.string(
+            SvgAssets.HEART,
+            color: onLiked.value ? Colors.red : Colors.white,
+          ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       body: Container(
@@ -47,7 +51,10 @@ class HeartReactionMain extends StatelessWidget {
         ),
         child: SceneBuilderWidget(
           builder: () => SceneController(
-            back: HeartScene(key: _key),
+            back: HeartScene(
+              key: _key,
+              onLiked: onLiked,
+            ),
           ),
           autoSize: true,
         ),

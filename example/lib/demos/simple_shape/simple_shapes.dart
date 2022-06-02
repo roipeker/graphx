@@ -10,6 +10,13 @@ class SimpleShapesMain extends StatelessWidget {
     return DemoSingleSceneWidget(
       title: 'simple shapes drawing',
       root: SimpleShapesScene(),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('See how to draw basic shapes with GraphX'),
+        ),
+      ),
 
       /// we are rendering a static scene here, no need for Ticker
       /// capabilities.

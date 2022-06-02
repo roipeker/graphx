@@ -113,7 +113,7 @@ class ToastScene extends GSprite {
     container.tween(
       duration: 1,
       ease: GEase.elasticIn,
-      y: stage!.stageHeight + 20,
+      y: (stage?.stageHeight??0) + 20,
     );
     GTween.delayedCall(.8, () {
       bg.tween(

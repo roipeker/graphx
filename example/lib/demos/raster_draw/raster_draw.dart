@@ -7,7 +7,7 @@ import 'package:graphx/graphx.dart';
 
 import 'scene.dart';
 
-class RasterDrawMain extends StatelessWidget {
+class RasterDrawingMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

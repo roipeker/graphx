@@ -20,6 +20,7 @@ class MyGraph extends GSprite {
   double minAlpha = .7;
   double maxAlpha = 1.0;
   final List<GraphModel>? data;
+
   MyGraph({this.data});
 
   @override

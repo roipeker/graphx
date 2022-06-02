@@ -1,3 +1,4 @@
+import 'package:exampleGraphx/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
@@ -12,16 +13,26 @@ class ChartBezierMain extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       backgroundColor: Colors.black,
-      body: Center(
-        child: Container(
-          width: 400,
-          height: 300,
-          child: SceneBuilderWidget(
-            builder: () => SceneController(
-              front: CurvedGraphScene(),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: Container(
+                width: 400,
+                height: 300,
+                child: SceneBuilderWidget(
+                  builder: () => SceneController(
+                    front: CurvedGraphScene(),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+          ExampleInfo(
+            color: Colors.white,
+            text: 'Click to generate random data points',
+          )
+        ],
       ),
     );
   }

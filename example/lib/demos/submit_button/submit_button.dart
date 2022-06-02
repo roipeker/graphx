@@ -14,7 +14,7 @@ class SubmitButtonMain extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xffE3E3E3),
       appBar: AppBar(
-        title: Text('submit button demo'),
+        title: Text('submit button animation'),
         backgroundColor: Colors.green,
       ),
       body: Center(

@@ -17,6 +17,7 @@ class SortingButtonMain extends StatelessWidget {
           title: Text('sorting button demo'),
         ),
         body: SceneBuilderWidget(
+          autoSize: true,
           builder: () => SceneController(
             front: SortingButtonScene(),
             config: SceneConfig.interactive,

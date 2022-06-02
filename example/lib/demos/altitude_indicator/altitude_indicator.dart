@@ -30,7 +30,7 @@ class AltitudeIndicatorMain extends StatelessWidget {
               color: Colors.grey.shade900,
               width: double.infinity,
               padding: EdgeInsets.all(8),
-              child: Text('Use the arrows keys to rotated the plane.'),
+              child: Text('Use the arrows keys to rotate the plane and change altitude.'),
             )
           ],
         ),

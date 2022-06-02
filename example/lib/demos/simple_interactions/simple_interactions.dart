@@ -1,6 +1,5 @@
+import 'package:exampleGraphx/utils/utils.dart';
 import 'package:graphx/graphx.dart';
-
-import '../../utils/utils.dart';
 
 import 'simple_interactions_scene.dart';
 
@@ -9,6 +8,20 @@ class SimpleInteractionsMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return DemoSingleSceneWidget(
       title: 'simple interactivity demo (pointer & keyboard support)',
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text('''
+- Use your keyboard arrows to move the red ball (press shift to move faster)
+                
+- Put mouse over the Temperature button, and use the mouse wheel to change the %
+'''),
+          ],
+        ),
+      ),
       root: SimpleInteractionsScene(),
       config: SceneConfig(
         autoUpdateRender: true,

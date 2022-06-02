@@ -1,5 +1,7 @@
 /// roipeker 2021
 ///
+/// WARNING: matrix perspective is wrong on latest Flutter 3.0
+/// Needs adjustment.
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 import 'scene.dart';

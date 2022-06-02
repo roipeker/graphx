@@ -4,57 +4,65 @@ import 'demos/demos.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-      home: SimpleShapesMain(),
-      // home: SimpleTweenMain(),
-      // home: DemoSvgIconsMain(),
-      // home: SimpleInteractionsMain(),
-      // home: GraphicsClipperDemo(),
-      // home: FacebookReactionsMain(),
-      // home: DrippingIVMain(),
-      // home: ChartMountainMain(),
-      // home: GlowingCircleMain(),
-      // home: SortingButtonMain(),
-      // home: BookmarkButtonMain(),
-      // home: SubmitButtonMain(),
-      // home: CardRotation3dMain(),
-      // home: RasterDrawMain(),
-      // home: DialerMain(),
-      // home: GaugeMeterMain(),
-      // home: SpiralLoaderMain(),
-      // home: UniversoFlutterIntroMain(),
-      // home: ColorfulLoaderMain(),
-      // home: JellyThingMain(),
-      // home: BallVsLineMain(),
-      // home: Dna3dMain(),
-      // home: SplashIntroMain(),
-      // home: LinedButtonMain(),
-      // home: ColorPickerMain(),
-      // home: AltitudeIndicatorMain(),
-      // home: BreakoutMain(),
-      // home: XmasMain(),
-      // home: SimpleRadialMenuMain(),
-      // home: MuratCoffeeMain(),
-      // home: PieChartMain(),
-      // home: ChartBezierMain(),
-      // home: RunHeroCanvasMain(),
-      // home: ElasticBandMain(),
-      // home: FlowerGradientMain(),
-      // home: NokiaSnakeMain(),
-      // home: HeartReactionMain(),
-      // home: SimpleToastMain(),
-      // home: RatingStarsMain(),
-      // home: PizzaBoxMain(),
-      // home: DrawingPadBezierMain(),
-      // home: IsmaChartMain(),
-      // home: TriGridMain(),
-      // home: NicoLoadingIndicatorMain(),
-      // home: FeelingSwitchMain(),
-      // home: MouseRepulsionMain(),
-      // home: Globe3dMain(),
-      // home: LungsAnimationMain(),
-      // home: ExpanderFabMenu(),
-      // home: PageIndicatorMain(),
-    ),
+    MaterialApp(home: _SamplesApp()),
   );
+}
+
+/// --- Wrapper widget for easy visualiation with hot reload.
+class _SamplesApp extends StatelessWidget {
+  const _SamplesApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleShapesMain();
+    // return SimpleTweenMain();
+    // return DemoSvgIconsMain();
+    // return SimpleInteractionsMain();
+    // return GraphicsClipperDemo();
+    // return FacebookReactionsMain();
+    // return DrippingIVMain();
+    // return ChartMountainMain();
+    // return GlowingCircleMain();
+    // return SortingButtonMain();
+    // return BookmarkButtonMain();
+    // return SubmitButtonMain();
+    // return CardRotation3dMain();
+    // return RasterDrawingMain();
+    // return DialerMain();
+    // return GaugeMeterMain();
+    // return SpiralLoaderMain();
+    // return UniversoFlutterIntroMain();
+    // return ColorfulLoaderMain();
+    // return JellyThingMain();
+    // return BallVsLineMain();
+    // return Dna3dMain();
+    // return SplashIntroMain();
+    // return LinedButtonMain();
+    // return ColorPickerMain();
+    // return AltitudeIndicatorMain();
+    // return BreakoutMain();
+    // return XmasMain();
+    // return SimpleRadialMenuMain();
+    // return MuratCoffeeMain();
+    // return PieChartMain();
+    // return ChartBezierMain();
+    // return RunHeroCanvasMain();
+    // return ElasticBandMain();
+    // return FlowerGradientMain();
+    // return NokiaSnakeMain();
+    // return HeartReactionMain();
+    // return SimpleToastMain();
+    // return RatingStarsMain();
+    // return PizzaBoxMain();
+    // return DrawingPadBezierMain();
+    // return IsmaChartMain();
+    // return TriGridMain();
+    // return NicoLoadingIndicatorMain();
+    // return FeelingSwitchMain();
+    // return MouseRepulsionMain();
+    // return Globe3dMain();
+    // return LungsAnimationMain();
+    // return ExpanderFabMenu();
+    // return PageIndicatorMain();
+  }
 }

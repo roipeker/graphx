@@ -129,7 +129,7 @@ class Pad extends GSprite {
     var lastPoint = lastPoints.isNotEmpty ? lastPoints.last : null;
     var hasLastPoint = lastPoint != null;
     var isLastPointTooClose =
-        hasLastPoint ? point.distanceTo(lastPoint!) <= minDist : false;
+        hasLastPoint ? point.distanceTo(lastPoint) <= minDist : false;
     final color = lastPointData.color;
 
     if (!hasLastPoint || !(hasLastPoint && isLastPointTooClose)) {
