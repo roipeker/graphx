@@ -276,7 +276,8 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   @override
   void update(double delta) {
     super.update(delta);
-    for (var child in children) {
+    final tmp = List.unmodifiable(children);
+    for (var child in tmp) {
       child.update(delta);
     }
   }

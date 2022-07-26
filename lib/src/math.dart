@@ -101,14 +101,14 @@ abstract class Math {
   /// Returns the floor of the number or expression specified in the parameter
   /// `value`.
   /// Parameter `keepDouble` enforces the return type to be `double`.
-  static num? floor(double value, [bool keepDouble = true]) {
+  static num floor(double value, [bool keepDouble = true]) {
     return keepDouble ? value.floorToDouble() : value.floor();
   }
 
   /// Rounds the value of the parameter `value` up or down to the nearest
   /// integer and returns the value.
   /// Parameter `keepDouble` enforces the return type to be `double`.
-  static num? round(double value, [bool keepDouble = true]) {
+  static num round(double value, [bool keepDouble = true]) {
     return keepDouble ? value.roundToDouble() : value.round();
   }
 
