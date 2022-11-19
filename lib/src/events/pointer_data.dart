@@ -3,6 +3,7 @@ import '../../graphx.dart';
 
 /// over, out are mouse
 enum PointerEventType {
+  zoomPan,
   scroll,
   cancel,
   move,
@@ -13,6 +14,9 @@ enum PointerEventType {
   hover,
 }
 
+enum PointerZoomPanType {
+  start, update, end, none
+}
 class PointerEventData {
   final double stageX;
   final double stageY;
@@ -25,8 +29,6 @@ class PointerEventData {
   double get localX => localPosition.x;
 
   double get localY => localPosition.y;
-
-//  double localX, localY;
 
   /// 300 milliseconds for double click
   static int doubleClickTime = 300;
@@ -42,8 +44,24 @@ class PointerEventData {
   Offset? get scrollDelta {
     if (rawEvent is PointerScrollEvent) {
       return (rawEvent as PointerScrollEvent).scrollDelta;
+    } else if (rawEvent is PointerPanZoomUpdateEvent) {
+      // TODO: temporal workaround for mouse wheel compatibility.
+      // will be removed in next version and change "onScroll" for "onSignal"
+      // to keep Flutter's compatibility.
+      return (rawEvent as PointerPanZoomUpdateEvent).localPanDelta;
     }
     return null;
+  }
+
+  PointerZoomPanType get zoomPanEventType {
+    if(rawEvent is PointerPanZoomStartEvent){
+      return PointerZoomPanType.start;
+    } else if(rawEvent is PointerPanZoomUpdateEvent){
+      return PointerZoomPanType.update;
+    } else if(rawEvent is PointerPanZoomEndEvent){
+      return PointerZoomPanType.end;
+    }
+    return PointerZoomPanType.none;
   }
 
   GPoint get windowPosition => GPoint.fromNative(rawEvent.original!.position);
@@ -96,6 +114,7 @@ enum MouseInputType {
   click,
   still,
   wheel,
+  zoomPan,
 
   /// check button directly with: isPrimaryDown, isSecondaryDown...
 //  rightDown,
@@ -206,6 +225,8 @@ class MouseInputData {
       return MouseInputType.exit;
     } else if (nativeType == PointerEventType.scroll) {
       return MouseInputType.wheel;
+    } else if (nativeType == PointerEventType.zoomPan) {
+      return MouseInputType.zoomPan;
     }
     return MouseInputType.unknown;
   }

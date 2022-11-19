@@ -17,10 +17,8 @@ class TestSvgScene extends GSprite {
     await _loadData();
     _drawSun();
 
-    trees = GSprite();
-    ground = GSprite();
-    addChild(trees);
-    addChild(ground);
+    trees = addChild(GSprite());
+    ground = addChild(GSprite());
 
     trees.y = stage!.stageHeight - groundHeight;
     ground.y = stage!.stageHeight - groundHeight;
@@ -45,11 +43,10 @@ class TestSvgScene extends GSprite {
     var currentObjectX = 30.0;
     for (var i = 0; i < 15; ++i) {
       final treeId = i.isOdd ? SvgId.tree : SvgId.pine;
-      var tree = getSvgIcon(treeId);
+      var tree = trees.addChild(getSvgIcon(treeId));
       tree.alignPivot(Alignment.bottomCenter);
       tree.x = currentObjectX;
       tree.scale = Math.randomRange(.4, 1.4);
-      trees.addChild(tree);
       currentObjectX += Math.randomRange(20, 80);
 
       /// let's skew the tree so it seems the wind is moving it.
@@ -140,7 +137,6 @@ class TestSvgScene extends GSprite {
     for (var i = 0; i < 100; ++i) {
       final leafId = i.isOdd ? SvgId.leaf : SvgId.leaf2;
       var leaf = getSvgIcon(leafId);
-
       addChild(leaf);
 
       var px = Math.randomRange(10, stage!.stageWidth - 10);
@@ -176,6 +172,10 @@ class TestSvgScene extends GSprite {
       skewX: randomSkew,
       skewY: -randomSkew / 2,
       onComplete: () {
+        if(!leaf.inStage){
+          leaf.removeFromParent(true);
+          return;
+        }
         if (leaf.y > stage!.stageHeight) {
           print('Leaf outside of stage, remove and dispose it.');
           leaf.removeFromParent(true);
@@ -188,10 +188,13 @@ class TestSvgScene extends GSprite {
     final randomX = Math.randomRange(5, 40) * dir;
     final randomY = Math.randomRange(5, 30);
     leaf.tween(
-        duration: randomDuration * .9,
-        x: '$randomX',
-        y: '$randomY',
-        ease: GEase.linear);
+      duration: randomDuration * .8,
+      x: '$randomX',
+      y: '$randomY',
+      ease: GEase.easeOut,
+      /// import to not kill previous tween.
+      overwrite: 0,
+    );
   }
 
   /// utils for parsing SVG.

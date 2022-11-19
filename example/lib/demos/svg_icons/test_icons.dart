@@ -7,8 +7,7 @@ class TestIcons extends GSprite {
   }
 
   void _init() {
-    final iconsContainer = GSprite();
-    addChild(iconsContainer);
+    final iconsContainer = addChild(GSprite());
     iconsContainer.x = 100;
     iconsContainer.y = 100;
 

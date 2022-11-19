@@ -31,11 +31,31 @@ class InputConverter {
   }
 
   /// touchable stuffs.
-
   void pointerSignal(PointerSignalEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.scroll,
       rawEvent: event as PointerScrollEvent,
+    ));
+  }
+
+  void pointerPanZoomStart(PointerPanZoomStartEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.zoomPan,
+      rawEvent: event,
+    ));
+  }
+
+  void pointerPanZoomUpdate(PointerPanZoomUpdateEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.zoomPan,
+      rawEvent: event,
+    ));
+  }
+
+  void pointerPanZoomEnd(PointerPanZoomEndEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.zoomPan,
+      rawEvent: event,
     ));
   }
 
@@ -74,4 +94,5 @@ class InputConverter {
       rawEvent: event,
     ));
   }
+
 }

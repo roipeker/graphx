@@ -54,6 +54,9 @@ class PointerManager<T extends PointerEventData> {
   EventSignal<T> get onScroll => _onScroll ??= EventSignal<T>();
   EventSignal<T>? _onScroll;
 
+  EventSignal<T> get onZoomPan => _onZoomPan ??= EventSignal<T>();
+  EventSignal<T>? _onZoomPan;
+
   EventSignal<T> get onHover => _onHover ??= EventSignal<T>();
   EventSignal<T>? _onHover;
 
@@ -72,6 +75,7 @@ class PointerManager<T extends PointerEventData> {
     _signalMapper[PointerEventType.cancel] = () => _onCancel;
     _signalMapper[PointerEventType.move] = () => _onMove;
     _signalMapper[PointerEventType.scroll] = () => _onScroll;
+    _signalMapper[PointerEventType.zoomPan] = () => _onZoomPan;
 
     /// mouse
     _signalMapper[PointerEventType.hover] = () => _onHover;
@@ -99,6 +103,7 @@ class PointerManager<T extends PointerEventData> {
     _onCancel?.removeAll();
     _onMove?.removeAll();
     _onScroll?.removeAll();
+    _onZoomPan?.removeAll();
     _onHover?.removeAll();
     _onExit?.removeAll();
     _onEnter?.removeAll();

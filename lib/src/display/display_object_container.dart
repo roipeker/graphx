@@ -128,11 +128,11 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
     return null;
   }
 
-  GDisplayObject addChild(GDisplayObject child) {
+  T addChild<T extends GDisplayObject>(T child) {
     return addChildAt(child, children.length);
   }
 
-  GDisplayObject addChildAt(GDisplayObject child, int index) {
+  T addChildAt<T extends GDisplayObject>(T child, int index) {
     if (index < 0 || index > children.length) {
       throw RangeError('Invalid child index');
     }
@@ -201,16 +201,16 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
     requiresRedraw();
   }
 
-  GDisplayObject getChildAt(int index) {
+  T getChildAt<T extends GDisplayObject>(int index) {
     final len = children.length;
     if (index < 0) index = len + index;
-    if (index >= 0 && index < len) return children[index];
+    if (index >= 0 && index < len) return children[index] as T;
     throw RangeError('Invalid child index');
   }
 
-  GDisplayObject? getChildByName(String name) {
+  T? getChildByName<T extends GDisplayObject>(String name) {
     for (final child in children) {
-      if (child.name == name) return child;
+      if (child.name == name) return child as T;
     }
     return null;
   }
@@ -245,7 +245,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
     return false;
   }
 
-  GDisplayObject removeChildAt(int index, [bool dispose = false]) {
+  T removeChildAt<T extends GDisplayObject>(int index, [bool dispose = false]) {
     if (index >= 0 && index < children.length) {
       requiresRedraw();
       final child = children[index];
@@ -261,15 +261,15 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
       index = children.indexOf(child);
       if (index >= 0) children.removeAt(index);
       if (dispose) child.dispose();
-      return child;
+      return child as T;
     }
     throw 'Invalid child index';
   }
 
-  GDisplayObject? removeChild(GDisplayObject child, [bool dispose = false]) {
+  T? removeChild<T extends GDisplayObject>(T child, [bool dispose = false]) {
     if (child.$parent != this) return null;
     final index = getChildIndex(child);
-    if (index > -1) return removeChildAt(index, dispose);
+    if (index > -1) return removeChildAt<T>(index, dispose);
     throw 'Invalid child index';
   }
 

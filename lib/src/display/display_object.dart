@@ -131,6 +131,9 @@ abstract class GDisplayObject
     if (mouseEnabled) {
       var mouseInput = input.clone(this, object, type);
       switch (type) {
+        case MouseInputType.zoomPan:
+          $onZoomPan?.dispatch(mouseInput);
+          break;
         case MouseInputType.wheel:
           $onMouseWheel?.dispatch(mouseInput);
           break;

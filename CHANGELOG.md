@@ -1,6 +1,14 @@
+## [1.0.5]
+
+- adds support for the new PointerPanZoom*Event family on Listenable that overrides the mouse Signal (mouse wheel) on desktop OS.
+  Basically, currently on desktop builds, everytime a mouse wheel event is triggered, a PointerPanZoomEvent is dispatched on the Listenable.
+  Check [MyButton] in [SimpleInteractionsMain] demo, for an example of how to use it.
+- add Generic Type [T] support to addChild
+- updated some samples for the API.
+
 ## [1.0.4]
 
-- Updated to run with flutter 3.
+- updated to run with flutter 3.
 
 ## [1.0.3]
 

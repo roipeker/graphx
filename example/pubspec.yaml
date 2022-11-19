@@ -3,10 +3,10 @@ description: Graphx rendering prototype examples
 
 publish_to: "none"
 
-version: 1.0.4+26
+version: 1.0.4+27
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.18.4 <3.0.0"
 
 dependencies:
   flutter:

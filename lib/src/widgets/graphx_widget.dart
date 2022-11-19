@@ -113,6 +113,9 @@ Use `Expanded()` or `Flexible()` in Flex Widgets like Column() or Row().
           onPointerCancel: converter.pointerCancel,
           onPointerMove: converter.pointerMove,
           onPointerSignal: converter.pointerSignal,
+          onPointerPanZoomStart: converter.pointerPanZoomStart,
+          onPointerPanZoomUpdate: converter.pointerPanZoomUpdate,
+          onPointerPanZoomEnd: converter.pointerPanZoomEnd,
         ),
       );
     }
