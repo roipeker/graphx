@@ -5,6 +5,8 @@
   Check [MyButton] in [SimpleInteractionsMain] demo, for an example of how to use it.
 - add Generic Type [T] support to addChild
 - updated some samples for the API.
+- added [ZoomPivotMain] sample to demonstrate the new PointerPanZoom event in Flutter.
+- Fixed inner transformations in all [GDisplayObject] for mouseX/mouseY.  
 
 ## [1.0.4]
 

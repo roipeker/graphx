@@ -14,7 +14,8 @@ class _SamplesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleShapesMain();
+    return ZoomPivotMain();
+    // return SimpleShapesMain();
     // return SimpleTweenMain();
     // return DemoSvgIconsMain();
     // return SimpleInteractionsMain();

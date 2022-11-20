@@ -3,7 +3,7 @@ description: Graphx rendering prototype examples
 
 publish_to: "none"
 
-version: 1.0.4+27
+version: 1.0.4+28
 
 environment:
   sdk: ">=2.18.4 <3.0.0"

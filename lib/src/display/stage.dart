@@ -231,6 +231,12 @@ class Stage extends GDisplayObjectContainer
   }
 
   @override
+  double get mouseX => pointer!.mouseX;
+
+  @override
+  double get mouseY => pointer!.mouseY;
+
+  @override
   double get width => throw 'Use `stage.stageWidth` instead.';
 
   @override

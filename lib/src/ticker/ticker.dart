@@ -26,6 +26,8 @@ class GTicker {
 
   bool get isActive => _ticker?.isActive ?? false;
 
+  double get currentTime => _currentTime;
+
   double get currentDeltaTime => _currentDeltaTime;
 
   double get currentDeltaRatio => _currentDeltaRatio;
