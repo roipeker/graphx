@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:ui';
 
 import 'package:graphx/graphx.dart';
@@ -43,6 +45,7 @@ class FacebookReactionsMain extends StatelessWidget {
         builder: () => SceneController(front: MenuScene()),
         child: Scrollbar(
           child: ListView.separated(
+            primary: true,
             padding: EdgeInsets.symmetric(vertical: 54, horizontal: 0),
             separatorBuilder: (context, index) => const SizedBox(height: 8),
             itemBuilder: (context, index) => InnerCardItem(data: posts[index]),

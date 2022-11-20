@@ -32,10 +32,10 @@ class MPSBuilder<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MPSBuilderState<T> createState() => _MPSBuilderState<T>();
+  createState() => MPSBuilderState<T>();
 }
 
-class _MPSBuilderState<T> extends State<MPSBuilder<T>> {
+class MPSBuilderState<T> extends State<MPSBuilder<T>> {
   MPSEvent<T> _data = MPSEvent.empty();
   final _maps = <String, Function>{};
 

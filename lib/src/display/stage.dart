@@ -121,7 +121,8 @@ class Stage extends GDisplayObjectContainer
           " or the parent is defining the constraints.",
         );
       }
-      _stageRectNative = _stageRect.setTo(0, 0, _size!.width, _size!.height).toNative();
+      _stageRectNative =
+          _stageRect.setTo(0, 0, _size!.width, _size!.height).toNative();
       _stageBoundsRectPath;
       _stageBoundsRectPath.reset();
       _stageBoundsRectPath.addRect(_stageRectNative!);
@@ -148,7 +149,7 @@ class Stage extends GDisplayObjectContainer
   bool hitTouch(GPoint localPoint, [bool useShape = false]) => true;
 
   @override
-  GDisplayObject? hitTest(GPoint localPoint, [bool useShapes = false]) {
+  GDisplayObject? hitTest(GPoint localPoint, [bool useShape = false]) {
     if (!visible || !mouseEnabled) return null;
 
     /// location outside stage area, is not accepted.

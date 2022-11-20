@@ -113,7 +113,7 @@ class GIcon extends GDisplayObject {
     final charCode = String.fromCharCode(_data!.codePoint);
     _builder.addText(charCode);
     _paragraph = _builder.build();
-    _paragraph!.layout(ui.ParagraphConstraints(width: double.infinity));
+    _paragraph!.layout(const ui.ParagraphConstraints(width: double.infinity));
     _invalidStyle = false;
   }
 

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:http/http.dart' as http;
@@ -72,9 +71,9 @@ class NetworkImageLoader {
     var loadedBytes = <int>[];
     var bytesLoaded = 0;
 
-    var _request = http.Request('GET', Uri.parse(url));
+    var request = http.Request('GET', Uri.parse(url));
     // _request.headers['Referrer Policy'] = 'no-referrer-when-downgrade';
-    var response = _client.send(_request);
+    var response = _client.send(request);
     void dispatchError(NetworkImageEvent eventData) {
       if (onError != null) {
         onError.call(eventData);
@@ -101,7 +100,7 @@ class NetworkImageLoader {
           onDone: () async {
             if (eventData.isError) {
               dispatchError(eventData);
-              return null;
+              return;
             }
             var bytes = Uint8List.fromList(loadedBytes);
             final codec = await instantiateImageCodec(
@@ -142,8 +141,8 @@ class NetworkImageLoader {
     final completer = Completer<NetworkImageEvent>();
     var loadedBytes = <int>[];
     var bytesLoaded = 0;
-    var _request = http.Request('GET', Uri.parse(url));
-    var response = _client.send(_request);
+    var request = http.Request('GET', Uri.parse(url));
+    var response = _client.send(request);
     void dispatchError(NetworkImageEvent eventData) {
       if (onError != null) {
         onError.call(eventData);
@@ -166,7 +165,7 @@ class NetworkImageLoader {
       }, onDone: () async {
         if (eventData.isError) {
           dispatchError(eventData);
-          return null;
+          return;
         }
         var svgString = utf8.decode(Uint8List.fromList(loadedBytes));
         eventData.svgString = svgString;

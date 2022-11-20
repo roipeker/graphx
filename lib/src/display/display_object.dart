@@ -127,9 +127,11 @@ abstract class GDisplayObject
     }
   }
 
-  void $dispatchMouseCallback(MouseInputType type,
-      GDisplayObject object,
-      MouseInputData input,) {
+  void $dispatchMouseCallback(
+    MouseInputType type,
+    GDisplayObject object,
+    MouseInputData input,
+  ) {
     if (mouseEnabled) {
       var mouseInput = input.clone(this, object, type);
       switch (type) {
@@ -208,7 +210,8 @@ abstract class GDisplayObject
           stage!.pointer!.mouseX,
           stage!.pointer!.mouseY,
         ),
-        _sHelperPoint,).x;
+        _sHelperPoint,
+      ).x;
     } else {
       throw 'To get mouseX object needs to be a descendant of Stage.';
     }
@@ -221,7 +224,8 @@ abstract class GDisplayObject
           stage!.pointer!.mouseX,
           stage!.pointer!.mouseY,
         ),
-        _sHelperPoint,).y;
+        _sHelperPoint,
+      ).y;
     } else {
       throw 'To get mouseY object needs to be a descendant of Stage.';
     }
@@ -241,18 +245,10 @@ abstract class GDisplayObject
   Object? userData;
   String? name;
 
-  double _x = 0,
-      _y = 0,
-      _scaleX = 1,
-      _scaleY = 1,
-      _rotation = 0;
-  double _pivotX = 0,
-      _pivotY = 0;
-  double _skewX = 0,
-      _skewY = 0;
-  double _z = 0,
-      _rotationX = 0,
-      _rotationY = 0;
+  double _x = 0, _y = 0, _scaleX = 1, _scaleY = 1, _rotation = 0;
+  double _pivotX = 0, _pivotY = 0;
+  double _skewX = 0, _skewY = 0;
+  double _z = 0, _rotationX = 0, _rotationY = 0;
 
   double get rotationX => _rotationX;
 
@@ -428,7 +424,9 @@ abstract class GDisplayObject
   static bool _isWarned3d = false;
 
   void _warn3d() {
-    print('Warning: 3d transformations still not properly supported');
+    if (kDebugMode) {
+      print('Warning: 3d transformations still not properly supported');
+    }
     _isWarned3d = true;
   }
 
@@ -589,7 +587,7 @@ abstract class GDisplayObject
   }
 
   set transformationMatrix(GMatrix matrix) {
-    const pi_q = Math.PI / 4.0;
+    const piQuarter = Math.PI / 4.0;
     requiresRedraw();
     _transformationChanged = false;
     _transformationMatrix ??= GMatrix();
@@ -599,10 +597,10 @@ abstract class GDisplayObject
     _y = matrix.ty;
     _skewX = Math.atan(-matrix.c / matrix.d);
     _skewY = Math.atan(matrix.b / matrix.a);
-    _scaleY = (_skewX > -pi_q && _skewX < pi_q)
+    _scaleY = (_skewX > -piQuarter && _skewX < piQuarter)
         ? matrix.d / Math.cos(_skewX)
         : -matrix.c / Math.sin(_skewX);
-    _scaleX = (_skewY > -pi_q && _skewY < pi_q)
+    _scaleX = (_skewY > -piQuarter && _skewY < piQuarter)
         ? matrix.a / Math.cos(_skewY)
         : -matrix.b / Math.sin(_skewY);
     if (MathUtils.isEquivalent(_skewX, _skewY)) {
@@ -613,16 +611,18 @@ abstract class GDisplayObject
     }
   }
 
-  void $updateTransformationMatrices(double? x,
-      double? y,
-      double pivotX,
-      double pivotY,
-      double scaleX,
-      double scaleY,
-      double skewX,
-      double skewY,
-      double rotation,
-      GMatrix out,) {
+  void $updateTransformationMatrices(
+    double? x,
+    double? y,
+    double pivotX,
+    double pivotY,
+    double scaleX,
+    double scaleY,
+    double skewX,
+    double skewY,
+    double rotation,
+    GMatrix out,
+  ) {
     out.identity();
     if (skewX == 0 && skewY == 0) {
       /// optimization, no skewing.
@@ -711,8 +711,8 @@ abstract class GDisplayObject
     return out;
   }
 
-  static GDisplayObject _findCommonParent(GDisplayObject obj1,
-      GDisplayObject obj2) {
+  static GDisplayObject _findCommonParent(
+      GDisplayObject obj1, GDisplayObject obj2) {
     GDisplayObject? current = obj1;
 
     /// TODO: use faster Hash access.
@@ -799,9 +799,11 @@ abstract class GDisplayObject
     $hasTouchableArea =
         visible && $maskee == null && _scaleX != 0 && _scaleY != 0;
 
-    $hasVisibleArea =
-        $alpha != 0 && visible && $maskee == null && _scaleX != 0 &&
-            _scaleY != 0;
+    $hasVisibleArea = $alpha != 0 &&
+        visible &&
+        $maskee == null &&
+        _scaleX != 0 &&
+        _scaleY != 0;
   }
 
   void removedFromStage() {}
@@ -853,38 +855,42 @@ abstract class GDisplayObject
     if (!$hasVisibleArea || !visible) {
       return;
     }
-    final _hasScale = _scaleX != 1 || _scaleY != 1;
-    final _hasTranslate = _x != 0 || _y != 0;
-    final _hasPivot = _pivotX != 0 || _pivotY != 0;
-    final _hasSkew = _skewX != 0 || _skewY != 0;
-    final needSave = _hasTranslate || _hasScale || rotation != 0 || _hasPivot ||
-        _hasSkew || _is3D;
+    final hasScale = _scaleX != 1 || _scaleY != 1;
+    final hasTranslate = _x != 0 || _y != 0;
+    final hasPivot = _pivotX != 0 || _pivotY != 0;
+    final hasSkew = _skewX != 0 || _skewY != 0;
+    final needSave = hasTranslate ||
+        hasScale ||
+        rotation != 0 ||
+        hasPivot ||
+        hasSkew ||
+        _is3D;
 
     final $hasFilters = hasFilters;
     // final hasColorize = $colorize?.alpha > 0 ?? false;
     // var _saveLayer = this is DisplayObjectContainer &&
     //     (this as DisplayObjectContainer).hasChildren &&
     //     ($alpha != 1 || $hasColorize || $hasFilters);
-    var _saveLayer = allowSaveLayer && $alpha != 1 || $hasColorize ||
-        $hasFilters;
+    var saveLayer =
+        allowSaveLayer && $alpha != 1 || $hasColorize || $hasFilters;
     // if (this is DisplayObjectContainer &&
     //     (this as DisplayObjectContainer).hasChildren) {
     // }
 
     final hasMask = mask != null || maskRect != null;
-    final showDebugBounds = DisplayBoundsDebugger.debugBoundsMode ==
-        DebugBoundsMode.internal &&
-        ($debugBounds || DisplayBoundsDebugger.debugAll);
+    final showDebugBounds =
+        DisplayBoundsDebugger.debugBoundsMode == DebugBoundsMode.internal &&
+            ($debugBounds || DisplayBoundsDebugger.debugAll);
 
-    GRect? _cacheLocalBoundsRect;
-    if (showDebugBounds || _saveLayer) {
+    GRect? cacheLocalBoundsRect;
+    if (showDebugBounds || saveLayer) {
       // _cacheLocalBoundsRect = bounds.toNative();
-      _cacheLocalBoundsRect = bounds;
+      cacheLocalBoundsRect = bounds;
     }
 
-    List<GComposerFilter>? _composerFilters;
+    List<GComposerFilter>? composerFilters;
     var filterHidesObject = false;
-    if (_saveLayer) {
+    if (saveLayer) {
 //       TODO: static painter seems to have some issues, try local var later.
       /// using local Painter now to avoid problems.
       final alphaPaint = filterPaint;
@@ -914,8 +920,8 @@ abstract class GDisplayObject
           filter.update();
           filter.expandBounds(layerBounds, resultBounds);
           if (filter is GComposerFilter) {
-            _composerFilters ??= <GComposerFilter>[];
-            _composerFilters.add(filter);
+            composerFilters ??= <GComposerFilter>[];
+            composerFilters.add(filter);
           } else {
             filter.resolvePaint(alphaPaint);
           }
@@ -958,8 +964,8 @@ abstract class GDisplayObject
 
     $onPrePaint?.dispatch(canvas);
 
-    if (_composerFilters != null) {
-      for (var filter in _composerFilters) {
+    if (composerFilters != null) {
+      for (var filter in composerFilters) {
         if (filter.hideObject ||
             (filter is GDropShadowFilter && filter.innerShadow)) {
           filterHidesObject = true;
@@ -976,18 +982,18 @@ abstract class GDisplayObject
       canvas.restore();
     }
     if (showDebugBounds) {
-      final _paint = $debugBoundsPaint ?? _debugPaint;
-      final linePaint = _paint.clone();
+      final paint = $debugBoundsPaint ?? _debugPaint;
+      final linePaint = paint.clone();
       linePaint.color = linePaint.color.withOpacity(.3);
-      final rect = _cacheLocalBoundsRect!.toNative();
+      final rect = cacheLocalBoundsRect!.toNative();
       canvas.drawLine(rect.topLeft, rect.bottomRight, linePaint);
       canvas.drawLine(rect.topRight, rect.bottomLeft, linePaint);
-      canvas.drawRect(rect, _paint);
+      canvas.drawRect(rect, paint);
     }
     if (needSave) {
       canvas.restore();
     }
-    if (_saveLayer) {
+    if (saveLayer) {
       canvas.restore();
     }
   }
@@ -1027,7 +1033,7 @@ abstract class GDisplayObject
     if (ancestor == this) {
       throw ArgumentError(
           'An object cannot be added as a child to itself or one '
-              'of its children (or children\'s children, etc.)');
+          'of its children (or children\'s children, etc.)');
     } else {
       $parent = value;
     }
@@ -1064,8 +1070,8 @@ abstract class GDisplayObject
   /// transformations (x, y, scale, etc) if you intend to use in it's "original"
   /// form.
   ui.Picture createPicture(
-      [void Function(ui.Canvas)? prePaintCallback, void Function(ui
-          .Canvas)? postPaintCallback]) {
+      [void Function(ui.Canvas)? prePaintCallback,
+      void Function(ui.Canvas)? postPaintCallback]) {
     final r = ui.PictureRecorder();
     final c = ui.Canvas(r);
     prePaintCallback?.call(c);
@@ -1096,8 +1102,8 @@ abstract class GDisplayObject
     if (resolution != 1) {
       rect *= resolution;
     }
-    final needsAdjust = (rect.left != 0 || rect.top != 0) && adjustOffset ||
-        resolution != 1;
+    final needsAdjust =
+        (rect.left != 0 || rect.top != 0) && adjustOffset || resolution != 1;
     ui.Picture picture;
     if (needsAdjust) {
       picture = createPicture((canvas) {

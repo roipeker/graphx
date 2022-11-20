@@ -102,14 +102,14 @@ class GSvgShape extends GDisplayObject {
 
   @override
   void $applyPaint(Canvas? canvas) {
-    var _saveLayer = $alpha != 1 || usePaint;
-    if (_saveLayer) {
+    var doSaveLayer = $alpha != 1 || usePaint;
+    if (doSaveLayer) {
       if (_invalidColor) _validateColor();
       final rect = getBounds(this)!.toNative();
       canvas!.saveLayer(rect, _paint);
     }
     canvas!.drawPicture(_data!.picture!);
-    if (_saveLayer) {
+    if (doSaveLayer) {
       canvas.restore();
     }
   }

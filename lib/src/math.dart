@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:math' as m;
 
 abstract class Math {
@@ -43,54 +45,54 @@ abstract class Math {
   static const SQRT2 = m.sqrt2;
 
   /// Computes and returns the cosine of the specified angle in radians.
-  static final cos = m.cos;
+  static const cos = m.cos;
 
   /// Computes and returns the arc cosine of the number specified in the
   /// parameter `x`, in radians.
-  static final acos = m.acos;
+  static const acos = m.acos;
 
   /// Computes and returns the sine of the specified angle in radians.
-  static final sin = m.sin;
+  static const sin = m.sin;
 
   /// Computes and returns the arc sine of the number specified in the
   /// parameter `x`, in radians.
-  static final asin = m.asin;
+  static const asin = m.asin;
 
   /// Computes and returns the tangent of the specified angle.
   /// Shortcut of [math.tan]
-  static final tan = m.tan;
+  static const tan = m.tan;
 
   /// Computes and returns the value, in radians, of the angle whose tangent
   /// is specified in the parameter `x`.
   /// Shortcut of [dart:math atan()]
-  static final atan = m.atan;
+  static const atan = m.atan;
 
   /// Computes and returns the angle of the point a/b in radians,
   /// in cartesian coordinates `a=y`, and `b=x`.
   /// when measured counterclockwise from a circle's x axis
   /// (where 0,0 represents the center of the circle).
-  static final atan2 = m.atan2;
+  static const atan2 = m.atan2;
 
   /// Computes and returns the square root of 'x'.
-  static final sqrt = m.sqrt;
+  static const sqrt = m.sqrt;
 
   /// Returns the value of the base of the natural logarithm (e),
   /// to the power of the exponent specified in the parameter `x`.
-  static final exp = m.exp;
+  static const exp = m.exp;
 
   /// Returns the natural logarithm of the parameter `x`.
-  static final log = m.log;
+  static const log = m.log;
 
   /// Evaluates `a` and `b` and returns the largest value.
-  static final max = m.max;
+  static const max = m.max;
   // * OLD code
   // static final max = m.max as T Function<T extends num>(T, T);
 
   /// Evaluates `a` and `b` and returns the smallest value.
-  static final min = m.min;
+  static const min = m.min;
 
   /// Computes and returns `x` to the power of `exponent`.
-  static final pow = m.pow;
+  static const pow = m.pow;
 
   /// Returns the ceiling of the specified number or expression.
   /// Parameter `keepDouble` enforces the return type to be `double`.

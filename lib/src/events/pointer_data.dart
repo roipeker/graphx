@@ -14,9 +14,8 @@ enum PointerEventType {
   hover,
 }
 
-enum PointerZoomPanType {
-  start, update, end, none
-}
+enum PointerZoomPanType { start, update, end, none }
+
 class PointerEventData {
   final double stageX;
   final double stageY;
@@ -54,11 +53,11 @@ class PointerEventData {
   }
 
   PointerZoomPanType get zoomPanEventType {
-    if(rawEvent is PointerPanZoomStartEvent){
+    if (rawEvent is PointerPanZoomStartEvent) {
       return PointerZoomPanType.start;
-    } else if(rawEvent is PointerPanZoomUpdateEvent){
+    } else if (rawEvent is PointerPanZoomUpdateEvent) {
       return PointerZoomPanType.update;
-    } else if(rawEvent is PointerPanZoomEndEvent){
+    } else if (rawEvent is PointerPanZoomEndEvent) {
       return PointerZoomPanType.end;
     }
     return PointerZoomPanType.none;

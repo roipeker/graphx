@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 abstract class PainterUtils {
   static ui.Paint emptyPaint = ui.Paint();
   static ui.Paint alphaPaint = ui.Paint()
-    ..color = ui.Color(0xff000000)
+    ..color = const ui.Color(0xff000000)
     ..blendMode = ui.BlendMode.srcATop;
 
   static ui.Paint getAlphaPaint(double alpha) {

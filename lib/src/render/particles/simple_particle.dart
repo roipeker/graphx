@@ -49,9 +49,7 @@ class GSimpleParticle {
     final r = (red * 0xff).toInt() << 16;
     final g = (green * 0xff).toInt() << 8;
     final b = (blue * 0xff).toInt();
-    final rgb = a + r + g + b;
-    final _color = ui.Color(rgb);
-    return _color;
+    return ui.Color(a + r + g + b);
 //    (((a & 0xff) << 24) |
 //    ((r & 0xff) << 16) |
 //    ((g & 0xff) << 8)  |
@@ -124,12 +122,12 @@ class GSimpleParticle {
     var ay = particleAccelerationY = 0;
     var rot = emitter.rotation;
     if (rot != 0) {
-      var _sin = Math.sin(rot);
-      var _cos = Math.cos(rot);
-      vx = particleVelocityX = v * _cos;
-      vy = particleVelocityY = v * _sin;
-      ax = particleAccelerationX = a * _cos;
-      ay = particleAccelerationY = a * _sin;
+      var sin = Math.sin(rot);
+      var cos = Math.cos(rot);
+      vx = particleVelocityX = v * cos;
+      vy = particleVelocityY = v * sin;
+      ax = particleAccelerationX = a * cos;
+      ay = particleAccelerationY = a * sin;
     }
 
     if (emitter.dispersionAngle != 0 || emitter.dispersionAngleVariance != 0) {
@@ -137,12 +135,12 @@ class GSimpleParticle {
       if (emitter.dispersionAngleVariance > 0) {
         dispersionAngle += emitter.dispersionAngleVariance * Math.random();
       }
-      var _sin = Math.sin(dispersionAngle);
-      var _cos = Math.cos(dispersionAngle);
-      particleVelocityX = (vx * _cos - vy * _sin);
-      particleVelocityY = (vy * _cos + vx * _sin);
-      particleAccelerationX = (ax * _cos - ay * _sin);
-      particleAccelerationY = (ay * _cos + ay * _sin);
+      var sin = Math.sin(dispersionAngle);
+      var cos = Math.cos(dispersionAngle);
+      particleVelocityX = (vx * cos - vy * sin);
+      particleVelocityY = (vy * cos + vx * sin);
+      particleAccelerationX = (ax * cos - ay * sin);
+      particleAccelerationY = (ay * cos + ay * sin);
     }
 
     var ratioVel = .001;

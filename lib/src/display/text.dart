@@ -104,7 +104,7 @@ class GText extends GDisplayObject {
     return _paragraph?.height ?? 0;
   }
 
-  static painting.TextStyle defaultTextStyle = painting.TextStyle(
+  static painting.TextStyle defaultTextStyle = const painting.TextStyle(
     color: kColorBlack,
     decorationStyle: ui.TextDecorationStyle.solid,
   );
@@ -220,8 +220,9 @@ class GText extends GDisplayObject {
 
   void _layout() {
     //// Web has a bug for double.infinity for text layout.
-    final paragraphWidth =
-        _width.isInfinite && !SystemUtils.usingSkia ? _maxTextWidthForWeb : _width;
+    final paragraphWidth = _width.isInfinite && !SystemUtils.usingSkia
+        ? _maxTextWidthForWeb
+        : _width;
     _paragraph?.layout(ui.ParagraphConstraints(width: paragraphWidth));
     _invalidSize = false;
   }

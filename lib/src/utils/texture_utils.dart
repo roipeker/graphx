@@ -41,7 +41,7 @@ mixin GTextureUtils {
     double y = 0,
     String? id,
   }) async {
-    _g.clear()..beginFill(color).drawCircle(x, y, radius);
+    _g.clear().beginFill(color).drawCircle(x, y, radius);
     return await _drawShape(id);
   }
 
@@ -53,7 +53,7 @@ mixin GTextureUtils {
     double h = 20,
     String? id,
   }) async {
-    _g.clear()..beginFill(color).drawRect(x, y, w, h);
+    _g.clear().beginFill(color).drawRect(x, y, w, h);
     return (await _drawShape(id));
   }
 
@@ -66,7 +66,7 @@ mixin GTextureUtils {
     double r = 8,
     String? id,
   }) async {
-    _g.clear()..beginFill(color).drawRoundRect(x, y, w, h, r);
+    _g.clear().beginFill(color).drawRoundRect(x, y, w, h, r).endFill();
     return (await _drawShape(id));
   }
 
@@ -114,12 +114,12 @@ mixin GTextureUtils {
     var rows = base.sourceRect!.height / h;
     var total = cols * rows;
     var output = <GTexture>[];
-    final _w = w.toDouble();
-    final _h = h.toDouble();
+    final textureW = w.toDouble();
+    final textureH = h.toDouble();
     for (var i = 0; i < total; ++i) {
-      final px = (i % cols) * _w;
-      final py = (i ~/ cols) * _h;
-      var subRect = GRect(px, py, _w, _h);
+      final px = (i % cols) * textureW;
+      final py = (i ~/ cols) * textureH;
+      var subRect = GRect(px, py, textureW, textureH);
       var texture = GSubTexture(
         base,
         region: subRect,
@@ -136,11 +136,11 @@ mixin GTextureUtils {
   }
 
   static int getNextValidTextureSize(int size) {
-    var _size = 1;
-    while (size > _size) {
-      _size *= 2;
+    var newSize = 1;
+    while (size > newSize) {
+      newSize *= 2;
     }
-    return _size;
+    return newSize;
   }
 
   static int getPreviousValidTextureSize(int size) {

@@ -239,14 +239,14 @@ class GSimpleParticleSystem extends GDisplayObject {
       }
 
       /// calculate color... if needed
-      final _color = particle.color;
-      nativePaint.color = _color;
+      final newColor = particle.color;
+      nativePaint.color = newColor;
 //      nativePaint.color = nativePaint.color.withOpacity(particle.alpha);
 //      nativePaint.colorFilter = ColorFilter.mode(_color, BlendMode.srcATop);
 //      nativePaint.colorFilter = ColorFilter.mode(_color, BlendMode.plus);
 //      nativePaint.colorFilter = ColorFilter.mode(_color, BlendMode.colorBurn);
 //      nativePaint.colorFilter = ColorFilter.mode(_color, BlendMode.src);
-      var filterColor = useAlphaOnColorFilter ? _color : _color.withOpacity(1);
+      var filterColor = useAlphaOnColorFilter ? newColor : newColor.withOpacity(1);
       nativePaint.colorFilter =
           ui.ColorFilter.mode(filterColor, particleBlendMode);
       canvas!.save();

@@ -94,5 +94,4 @@ class InputConverter {
       rawEvent: event,
     ));
   }
-
 }

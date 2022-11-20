@@ -35,10 +35,10 @@ class SceneBuilderWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SceneBuilderWidgetState createState() => _SceneBuilderWidgetState();
+  createState() => SceneBuilderWidgetState();
 }
 
-class _SceneBuilderWidgetState extends State<SceneBuilderWidget> {
+class SceneBuilderWidgetState extends State<SceneBuilderWidget> {
   late SceneController _controller;
 
   @override
@@ -106,7 +106,6 @@ Use `Expanded()` or `Flexible()` in Flex Widgets like Column() or Row().
         cursor: MouseCursor.defer,
         opaque: widget.mouseOpaque,
         child: Listener(
-          child: child,
           behavior: widget.pointerBehaviour,
           onPointerDown: converter.pointerDown,
           onPointerUp: converter.pointerUp,
@@ -116,6 +115,7 @@ Use `Expanded()` or `Flexible()` in Flex Widgets like Column() or Row().
           onPointerPanZoomStart: converter.pointerPanZoomStart,
           onPointerPanZoomUpdate: converter.pointerPanZoomUpdate,
           onPointerPanZoomEnd: converter.pointerPanZoomEnd,
+          child: child,
         ),
       );
     }

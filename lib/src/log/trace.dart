@@ -72,14 +72,14 @@ void trace(
   var msg = outputList.join(_separator);
   var name = _customTag;
   if (_useStack) {
-    var _stack = _getStack();
+    var stack = _getStack();
     if (_tagPaddingCount > 0) {
-      _stack = _stack.padRight(_tagPaddingCount, _tagPaddingChar);
+      stack = stack.padRight(_tagPaddingCount, _tagPaddingChar);
     }
     if (_showOutsideTag) {
-      msg = '$_stack◉ $msg';
+      msg = '$stack◉ $msg';
     } else {
-      name += ' $_stack';
+      name += ' $stack';
     }
   }
   dev.log(
@@ -127,10 +127,10 @@ String _stackCommon(String stack) {
       output += '↪ $callLine ';
     }
   }
-  const _suffixCall = '()';
+  const suffixCall = '()';
   if (elements.length == 1) {
     /// global method.
-    methodName = '${elements[0]}$_suffixCall';
+    methodName = '${elements[0]}$suffixCall';
     if (_showMethodname) {
       output += '‣ $methodName ';
     }
@@ -138,7 +138,7 @@ String _stackCommon(String stack) {
     className = elements.removeAt(0);
     methodName = elements.join('.');
     methodName =
-        '${methodName.replaceAll(_anonymousMethodTag, '<⁕>')}$_suffixCall';
+        '${methodName.replaceAll(_anonymousMethodTag, '<⁕>')}$suffixCall';
     if (_showClassname) {
       output += '‣ $className ';
     }

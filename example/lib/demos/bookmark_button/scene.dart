@@ -28,7 +28,7 @@ class BookmarkButton extends GSprite {
   @override
   void addedToStage() {
     stage!.color = Color(0xffEDEFFB);
-    bg = addChild(GShape()) as GShape;
+    bg = addChild(GShape());
     shadow = GDropShadowFilter(
       6,
       6,
@@ -76,7 +76,7 @@ class BookmarkButton extends GSprite {
       _gifFrames = atlas.textureFrames;
     }
     bookmarkIco =
-        addChild(GMovieClip(frames: _gifFrames!, fps: 50)) as GMovieClip;
+        addChild(GMovieClip(frames: _gifFrames!, fps: 50));
     bookmarkIco.repeatable = false;
     bookmarkIco.alignPivot();
     bookmarkIco.setPosition(label.x / 2 + 2, sh / 2);

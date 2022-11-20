@@ -59,7 +59,7 @@ class GShape extends GDisplayObject {
       return;
     }
     _inverseHugePath = ui.Path();
-    final w = 100000.0;
+    const w = 100000.0;
     var r = Pool.getRect(-w / 2, -w / 2, w, w);
     _inverseHugePath!.addRect(r.toNative());
     _inverseHugePath!.close();

@@ -56,12 +56,12 @@ class DisplayBoundsDebugger {
 
   void _renderBounds(GDisplayObject obj) {
     obj.getBounds(_root, _sHelpRect);
-    final _paint = obj.$debugBoundsPaint ?? _debugPaint;
-    final linePaint = _paint.clone();
+    final paint = obj.$debugBoundsPaint ?? _debugPaint;
+    final linePaint = paint.clone();
     linePaint.color = linePaint.color.withOpacity(.3);
     final rect = _sHelpRect.toNative();
     canvas!.drawLine(rect.topLeft, rect.bottomRight, linePaint);
     canvas!.drawLine(rect.topRight, rect.bottomLeft, linePaint);
-    canvas!.drawRect(rect, _paint);
+    canvas!.drawRect(rect, paint);
   }
 }

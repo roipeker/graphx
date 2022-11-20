@@ -378,7 +378,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     double anchorX,
     double anchorY,
   ) {
-    _path!.cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
+    _path!
+        .cubicTo(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
     return this;
   }
 
@@ -592,7 +593,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     int sides, [
     double rotation = 0,
   ]) {
-    final points = List<Offset>.filled(sides, Offset(0, 0));
+    final points = List<Offset>.filled(sides, Offset.zero);
     final rel = 2 * Math.PI / sides;
     for (var i = 1; i <= sides; ++i) {
       final px = x + radius * Math.cos(i * rel + rotation);
@@ -649,21 +650,21 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       throw "Can't endHole() without starting a beginHole() command.";
 //      return this;
     }
-    final _holePath = _path!;
-    _holePath.close();
+    final holePath = _path!;
+    holePath.close();
     _currentDrawing = _drawingQueue.last;
     if (!applyToCurrentQueue) {
       _currentDrawing!.path = Path.combine(
         PathOperation.difference,
         _path!,
-        _holePath,
+        holePath,
       );
     } else {
       for (final cmd in _drawingQueue) {
         cmd!.path = Path.combine(
           PathOperation.difference,
           cmd.path!,
-          _holePath,
+          holePath,
         );
       }
     }
@@ -717,17 +718,17 @@ class Graphics with RenderUtilMixin implements GxRenderable {
 
       /// calculate gradient.
       if (graph.hasGradient) {
-        Rect? _bounds;
+        Rect? graphBounds;
         if (graph.hasVertices) {
-          _bounds = graph.vertices!.getBounds();
+          graphBounds = graph.vertices!.getBounds();
         } else {
-          _bounds = graph.path!.getBounds();
+          graphBounds = graph.path!.getBounds();
         }
 
         /// TODO: try if this works to change the gradient
         /// opacity from the Shape.
         fill.color = baseColor.withOpacity(alpha);
-        fill.shader = graph.gradient!.createShader(_bounds!);
+        fill.shader = graph.gradient!.createShader(graphBounds!);
       } else {
         if (alpha != 1) {
           fill.color = baseColor.withOpacity(baseColor.opacity * alpha);
@@ -843,7 +844,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     /// will only work if it has a fill.
     assert(_currentDrawing != null);
     assert(_currentDrawing!.fill != null);
-    _currentDrawing!.vertices = _GraphVertices(
+    _currentDrawing!.vertices = GraphicsVertices(
       ui.VertexMode.triangles,
       vertices,
       indices,
@@ -866,7 +867,7 @@ class GraphicsDrawingData {
 
   /// for drawVertices()
   BlendMode blendMode = BlendMode.src;
-  _GraphVertices? vertices;
+  GraphicsVertices? vertices;
 
   /// temporal storage to use with _GraphVertices
   GTexture? shaderTexture;
@@ -886,14 +887,14 @@ class GraphicsDrawingData {
     bool cloneFill = false,
     bool clonePath = false,
   ]) {
-    final _fill = cloneFill ? fill?.clone() : fill;
-    final _path = clonePath ? (path != null ? Path.from(path!) : null) : path;
-    final _vertices = vertices;
-    return GraphicsDrawingData(_fill, _path)
+    final newFill = cloneFill ? fill?.clone() : fill;
+    final newPath = clonePath ? (path != null ? Path.from(path!) : null) : path;
+    final newVertices = vertices;
+    return GraphicsDrawingData(newFill, newPath)
       ..gradient = gradient
       ..picture = picture
       ..blendMode = blendMode
-      ..vertices = _vertices;
+      ..vertices = newVertices;
   }
 
   bool isSameType(Paint otherFill) => fill?.style == otherFill.style;
@@ -922,7 +923,7 @@ extension ExtSkiaPaintCustom on Paint {
   }
 }
 
-class _GraphVertices {
+class GraphicsVertices {
   List<double> vertices;
   List<double>? uvtData, adjustedUvtData;
   List<int>? colors, indices;
@@ -944,7 +945,7 @@ class _GraphVertices {
   Culling culling;
 
   /// check if uvt requires normalization.
-  _GraphVertices(
+  GraphicsVertices(
     this.mode,
     this.vertices, [
     this.indices,
@@ -986,20 +987,25 @@ class _GraphVertices {
   ui.Vertices? get rawData {
     if (_rawData != null) return _rawData;
     // calculateCulling();
-    Float32List? _textureCoordinates;
-    Int32List? _colors;
-    Uint16List? _indices;
+    Float32List? textureCoordinates;
+    Int32List? newColors;
+    Uint16List? newIndices;
     if (uvtData != null && adjustedUvtData != null) {
-      _textureCoordinates = Float32List.fromList(adjustedUvtData as List<double>);
+      textureCoordinates =
+          Float32List.fromList(adjustedUvtData as List<double>);
     }
-    if (colors != null) _colors = Int32List.fromList(colors!);
-    if (indices != null) _indices = Uint16List.fromList(indices!);
+    if (colors != null) {
+      newColors = Int32List.fromList(colors!);
+    }
+    if (indices != null) {
+      newIndices = Uint16List.fromList(indices!);
+    }
     _rawData = ui.Vertices.raw(
       VertexMode.triangles,
       Float32List.fromList(vertices),
-      textureCoordinates: _textureCoordinates,
-      colors: _colors,
-      indices: _indices,
+      textureCoordinates: textureCoordinates,
+      colors: newColors,
+      indices: newIndices,
     );
     return _rawData;
   }
@@ -1027,16 +1033,16 @@ class _GraphVertices {
     var v = vertices;
     var l = indices!.length;
     while (i < l) {
-      var _a = i;
-      var _b = i + 1;
-      var _c = i + 2;
+      var a = i;
+      var b = i + 1;
+      var c = i + 2;
 
-      var iax = ind![_a] * 2;
-      var iay = ind[_a] * 2 + 1;
-      var ibx = ind[_b] * 2;
-      var iby = ind[_b] * 2 + 1;
-      var icx = ind[_c] * 2;
-      var icy = ind[_c] * 2 + 1;
+      var iax = ind![a] * 2;
+      var iay = ind[a] * 2 + 1;
+      var ibx = ind[b] * 2;
+      var iby = ind[b] * 2 + 1;
+      var icx = ind[c] * 2;
+      var icy = ind[c] * 2 + 1;
 
       var x1 = v[iax] - offsetX;
       var y1 = v[iay] - offsetY;
@@ -1091,7 +1097,7 @@ class _GraphUtils {
 
   static final Path _helperPath = Path();
 
-  static Path getPathFromVertices(_GraphVertices v) {
+  static Path getPathFromVertices(GraphicsVertices v) {
     var path = _helperPath;
     path.reset();
     final pos = v.vertices;
@@ -1104,7 +1110,7 @@ class _GraphUtils {
     return path;
   }
 
-  static List<double?> getTrianglePoints(_GraphVertices v) {
+  static List<double?> getTrianglePoints(GraphicsVertices v) {
     var ver = v.vertices;
     var ind = v.indices;
     if (ind == null) {

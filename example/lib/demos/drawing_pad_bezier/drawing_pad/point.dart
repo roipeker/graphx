@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:graphx/graphx.dart';
 
 class PadPoint {
@@ -31,5 +29,5 @@ class PadPoint {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => hashValues(x, y, time);
+  int get hashCode => Object.hash(x, y, time);
 }

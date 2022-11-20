@@ -125,20 +125,20 @@ class MyButton extends GSprite {
     /// values for scrollDelta (according to device and OS sensibility).
     /// Can be scaled by 700% of what is expected (a subtle range between 1-10).
     /// Can be easily adjusted with some math, increasing the `dpiFactor`.
-    var dpiFactor = 100.5;
-    trace('data',input.scrollDelta, window.devicePixelRatio);
-    var ratioY =
-        (input.scrollDelta.y / h) / (window.devicePixelRatio * dpiFactor);
-    _fillPercent += ratioY;
-    _fillPercent = _fillPercent.clamp(0.0, 1.0);
-    _updateFill();
+    ///
+    // var dpiFactor = 100.5;
+    // var ratioY =
+    //     (input.scrollDelta.y / h) / (window.devicePixelRatio * dpiFactor);
+    // _fillPercent += ratioY;
+    // _fillPercent = _fillPercent.clamp(0.0, 1.0);
+    // _updateFill();
 
 
     /// "Smoother" variation, take the direction (1, -1) of the scroll wheel
-    // var scrollDir = input.scrollDelta.y < 0 ? 1 : -1;
-    // _fillPercent += .01 * scrollDir;
-    // _fillPercent = _fillPercent.clamp(0.0, 1.0);
-    // _updateFill();
+    var scrollDir = input.scrollDelta.y < 0 ? 1 : -1;
+    _fillPercent += .01 * scrollDir;
+    _fillPercent = _fillPercent.clamp(0.0, 1.0);
+    _updateFill();
   }
 
   void _onZoomPan(MouseInputData e) {

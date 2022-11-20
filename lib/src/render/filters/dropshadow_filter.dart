@@ -101,7 +101,8 @@ class GDropShadowFilter extends GComposerFilter {
   }
 
   @override
-  bool get isValid => _blurX > 0 || _blurY > 0 && color.value != kColorTransparent.value;
+  bool get isValid =>
+      _blurX > 0 || _blurY > 0 && color.value != kColorTransparent.value;
 
   /// todo: Check why lower numbers brings the layer on top creating a glitch.
   static const double _minBlur = .02;

@@ -16,11 +16,11 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  String scroreTF = 'SCORE: 0';
+  String scoreText = 'SCORE: 0';
 
   void updateScore(String score) {
     setState(() {
-      scroreTF = score;
+      scoreText = score;
     });
   }
 
@@ -38,14 +38,14 @@ class _GamePageState extends State<GamePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              scroreTF,
+              scoreText,
               style: TextStyle(
                 letterSpacing: 1,
                 fontSize: 10,
                 fontFamily: 'pressstart',
               ),
             ),
-            scroreTF == 'PAUSED'
+            scoreText == 'PAUSED'
                 ? IconButton(
                     icon: Icon(Icons.home),
                     onPressed: () => Navigator.of(context).pushReplacement(
@@ -66,7 +66,7 @@ class _GamePageState extends State<GamePage> {
         hoverElevation: 0,
         disabledElevation: 0,
         child: Icon(
-          scroreTF == 'PAUSED' ? Icons.play_arrow : Icons.pause,
+          scoreText == 'PAUSED' ? Icons.play_arrow : Icons.pause,
           color: Colors.white,
         ),
       ),

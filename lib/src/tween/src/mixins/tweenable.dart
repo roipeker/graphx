@@ -55,13 +55,13 @@ mixin GTweenable {
   /// implement in class.
   Map<String, List<Function>>? getTweenableAccessors() => null;
 
-  void setProperty(Object prop, double value) {
+  void setProperty(Object prop, double val) {
     final key = '$prop';
     if (_lerps.containsKey(key)) {
-      _lerps[key]?.resolve(value);
+      _lerps[key]?.resolve(val);
     } else {
       if (_accessors == null) initProps();
-      _accessors![key]![1](value);
+      _accessors![key]![1](val);
     }
     // if (_lerps[prop as String] != null) {
     //   _lerps[prop]!.resolve(value);
