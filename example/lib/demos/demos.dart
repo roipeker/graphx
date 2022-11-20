@@ -48,4 +48,5 @@ export 'svg_icons/svg_icons.dart';
 export 'trigrid/trigrid.dart';
 export 'universo_flutter_intro/universo_flutter_intro.dart';
 export 'xmas/xmas.dart';
+export 'zoom_gesture/zoom_gesture.dart';
 export 'zoom_pivot/zoom_pivot.dart';
