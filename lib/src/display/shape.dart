@@ -47,6 +47,9 @@ class GShape extends GDisplayObject {
     if (!$hasTouchableArea || !mouseEnabled) {
       return null;
     }
+    if (($mask != null || maskRect != null) && !hitTestMask(localPoint)) {
+      return null;
+    }
     return (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
   }
 
