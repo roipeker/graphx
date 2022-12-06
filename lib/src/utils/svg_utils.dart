@@ -10,18 +10,22 @@ class SvgUtils {
     return await svg.svg.fromSvgString(rawSvg, rawSvg);
   }
 
-  static Future<Picture> svgStringToPicture(String rawSvg) async {
+  static Future<Picture> svgStringToPicture(String rawSvg, {
+    Size? size,
+    ColorFilter? colorFilter,
+    bool clipToViewBox = true,
+  }) async {
     final svgRoot = await svg.svg.fromSvgString(rawSvg, rawSvg);
-    return svgRoot.toPicture();
+    return svgRoot.toPicture(
+      size: size, colorFilter: colorFilter, clipToViewBox: clipToViewBox,);
   }
 
-  static void svgStringToCanvas(
-    String rawSvg,
-    Canvas canvas, {
-    bool scaleCanvas = true,
-    bool clipCanvas = true,
-    required Size scaleCanvasSize,
-  }) async {
+  static void svgStringToCanvas(String rawSvg,
+      Canvas canvas, {
+        bool scaleCanvas = true,
+        bool clipCanvas = true,
+        required Size scaleCanvasSize,
+      }) async {
     final svgRoot = await svg.svg.fromSvgString(rawSvg, rawSvg);
     if (scaleCanvas) {
       svgRoot.scaleCanvasToViewBox(canvas, scaleCanvasSize);

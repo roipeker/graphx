@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../graphx.dart';
 
 class KeyboardManager<T extends KeyboardEventData> {
-  final focusNode = FocusNode();
+  final focusNode = FocusNode(debugLabel: 'graphx_keyboard_manager');
 
   void dispose() {
     _onDown?.removeAll();

@@ -76,15 +76,14 @@ mixin DisplayListSignalsMixin {
 }
 
 mixin RenderSignalMixin {
-  EventSignal<Canvas?>? $onPrePaint;
-  EventSignal<Canvas?>? $onPostPaint;
+  EventSignal<Canvas>? $onPrePaint;
+  EventSignal<Canvas>? $onPostPaint;
 
 //  EventSignal<Canvas> $onPaint;
 
-  EventSignal<Canvas?> get onPrePaint => $onPrePaint ??= EventSignal<Canvas?>();
+  EventSignal<Canvas> get onPrePaint => $onPrePaint ??= EventSignal<Canvas>();
 
-  EventSignal<Canvas?> get onPostPaint =>
-      $onPostPaint ??= EventSignal<Canvas?>();
+  EventSignal<Canvas> get onPostPaint => $onPostPaint ??= EventSignal<Canvas>();
 
 //  EventSignal<Canvas> get onPaint => $onPaint ??= EventSignal<Canvas>();
 

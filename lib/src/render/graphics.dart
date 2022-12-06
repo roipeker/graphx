@@ -339,7 +339,7 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     bool smooth = false,
   ]) {
     /// actual paint must be stroke.
-    assert(_currentDrawing!.fill!.style == PaintingStyle.stroke);
+    assert(_currentDrawing!.fill?.style == PaintingStyle.stroke);
     if (_holeMode) return this;
     final fill = _currentDrawing!.fill!;
     fill.isAntiAlias = smooth;
