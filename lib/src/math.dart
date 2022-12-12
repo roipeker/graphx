@@ -83,6 +83,11 @@ abstract class Math {
   /// Returns the natural logarithm of the parameter `x`.
   static const log = m.log;
 
+  /// Log base 10
+  static double log10(num value){
+    return m.log(value) * m.log10e;
+  }
+
   /// Evaluates `a` and `b` and returns the largest value.
   static const max = m.max;
   // * OLD code
@@ -96,7 +101,7 @@ abstract class Math {
 
   /// Returns the ceiling of the specified number or expression.
   /// Parameter `keepDouble` enforces the return type to be `double`.
-  static num? ceil(double value, [bool keepDouble = true]) {
+  static num ceil(double value, [bool keepDouble = true]) {
     return keepDouble ? value.ceilToDouble() : value.ceil();
   }
 

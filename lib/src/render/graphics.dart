@@ -855,6 +855,15 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     );
     return this;
   }
+
+  /// quick way to colorize all previous drawing
+  void colorize(Color color) {
+    for (var dq in drawingQueue) {
+      if (dq?.fill != null) {
+        dq?.fill?.colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
+      }
+    }
+  }
 }
 
 class GraphicsDrawingData {
