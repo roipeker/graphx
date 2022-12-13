@@ -84,12 +84,13 @@ abstract class Math {
   static const log = m.log;
 
   /// Log base 10
-  static double log10(num value){
+  static double log10(num value) {
     return m.log(value) * m.log10e;
   }
 
   /// Evaluates `a` and `b` and returns the largest value.
   static const max = m.max;
+
   // * OLD code
   // static final max = m.max as T Function<T extends num>(T, T);
 
@@ -171,5 +172,30 @@ abstract class Math {
 
   static double lerp(num min, num max, double t) {
     return min + (max - min) * t;
+  }
+
+  static double map(
+    double srcValue,
+    double srcMin,
+    double srcMax,
+    double dstMin,
+    double dstMax,
+  ) {
+    final norm = Math.norm(srcValue, srcMin, srcMax);
+    return Math.lerp(dstMin, dstMax, norm);
+  }
+
+  static double dotProduct(
+    double x0,
+    double y0,
+    double x1,
+    double y1,
+    double x2,
+    double y2,
+    double x3,
+    double y3,
+  ) {
+    var dx0 = x1 - x0, dy0 = y1 - y0, dx1 = x3 - x2, dy1 = y3 - y2;
+    return dx0 * dx1 + dy0 * dy1;
   }
 }
