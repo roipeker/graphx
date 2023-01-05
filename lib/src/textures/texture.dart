@@ -103,7 +103,7 @@ class GTexture {
   }
 
   void _drawImage(ui.Canvas canvas, ui.Paint paint) {
-    if (_disposed) return;
+    if (_disposed || root == null) return;
     if (scale9Grid != null) {
       // print('src: $scale9Grid, dst: $scale9GridDest');
       canvas.drawImageNine(
