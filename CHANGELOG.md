@@ -1,3 +1,7 @@
+## [1.0.6]
+- `GMovieClip` cleanup
+- added `GTextureAtlas.fixedSizeTile()` to fill sub-textures from a fixed size SpriteSheet.
+
 ## [1.0.5]
 
 - adds support for the new PointerPanZoom*Event family on Listenable that overrides the mouse Signal (mouse wheel) on desktop OS.

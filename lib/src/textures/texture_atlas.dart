@@ -23,8 +23,35 @@ class GTextureAtlas {
 
   late double _atlasXmlRatio;
 
-  GTextureAtlas(
-    GTexture? texture, [
+  factory GTextureAtlas.fixedSizeTile(GTexture texture, {
+    required double tileWidth,
+    double? tileHeight,
+    double tilePadding = 0,
+    String namePrefix = '',
+  }) {
+    tileHeight ??= tileWidth;
+    final atlas = GTextureAtlas(texture);
+    final cols = texture.width! ~/ tileWidth;
+    final rows = texture.height! ~/ tileHeight;
+    final total = cols * rows;
+    List.generate(total, (index) {
+      var px = index % cols;
+      var py = index ~/ cols;
+      final name = '$namePrefix$index'.padLeft(2, '0');
+      atlas.addRegion(
+        name,
+        GRect(
+          px * tileWidth + tilePadding,
+          py * tileHeight!+ tilePadding,
+          tileWidth- tilePadding,
+          tileHeight- tilePadding,
+        ),
+      );
+    });
+    return atlas;
+  }
+
+  GTextureAtlas(GTexture? texture, [
     Object? data,
     double adjustXmlSizesRatio = 1,
   ]) {

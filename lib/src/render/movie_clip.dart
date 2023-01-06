@@ -18,14 +18,10 @@ class GMovieClip extends GBitmap {
 
   /// stops the playback when reaching this frame.
   int targetFrame = -1;
-  GBitmap? bitmap;
 
   Signal? _onFramesComplete;
 
   Signal get onFramesComplete => _onFramesComplete ??= Signal();
-
-//  Bitmap2 getBitmap() => this;
-//  Bitmap2 resolveBitmap() => getBitmap();
 
   double get fps => 1 / speed;
 
