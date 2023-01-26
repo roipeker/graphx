@@ -35,7 +35,7 @@ class SplashIntroMain extends StatelessWidget {
             children: [
               Text(
                 "I'm a flutter widget.",
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
               SizedBox(height: 24),
               FlutterLogo(size: 120),

@@ -10,6 +10,7 @@ import 'xmas_scene.dart';
 
 class XmasMain extends StatefulWidget {
   XmasMain({Key? key}) : super(key: key);
+
   @override
   _XmasMainState createState() => _XmasMainState();
 }
@@ -47,7 +48,7 @@ class _XmasMainState extends State<XmasMain> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4!.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 shadows: [
                   Shadow(
                     color: Colors.black.withOpacity(.7),

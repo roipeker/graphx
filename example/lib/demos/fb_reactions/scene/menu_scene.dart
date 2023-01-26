@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide MenuItem;
+import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import 'menu_item.dart';

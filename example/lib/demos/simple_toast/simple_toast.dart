@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
     mps.emit1<Map<String, dynamic>>(
       'showSnackBar',
       {
-        'text': tec.text == '' ? 'No messege' : tec.text,
+        'text': tec.text == '' ? 'No message' : tec.text,
         'color': Colors.red,
         'bottomInset': MediaQuery.of(context).viewInsets.bottom,
         'onMouseClick': (MouseInputData event) =>
@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),

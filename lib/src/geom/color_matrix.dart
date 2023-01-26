@@ -52,30 +52,44 @@ class ColorMatrix {
   static final int LENGTH = kIdentityMatrix.length;
   final _storage = List<double>.filled(25, 0);
 
+  // Provides helper functions for assembling a matrix for use with the
+  // ColorMatrixFilter.
+  // Most methods return the instance to facilitate chained calls.
   ColorMatrix([List<double> matrix = kIdentityMatrix]) {
     matrix = _fixMatrix(matrix);
     copyMatrix(((matrix.length == LENGTH) ? matrix : kIdentityMatrix));
   }
 
-  // public methods:
+  // Resets the matrix to identity values.
   void reset() {
     for (var i = 0; i < LENGTH; i++) {
       _storage[i] = kIdentityMatrix[i];
     }
   }
 
+  // Shortcut method to adjust brightness, contrast, saturation and hue.
+  // Equivalent to calling:
+  // - adjustHue(hue),
+  // - adjustContrast(contrast),
+  // - adjustBrightness(brightness),
+  // - adjustSaturation(saturation),
+  // in that order.
   void adjustColor(
-    double pBrightness,
-    double pContrast,
-    double pSaturation,
-    double pHue,
+    double brightness,
+    double contrast,
+    double saturation,
+    double hue,
   ) {
-    adjustHue(pHue);
-    adjustContrast(pContrast);
-    adjustBrightness(pBrightness);
-    adjustSaturation(pSaturation);
+    adjustHue(hue);
+    adjustContrast(contrast);
+    adjustBrightness(brightness);
+    adjustSaturation(saturation);
   }
 
+  // Adjusts the brightness of pixel color by adding the specified value
+  // to the red, green and blue channels.
+  // Positive values will make the image brighter (1),
+  // negative values will make it darker (-1).
   void adjustBrightness(double percent) {
     if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
@@ -95,6 +109,9 @@ class ColorMatrix {
     ]);
   }
 
+  // Adjusts the contrast of pixel color.
+  // Positive values will increase contrast,
+  // negative values will decrease contrast.
   void adjustContrast(double percent) {
     if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
@@ -131,6 +148,9 @@ class ColorMatrix {
     ]);
   }
 
+  // Adjusts the color saturation of the pixel.
+  // Positive values will increase saturation,
+  // negative values will decrease saturation (trend towards greyscale).
   void adjustSaturation(double percent) {
     if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
@@ -155,6 +175,7 @@ class ColorMatrix {
     ]);
   }
 
+  // Adjusts the hue of the pixel color.
   void adjustHue(double percent) {
     if (percent == 0 || percent.isNaN) return;
     if (percent >= -1 && percent <= 1) {
@@ -192,12 +213,14 @@ class ColorMatrix {
     ]);
   }
 
+  // Concatenates (multiplies) the specified matrix with this one.
   void concat(List<double> pMatrix) {
     pMatrix = _fixMatrix(pMatrix);
     if (pMatrix.length != LENGTH) return;
     multiplyMatrix(pMatrix);
   }
 
+  // Returns a clone of this ColorMatrix.
   ColorMatrix clone() => ColorMatrix(_storage);
 
   @override
@@ -207,8 +230,7 @@ class ColorMatrix {
   List<double?> get storage =>
       _storage.sublist(0, math.min(_storage.length, 20)).toList();
 
-  /// private methods:
-  /// copy the specified matrix's values to this matrix:
+  // Copy the specified matrix's values to this matrix.
   void copyMatrix(List<double> pMatrix) {
     for (var i = 0; i < LENGTH; i++) {
       _storage[i] = pMatrix[i];

@@ -1,18 +1,45 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+
 import 'geom.dart';
 
 class GMatrix {
-  double a = 0.0, b = 0.0, c = 0.0, d = 0.0, tx = 0.0, ty = 0.0;
+  // The value that affects the positioning of pixels along the x axis when
+  // scaling or rotating an image.
+  double a = 0.0;
+
+  // The value that affects the positioning of pixels along the y axis when
+  // rotating or skewing an image.
+  double b = 0.0;
+
+  // The value that affects the positioning of pixels along the x axis when
+  // rotating or skewing an image.
+  double c = 0.0;
+
+  // The value that affects the positioning of pixels along the y axis when
+  // scaling or rotating an image.
+  double d = 0.0;
+
+  // The distance by which to translate each point along the x axis.
+  double tx = 0.0;
+
+  // The distance by which to translate each point along the y axis.
+  double ty = 0.0;
+
   final Matrix4 _native = Matrix4.identity();
+
+  // Returns a text value listing the properties of the Matrix object.
   @override
   String toString() => 'GMatrix {a: $a, b: $b, c: $c, d: $d, tx: $tx, ty: $ty}';
 
+  // Returns a native Matrix4 instance based on this GMatrix a,b,c,d,tx,ty
   Matrix4 toNative() {
     _native.setValues(a, b, 0, 0, c, d, 0, 0, 0, 0, 1, 0, tx, ty, 0, 1);
     return _native;
   }
 
+  // Creates a new GMatrix object based on the Matrix4 counterpart.
   static GMatrix fromNative(Matrix4 m) => GMatrix(
         m.storage[0],
         m.storage[4],
@@ -22,6 +49,8 @@ class GMatrix {
         m.storage[13],
       );
 
+  // Easy utility to zoom by `zoomFactor` around the point `center`
+  // returns the new Matrix
   GMatrix zoomAroundPoint(GPoint center, double zoomFactor) {
     var t1 = GMatrix();
     t1.translate(-center.x, -center.y);
@@ -34,6 +63,7 @@ class GMatrix {
     return concat(zoom);
   }
 
+  // Creates a new GMatrix object with the specified parameters.
   GMatrix([
     this.a = 1,
     this.b = 0,
@@ -43,6 +73,8 @@ class GMatrix {
     this.ty = 0,
   ]);
 
+  // Returns a new Matrix object that is a clone of this matrix,
+  // with an exact copy of the contained object.
   GMatrix clone() {
     return GMatrix(
       a,
@@ -54,16 +86,19 @@ class GMatrix {
     );
   }
 
-  GMatrix copyFrom(GMatrix from) {
-    a = from.a;
-    b = from.b;
-    c = from.c;
-    d = from.d;
-    tx = from.tx;
-    ty = from.ty;
+  // Copies all of matrix data from the source Matrix object into the
+  // calling Matrix object.
+  GMatrix copyFrom(GMatrix source) {
+    a = source.a;
+    b = source.b;
+    c = source.c;
+    d = source.d;
+    tx = source.tx;
+    ty = source.ty;
     return this;
   }
 
+  // Sets the members of Matrix to the specified values
   GMatrix setTo(double a, double b, double c, double d, double tx, double ty) {
     this.a = a;
     this.b = b;
@@ -74,6 +109,7 @@ class GMatrix {
     return this;
   }
 
+  // Assigns the Matrix from a List<double> of 6 values.
   GMatrix.fromList(List<double> value) {
     a = value[0];
     b = value[1];
@@ -83,6 +119,13 @@ class GMatrix {
     ty = value[5];
   }
 
+  // Sets each matrix property to a value that causes a null transformation.
+  // An object transformed by applying an identity matrix will be identical
+  // to the original.
+  //
+  // After calling the identity() method, the resulting matrix has the
+  // following properties: a=1, b=0, c=0, d=1, tx=0, ty=0.
+  // Returns itself for chaining.
   GMatrix identity() {
     a = 1;
     b = 0;
@@ -93,6 +136,7 @@ class GMatrix {
     return this;
   }
 
+  // Calculates directly the transformation for the DisplayObject properties.
   GMatrix setTransform(
     double x,
     double y,
@@ -113,6 +157,8 @@ class GMatrix {
     return this;
   }
 
+  // Appends the specified Matrix structure to this Matrix structure.
+  // Returns itself for chaining.
   GMatrix append(GMatrix matrix) {
     final a1 = a;
     final b1 = b;
@@ -136,6 +182,9 @@ class GMatrix {
     return this;
   }
 
+  // Concatenates a matrix with the current matrix,
+  // effectively combining the geometric effects of the two.
+  // Returns current matrix (self) for chaining.
   GMatrix concat(GMatrix matrix) {
     double a1, c1, tx1;
     a1 = a * matrix.a + b * matrix.c;
@@ -180,6 +229,8 @@ class GMatrix {
 //  tx = tx1;
 //}
 
+  // Performs the opposite transformation of the original matrix.
+  // Returns itself for chaining.
   GMatrix invert() {
     var n = a * d - b * c;
     if (n == 0) {
@@ -200,6 +251,7 @@ class GMatrix {
     return this;
   }
 
+  // Applies a scaling transformation to the matrix.
   GMatrix scale(double scaleX, [double? scaleY]) {
     scaleY ??= scaleX;
     a *= scaleX;
@@ -211,6 +263,7 @@ class GMatrix {
     return this;
   }
 
+  // Applies a skew transformation (in radians) to the matrix.
   void skew(double skewX, double skewY) {
 //    print("Skews: $skewX, $skewY");
 //    c = math.tan(skewX);
@@ -229,6 +282,7 @@ class GMatrix {
     );
   }
 
+  // Applies a rotation transformation to the Matrix object.
   void rotate(double angle) {
     final cos = math.cos(angle);
     final sin = math.sin(angle);
@@ -246,12 +300,16 @@ class GMatrix {
     tx = tx1;
   }
 
-  GMatrix translate(double x, double y) {
-    tx += x;
-    ty += y;
+  // Translates the matrix along the x and y axes, as specified by
+  // the dx and dy parameters.
+  GMatrix translate(double dx, double dy) {
+    tx += dx;
+    ty += dy;
     return this;
   }
 
+  // Returns the result of applying the geometric transformation
+  // represented by the Matrix object to the specified point.
   GPoint transformPoint(GPoint point, [GPoint? out]) {
     return transformCoords(point.x, point.y, out);
   }
@@ -268,6 +326,8 @@ class GMatrix {
     return out;
   }
 
+  // Returns the result of applying the geometric transformation
+  // into a point.
   GPoint transformCoords(double x, double y, [GPoint? out]) {
     out ??= GPoint();
     out.x = a * x + c * y + tx;

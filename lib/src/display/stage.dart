@@ -123,7 +123,6 @@ class Stage extends GDisplayObjectContainer
       }
       _stageRectNative =
           _stageRect.setTo(0, 0, _size!.width, _size!.height).toNative();
-      _stageBoundsRectPath;
       _stageBoundsRectPath.reset();
       _stageBoundsRectPath.addRect(_stageRectNative!);
       _stageBoundsRectPath.close();
