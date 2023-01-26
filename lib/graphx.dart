@@ -1,7 +1,6 @@
 library graphx;
 
 export 'package:flutter/foundation.dart';
-
 export 'package:flutter/services.dart';
 
 export 'src/core/core.dart';

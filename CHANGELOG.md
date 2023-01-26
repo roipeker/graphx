@@ -1,3 +1,8 @@
+## [1.0.7]
+- upgrade to Flutter 3.7 constrains.
+- `createImageSync()` and `createImageTextureSync()`
+- small fixes in `GKeyboard` and `ParticleSystem`
+
 ## [1.0.6]
 - `GMovieClip` cleanup
 - added `GTextureAtlas.fixedSizeTile()` to fill sub-textures from a fixed size SpriteSheet.

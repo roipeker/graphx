@@ -1104,7 +1104,7 @@ abstract class GDisplayObject
     }
     final needsAdjust =
         (rect.left != 0 || rect.top != 0) && adjustOffset || resolution != 1;
-    ui.Picture picture;
+    late ui.Picture picture;
     if (needsAdjust) {
       picture = createPicture((canvas) {
         if (adjustOffset) canvas.translate(-rect!.left, -rect.top);
@@ -1116,23 +1116,53 @@ abstract class GDisplayObject
     } else {
       picture = createPicture();
     }
-    //
-    // final picture = createPicture(
-    //   !needsAdjust
-    //       ? null
-    //       : (canvas) {
-    //     if (adjustOffset) {
-    //       canvas.translate(-rect.left, -rect.top);
-    //     }
-    //     if (resolution != 1) {
-    //       canvas.scale(resolution);
-    //     }
-    //   },
-    // );
     final width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
     final height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
     final output = await picture.toImage(width, height);
-    // picture?.dispose();
+    picture.dispose();
+    return output;
+  }
+
+  GTexture createImageTextureSync([
+    bool adjustOffset = true,
+    double resolution = 1,
+    GRect? rect,
+  ]) {
+    final img = createImageSync(adjustOffset, resolution, rect);
+    var tx = GTexture.fromImage(img, resolution);
+    tx.pivotX = bounds!.x;
+    tx.pivotY = bounds!.y;
+    return tx;
+  }
+
+  ui.Image createImageSync([
+    bool adjustOffset = true,
+    double resolution = 1,
+    GRect? rect,
+  ]) {
+    rect ??= getFilterBounds();
+    rect = rect!.clone();
+    if (resolution != 1) {
+      rect *= resolution;
+    }
+    final needsAdjust =
+        (rect.left != 0 || rect.top != 0) && adjustOffset || resolution != 1;
+    late ui.Picture picture;
+    if (needsAdjust) {
+      picture = createPicture((canvas) {
+        if (adjustOffset) canvas.translate(-rect!.left, -rect.top);
+        if (resolution != 1) canvas.scale(resolution);
+      }, (canvas) {
+        if (adjustOffset) canvas.restore();
+        if (resolution != 1) canvas.restore();
+      });
+    } else {
+      picture = createPicture();
+    }
+    final width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
+    final height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
+    final output = picture.toImageSync(width, height);
+    picture.dispose();
     return output;
   }
 }

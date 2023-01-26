@@ -1,9 +1,11 @@
 import 'dart:ui' as ui;
+
 import '../../../graphx.dart';
 
 class GSimpleParticleSystem extends GDisplayObject {
   static final _sHelperMatrix = GMatrix();
   static final _sHelperPoint = GPoint();
+
   // static Random random = Random();
 
   bool useWorldSpace = false;
@@ -11,6 +13,7 @@ class GSimpleParticleSystem extends GDisplayObject {
   ui.BlendMode particleBlendMode = ui.BlendMode.srcATop;
 
   ui.BlendMode get blendMode => nativePaint.blendMode;
+
   set blendMode(ui.BlendMode value) {
     nativePaint.blendMode = value;
   }
@@ -154,7 +157,7 @@ class GSimpleParticleSystem extends GDisplayObject {
   }
 
   double? particlePivotX;
-  late double particlePivotY;
+  double? particlePivotY;
 
   void forceBurst() {
     var currentEmission = (emission + emissionVariance * Math.random()).toInt();
@@ -246,14 +249,15 @@ class GSimpleParticleSystem extends GDisplayObject {
 //      nativePaint.colorFilter = ColorFilter.mode(_color, BlendMode.plus);
 //      nativePaint.colorFilter = ColorFilter.mode(_color, BlendMode.colorBurn);
 //      nativePaint.colorFilter = ColorFilter.mode(_color, BlendMode.src);
-      var filterColor = useAlphaOnColorFilter ? newColor : newColor.withOpacity(1);
+      var filterColor =
+          useAlphaOnColorFilter ? newColor : newColor.withOpacity(1);
       nativePaint.colorFilter =
           ui.ColorFilter.mode(filterColor, particleBlendMode);
       canvas!.save();
       canvas.translate(tx, ty);
       canvas.rotate(particle.rotation);
       canvas.scale(sx, sy);
-      canvas.translate(-particlePivotX!, -particlePivotY);
+      canvas.translate(-(particlePivotX ?? 0), -(particlePivotY ?? 0));
 
       // $canvas.scale(particle.scaleX, particle.scaleY);
       // $canvas.rotate(particle.rotation);

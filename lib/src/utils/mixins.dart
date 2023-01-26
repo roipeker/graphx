@@ -11,7 +11,18 @@ mixin RenderUtilMixin {
   }
 
   void paint(Canvas canvas);
+
   GRect getBounds();
+
+  GTexture createImageTextureSync([
+    bool adjustOffset = true,
+    double resolution = 1,
+  ]) {
+    return GTexture.fromImage(
+      createImageSync(adjustOffset, resolution),
+      resolution,
+    );
+  }
 
   Future<GTexture> createImageTexture([
     bool adjustOffset = true,
@@ -19,6 +30,35 @@ mixin RenderUtilMixin {
   ]) async {
     final img = await createImage(adjustOffset, resolution);
     return GTexture.fromImage(img, resolution);
+  }
+
+  Image createImageSync([
+    bool adjustOffset = true,
+    double resolution = 1,
+  ]) {
+    var rect = getBounds();
+    if (resolution != 1) {
+      rect *= resolution;
+    }
+    final needsAdjust =
+        (rect.x != 0 || rect.y != 0) && adjustOffset || resolution != 1;
+    final picture = createPicture(
+      !needsAdjust
+          ? null
+          : (c) {
+              if (adjustOffset) {
+                c.translate(-rect.left, -rect.top);
+              }
+              if (resolution != 1) {
+                c.scale(resolution);
+              }
+            },
+    );
+    final width = adjustOffset ? rect.width.toInt() : rect.right.toInt();
+    final height = adjustOffset ? rect.height.toInt() : rect.bottom.toInt();
+    final output = picture.toImageSync(width, height);
+    picture.dispose();
+    return output;
   }
 
   Future<Image> createImage([

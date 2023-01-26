@@ -13,8 +13,8 @@ class GKeyboard {
 
   static Stage? _stage;
 
-  static bool justReleased(GKeyboard key) {
-    return _justReleased[key as LogicalKeyboardKey] != null;
+  static bool justReleased(GKey key) {
+    return _justReleased[key] != null;
   }
 
   static bool isDown(GKey key) {
