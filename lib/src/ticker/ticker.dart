@@ -24,6 +24,8 @@ class GTicker {
 
   bool get isTicking => _ticker?.isTicking ?? false;
 
+  // Whether time is elapsing for this [Ticker]. Becomes true when [start] is
+  // called and false when [stop] is called.
   bool get isActive => _ticker?.isActive ?? false;
 
   double get currentTime => _currentTime;
@@ -32,6 +34,8 @@ class GTicker {
 
   double get currentDeltaRatio => _currentDeltaRatio;
 
+  // Resumes the execution of this [Ticker]. This is equivalent to calling
+  // [Ticker::muted] with `false`.
   void resume() {
     if (isTicking) return;
     _createTicker();
@@ -39,6 +43,8 @@ class GTicker {
     _expectedDelta = 1.0 / frameRate;
   }
 
+  // Pauses the execution of this [Ticker]. This is equivalent to calling
+  // [Ticker::muted] with `true`.
   void pause() {
     if (!isTicking) return;
     _ticker?.muted = true;
