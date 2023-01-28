@@ -42,8 +42,8 @@ class PageIndicatorMain extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child:
                 Text('page indicator (use keyboard Tab+arrows to move pages)'),
           ),
