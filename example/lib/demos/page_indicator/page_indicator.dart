@@ -40,12 +40,16 @@ class PageIndicatorMain extends StatelessWidget {
         ListView.builder(itemBuilder: (_, index) => buildPageIndicator());
 
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: const Text('page indicator (use keyboard Tab+arrows to move pages)'),
-          elevation: 0,
-          backgroundColor: Colors.black26,
-        ),
-        body: body);
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:
+                Text('page indicator (use keyboard Tab+arrows to move pages)'),
+          ),
+          Expanded(child: body),
+        ],
+      ),
+    );
   }
 }

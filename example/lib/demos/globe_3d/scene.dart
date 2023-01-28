@@ -9,11 +9,12 @@ class Globe3dScene extends GSprite {
   double centerZ = 500;
   int cols = 20, rows = 20;
   double fl = 1000;
-  double radius = 400;
+  double radius = 300;
   double offset = 0;
 
   @override
   void addedToStage() {
+    radius = stage!.stageHeight / 2;
     world = GSprite();
     addChild(world);
     loadStuff();
@@ -22,7 +23,6 @@ class Globe3dScene extends GSprite {
   Future<void> loadStuff() async {
     await ResourceLoader.loadTexture(
         'assets/globe_3d/world_texture.jpg', 1, 'map');
-    trace('map is:', ResourceLoader.getTexture('map'));
     makeTriangles();
     draw();
   }

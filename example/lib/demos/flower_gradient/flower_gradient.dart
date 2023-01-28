@@ -15,6 +15,7 @@ class FlowerGradientMain extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: SceneBuilderWidget(
+          autoSize: true,
           builder: () => SceneController(
             front: FlowerScene(),
           ),

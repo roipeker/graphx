@@ -15,9 +15,7 @@ class NicoLoadingIndicatorMain extends StatelessWidget {
       // appBar: AppBar(
       //   title: const Text('Nico Progress Indicator'),
       // ),
-      body: Center(
-        child: CustomLoadingIndicator(),
-      ),
+      body: CustomLoadingIndicator(),
     );
   }
 }

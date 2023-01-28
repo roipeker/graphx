@@ -16,15 +16,17 @@ class RunHeroCanvasMain extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade800,
       body: Center(
-        child: SizedBox(
-          width: 500,
-          height: 500,
-          child: SceneBuilderWidget(
-            builder: () => SceneController(
-              front: PainterRawScene(),
-              config: SceneConfig(
-                useKeyboard: true,
-                usePointer: true,
+        child: FittedBox(
+          child: SizedBox(
+            width: 500,
+            height: 500,
+            child: SceneBuilderWidget(
+              builder: () => SceneController(
+                front: PainterRawScene(),
+                config: SceneConfig(
+                  useKeyboard: true,
+                  usePointer: true,
+                ),
               ),
             ),
           ),

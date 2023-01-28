@@ -26,6 +26,8 @@
     if (searchParams.has('renderer')) {
       window.flutterWebRenderer = searchParams.get('renderer');
       console.log(searchParams.get('renderer') + ' renderer requested in the URL');
+    } else {
+      window.flutterWebRenderer = "canvaskit";
     }
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;

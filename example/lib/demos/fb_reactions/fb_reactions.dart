@@ -42,6 +42,7 @@ class FacebookReactionsMain extends StatelessWidget {
       ),
       backgroundColor: const Color(0xffebebeb),
       body: SceneBuilderWidget(
+        autoSize: true,
         builder: () => SceneController(front: MenuScene()),
         child: Scrollbar(
           child: ListView.separated(

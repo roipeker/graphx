@@ -11,17 +11,10 @@ class Globe3dMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: const Text(
-          'globe 3d',
-          style: TextStyle(fontSize: 12),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.black26,
-      ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
         child: SceneBuilderWidget(
+          autoSize: true,
           builder: () => SceneController(front: Globe3dScene()),
         ),
       ),

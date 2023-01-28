@@ -44,15 +44,27 @@ class CardRotation3dScene extends GSprite {
         .beginFill(kColorBlack)
         .drawRoundRect(0, 0, 120, 120, 20)
         .endFill();
-    var bmp = GBitmap(photoTexture);
-    bmp.height = 120;
-    bmp.scaleX = bmp.scaleY;
-    image.addChild(bmp);
-    image.addChild(roundMask);
-    bmp.mask = roundMask;
+
+    if(SystemUtils.usingSkia){
+      var bmp = GBitmap(photoTexture);
+      bmp.height = 120;
+      bmp.scaleX = bmp.scaleY;
+      bmp.nativePaint.filterQuality = FilterQuality.high;
+      image.addChild(bmp);
+      image.addChild(roundMask);
+      bmp.mask = roundMask;
+    } else {
+      image.addChild(roundMask);
+    }
     cardItem.setPosition(100, 100);
     image.x = -30;
     image.y = (144 - 120) / 2;
+
+
+
+
+
+
 
     var logo = GSprite();
     cardItem.addChild(logo);
@@ -67,7 +79,6 @@ class CardRotation3dScene extends GSprite {
     mcLogo.alignPivot();
     mcLogo.scale = .5;
     mcLogo.nativePaint.filterQuality = FilterQuality.high;
-    bmp.nativePaint.filterQuality = FilterQuality.high;
     mcLogo.setPosition(20, 20);
 
     var textContainer = GSprite();

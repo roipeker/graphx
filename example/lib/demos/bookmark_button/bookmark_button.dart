@@ -15,13 +15,15 @@ class BookmarkButtonMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      height: 80,
-      child: SceneBuilderWidget(
-        builder: () => SceneController(
-          front: BookmarkButton(),
-          config: SceneConfig.interactive,
+    return Center(
+      child: SizedBox(
+        width: 200,
+        height: 80,
+        child: SceneBuilderWidget(
+          builder: () => SceneController(
+            front: BookmarkButton(),
+            config: SceneConfig.interactive,
+          ),
         ),
       ),
     );
