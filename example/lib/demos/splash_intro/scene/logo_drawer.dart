@@ -47,7 +47,7 @@ class LogoDrawer extends GSprite {
     _rootPath = letters.reduce(
       (path1, path2) => Path.combine(PathOperation.union, path1, path2),
     );
-    _metricsList = _rootPath.computeMetrics(forceClosed: false).toList();
+    _metricsList = _rootPath.computeMetrics().toList();
     drawPercent(1);
   }
 

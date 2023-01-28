@@ -72,8 +72,8 @@ class Dialer extends GSprite {
     // g.drawCircle(0, 0, smallRadius).endFill();
 
     g.lineStyle(1, const Color(0xff574549).withOpacity(.8));
-    final shortLine = 24.0;
-    final longLine = 36.0;
+    const shortLine = 24.0;
+    const longLine = 36.0;
     for (var i = 0.0; i < 360; ++i) {
       var angle = deg2rad(i);
       var lineSize = i % 5 == 0 ? longLine : shortLine;

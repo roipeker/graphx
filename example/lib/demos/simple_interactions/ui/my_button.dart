@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
@@ -20,16 +18,6 @@ class MyButton extends GSprite {
   bool _isTouching = false;
   bool _isOn = false;
   double _fillPercent = 0.0;
-
-  // track last value for this particular event on desktop OS.
-  // `onZoomPan` reports start,update and end... and we only want
-  // `update` (the one that has scroll data).
-  double lastZoomPanRatio = 0.0;
-
-  // track last event time for this particular event on desktop OS.
-  // so we can detect a threshold of X ms between events to cancel
-  // the "easing".
-  double lastZoomPanTime = 0.0;
 
   late GText _fillText;
 
@@ -76,13 +64,12 @@ class MyButton extends GSprite {
 
     // only on desktop.
     onMouseScroll.add(_onMouseScroll);
-    onZoomPan.add(_onZoomPan);
   }
 
   void _initText() {
     _fillText = GText(
       text: '0%',
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         color: Colors.black,
         fontSize: 24,
         fontWeight: FontWeight.bold,
@@ -118,56 +105,17 @@ class MyButton extends GSprite {
     stage!.onMouseUp.addOnce(_onStageRelease);
   }
 
-  /// Handler for mouse scroll wheel (only desktop WEB seems to work).
+  /// Handler for mouse scroll wheel (only desktop).
   void _onMouseScroll(MouseInputData input) {
-    /// "Pixel" variation... takes it as a ratio of the button height.
-    /// considering window scale factor. Some devices could report bug
-    /// values for scrollDelta (according to device and OS sensibility).
-    /// Can be scaled by 700% of what is expected (a subtle range between 1-10).
-    /// Can be easily adjusted with some math, increasing the `dpiFactor`.
-    ///
-    // var dpiFactor = 100.5;
-    // var ratioY =
-    //     (input.scrollDelta.y / h) / (window.devicePixelRatio * dpiFactor);
-    // _fillPercent += ratioY;
-    // _fillPercent = _fillPercent.clamp(0.0, 1.0);
-    // _updateFill();
-
-
-    /// "Smoother" variation, take the direction (1, -1) of the scroll wheel
+    /// take the direction of the scroll wheel
     var scrollDir = input.scrollDelta.y < 0 ? 1 : -1;
     _fillPercent += .01 * scrollDir;
     _fillPercent = _fillPercent.clamp(0.0, 1.0);
     _updateFill();
   }
 
-  void _onZoomPan(MouseInputData e) {
-    var type = e.rawEvent!.zoomPanEventType;
-    if (type == PointerZoomPanType.update) {
-      trace('Scroll delta: ', e.scrollDelta.y);
-      var ratioY = (e.scrollDelta.y / h) / (window.devicePixelRatio * 1.5);
-      lastZoomPanRatio = ratioY;
-      lastZoomPanTime = e.time;
-      _fillPercent += ratioY;
-      _fillPercent = _fillPercent.clamp(0.0, 1.0);
-      _updateFill();
-    } else if (type == PointerZoomPanType.end) {
-      var timeDiff = e.time - lastZoomPanTime;
-      // over 200ms, reject gesture (too slow for a flick)
-      if (timeDiff > .2) {
-        return;
-      }
-      var tweenRatio = lastZoomPanRatio.twn;
-      tweenRatio.tween(0.0, duration: 0.5, onUpdate: () {
-        _fillPercent += tweenRatio.value;
-        _fillPercent = _fillPercent.clamp(0.0, 1.0);
-        _updateFill();
-      });
-    }
-  }
-
   /// handler for mouse over.
-  /// this happens when the mouse enters into the bounding box areaes
+  /// this happens when the mouse enters into the bounding box area
   /// of the object that is listening for this signal.
   /// Means that the pointer started to interact with this object.
   /// Similar to "onmouseover" in Javascript.
@@ -205,11 +153,13 @@ class MyButton extends GSprite {
   /// update the [icon.data] and icon's color, based on [_isOn] current state.
   void _updateIcon() {
     if (_isOn) {
-      icon.data = Icons.wb_incandescent;
-      icon.color = Colors.yellow;
-    } else {
-      icon.data = Icons.wb_incandescent_outlined;
-      icon.color = Colors.white;
+      if (_isOn) {
+        icon.data = Icons.wb_incandescent;
+        icon.color = Colors.yellow;
+      } else {
+        icon.data = Icons.wb_incandescent_outlined;
+        icon.color = Colors.white;
+      }
     }
   }
 

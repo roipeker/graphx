@@ -16,7 +16,7 @@ class Ball extends GShape {
     this.y = y;
     graphics
         .beginFill(color!.withOpacity(.8))
-        .lineStyle(6, kColorBlack)
+        .lineStyle(6)
         .drawCircle(0, 0, radius)
         .endFill()
         .beginFill(kColorBlack.withOpacity(.9))

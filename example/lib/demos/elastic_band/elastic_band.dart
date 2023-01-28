@@ -8,14 +8,16 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class ElasticBandMain extends StatelessWidget {
+  const ElasticBandMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('elastic band'),
-        backgroundColor: kColorTransparent,
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('elastic band'),
+      //   backgroundColor: kColorTransparent,
+      //   elevation: 0,
+      // ),
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.grey.shade800,
       body: SizedBox.expand(

@@ -6,12 +6,14 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class LungsAnimationMain extends StatelessWidget {
+  const LungsAnimationMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text('lungs'),
+        title: const Text('lungs'),
         elevation: 0,
         backgroundColor: Colors.black26,
       ),

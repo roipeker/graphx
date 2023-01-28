@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'game_page_widget.dart';
 
 class NokiaSnakeMain extends StatefulWidget {
-  const NokiaSnakeMain({Key? key}) : super(key: key);
-
+  const NokiaSnakeMain({super.key});
   @override
   _NokiaSnakeMainState createState() => _NokiaSnakeMainState();
 }
@@ -44,10 +43,10 @@ class _NokiaSnakeMainState extends State<NokiaSnakeMain> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           toolbarHeight: 50,
-          backgroundColor: Color(0xFF949425),
+          backgroundColor: const Color(0xFF949425),
           centerTitle: true,
           title: Column(
-            children: [
+            children: const [
               Text(
                 'NOKIA SNAKE',
                 style: TextStyle(
@@ -55,7 +54,7 @@ class _NokiaSnakeMainState extends State<NokiaSnakeMain> {
                   color: Color(0xFF41361F),
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               Text(
                 'BY ISMAIL ALAM KHAN',
                 style: TextStyle(
@@ -71,7 +70,8 @@ class _NokiaSnakeMainState extends State<NokiaSnakeMain> {
             ListTile(
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => GamePage(speed: speed)),
+                  MaterialPageRoute(
+                      builder: (context) => GamePage(speed: speed)),
                 );
               },
               trailing: PopupMenuButton(
@@ -82,19 +82,19 @@ class _NokiaSnakeMainState extends State<NokiaSnakeMain> {
                 itemBuilder: (_) => levels
                     .map(
                       (e) => PopupMenuItem(
+                        value: e['value'],
                         child: Text(
                           e['text'].toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color(0xFF41361F),
                             fontSize: 8,
                           ),
                         ),
-                        value: e['value'],
                       ),
                     )
                     .toList(),
               ),
-              title: Text(
+              title: const Text(
                 'START GAME',
                 style: TextStyle(
                   color: Color(0xFF42371C),

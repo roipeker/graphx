@@ -9,14 +9,16 @@ import 'package:graphx/graphx.dart';
 import 'dialer_scene.dart';
 
 class DialerMain extends StatelessWidget {
+  const DialerMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData.dark(),
       child: Scaffold(
-        backgroundColor: Color(0xff19191B),
+        backgroundColor: const Color(0xff19191B),
         appBar: AppBar(
-          leading: Icon(Icons.arrow_back_outlined),
+          leading: const Icon(Icons.arrow_back_outlined),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -31,13 +33,13 @@ class DialerMain extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 100),
+                  const SizedBox(height: 100),
                   _buildTemperature(),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
                   /// smart schedule
                   Row(
-                    children: [
+                    children: const [
                       Opacity(opacity: .2, child: Icon(Icons.access_time)),
                       SizedBox(width: 8),
                       Text(
@@ -51,7 +53,7 @@ class DialerMain extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
                   /// buttons.
                   Row(children: [
@@ -59,19 +61,18 @@ class DialerMain extends StatelessWidget {
                     _buildCircButton(Icons.wb_cloudy_outlined, false),
                     _buildCircButton(Icons.wb_sunny, false),
                   ]),
-                  SizedBox(height: 30),
-                  Spacer(),
+                  const SizedBox(height: 30),
+                  const Spacer(),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const [
                       Icon(
                         Icons.radio_button_off_outlined,
                         color: pinkColor,
                         size: 24,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
+                        padding: EdgeInsets.only(left: 4.0),
                         child: Text(
                           'Hold on to turn AC off',
                           style: TextStyle(
@@ -80,13 +81,12 @@ class DialerMain extends StatelessWidget {
                             fontSize: 12,
                             letterSpacing: -.1,
                           ),
-                          strutStyle:
-                              StrutStyle(fontSize: 10, forceStrutHeight: true),
+                          strutStyle: StrutStyle(fontSize: 10, forceStrutHeight: true),
                         ),
                       )
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ),
             )
@@ -98,45 +98,40 @@ class DialerMain extends StatelessWidget {
 
   Widget _buildTemperature() {
     return FittedBox(
-      child: Container(
-        // color: Colors.red,
-        // width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              'TEMPERATURE, C',
-              style: TextStyle(
-                fontSize: 16,
-                letterSpacing: 3,
-                fontWeight: FontWeight.bold,
-                height: 16 / 16,
-              ),
-              textAlign: TextAlign.left,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text(
+            'TEMPERATURE, C',
+            style: TextStyle(
+              fontSize: 16,
+              letterSpacing: 3,
+              fontWeight: FontWeight.bold,
+              height: 16 / 16,
             ),
-            SizedBox(height: 14),
-            Text(
-              '72',
-              style: TextStyle(
-                fontSize: 143,
-                letterSpacing: .7,
-                fontWeight: FontWeight.bold,
-                // backgroundColor: Colors.red.withOpacity(.3),
-                // height: 143 / 143,
-              ),
-              textAlign: TextAlign.left,
-              strutStyle: StrutStyle(
-                fontSize: 101,
-                forceStrutHeight: true,
-              ),
-              // textHeightBehavior: TextHeightBehavior(
-              //   applyHeightToFirstAscent: true,
-              //   applyHeightToLastDescent: false,
-              // ),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(height: 14),
+          Text(
+            '72',
+            style: TextStyle(
+              fontSize: 143,
+              letterSpacing: .7,
+              fontWeight: FontWeight.bold,
+              // backgroundColor: Colors.red.withOpacity(.3),
+              // height: 143 / 143,
             ),
-          ],
-        ),
+            textAlign: TextAlign.left,
+            strutStyle: StrutStyle(
+              fontSize: 101,
+              forceStrutHeight: true,
+            ),
+            // textHeightBehavior: TextHeightBehavior(
+            //   applyHeightToFirstAscent: true,
+            //   applyHeightToLastDescent: false,
+            // ),
+          ),
+        ],
       ),
     );
   }
@@ -146,13 +141,12 @@ class DialerMain extends StatelessWidget {
     return Opacity(
       opacity: selected ? 1 : 0.2,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 5),
-        padding: EdgeInsets.all(12),
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: selected ? pinkColor : Colors.transparent,
-          border: Border.all(
-              color: selected ? pinkColor : Colors.white70, width: 1.2),
+          border: Border.all(color: selected ? pinkColor : Colors.white70, width: 1.2),
         ),
         child: Icon(
           ico,

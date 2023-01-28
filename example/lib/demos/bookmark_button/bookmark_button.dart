@@ -11,20 +11,17 @@ import '../../utils/utils.dart';
 import 'scene.dart';
 
 class BookmarkButtonMain extends StatelessWidget {
+  const BookmarkButtonMain({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('bookmark button animation')),
-      body: Center(
-        child: SizedBox(
-          width: 200,
-          height: 80,
-          child: SceneBuilderWidget(
-            builder: () => SceneController(
-              front: BookmarkButton(),
-              config: SceneConfig.interactive,
-            ),
-          ),
+    return SizedBox(
+      width: 200,
+      height: 80,
+      child: SceneBuilderWidget(
+        builder: () => SceneController(
+          front: BookmarkButton(),
+          config: SceneConfig.interactive,
         ),
       ),
     );

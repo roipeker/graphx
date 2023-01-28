@@ -15,7 +15,7 @@ class FeelingSwitch extends GSprite {
     var pill = GShape();
     var g = pill.graphics;
     g
-        .beginFill(Color(0xffedeae8))
+        .beginFill(const Color(0xffedeae8))
         .drawRoundRect(0, 0, tw, th, th / 2)
         .endFill();
     container.addChild(pill);
@@ -24,12 +24,12 @@ class FeelingSwitch extends GSprite {
     var gapy = 18.0;
     var gapx = th / 5;
     g
-        .beginFill(Color(0xff71a745).withOpacity(.8))
+        .beginFill(const Color(0xff71a745).withOpacity(.8))
         .drawCircle(gapy, eyeRadius + gapx, eyeRadius)
         .drawCircle(gapy, th - eyeRadius - gapx, eyeRadius)
         .endFill();
     g
-        .beginFill(Color(0xffadadad))
+        .beginFill(const Color(0xffadadad))
         .drawCircle(tw - gapy, eyeRadius + gapx, eyeRadius)
         .drawCircle(tw - gapy, th - eyeRadius - gapx, eyeRadius)
         .endFill();
@@ -41,7 +41,7 @@ class FeelingSwitch extends GSprite {
     smile.$useSaveLayerBounds = false;
     smile.graphics.lineStyle(
       3,
-      Color(0xff71a745).withOpacity(.8),
+      const Color(0xff71a745).withOpacity(.8),
       true,
       StrokeCap.round,
     );
@@ -78,7 +78,7 @@ class FeelingSwitch extends GSprite {
           skewY: .05,
           scaleY: 1.2,
           ease: GEase.easeOutSine,
-          colorize: Color(0xff71A745).withOpacity(.8),
+          colorize: const Color(0xff71A745).withOpacity(.8),
         );
       } else {
         pill.tween(duration: .4, skewY: -.05);
@@ -90,7 +90,7 @@ class FeelingSwitch extends GSprite {
           scaleY: .8,
           skewY: -.05,
           ease: GEase.easeOutSine,
-          colorize: Color(0xffaDADAD),
+          colorize: const Color(0xffaDADAD),
         );
       }
     }

@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class CustomLoadingIndicator extends StatelessWidget {
-  const CustomLoadingIndicator({Key? key}) : super(key: key);
-
+  const CustomLoadingIndicator({super.key});
   @override
   Widget build(BuildContext context) {
     return SceneBuilderWidget(
@@ -47,7 +46,7 @@ class CustomLoadingIndicatorSprite extends GSprite {
       (index) {
         final corner = GShape();
         corner.graphics
-            .lineStyle(3.0, Colors.black)
+            .lineStyle(3.0)
             .moveTo(0.0, lineSize)
             .lineTo(0.0, 0.0)
             .lineTo(lineSize, 0);

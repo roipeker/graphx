@@ -41,7 +41,7 @@ class Star extends GSprite {
         .endFill();
 
     st.mask = m1;
-    _tx1 = await st.createImageTexture(true);
+    _tx1 = await st.createImageTexture();
 
     st.maskInverted = true;
     _tx2 = await st.createImageTexture(true, 2);
@@ -117,13 +117,13 @@ class Star extends GSprite {
       var dly = 0.0;
       _star.visible = false;
 
-      final _color = kUnselectedSColor.withAlpha(0);
+      final color = kUnselectedSColor.withAlpha(0);
 
       _broken!.setProps(
         y: 0,
         alpha: 1,
         visible: true,
-        colorize: _color,
+        colorize: color,
       );
       var p1 = _broken!.children[0];
       var p2 = _broken!.children[1];
@@ -151,7 +151,7 @@ class Star extends GSprite {
         overwrite: 0,
       );
 
-      var blur = GBlurFilter(0, 0);
+      var blur = GBlurFilter();
       _broken!.filters = [blur];
       var a = 0.0.twn;
       a.tween(8, duration: .5, delay: .16, onUpdate: () {

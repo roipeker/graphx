@@ -16,27 +16,38 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class LinedButtonMain extends StatelessWidget {
+  const LinedButtonMain({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          'graphx hover button',
-          style: TextStyle(fontSize: 12),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.black.withOpacity(.1),
-      ),
-      body: Center(
-        child: SizedBox(
-          width: 140,
-          height: 120,
-          child: SceneBuilderWidget(
-            builder: () => SceneController(front: LinedButtonScene()),
-          ),
+    return Center(
+      child: SizedBox(
+        width: 140,
+        height: 120,
+        child: SceneBuilderWidget(
+          builder: () => SceneController(front: LinedButtonScene()),
         ),
       ),
     );
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     centerTitle: false,
+    //     title: const Text(
+    //       'graphx hover button',
+    //       style: TextStyle(fontSize: 12),
+    //     ),
+    //     elevation: 0,
+    //     backgroundColor: Colors.black.withOpacity(.1),
+    //   ),
+    //   body: Center(
+    //     child: SizedBox(
+    //       width: 140,
+    //       height: 120,
+    //       child: SceneBuilderWidget(
+    //         builder: () => SceneController(front: LinedButtonScene()),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

@@ -11,15 +11,15 @@ import 'package:graphx/graphx.dart';
 class CardRotation3dScene extends GSprite {
   @override
   void addedToStage() {
-    stage!.color = Color(0xffF8F6F4);
+    stage!.color = const Color(0xffF8F6F4);
     initUi();
   }
 
   Future<void> initUi() async {
     var photoTexture =
-        await ResourceLoader.loadTexture('assets/card_rotation/photo.png', 1);
+        await ResourceLoader.loadTexture('assets/card_rotation/photo.png');
     var logoTexture = await ResourceLoader.loadTexture(
-        'assets/card_rotation/mcdonalds.png', 1);
+        'assets/card_rotation/mcdonalds.png');
 
     var cardItem = GSprite();
     addChild(cardItem);
@@ -32,7 +32,7 @@ class CardRotation3dScene extends GSprite {
         .endFill();
     bg.$useSaveLayerBounds = false;
 
-    final shadowColor = Color(0xff975A6F).withOpacity(.2);
+    final shadowColor = const Color(0xff975A6F).withOpacity(.2);
     var shadow = GDropShadowFilter(16, 16, deg2rad(90), 4, shadowColor);
     bg.filters = [shadow];
 

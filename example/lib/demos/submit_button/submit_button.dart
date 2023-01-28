@@ -9,14 +9,12 @@ import 'package:graphx/graphx.dart';
 import 'scene/scene.dart';
 
 class SubmitButtonMain extends StatelessWidget {
+  const SubmitButtonMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffE3E3E3),
-      appBar: AppBar(
-        title: Text('submit button animation'),
-        backgroundColor: Colors.green,
-      ),
+      backgroundColor: const Color(0xffE3E3E3),
       body: Center(
         child: SizedBox(
           width: 298,

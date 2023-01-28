@@ -4,6 +4,8 @@ import '../../utils/utils.dart';
 import 'scene.dart';
 
 class AltitudeIndicatorMain extends StatelessWidget {
+  const AltitudeIndicatorMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -15,7 +17,7 @@ class AltitudeIndicatorMain extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(32),
                   child: SceneBuilderWidget(
                     builder: () => SceneController(
                       front: AltitudIndicatorScene(),
@@ -29,8 +31,8 @@ class AltitudeIndicatorMain extends StatelessWidget {
             Container(
               color: Colors.grey.shade900,
               width: double.infinity,
-              padding: EdgeInsets.all(8),
-              child: Text('Use the arrows keys to rotate the plane and change altitude.'),
+              padding: const EdgeInsets.all(8),
+              child: const Text('Use the arrows keys to rotated the plane.'),
             )
           ],
         ),

@@ -6,12 +6,14 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class MouseRepulsionMain extends StatelessWidget {
+  const MouseRepulsionMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text(
+        title: const Text(
           'mouse repulsion',
           style: TextStyle(fontSize: 12),
         ),

@@ -1,5 +1,3 @@
-import 'package:exampleGraphx/utils/utils.dart';
-
 /// roipeker 2021
 
 /// just wrap ur app with this, to emit "global" events (and close the dropdown)
@@ -7,12 +5,12 @@ import 'package:exampleGraphx/utils/utils.dart';
 ///      builder: () => SceneController(front: RootScene()),
 ///      child: MaterialApp(
 ///        home: Scaffold(
+import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class RootWidget extends StatelessWidget {
   final Widget? child;
-  const RootWidget({Key? key, this.child}) : super(key: key);
-
+  const RootWidget({super.key, this.child});
   @override
   Widget build(BuildContext context) {
     return SceneBuilderWidget(

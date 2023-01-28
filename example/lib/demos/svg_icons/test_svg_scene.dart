@@ -17,8 +17,10 @@ class TestSvgScene extends GSprite {
     await _loadData();
     _drawSun();
 
-    trees = addChild(GSprite());
-    ground = addChild(GSprite());
+    trees = GSprite();
+    ground = GSprite();
+    addChild(trees);
+    addChild(ground);
 
     trees.y = stage!.stageHeight - groundHeight;
     ground.y = stage!.stageHeight - groundHeight;
@@ -43,10 +45,11 @@ class TestSvgScene extends GSprite {
     var currentObjectX = 30.0;
     for (var i = 0; i < 15; ++i) {
       final treeId = i.isOdd ? SvgId.tree : SvgId.pine;
-      var tree = trees.addChild(getSvgIcon(treeId));
+      var tree = getSvgIcon(treeId);
       tree.alignPivot(Alignment.bottomCenter);
       tree.x = currentObjectX;
       tree.scale = Math.randomRange(.4, 1.4);
+      trees.addChild(tree);
       currentObjectX += Math.randomRange(20, 80);
 
       /// let's skew the tree so it seems the wind is moving it.
@@ -137,12 +140,12 @@ class TestSvgScene extends GSprite {
     for (var i = 0; i < 100; ++i) {
       final leafId = i.isOdd ? SvgId.leaf : SvgId.leaf2;
       var leaf = getSvgIcon(leafId);
+
       addChild(leaf);
 
       var px = Math.randomRange(10, stage!.stageWidth - 10);
       leaf.setPosition(px, -10);
-      final rndPivot =
-          Math.randomBool() ? Alignment.bottomCenter : Alignment.topCenter;
+      final rndPivot = Math.randomBool() ? Alignment.bottomCenter : Alignment.topCenter;
       leaf.alignPivot(rndPivot);
       leaf.scale = Math.randomRange(.4, 1);
 
@@ -172,12 +175,8 @@ class TestSvgScene extends GSprite {
       skewX: randomSkew,
       skewY: -randomSkew / 2,
       onComplete: () {
-        if(!leaf.inStage){
-          leaf.removeFromParent(true);
-          return;
-        }
         if (leaf.y > stage!.stageHeight) {
-          print('Leaf outside of stage, remove and dispose it.');
+          trace('Leaf outside of stage, remove and dispose it.');
           leaf.removeFromParent(true);
         } else {
           _tweenLeaf(dir: dir * -1, leaf: leaf);
@@ -187,14 +186,7 @@ class TestSvgScene extends GSprite {
     );
     final randomX = Math.randomRange(5, 40) * dir;
     final randomY = Math.randomRange(5, 30);
-    leaf.tween(
-      duration: randomDuration * .8,
-      x: '$randomX',
-      y: '$randomY',
-      ease: GEase.easeOut,
-      /// import to not kill previous tween.
-      overwrite: 0,
-    );
+    leaf.tween(duration: randomDuration * .9, x: '$randomX', y: '$randomY', ease: GEase.linear);
   }
 
   /// utils for parsing SVG.

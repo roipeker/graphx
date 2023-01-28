@@ -23,7 +23,7 @@ class ChartTableCell extends GSprite {
       var cell = GSprite();
       addChild(cell);
       cell.graphics
-          .lineStyle(0, const Color(0xffccccccc))
+          .lineStyle(0, const Color(0xffcccccc))
           .drawRect(0, 0, cellW, cellH)
           .endFill();
       var tf = GText(

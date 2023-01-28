@@ -9,18 +9,17 @@ import 'nokia_snake.dart';
 class GamePage extends StatefulWidget {
   final int speed;
 
-  const GamePage({Key? key, required this.speed}) : super(key: key);
-
+  const GamePage({super.key, required this.speed});
   @override
   _GamePageState createState() => _GamePageState();
 }
 
 class _GamePageState extends State<GamePage> {
-  String scoreText = 'SCORE: 0';
+  String scroreTF = 'SCORE: 0';
 
   void updateScore(String score) {
     setState(() {
-      scoreText = score;
+      scroreTF = score;
     });
   }
 
@@ -33,26 +32,26 @@ class _GamePageState extends State<GamePage> {
         color: const Color(0xFF9A9626),
         height: 50,
         alignment: Alignment.centerLeft,
-        padding: EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.only(left: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              scoreText,
-              style: TextStyle(
+              scroreTF,
+              style: const TextStyle(
                 letterSpacing: 1,
                 fontSize: 10,
                 fontFamily: 'pressstart',
               ),
             ),
-            scoreText == 'PAUSED'
+            scroreTF == 'PAUSED'
                 ? IconButton(
-                    icon: Icon(Icons.home),
+                    icon: const Icon(Icons.home),
                     onPressed: () => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => NokiaSnakeMain()),
+                      MaterialPageRoute(builder: (_) => const NokiaSnakeMain()),
                     ),
                   )
-                : SizedBox.shrink()
+                : const SizedBox.shrink()
           ],
         ),
       ),
@@ -66,7 +65,7 @@ class _GamePageState extends State<GamePage> {
         hoverElevation: 0,
         disabledElevation: 0,
         child: Icon(
-          scoreText == 'PAUSED' ? Icons.play_arrow : Icons.pause,
+          scroreTF == 'PAUSED' ? Icons.play_arrow : Icons.pause,
           color: Colors.white,
         ),
       ),
@@ -99,7 +98,7 @@ class _GamePageState extends State<GamePage> {
                       MobileControlButton.left(
                         () => mps.emit1('COMMAND', SnakeCommands.left),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 50,
                       ),
                       MobileControlButton.right(

@@ -4,33 +4,24 @@ import '../../utils/utils.dart';
 import 'assets.dart';
 
 class HeartScene extends GSprite {
-  final GlobalKey key;
-  final ValueNotifier<bool> onLiked;
-
-  HeartScene({
-    required this.key,
-    required this.onLiked,
-  });
+  HeartScene({this.key});
 
   double get h => stage!.stageHeight;
 
   double get w => stage!.stageWidth;
   SvgData? svg;
+  final GlobalKey? key;
 
   @override
   Future<void> addedToStage() async {
     await loadSvg();
-    onLiked.addListener(() {
-      if (onLiked.value) _heartRain();
-    });
-    // mps.on('like', _heartRain);
+    mps.on('like', _heartRain);
     super.addedToStage();
   }
 
   void _heartRain() {
-    if (key.currentContext == null) return;
-    final _grect = ContextUtils.getRenderObjectBounds(key.currentContext!)!;
-    var isUp = _grect.y < h / 2;
+    final grect = ContextUtils.getRenderObjectBounds(key!.currentContext!)!;
+    var isUp = grect.y < h / 2;
     var maxDuration = 0.0;
     List.generate(
       30,
@@ -39,8 +30,8 @@ class HeartScene extends GSprite {
         svgShape = GSvgShape(svg);
         svgShape.alignPivot(Alignment.bottomCenter);
 
-        svgShape.y = _grect.y + _grect.height / 2;
-        svgShape.x = _grect.x + _grect.width / 2;
+        svgShape.y = grect.y + grect.height / 2;
+        svgShape.x = grect.x + grect.width / 2;
         svgShape.rotation = Math.randomRange(-Math.PI / 7, Math.PI / 7);
         svgShape.scale = Math.randomRange(1, 2);
         svgShape.alpha = Math.randomRange(.6, 1.0);
@@ -72,12 +63,11 @@ class HeartScene extends GSprite {
       },
     );
     GTween.delayedCall(maxDuration, () {
-      onLiked.value = false;
-      // mps.emit('animfinish');
+      mps.emit('animfinish');
     });
   }
 
   Future<void> loadSvg() async {
-    svg = await SvgUtils.svgDataFromString(SvgAssets.HEART);
+    svg = await SvgUtils.svgDataFromString(SvgAssets.heart);
   }
 }

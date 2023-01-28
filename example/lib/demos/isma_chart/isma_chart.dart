@@ -8,21 +8,23 @@ import 'scene/chart_scene.dart';
 import 'widgets/orange_box.dart';
 
 class IsmaChartMain extends StatelessWidget {
+  const IsmaChartMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: 430,
           height: 260,
           child: Card(
             child: Column(
               children: [
                 Row(
-                  children: [
-                    const SizedBox(width: 7),
+                  children: const [
+                    SizedBox(width: 7),
                     OrangeBox(),
-                    const SizedBox(width: 7),
+                    SizedBox(width: 7),
                     Text(
                       'Case fatality rate(%) of reported cases by month',
                       style: TextStyle(
@@ -52,14 +54,14 @@ class IsmaChartMain extends StatelessWidget {
                               top: point.y,
                               child: Tooltip(
                                 height: 20,
-                                padding: EdgeInsets.all(2),
-                                child: Text("."),
-                                showDuration: Duration(seconds: 2),
+                                padding: const EdgeInsets.all(2),
+                                showDuration: const Duration(seconds: 2),
                                 message: model.year,
+                                child: const Text("."),
                               ),
                             );
                           },
-                          topics: ['chartHover'],
+                          topics: const ['chartHover'],
                           mps: mps,
                         ),
                       ],
@@ -68,10 +70,10 @@ class IsmaChartMain extends StatelessWidget {
                 ),
                 Container(
                   height: 30,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Divider(
                         height: 0,
                       ),

@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class PadSettings extends StatelessWidget {
+  const PadSettings({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 90,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.black45,
         border: Border.all(color: Colors.white12, width: 0),
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
@@ -23,16 +25,15 @@ class PadSettings extends StatelessWidget {
             onPressed: () {
               mps.emit('clear');
             },
-            child: Text('CLEAR'),
+            child: const Text('CLEAR'),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
-                  children: [
+                  children: const [
                     Text(
                       'pick a color',
                       style: TextStyle(
@@ -69,7 +70,7 @@ class PadSettings extends StatelessWidget {
                     // ),
                   ],
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Expanded(
                   child: ListView.separated(
                       itemBuilder: (_, idx) {
@@ -79,7 +80,7 @@ class PadSettings extends StatelessWidget {
                             mps.emit1('color', color);
                           },
                           child: Container(
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                                 vertical: 2, horizontal: 1),
                             width: 50,
                             height: 50,
@@ -90,7 +91,7 @@ class PadSettings extends StatelessWidget {
                                 width: 3,
                               ),
                               color: color,
-                              boxShadow: [
+                              boxShadow: const [
                                 BoxShadow(
                                   color: Colors.black38,
                                   spreadRadius: 1,
@@ -103,10 +104,10 @@ class PadSettings extends StatelessWidget {
                         );
                       },
                       scrollDirection: Axis.horizontal,
-                      separatorBuilder: (_, idx) => SizedBox(width: 1),
+                      separatorBuilder: (_, idx) => const SizedBox(width: 1),
                       itemCount: Colors.primaries.length),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
               ],
             ),
           ),

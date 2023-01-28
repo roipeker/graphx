@@ -1,20 +1,22 @@
-name: exampleGraphx
+name: example_graphx
 description: Graphx rendering prototype examples
 
 publish_to: "none"
 
-version: 1.0.4+29
+version: 1.0.2+25
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^1.0.3
   graphx:
     path: ../
 
 dev_dependencies:
+  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
 

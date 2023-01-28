@@ -9,8 +9,7 @@ import 'package:graphx/graphx.dart';
 import 'xmas_scene.dart';
 
 class XmasMain extends StatefulWidget {
-  XmasMain({Key? key}) : super(key: key);
-
+  const XmasMain({super.key});
   @override
   _XmasMainState createState() => _XmasMainState();
 }
@@ -48,7 +47,7 @@ class _XmasMainState extends State<XmasMain> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                 shadows: [
                   Shadow(
                     color: Colors.black.withOpacity(.7),
@@ -62,10 +61,10 @@ class _XmasMainState extends State<XmasMain> {
       ),
     );
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff2373A1).withOpacity(.6),
-        title: Text('graphx xmas'),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: const Color(0xff2373A1).withOpacity(.6),
+      //   title: const Text('graphx xmas'),
+      // ),
       extendBodyBehindAppBar: true,
       body: Container(
         decoration: BoxDecoration(
@@ -75,7 +74,7 @@ class _XmasMainState extends State<XmasMain> {
               BlendMode.darken,
             ),
             fit: BoxFit.cover,
-            image: AssetImage(
+            image: const AssetImage(
               'assets/xmas/xmas_bg.jpg',
             ),
           ),
@@ -83,13 +82,13 @@ class _XmasMainState extends State<XmasMain> {
         child: child,
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff9896AE),
+        backgroundColor: const Color(0xff9896AE),
         onPressed: () {
           trace('OK PRESSED!');
           _incrementCounter();
         },
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

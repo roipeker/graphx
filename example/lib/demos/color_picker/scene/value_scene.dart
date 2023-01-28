@@ -32,13 +32,13 @@ class ValueScene extends GSprite {
     bgValue = GShape();
     drawGradient(bgValue.graphics, color: kColorBlack, isHorizontal: false);
 
-    final radius = 8.0;
+    const radius = 8.0;
     selector = GShape();
     selector.graphics
         .lineStyle(2, kColorWhite)
         .drawCircle(0, 0, radius)
         .endFill()
-        .lineStyle(2, kColorBlack)
+        .lineStyle(2)
         .drawCircle(0, 0, radius - 2)
         .endFill();
     selector.alpha = .8;

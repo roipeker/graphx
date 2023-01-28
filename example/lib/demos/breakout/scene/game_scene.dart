@@ -95,7 +95,7 @@ class BreakoutAtari extends GSprite {
     }
     bricks.clear();
     final total = rows * cols;
-    final sepHud = 20;
+    const sepHud = 20;
     for (var i = 0; i < total; ++i) {
       final idx = i % cols;
       final idy = i ~/ cols;
@@ -258,8 +258,8 @@ class BreakoutAtari extends GSprite {
     }
 
     final removeBricks = [];
-    bricks.forEach((b) {
-      if (!collides(b, ball)) return;
+    for (var b in bricks) {
+      if (!collides(b, ball)) continue;
       removeBricks.add(b);
       hud.showPoints(b.points, b.getBounds(this)!);
       b.removeFromParent();
@@ -283,9 +283,11 @@ class BreakoutAtari extends GSprite {
         ball.x -= ball.vx;
         ball.vx *= -1;
       }
-    });
+    }
 
-    removeBricks.forEach((b) => bricks.remove(b));
+    for (var b in removeBricks) {
+      bricks.remove(b);
+    }
     // removeBricks.forEach(bricks.remove);
     removeBricks.clear();
 

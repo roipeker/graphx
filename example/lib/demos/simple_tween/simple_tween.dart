@@ -5,10 +5,11 @@ import 'tween_controller.dart';
 class SimpleTweenMain extends StatelessWidget {
   final controller = TweenSceneController();
 
+  SimpleTweenMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DemoSingleSceneWidget(
-      title: 'simple tweens',
       root: SimpleTweenScene(controller),
       child: _TweenMenu(controller),
     );
@@ -18,12 +19,12 @@ class SimpleTweenMain extends StatelessWidget {
 class _TweenMenu extends StatelessWidget {
   final TweenSceneController controller;
 
-  _TweenMenu(this.controller);
+  const _TweenMenu(this.controller);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       width: 300,
 //      alignment: Alignment.center,
       child: Column(
@@ -69,9 +70,10 @@ class _TweenMenu extends StatelessWidget {
     );
   }
 
-  Widget _addButton(
-      {required String label, IconData? icon, VoidCallback? onPressed}) {
+  Widget _addButton({required String label, IconData? icon, VoidCallback? onPressed}) {
     return TextButton(
+      // color: Colors.red,
+      onPressed: onPressed,
       // color: Colors.red,
       child: Row(
         children: [
@@ -79,7 +81,6 @@ class _TweenMenu extends StatelessWidget {
           Text(label),
         ],
       ),
-      onPressed: onPressed,
     );
   }
 }

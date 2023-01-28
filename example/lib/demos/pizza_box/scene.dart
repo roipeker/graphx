@@ -16,7 +16,7 @@ class PizzaBoxScene extends GSprite {
 
   @override
   void addedToStage() async {
-    stage?.color = Colors.grey.shade50;
+    stage!.color = Colors.grey.shade50;
     pizzaTexture =
         await ResourceLoader.loadTexture('assets/pizza_box/pizza.png', 2);
     run();

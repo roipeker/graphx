@@ -44,7 +44,7 @@ class DrawingScene extends GSprite {
     /// get a Texture (Image) from the container GSprite,
     /// at 100% resolution (1x).
     /// This value should match the dpiScale of the screen.
-    final texture = await container.createImageTexture(false, 1);
+    final texture = await container.createImageTexture(false);
 
     /// potential bug in GraphX, we should reset the pivot point in the Texture.
     /// so it doesnt goes off-stage if we press/move away the screen area.

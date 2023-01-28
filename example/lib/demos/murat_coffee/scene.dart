@@ -36,8 +36,8 @@ class _ProductPlayful extends GSprite {
 
   double shadowY = 0.0;
   double imageY = 0.0;
-  var moveCounter = 0.0;
-  var rotationCounter = 0.0;
+  double moveCounter = 0.0;
+  double rotationCounter = 0.0;
 
   void loadImage(String url) {
     this.url = url;

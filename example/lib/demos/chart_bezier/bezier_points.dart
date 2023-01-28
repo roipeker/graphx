@@ -25,9 +25,9 @@ void bezierCurveThrough(
   }
 
   final cpoints = <_BezierControlPoint>[];
-  points.forEach((e) {
+  for (var _ in points) {
     cpoints.add(_BezierControlPoint());
-  });
+  }
 
   for (var i = 1; i < len - 1; ++i) {
     final pi = points[i];

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class MouseRepulsionScene extends GSprite {
-  var cols = 20;
-  var rows = 20;
-  var sep = 8.0;
-  var dots = <GraphPoint>[];
+  int cols = 20;
+  int rows = 20;
+  double sep = 8.0;
+  List<GraphPoint> dots = <GraphPoint>[];
 
   double spring = .015, stiff = .02, damp = .95, radius = 150.0;
   late double radiusSq;
@@ -48,7 +48,7 @@ class MouseRepulsionScene extends GSprite {
 
     mouseRadiusShape.graphics.lineStyle(1, Colors.red.withOpacity(.7));
     mouseRadiusShape.graphics.drawCircle(0, 0, radius).endFill();
-    mouseRadiusShape.graphics.lineStyle(2, Colors.black);
+    mouseRadiusShape.graphics.lineStyle(2);
     mouseRadiusShape.graphics.drawCircle(0, 0, radius - 1).endFill();
     mouseRadiusShape.graphics.lineStyle(1, Colors.red);
     mouseRadiusShape.graphics.drawCircle(0, 0, radius - 2).endFill();

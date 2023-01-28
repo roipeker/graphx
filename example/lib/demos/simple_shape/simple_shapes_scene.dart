@@ -40,7 +40,7 @@ class SimpleShapesScene extends GSprite {
 
     /// mouth
     face.graphics
-        .lineStyle(2, Colors.black)
+        .lineStyle(2)
         .arc(0, 10, 20, deg2rad(45), deg2rad(90))
 
         /// sad face

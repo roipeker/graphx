@@ -75,7 +75,7 @@ class PieChartScene extends GSprite {
       var percentText = (percent * 100.0).toStringAsPrecision(2);
       var valueText = GText(
         text: percentText,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: Colors.white,
           fontSize: 18,
           fontWeight: FontWeight.w600,

@@ -9,14 +9,13 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class Dna3dMain extends StatelessWidget {
+  const Dna3dMain({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('DNA 2.5D')),
-      body: SceneBuilderWidget(
-        builder: () => SceneController(front: DnaScene()),
-        autoSize: true,
-      ),
+    return SceneBuilderWidget(
+      builder: () => SceneController(front: DnaScene()),
+      autoSize: true,
     );
   }
 }

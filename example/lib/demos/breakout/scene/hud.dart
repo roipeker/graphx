@@ -16,7 +16,7 @@ class HUD extends GSprite {
   }
 
   void _draw() {
-    final textMargin = 4.0;
+    const textMargin = 4.0;
     var titleScore = _getText('SCORE', 4);
     titleScore.setPosition(textMargin, textMargin);
     _score_tf = _getText('0', 6);
@@ -33,7 +33,7 @@ class HUD extends GSprite {
     _gameState_tf = GText(
       text: 'GAME OVER',
       width: w,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontFamily: 'pressstart',
         fontSize: 12,
         color: Colors.white,
@@ -55,7 +55,7 @@ class HUD extends GSprite {
     var tmpContainer = GSprite();
     var p1Tf = GText(
       text: '+$points',
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontFamily: 'pressstart',
         fontSize: 8,
         color: Colors.white,
@@ -100,7 +100,7 @@ class HUD extends GSprite {
   }
 
   void speedUp() {
-    final offset = 10.0;
+    const offset = 10.0;
     GTween.killTweensOf(_speedUp_tf);
     _speedUp_tf!.y = h / 2;
     _speedUp_tf!.alpha = 0;

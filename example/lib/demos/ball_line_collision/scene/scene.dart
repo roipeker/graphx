@@ -15,14 +15,14 @@ class CollisionScene extends GSprite {
   double get sh => stage!.stageHeight;
 
   /// lazy with the types :P
-  var lines = [];
-  var points = <List<double>>[];
-  var balls = <Ball>[];
+  List lines = [];
+  List<List<double>> points = <List<double>>[];
+  List<Ball> balls = <Ball>[];
   double maxAge = 200;
 
   @override
   void addedToStage() {
-    final random = Math.randomRange;
+    const random = Math.randomRange;
     List.generate(10, (index) {
       var ball = Ball(
         x: random(0, sw),
@@ -48,12 +48,12 @@ class CollisionScene extends GSprite {
   }
 
   @override
-  void update(t) {
+  void update(double t) {
     super.update(t);
     balls.forEach(updateBall);
     graphics.clear();
     for (var i = 0; i < lines.length; i++) {
-      graphics.lineStyle(3, Color(0xff212121));
+      graphics.lineStyle(3, const Color(0xff212121));
       var line = lines[i];
       for (var j = 0; j < line.length; j++) {
         var p = line[j];
@@ -72,7 +72,7 @@ class CollisionScene extends GSprite {
     }
 
     /// remove empty lines.
-    while (lines.length > 0 && lines[0].length == 0) {
+    while (lines.isNotEmpty && lines[0].length == 0) {
       lines.removeAt(0);
     }
   }

@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class SimpleRadialMenuMain extends StatelessWidget {
+  const SimpleRadialMenuMain({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return SceneBuilderWidget(
-      builder: () => SceneController(front: SimpleRadialMenuScene()),
+    return SizedBox.expand(
+      child: SceneBuilderWidget(
+        builder: () => SceneController(front: SimpleRadialMenuScene()),
+      ),
     );
   }
 }
@@ -79,7 +83,7 @@ class SimpleRadialMenuScene extends GSprite {
       paragraphStyle: ParagraphStyle(textAlign: TextAlign.center),
     );
     text.width = size;
-    text.setTextStyle(TextStyle(
+    text.setTextStyle(const TextStyle(
       color: Colors.white,
       fontSize: 10,
     ));
@@ -89,7 +93,7 @@ class SimpleRadialMenuScene extends GSprite {
     text.alignPivot();
 
     var icon = GIcon(iconData, Colors.white, size / 2);
-    icon.alignPivot(Alignment.center);
+    icon.alignPivot();
     icon.y = -8;
     text.y = icon.y + icon.height / 2 + text.height / 2;
 

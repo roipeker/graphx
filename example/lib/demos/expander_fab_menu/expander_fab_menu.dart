@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class ExpanderFabMenu extends StatelessWidget {
+  const ExpanderFabMenu({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -9,30 +11,30 @@ class ExpanderFabMenu extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Custom Animation',
-            style: TextStyle(color: Colors.black),
-          ),
-          backgroundColor: Colors.white,
-          centerTitle: false,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-        ),
+        // appBar: AppBar(
+        //   title: const Text(
+        //     'Custom Animation',
+        //     style: TextStyle(color: Colors.black),
+        //   ),
+        //   backgroundColor: Colors.white,
+        //   centerTitle: false,
+        //   leading: IconButton(
+        //     icon: const Icon(
+        //       Icons.arrow_back,
+        //       color: Colors.black,
+        //     ),
+        //     onPressed: () {},
+        //   ),
+        // ),
         body: MyMenu(
           child: ListView.builder(
             itemBuilder: (_, idx) {
               return Card(
+                elevation: 2,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text('Item num $idx'),
                 ),
-                elevation: 2,
               );
             },
             itemCount: 50,
@@ -46,8 +48,7 @@ class ExpanderFabMenu extends StatelessWidget {
 class MyMenu extends StatefulWidget {
   final Widget? child;
 
-  const MyMenu({Key? key, this.child}) : super(key: key);
-
+  const MyMenu({super.key, this.child});
   @override
   _MyMenuState createState() => _MyMenuState();
 }
@@ -78,45 +79,39 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final baseButton = IconButton(
-      icon: Icon(Icons.android),
+      icon: const Icon(Icons.android),
       onPressed: () {},
     );
     return SceneBuilderWidget(
       builder: () => SceneController(front: menuScene),
       child: Stack(
         children: [
-          Container(
-            // color: Colors.red,
-            child: Column(
-              children: [
-                Expanded(child: widget.child!),
-                Container(
-                  height: 60,
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        color: Colors.black38,
-                        blurRadius: 12,
-                        offset: Offset(0, -1),
-                        spreadRadius: 2)
-                  ]),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      baseButton,
-                      baseButton,
-                      Container(
-                        width: 40,
-                        height: 40,
-                        color: Colors.transparent,
-                        key: mySuperKey,
-                      ),
-                      baseButton,
-                      baseButton,
-                    ],
-                  ),
+          Column(
+            children: [
+              Expanded(child: widget.child!),
+              Container(
+                height: 60,
+                decoration: const BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                      color: Colors.black38, blurRadius: 12, offset: Offset(0, -1), spreadRadius: 2)
+                ]),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    baseButton,
+                    baseButton,
+                    Container(
+                      width: 40,
+                      height: 40,
+                      color: Colors.transparent,
+                      key: mySuperKey,
+                    ),
+                    baseButton,
+                    baseButton,
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           // buildMenu(),
           // buildAnimFab(),
@@ -272,7 +267,7 @@ class MyCoolMenuScene extends GSprite {
       if (isOpen) {
         itm.tween(duration: .45, delay: .25 + ((len - 1) - i) * .09, alpha: ta);
       } else {
-        itm.tween(duration: .12, delay: 0, alpha: 0, overwrite: 1);
+        itm.tween(duration: .12, delay: 0, alpha: 0);
       }
     }
   }

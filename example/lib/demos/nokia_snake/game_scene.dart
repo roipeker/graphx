@@ -5,10 +5,10 @@ import 'commands.dart';
 
 class SnakeGameScene extends GSprite {
   static Color boardBorder = Colors.blue;
-  static Color boardBackground = Color(0xFF989325);
+  static Color boardBackground = const Color(0xFF989325);
   static Color snakeCol = Colors.black;
   static Color snakeBorder = Colors.green.withOpacity(.6);
-  static Color foodCol = Color(0xFF443902);
+  static Color foodCol = const Color(0xFF443902);
   static Color foodBorder = Colors.transparent;
 
   GRect foodRect = GRect();
@@ -107,8 +107,8 @@ class SnakeGameScene extends GSprite {
   }
 
   void drawFrame() {
-    final lineW = 4.0;
-    final lineW2 = lineW / 2;
+    const lineW = 4.0;
+    const lineW2 = lineW / 2;
     graphics.lineStyle(1, Colors.black26);
     graphics.drawRect(lineW2, lineW2, sw - lineW, sh - lineW);
     graphics.endFill();
@@ -140,15 +140,15 @@ class SnakeGameScene extends GSprite {
       isPulsing = false;
     }
 
-    final _foodCol = Colors.red.withOpacity(isPulsing ? 1 : .8);
+    final foodCol = Colors.red.withOpacity(isPulsing ? 1 : .8);
     graphics.lineStyle(4, Colors.white54);
-    graphics.beginFill(_foodCol);
+    graphics.beginFill(foodCol);
 
     final inflation = isPulsing ? 0.0 : -2.0;
     final outRect = foodRect.clone().inflate(inflation, inflation);
 
-    graphics.drawCircle(outRect.x + outRect.width / 2,
-        outRect.y + outRect.height / 2, outRect.width / 2);
+    graphics.drawCircle(
+        outRect.x + outRect.width / 2, outRect.y + outRect.height / 2, outRect.width / 2);
 
     graphics.endFill();
     graphics.endFill();
@@ -169,8 +169,7 @@ class SnakeGameScene extends GSprite {
     return false;
   }
 
-  double randomFood(double min, double max) =>
-      Math.randomRangeClamp(min, max, tileSize);
+  double randomFood(double min, double max) => Math.randomRangeClamp(min, max, tileSize);
 
   void generateFood() {
     isBig = score % 8 == 0 && score > 0;
@@ -208,22 +207,22 @@ class SnakeGameScene extends GSprite {
 
   void onKeyDown(KeyboardEventData event) {
     final key = event.rawEvent.logicalKey;
-    if (key == Keys.LEFT_KEY) {
+    if (key == Keys.leftKey) {
       changeState(SnakeCommands.left);
     }
-    if (key == Keys.RIGHT_KEY) {
+    if (key == Keys.rightKey) {
       changeState(SnakeCommands.right);
     }
-    if (key == Keys.DOWN_KEY) {
+    if (key == Keys.downKey) {
       changeState(SnakeCommands.down);
     }
-    if (key == Keys.UP_KEY) {
+    if (key == Keys.upKey) {
       changeState(SnakeCommands.up);
     }
-    if (key == Keys.ESC_KEY) {
+    if (key == Keys.escKey) {
       changeState(SnakeCommands.pause);
     }
-    if (key == Keys.R_KEY) {
+    if (key == Keys.rKey) {
       gameOver();
     }
   }

@@ -2,50 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class GraphicsClipperDemo extends StatelessWidget {
+  const GraphicsClipperDemo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('GraphX Graphics Clipper'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: ClipPath(
-                clipper: MyCurvyPath(),
-                child: Container(
-                  width: 300,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.red, Colors.blue],
-                    ),
-                  ),
-                  child: ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                    itemBuilder: (ctx, idx) {
-                      return Text(
-                        'graphics clipper demo',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black26,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+      /// takes the entire body area.
+      body: Center(
+          child: ClipPath(
+        clipper: MyCurvyPath(),
+        child: Container(
+          width: 300,
+          height: 300,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.red, Colors.blue],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-                'This sample shows how to use GraphX to output a Path to use as a ClipRect'),
-          )
-        ],
-      ),
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            itemBuilder: (ctx, idx) {
+              return const Text(
+                'graphics clipper demo',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black26,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            },
+          ),
+        ),
+      )),
     );
   }
 }
@@ -54,7 +42,7 @@ class GraphicsClipperDemo extends StatelessWidget {
 class MyCurvyPath extends GraphicsClipper {
   @override
   void draw(Graphics g, Size size) {
-    final curveSize = 60.0;
+    const curveSize = 60.0;
     final targetW = size.width;
     final targetH = size.height;
     g

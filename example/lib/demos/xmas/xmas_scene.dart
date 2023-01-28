@@ -33,7 +33,7 @@ class SnowScene extends GSprite {
       );
       return flake;
     });
-    _snowDirectionTimer = Timer.periodic(Duration(milliseconds: 900), (timer) {
+    _snowDirectionTimer = Timer.periodic(const Duration(milliseconds: 900), (timer) {
       _snowDirectionTimer = timer;
       _changeSnowDirection();
     });
@@ -48,13 +48,15 @@ class SnowScene extends GSprite {
 
   void _changeSnowDirection() {
     /// flip the x velocity direction of each snowflake every 2 seconds.
-    flakes.forEach((flake) => flake.velX *= -1);
+    for (var flake in flakes) {
+      flake.velX *= -1;
+    }
   }
 
   @override
   void update(double delta) {
     super.update(delta);
-    flakes.forEach((flake) {
+    for (var flake in flakes) {
       flake.x += flake.velX;
       flake.y += flake.velY;
 
@@ -67,7 +69,7 @@ class SnowScene extends GSprite {
       } else if (flake.x > stage!.stageWidth) {
         flake.x = -flake.width;
       }
-    });
+    }
   }
 
   Future<void> _initTextures() async {
@@ -92,7 +94,7 @@ class Snowflake extends GBitmap {
   double velY = 0.0, velX = 0.0;
 
   /// GBitmap requires the Texture in the constructor.
-  Snowflake(GTexture? texture) : super(texture) {
+  Snowflake(super.texture) {
     _init();
   }
 

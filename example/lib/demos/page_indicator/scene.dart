@@ -132,7 +132,7 @@ class PageIndicatorPaged extends BaseScene {
       _targetScroll = 0;
     }
     var firstIndex = -_scroll;
-    _dots.forEach((dot) {
+    for (var dot in _dots) {
       var targetAlpha = 1.0;
       if (dot.id < firstIndex || dot.id > firstIndex + (_visibleItems - 1)) {
         targetAlpha = 0;
@@ -147,7 +147,7 @@ class PageIndicatorPaged extends BaseScene {
       );
       dot.targetColor = dotUnselectedColor;
       dot.targetSize = dotSize;
-    });
+    }
 
     prevDot?.targetSize = dotPreW;
     nextDot?.targetSize = dotPreW;

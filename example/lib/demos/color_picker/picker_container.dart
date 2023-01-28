@@ -6,6 +6,8 @@ import 'scene/value_scene.dart';
 import 'utils.dart';
 
 class PickerContainer extends StatelessWidget {
+  const PickerContainer({super.key});
+
   @override
   Widget build(BuildContext context) {
     const separator = SizedBox(width: 10);
@@ -15,7 +17,7 @@ class PickerContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey.shade800,
         borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black45,
             blurRadius: 24,
@@ -33,7 +35,7 @@ class PickerContainer extends StatelessWidget {
               width: 40,
               decoration: BoxDecoration(
                 color: value,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12),
                 ),
@@ -42,14 +44,12 @@ class PickerContainer extends StatelessWidget {
           ),
           separator,
           Expanded(
-            child: Container(
-              child: SceneBuilderWidget(
-                builder: () => SceneController(front: ValueScene()),
-              ),
+            child: SceneBuilderWidget(
+              builder: () => SceneController(front: ValueScene()),
             ),
           ),
           separator,
-          Container(
+          SizedBox(
             width: 80,
             child: SceneBuilderWidget(
               builder: () => SceneController(front: HueScene()),

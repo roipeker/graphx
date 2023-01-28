@@ -6,12 +6,14 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class Globe3dMain extends StatelessWidget {
+  const Globe3dMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text(
+        title: const Text(
           'globe 3d',
           style: TextStyle(fontSize: 12),
         ),

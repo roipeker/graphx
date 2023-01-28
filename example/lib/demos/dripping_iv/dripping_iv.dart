@@ -5,6 +5,8 @@ import 'package:graphx/graphx.dart';
 import 'scene/dripping_scene.dart';
 
 class DrippingIVMain extends StatelessWidget {
+  const DrippingIVMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SceneBuilderWidget(

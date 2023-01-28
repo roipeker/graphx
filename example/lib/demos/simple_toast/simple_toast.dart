@@ -6,11 +6,13 @@ import 'package:graphx/graphx.dart';
 import 'toast.dart';
 
 class SimpleToastMain extends StatelessWidget {
+  const SimpleToastMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SceneBuilderWidget(
       builder: () => SceneController(front: ToastScene()),
-      child: MyHomePage(
+      child: const MyHomePage(
         title: 'Flutter Demo Home Page',
       ),
     );
@@ -18,7 +20,7 @@ class SimpleToastMain extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, this.title}) : super(key: key);
+  const MyHomePage({super.key, this.title});
   final String? title;
 
   @override
@@ -26,7 +28,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final int _counter = 0;
   double? bottom;
   final tec = TextEditingController();
 
@@ -34,11 +36,10 @@ class _MyHomePageState extends State<MyHomePage> {
     mps.emit1<Map<String, dynamic>>(
       'showSnackBar',
       {
-        'text': tec.text == '' ? 'No message' : tec.text,
+        'text': tec.text == '' ? 'No messege' : tec.text,
         'color': Colors.red,
         'bottomInset': MediaQuery.of(context).viewInsets.bottom,
-        'onMouseClick': (MouseInputData event) =>
-            tec.text = event.localX.toString(),
+        'onMouseClick': (MouseInputData event) => tec.text = event.localX.toString(),
       },
     );
   }
@@ -55,9 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // sendKeyboardOpenEvent();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title!),
-      ),
+      // appBar: AppBar(
+      //   title: Text(widget.title!),
+      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (value) => sendKeyboardOpenEvent(),
               ),
             ),
-            Text(
+            const Text(
               'You have pushed the button this many times:',
             ),
             Text(
@@ -82,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -11,7 +11,7 @@ import 'scene/menu_scene.dart';
 const _kBlue = Color(0xff3578EA);
 
 class FacebookReactionsMain extends StatelessWidget {
-  FacebookReactionsMain() {
+  FacebookReactionsMain({super.key}) {
     if (posts.isEmpty) {
       buildPostData();
     }
@@ -28,7 +28,7 @@ class FacebookReactionsMain extends StatelessWidget {
             sigmaX: 16,
             sigmaY: 16,
           ),
-          child: Text(
+          child: const Text(
             'Facebook Reactions (long press a photo!)',
             style: TextStyle(
               color: _kBlue,
@@ -40,13 +40,12 @@ class FacebookReactionsMain extends StatelessWidget {
         backgroundColor: Colors.white.withOpacity(.6),
         elevation: 0,
       ),
-      backgroundColor: Color(0xffebebeb),
+      backgroundColor: const Color(0xffebebeb),
       body: SceneBuilderWidget(
         builder: () => SceneController(front: MenuScene()),
         child: Scrollbar(
           child: ListView.separated(
-            primary: true,
-            padding: EdgeInsets.symmetric(vertical: 54, horizontal: 0),
+            padding: const EdgeInsets.symmetric(vertical: 54),
             separatorBuilder: (context, index) => const SizedBox(height: 8),
             itemBuilder: (context, index) => InnerCardItem(data: posts[index]),
             itemCount: posts.length,
@@ -60,7 +59,7 @@ class FacebookReactionsMain extends StatelessWidget {
 class InnerCardItem extends StatelessWidget {
   final PostVo? data;
 
-  const InnerCardItem({Key? key, this.data}) : super(key: key);
+  const InnerCardItem({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +72,7 @@ class InnerCardItem extends StatelessWidget {
           mps.emit1('showMenu', ContextUtils.getRenderObjectBounds(context));
         },
         child: Container(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -149,7 +148,7 @@ class InnerCardItem extends StatelessWidget {
                   _IconReaction.likes(count: data!.numLikes),
                   const SizedBox(width: 12),
                   _IconReaction.comments(count: data!.numComments),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     data!.shares,
                     style: const TextStyle(
@@ -175,25 +174,22 @@ class _IconReaction extends StatelessWidget {
   final int? count;
 
   const _IconReaction({
-    Key? key,
+    super.key,
     this.iconData,
     this.color = Colors.black,
     this.count,
-  }) : super(key: key);
-
-  _IconReaction.likes({this.count})
+  });
+  const _IconReaction.likes({this.count})
       : iconData = Icons.favorite,
         color = const Color(0xffDB615C);
 
-  _IconReaction.comments({this.count})
+  const _IconReaction.comments({this.count})
       : iconData = Icons.chat_bubble,
         color = const Color(0xff5B46F4);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(
           iconData,

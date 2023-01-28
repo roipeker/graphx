@@ -36,7 +36,10 @@ class AltitudIndicatorScene extends GSprite {
 
     var mainMask = GShape();
     var radius = meterSize / 2;
-    mainMask.graphics.beginFill(Colors.red.withOpacity(.3)).drawCircle(0, 0, radius).endFill();
+    mainMask.graphics
+        .beginFill(Colors.red.withOpacity(.3))
+        .drawCircle(0, 0, radius)
+        .endFill();
     addChild(mainMask);
     mainContainer.mask = mainMask;
 
@@ -53,8 +56,11 @@ class AltitudIndicatorScene extends GSprite {
   }
 
   Future<void> drawInnerCircle() async {
-    innerCircleSize =
-        meterSize - outlineThickness1 * 2 - outlineThickness2 * 2 + 4 - innerCircSeparation * 2;
+    innerCircleSize = meterSize -
+        outlineThickness1 * 2 -
+        outlineThickness2 * 2 +
+        4 -
+        innerCircSeparation * 2;
 
     var maskCircle = GShape()
       ..graphics
@@ -135,15 +141,15 @@ class AltitudIndicatorScene extends GSprite {
     movable = GSprite();
 
     /// center pivot in the drawn object.
-    rotatorCircle.alignPivot(Alignment.center);
+    rotatorCircle.alignPivot();
 
-    var sky = buildBox(Color(0xff3D84A9), innerCircleSize, innerCircleSize);
-    var ground = buildBox(Color(0xff493F42), innerCircleSize, innerCircleSize);
+    var sky = buildBox(const Color(0xff3D84A9), innerCircleSize, innerCircleSize);
+    var ground = buildBox(const Color(0xff493F42), innerCircleSize, innerCircleSize);
     var line = buildBox(kColorWhite, innerCircleSize, 2);
 
     sky.alignPivot(Alignment.bottomCenter);
     ground.alignPivot(Alignment.topCenter);
-    line.alignPivot(Alignment.center);
+    line.alignPivot();
 
     movable!.addChild(sky);
     movable!.addChild(ground);
@@ -195,7 +201,7 @@ class AltitudIndicatorScene extends GSprite {
     GText buildTextVal(int value) {
       var tf = GText(
         text: value.toString(),
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: Colors.white,
           fontSize: 13,
           fontWeight: FontWeight.w500,
@@ -232,8 +238,11 @@ class AltitudIndicatorScene extends GSprite {
         underlineY *= -1;
       }
 
-      final underlineW = 28.0;
-      spr.graphics.moveTo(-underlineW / 2, underlineY).lineTo(underlineW / 2, underlineY).endFill();
+      const underlineW = 28.0;
+      spr.graphics
+          .moveTo(-underlineW / 2, underlineY)
+          .lineTo(underlineW / 2, underlineY)
+          .endFill();
 
       spr.addChild(tf1);
       spr.addChild(tf2);
@@ -283,17 +292,19 @@ class AltitudIndicatorScene extends GSprite {
     var outlines = GShape();
     final g = outlines.graphics;
     g
-        .lineStyle(outlineThickness1, Color(0xff3B414B))
+        .lineStyle(outlineThickness1, const Color(0xff3B414B))
         .drawCircle(0, 0, radius - outlineThickness1 * .4);
     g
-        .lineStyle(outlineThickness2, Color(0xff1C2023))
+        .lineStyle(outlineThickness2, const Color(0xff1C2023))
         .drawCircle(0, 0, radius - outlineThickness1 - outlineThickness2 * .3);
 
     /// draw the floor.
     var skyFloor = GShape();
-    skyFloor.graphics.beginFill(Color(0xff5ABAEC)).drawRect(0, 0, meterSize, meterSize / 2);
     skyFloor.graphics
-        .beginFill(Color(0xff5E5351))
+        .beginFill(const Color(0xff5ABAEC))
+        .drawRect(0, 0, meterSize, meterSize / 2);
+    skyFloor.graphics
+        .beginFill(const Color(0xff5E5351))
         .drawRect(0, meterSize / 2, meterSize, meterSize / 2);
     skyFloor.alignPivot();
     mainContainer.addChild(skyFloor);
@@ -357,7 +368,8 @@ class AltitudIndicatorScene extends GSprite {
   }
 
   GShape buildBox(Color color, double width, double height) {
-    return GShape()..graphics.beginFill(color).drawRect(0, 0, width, height).endFill();
+    return GShape()
+      ..graphics.beginFill(color).drawRect(0, 0, width, height).endFill();
   }
 
   GDisplayObject buildArrow({

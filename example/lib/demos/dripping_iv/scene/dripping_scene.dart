@@ -13,7 +13,7 @@ class DrippingScene extends GSprite {
     stage!.color = Colors.red;
     var dropData = await SvgUtils.svgDataFromString(dropSvg);
     var tubeData = await SvgUtils.svgDataFromString(tubeSvgString);
-    final waterColor = Colors.white;
+    const waterColor = Colors.white;
 
     var tube = GSvgShape(tubeData);
     addChild(tube);

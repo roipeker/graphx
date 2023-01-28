@@ -9,14 +9,13 @@ import 'package:graphx/graphx.dart';
 import 'scene/scene.dart';
 
 class BallVsLineMain extends StatelessWidget {
+  const BallVsLineMain({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('ball vs line collisions')),
-      body: SceneBuilderWidget(
-        builder: () => SceneController(front: CollisionScene()),
-        autoSize: true,
-      ),
+    return SceneBuilderWidget(
+      builder: () => SceneController(front: CollisionScene()),
+      autoSize: true,
     );
   }
 }

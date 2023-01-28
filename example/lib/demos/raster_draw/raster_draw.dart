@@ -7,17 +7,16 @@ import 'package:graphx/graphx.dart';
 
 import 'scene.dart';
 
-class RasterDrawingMain extends StatelessWidget {
+class RasterDrawMain extends StatelessWidget {
+  const RasterDrawMain({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('graphx drawing to bitmap')),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: SceneBuilderWidget(
-          builder: () => SceneController(back: DrawingScene()),
-          autoSize: true,
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: SceneBuilderWidget(
+        builder: () => SceneController(back: DrawingScene()),
+        autoSize: true,
       ),
     );
   }

@@ -38,7 +38,7 @@ class MenuItem extends GSprite {
     addChild(pill);
     label = GText(
       text: 'label',
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontSize: 12.0,
         color: Colors.white,
         letterSpacing: .2,
@@ -73,7 +73,7 @@ class MenuItem extends GSprite {
   }
 
   void drawBackground() {
-    final sepX = 5.0;
+    const sepX = 5.0;
     label.x = sepX;
     var bgW = label.textWidth + sepX * 2;
     var bgH = label.textHeight + 2;

@@ -43,7 +43,7 @@ class BezierDraw {
   );
 
   double length() {
-    final steps = 10;
+    const steps = 10;
     var len = 0.0;
     var px = 0.0, py = 0.0;
     for (var i = 0; i <= steps; ++i) {

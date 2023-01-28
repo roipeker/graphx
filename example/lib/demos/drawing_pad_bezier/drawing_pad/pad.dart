@@ -13,7 +13,7 @@ class Pad extends GSprite {
 
   double get dotSize => (minW + maxW) / 2;
 
-  Color penColor = Color(0xff000000);
+  Color penColor = const Color(0xff000000);
   Color backgroundColor = Colors.black;
   Function? onBegin, onEnd, onUpdate;
   final List<PadPoint> _lastPoints = [];
@@ -37,7 +37,7 @@ class Pad extends GSprite {
     on();
   }
 
-  List<_StrokeData> _data = <_StrokeData>[];
+  final List<_StrokeData> _data = <_StrokeData>[];
   bool _isEmpty = true;
   bool _isMouseDown = false;
 

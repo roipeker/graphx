@@ -36,12 +36,12 @@ class HueScene extends GSprite {
         .drawRoundRectComplex(0, 0, sw, sh, 0, 12, 0, 12)
         .endFill();
 
-    final arrowSize = 5.0;
+    const arrowSize = 5.0;
     arrowSelector = GShape();
     lineSelector = GShape();
 
     lineSelector!.graphics.beginFill(kColorWhite).drawRect(0, 0, sw, 10);
-    lineSelector!.alignPivot(Alignment.center);
+    lineSelector!.alignPivot();
     lineSelector!.x = sw / 2;
 
     /// create the arrow GShape first
@@ -59,8 +59,8 @@ class HueScene extends GSprite {
     arrowSelector.graphics
         .clear()
         .beginFill(kColorWhite)
-        .lineStyle(0, kColorBlack)
-        .drawPath(arrowPath, -arrowSize, 0)
+        .lineStyle()
+        .drawPath(arrowPath, -arrowSize)
         .drawPath(arrowPath, sw + arrowSize, 0, GMatrix()..rotate(Math.PI));
     // lineSelector.alignPivot();
     // lineSelector.x = sw / 2;

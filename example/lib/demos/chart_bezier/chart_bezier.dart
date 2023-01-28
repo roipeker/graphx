@@ -1,37 +1,29 @@
-import 'package:exampleGraphx/utils/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 import 'curved_graph_scene.dart';
 
 class ChartBezierMain extends StatelessWidget {
+  const ChartBezierMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('curved chart'),
-        backgroundColor: Colors.transparent,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('curved chart'),
+      //   backgroundColor: Colors.transparent,
+      // ),
       backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Container(
-                width: 400,
-                height: 300,
-                child: SceneBuilderWidget(
-                  builder: () => SceneController(
-                    front: CurvedGraphScene(),
-                  ),
-                ),
-              ),
+      body: Center(
+        child: SizedBox(
+          width: 400,
+          height: 300,
+          child: SceneBuilderWidget(
+            builder: () => SceneController(
+              front: CurvedGraphScene(),
             ),
           ),
-          ExampleInfo(
-            color: Colors.white,
-            text: 'Click to generate random data points',
-          )
-        ],
+        ),
       ),
     );
   }

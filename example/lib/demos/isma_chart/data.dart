@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-final smallText = TextStyle(
-  color: const Color(0xff333333),
+const smallText = TextStyle(
+  color: Color(0xff333333),
   fontSize: 9,
   fontWeight: FontWeight.w600,
 );
 
-final valueTextStyle = TextStyle(
-  color: const Color(0xff333333),
+const valueTextStyle = TextStyle(
+  color: Color(0xff333333),
   fontSize: 6,
   fontWeight: FontWeight.w600,
 );

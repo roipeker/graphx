@@ -23,7 +23,7 @@ class ToastScene extends GSprite {
 
     bg = GShape()
       ..graphics
-          .beginFill(Color(0xffff00ff))
+          .beginFill(const Color(0xffff00ff))
           .drawRoundRect(
             0,
             0,
@@ -45,7 +45,7 @@ class ToastScene extends GSprite {
       text: '',
       width: stage!.stageWidth - 150,
       paragraphStyle: paragraphStyle,
-      textStyle: TextStyle(fontSize: 18, color: Colors.white),
+      textStyle: const TextStyle(fontSize: 18, color: Colors.white),
     )
       ..x = myIcon.x + 30
       ..y = 13;
@@ -53,7 +53,7 @@ class ToastScene extends GSprite {
       text: 'Increment',
       width: stage!.stageWidth - 150,
       paragraphStyle: paragraphStyle,
-      textStyle: TextStyle(fontSize: 14, color: Colors.white),
+      textStyle: const TextStyle(fontSize: 14, color: Colors.white),
     )
       ..y = 11
       ..x = 9;
@@ -113,7 +113,7 @@ class ToastScene extends GSprite {
     container.tween(
       duration: 1,
       ease: GEase.elasticIn,
-      y: (stage?.stageHeight??0) + 20,
+      y: stage!.stageHeight + 20,
     );
     GTween.delayedCall(.8, () {
       bg.tween(

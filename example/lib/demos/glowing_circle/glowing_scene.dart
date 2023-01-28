@@ -26,7 +26,6 @@ extension MyGlowingExt on Widget {
           graphicBuilder: graphicBuilder,
         ),
       ),
-      autoSize: false,
       child: this,
     );
   }

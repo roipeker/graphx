@@ -7,12 +7,14 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class UniversoFlutterIntroMain extends StatelessWidget {
+  const UniversoFlutterIntroMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: 600,
           height: 600,
           child: SceneBuilderWidget(

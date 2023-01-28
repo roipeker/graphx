@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
@@ -31,8 +30,8 @@ Color getPixelColor(
 }
 
 Future<ByteData?> getImageBytes(GDisplayObject object) async {
-  var texture = await object.createImageTexture(true, 1);
-  var data = texture.root!.toByteData(format: ImageByteFormat.rawRgba);
+  var texture = await object.createImageTexture();
+  var data = texture.root!.toByteData();
   // texture?.dispose();
   // texture = null;
   return data;

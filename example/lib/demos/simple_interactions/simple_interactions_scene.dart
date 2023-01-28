@@ -29,7 +29,7 @@ class SimpleInteractionsScene extends GSprite {
     /// a ball to play with the keyboard
     ball = GShape();
     ball.name = 'ball';
-    ball.graphics.lineStyle(6, Colors.black);
+    ball.graphics.lineStyle(6);
     ball.graphics.beginFill(Colors.red);
     ball.graphics.drawCircle(0, 0, 20);
     ball.graphics.endFill();

@@ -78,7 +78,7 @@ class GaugeMeterScene extends GSprite {
         );
         textValueCounter += stepValueDeg;
         container.addChild(label);
-        label.alignPivot(Alignment.center);
+        label.alignPivot();
         label.x = cos1 * textRadius;
         label.y = sin1 * textRadius;
       }
@@ -117,9 +117,9 @@ class GaugeMeterScene extends GSprite {
       ),
     );
     container.addChild(labelValue);
-    labelValue.alignPivot(Alignment.center);
+    labelValue.alignPivot();
     labelValue.onFontLoaded.addOnce(() {
-      labelValue.alignPivot(Alignment.center);
+      labelValue.alignPivot();
     });
     nailMeter = GShape();
     var nailH = bigRadius / 2;
@@ -130,7 +130,7 @@ class GaugeMeterScene extends GSprite {
     g.drawPolygonFaces(0, 0, nailH, 3);
     g.endFill();
     nailMeter.height = 16;
-    nailMeter.alignPivot(Alignment(-1.6, 0));
+    nailMeter.alignPivot(const Alignment(-1.6, 0));
     container.alignPivot();
 
     // adjust size

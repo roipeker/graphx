@@ -51,7 +51,7 @@ class LineButton extends GSprite {
 
     tf = GText(
       text: 'GRAPHX',
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         letterSpacing: 1,
         color: Colors.white,
         fontSize: 18,

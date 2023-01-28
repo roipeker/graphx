@@ -5,13 +5,15 @@ import 'scene/data.dart';
 import 'scene/game_scene.dart';
 
 class HUDControls extends StatelessWidget {
+  const HUDControls({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          Spacer(),
+          const Spacer(),
           buildButton(Icons.play_arrow_outlined, GameEvents.action),
         ],
       ),
@@ -20,7 +22,7 @@ class HUDControls extends StatelessWidget {
 
   Widget buildButton(IconData ico, String eventType) {
     return MPSBuilder<bool>(
-      topics: [GameEvents.action],
+      topics: const [GameEvents.action],
       mps: mps,
       builder: (ctx, data, child) {
         final isPaused = BreakoutAtari.instance.isPaused;
@@ -32,22 +34,22 @@ class HUDControls extends StatelessWidget {
           child: Container(
             width: 48,
             height: 48,
-            margin: EdgeInsets.symmetric(horizontal: 8),
-            child: Icon(
-              icon,
-              color: Colors.white38,
-              size: 24,
-            ),
-            decoration: BoxDecoration(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: const BoxDecoration(
               color: Colors.white10,
               shape: BoxShape.circle,
               boxShadow: [
-                const BoxShadow(
+                BoxShadow(
                   color: Colors.black12,
                   blurRadius: 8,
                   spreadRadius: 0.5,
                 ),
               ],
+            ),
+            child: Icon(
+              icon,
+              color: Colors.white38,
+              size: 24,
             ),
           ),
         );

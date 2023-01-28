@@ -115,7 +115,7 @@ class MenuScene extends GSprite {
 
     /// load gifs (if needed, or take from cache)
     for (final vo in emotions) {
-      await ResourceLoader.loadGif(vo.asset, resolution: 1, cacheId: vo.asset);
+      await ResourceLoader.loadGif(vo.asset, cacheId: vo.asset);
     }
     _loadingBug = false;
     _items = [];

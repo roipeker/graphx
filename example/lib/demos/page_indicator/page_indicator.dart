@@ -6,6 +6,8 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class PageIndicatorMain extends StatelessWidget {
+  const PageIndicatorMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     Widget buildPageIndicator() {
@@ -13,7 +15,7 @@ class PageIndicatorMain extends StatelessWidget {
         child: Container(
           width: 100,
           height: 20,
-          padding: EdgeInsets.all(4),
+          padding: const EdgeInsets.all(4),
           color: Colors.grey.shade200,
           child: SceneBuilderWidget(
             builder: () => SceneController(
@@ -40,7 +42,7 @@ class PageIndicatorMain extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
-          title: Text('page indicator (use keyboard Tab+arrows to move pages)'),
+          title: const Text('page indicator (use keyboard Tab+arrows to move pages)'),
           elevation: 0,
           backgroundColor: Colors.black26,
         ),

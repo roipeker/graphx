@@ -20,7 +20,7 @@ class SortingButtonScene extends GSprite {
 
   @override
   void addedToStage() {
-    stage!.color = const Color(0xffdededede);
+    stage!.color = const Color(0xffdedede);
     var btn = SortingButton(195, 50);
 
     /// as we need to detect global touches on the window, we listen the event
@@ -97,8 +97,8 @@ class SortingButton extends GSprite {
     addChild(menuMask!);
     addChild(clickArea!);
     tweenMenuSize.value = h;
-    drawBackground(bg!.graphics, h, 5, Colors.black);
-    drawBackground(menuMask!.graphics, h, 5, Colors.black);
+    drawBackground(bg!.graphics, h, 5);
+    drawBackground(menuMask!.graphics, h, 5);
     drawBackground(clickArea!.graphics, h, 0, Colors.red.withOpacity(.4));
 
     clickArea!.alpha = 0;
@@ -115,7 +115,6 @@ class SortingButton extends GSprite {
 
     sortBy = createLabel(
       text: 'SORT BY',
-      weight: FontWeight.w600,
       fontSize: 7,
       letterSpacing: .6,
       targetW: labelMaxW - labelPaddingX,

@@ -11,20 +11,17 @@ import 'package:graphx/graphx.dart';
 import 'scene/scene.dart';
 
 class ColorfulLoaderMain extends StatelessWidget {
+  const ColorfulLoaderMain({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('colorful loader'),
-      ),
-      body: Center(
-        child: SceneBuilderWidget(
-          builder: () => SceneController(
-            front: ColorLoaderScene(),
-            config: SceneConfig.autoRender,
-          ),
-          autoSize: true,
+    return Center(
+      child: SceneBuilderWidget(
+        builder: () => SceneController(
+          front: ColorLoaderScene(),
+          config: SceneConfig.autoRender,
         ),
+        autoSize: true,
       ),
     );
   }

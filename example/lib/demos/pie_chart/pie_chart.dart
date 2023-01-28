@@ -4,6 +4,8 @@ import 'package:graphx/graphx.dart';
 import 'scene.dart';
 
 class PieChartMain extends StatelessWidget {
+  const PieChartMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

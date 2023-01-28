@@ -12,15 +12,14 @@ import '../../utils/utils.dart';
 import 'scene.dart';
 
 class CardRotation3dMain extends StatelessWidget {
+  const CardRotation3dMain({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('3d card rotation')),
-      body: SceneBuilderWidget(
-        autoSize: true,
-        builder: () => SceneController(
-          front: CardRotation3dScene(),
-        ),
+    return SceneBuilderWidget(
+      autoSize: true,
+      builder: () => SceneController(
+        front: CardRotation3dScene(),
       ),
     );
   }

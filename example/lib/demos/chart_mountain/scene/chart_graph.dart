@@ -20,7 +20,6 @@ class MyGraph extends GSprite {
   double minAlpha = .7;
   double maxAlpha = 1.0;
   final List<GraphModel>? data;
-
   MyGraph({this.data});
 
   @override
@@ -72,7 +71,7 @@ class MyGraph extends GSprite {
     });
 
     chartContainer?.addChild(graph);
-    drawChart(data, graph, 1);
+    drawChart(data, graph);
     return graph;
   }
 
@@ -99,7 +98,7 @@ class MyGraph extends GSprite {
 
   void drawBg() {
     var g = background.graphics;
-    g.lineStyle(0, Color(0xff868686));
+    g.lineStyle(0, const Color(0xff868686));
     g.moveTo(0, 0);
     g.lineTo(0, graphH);
 

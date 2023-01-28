@@ -39,12 +39,10 @@ class PainterRawScene extends GSprite {
     );
     await ResourceLoader.loadGif(
       'assets/run_hero/run_outline.gif',
-      resolution: 1,
       cacheId: 'hero',
     );
     await ResourceLoader.loadGif(
       'assets/run_hero/midair_outline.gif',
-      resolution: 1,
       cacheId: 'hero_air',
     );
   }
@@ -149,7 +147,7 @@ class ParallaxView extends GDisplayObjectContainer {
     canvas.translate(300.0, floorY);
     canvas.scale(heroScale);
     canvas.translate(-hero!.width! / 2, -hero!.height!);
-    canvas.drawImage(img, Offset(0, 0), heroPaint);
+    canvas.drawImage(img, const Offset(0, 0), heroPaint);
     canvas.restore();
   }
 

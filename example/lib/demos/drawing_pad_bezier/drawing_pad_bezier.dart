@@ -5,6 +5,8 @@ import 'drawing_pad/draw_pad_scene.dart';
 import 'pad_settings.dart';
 
 class DrawingPadBezierMain extends StatelessWidget {
+  const DrawingPadBezierMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -20,7 +22,7 @@ class DrawingPadBezierMain extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(left: 0, right: 0, bottom: 0, child: PadSettings()),
+            const Positioned(left: 0, right: 0, bottom: 0, child: PadSettings()),
           ],
         ),
       ),

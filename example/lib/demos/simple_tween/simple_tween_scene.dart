@@ -26,7 +26,7 @@ class SimpleTweenScene extends GSprite {
     /// use this Sprite to keep the box always centered in the stage.
     centeredContainer = GSprite();
 
-    box = MyBox(size: 40);
+    box = MyBox();
 
     /// add the box as child of the container (will inherit all the
     /// transformations from the parent).
@@ -36,7 +36,7 @@ class SimpleTweenScene extends GSprite {
 
     /// now the box is drawn from the top left corner drawRect(0,0,width,height)
     /// so we can change the pivots so it centers itself in the parent
-    box!.alignPivot(Alignment.center);
+    box!.alignPivot();
 
     controller.onRotate.add(_rotateBox);
     controller.onScale.add(_scaleBox);
@@ -59,7 +59,7 @@ class SimpleTweenScene extends GSprite {
 
   void _initCounter() {
     counterText = GText(
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.bold,
         fontSize: 20,

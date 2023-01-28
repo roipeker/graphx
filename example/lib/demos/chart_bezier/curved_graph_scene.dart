@@ -56,7 +56,6 @@ class CurvedGraphScene extends GSprite {
         alpha: .5,
         ease: GEase.easeInExpo,
         colorize: Colors.white,
-        overwrite: 1,
       );
       dot.tween(
         delay: 1 + i * .08,

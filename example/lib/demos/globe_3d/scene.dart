@@ -20,7 +20,8 @@ class Globe3dScene extends GSprite {
   }
 
   Future<void> loadStuff() async {
-    await ResourceLoader.loadTexture('assets/globe_3d/world_texture.jpg', 1, 'map');
+    await ResourceLoader.loadTexture(
+        'assets/globe_3d/world_texture.jpg', 1, 'map');
     trace('map is:', ResourceLoader.getTexture('map'));
     makeTriangles();
     draw();
@@ -72,7 +73,7 @@ class Globe3dScene extends GSprite {
 
     /// TODO: fix issues with z ordering.
     // world.graphics.beginBitmapFill(texture);
-    world.graphics.lineStyle(0, Color(0xffff00ff));
+    world.graphics.lineStyle(0, const Color(0xffff00ff));
     world.graphics.drawTriangles(
       vertices,
       indices,
