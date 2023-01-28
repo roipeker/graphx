@@ -8,12 +8,25 @@ class SimpleInteractionsMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DemoSingleSceneWidget(
-      root: SimpleInteractionsScene(),
-      config: SceneConfig(
-        useKeyboard: true,
-        usePointer: true,
-      ),
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'For desktop, use keyboard to move ball, and mouse wheel on the weather icon',
+            style: TextStyle(color: Colors.black, fontSize: 12),
+          ),
+        ),
+        Expanded(
+          child: DemoSingleSceneWidget(
+            root: SimpleInteractionsScene(),
+            config: SceneConfig(
+              useKeyboard: true,
+              usePointer: true,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

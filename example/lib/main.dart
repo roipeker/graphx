@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-import 'package:graphx/graphx.dart';
+import 'package:example_graphx/utils/utils.dart';
 
 import 'demos/demos.dart';
 
@@ -24,13 +23,13 @@ class _HomeState extends State<Home> {
     "Simple Shapes": const SimpleShapesMain(),
     "Simple Tween": SimpleTweenMain(),
     "Svg Icons": const DemoSvgIconsMain(),
-    "Simple Interactions": const SimpleInteractionsMain(),
-    if (SystemUtils.usingSkia) "Graphics Clipper": const GraphicsClipperDemo(),
-    if (SystemUtils.usingSkia) "Facebook Reactions": FacebookReactionsMain(),
-    if (SystemUtils.usingSkia) "Dripping IV": const DrippingIVMain(),
+    if (isWebDesktop) "Simple Interactions": const SimpleInteractionsMain(),
+    if (isSkia) "Graphics Clipper": const GraphicsClipperDemo(),
+    if (isSkia) "Facebook Reactions": FacebookReactionsMain(),
+    if (isSkia) "Dripping IV": const DrippingIVMain(),
     "Chart Mountain": const ChartMountainMain(),
     "Glowing Circle": const GlowingCircleMain(),
-    if (SystemUtils.usingSkia) "Sorting Button": const SortingButtonMain(),
+    if (isSkia) "Sorting Button": const SortingButtonMain(),
     "Bookmark Button": const BookmarkButtonMain(),
     "Submit Button": const SubmitButtonMain(),
     "Card Rotation 3d": const CardRotation3dMain(),
@@ -39,28 +38,28 @@ class _HomeState extends State<Home> {
     "Gauge Meter": const GaugeMeterMain(),
     "Spiral Loader": const SpiralLoaderMain(),
     "Universo Flutter Intro": const UniversoFlutterIntroMain(),
-    if (SystemUtils.usingSkia) "Colorful Loader": const ColorfulLoaderMain(),
+    if (isSkia) "Colorful Loader": const ColorfulLoaderMain(),
     "Jelly Thing": const JellyThingMain(),
     "Ball vs Line": const BallVsLineMain(),
     "DNA 3d": const Dna3dMain(),
     "Splash Intro": const SplashIntroMain(),
-    if (SystemUtils.usingSkia) "Lined Button": const LinedButtonMain(),
+    if (isSkia) "Lined Button": const LinedButtonMain(),
     "Color Picker": const ColorPickerMain(),
-    if (SystemUtils.usingSkia)
+    if (isSkia && isWebDesktop)
       "Altitude Indicator": const AltitudeIndicatorMain(),
-    "Breakout": const BreakoutMain(),
+    if (isWebDesktop) "Breakout": const BreakoutMain(),
     "Xmas": const XmasMain(),
     "Simple Radial Menu": const SimpleRadialMenuMain(),
     "Murat Coffee": const MuratCoffeeMain(),
     "Pie Chart": const PieChartMain(),
     "Bezier Chart": const ChartBezierMain(),
-    if (SystemUtils.usingSkia) "Run Hero Canvas": const RunHeroCanvasMain(),
+    if (isSkia) "Run Hero Canvas": const RunHeroCanvasMain(),
     "Elastic Band": const ElasticBandMain(),
     "Flower Gradient": const FlowerGradientMain(),
     "Nokia Snake": const NokiaSnakeMain(),
     "Heart Reaction": HeartReactionMain(),
     "Simple Toast": const SimpleToastMain(),
-    if (SystemUtils.usingSkia) "Rating Stars": const RatingStarsMain(),
+    if (isSkia) "Rating Stars": const RatingStarsMain(),
     "Pizza Box": const PizzaBoxMain(),
     "Drawing Pad Bezier": const DrawingPadBezierMain(),
     "Isma Chart": const IsmaChartMain(),
@@ -71,7 +70,7 @@ class _HomeState extends State<Home> {
     "Globe 3d": const Globe3dMain(),
     "Lungs Animation": const LungsAnimationMain(),
     "Expander Fab": const ExpanderFabMenu(),
-    "Page Indicator (desktop)": const PageIndicatorMain(),
+    if (isWebDesktop) "Page Indicator (desktop)": const PageIndicatorMain(),
 
     /// TODO: add web links.
     // fly dash: https://graphx-dash-game.surge.sh/#/
@@ -120,32 +119,6 @@ class _HomeState extends State<Home> {
     // fly dash 1: https://graphx-trees.surge.sh/#/
     // puzzle interaction: https://graphx-puzzle-ref.surge.sh/#/
     // simple particles: https://graphx-simple-particles.surge.sh/#/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   };
 
   @override
