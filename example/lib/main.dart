@@ -491,11 +491,14 @@ class Home extends StatelessWidget {
             ),
             child: ListTile(
               leading: demo.thumbnail?.isNotEmpty == true
-                  ? Image.asset(
-                      demo.thumbnail!,
-                      width: 50.0,
-                      height: 50.0,
-                      fit: BoxFit.cover,
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        demo.thumbnail!,
+                        width: 50.0,
+                        height: 50.0,
+                        fit: BoxFit.cover,
+                      ),
                     )
                   : null,
               title: Text(
