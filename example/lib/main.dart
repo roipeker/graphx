@@ -8,11 +8,13 @@ import 'utils/utils.dart';
 void main() {
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Color(0xff241e30),
+          primaryColor: const Color(0xff241e30),
           fontFamily: 'Roboto',
-          appBarTheme: AppBarTheme(color: Color(0xff241e30), elevation: 0)),
-      home: Home(),
+          appBarTheme:
+              const AppBarTheme(color: Color(0xff241e30), elevation: 0)),
+      home: const Home(),
     ),
   );
 }
@@ -22,217 +24,267 @@ class Home extends StatelessWidget {
     _SampleScene(
       title: "Simple Shapes",
       build: () => const SimpleShapesMain(),
+      thumbnail: 'assets/thumbs/example_simple_shapes.png',
     ),
     _SampleScene(
       title: "Simple Tween",
       build: () => SimpleTweenMain(),
+      thumbnail: 'assets/thumbs/example_tween.png',
     ),
     _SampleScene(
       title: "Svg Icons",
       build: () => const DemoSvgIconsMain(),
+      thumbnail: 'assets/thumbs/example_svg.png',
     ),
-    if (isWebDesktop)
+    if (isDesktop)
       _SampleScene(
         title: "Simple Interactions",
         build: () => const SimpleInteractionsMain(),
+        thumbnail: 'assets/thumbs/example_simple_interactions.png',
       ),
     if (isSkia)
       _SampleScene(
         title: "Graphics Clipper",
         build: () => const GraphicsClipperDemo(),
+        thumbnail: 'assets/thumbs/example_clipper.png',
       ),
     if (isSkia)
       _SampleScene(
         title: "Facebook Reactions",
         build: () => FacebookReactionsMain(),
+        thumbnail: 'assets/thumbs/example_fb.png',
       ),
     if (isSkia)
       _SampleScene(
         title: "Dripping IV",
         build: () => const DrippingIVMain(),
+        thumbnail: 'assets/thumbs/example_dripping.png',
       ),
     _SampleScene(
       title: "Chart Mountain",
       build: () => const ChartMountainMain(),
+      thumbnail: 'assets/thumbs/example_chart.png',
     ),
     _SampleScene(
       title: "Glowing Circle",
       build: () => const GlowingCircleMain(),
+      thumbnail: 'assets/thumbs/example_glowing.png',
     ),
     if (isSkia)
       _SampleScene(
         title: "Sorting Button",
         build: () => const SortingButtonMain(),
+        thumbnail: 'assets/thumbs/example_sorting_list.png',
       ),
     _SampleScene(
       title: "Bookmark Button",
       build: () => const BookmarkButtonMain(),
+      thumbnail: 'assets/thumbs/example_bookmark_button.png',
     ),
     _SampleScene(
       title: "Submit Button",
       build: () => const SubmitButtonMain(),
+      thumbnail: 'assets/thumbs/example_submit.png',
     ),
     _SampleScene(
       title: "Card Rotation 3d",
       build: () => const CardRotation3dMain(),
+      thumbnail: 'assets/thumbs/example_3drot.png',
     ),
     _SampleScene(
       title: "Raster Draw",
       build: () => const RasterDrawMain(),
+      thumbnail: 'assets/thumbs/example_raster_draw.png',
     ),
     _SampleScene(
       title: "Dialer",
       build: () => const DialerMain(),
+      thumbnail: 'assets/thumbs/example_dialer.png',
     ),
     _SampleScene(
       title: "Gauge Meter",
       build: () => const GaugeMeterMain(),
+      thumbnail: 'assets/thumbs/example_gauge.png',
     ),
     _SampleScene(
       title: "Spiral Loader",
       build: () => const SpiralLoaderMain(),
+      thumbnail: 'assets/thumbs/example_spiral_loader.png',
     ),
     _SampleScene(
       title: "Universo Flutter Intro",
       build: () => const UniversoFlutterIntroMain(),
+      thumbnail: 'assets/thumbs/example_universo_flutter.png',
     ),
     if (isSkia)
       _SampleScene(
         title: "Colorful Loader",
         build: () => const ColorfulLoaderMain(),
+        thumbnail: 'assets/thumbs/example_colorful_loader.png',
       ),
     _SampleScene(
       title: "Jelly Thing",
       build: () => const JellyThingMain(),
+      thumbnail: 'assets/thumbs/example_jelly.png',
     ),
     _SampleScene(
       title: "Ball vs Line",
       build: () => const BallVsLineMain(),
+      thumbnail: 'assets/thumbs/example_ball_vs_line.png',
     ),
     _SampleScene(
       title: "DNA 3d",
       build: () => const Dna3dMain(),
+      thumbnail: 'assets/thumbs/example_dna.png',
     ),
     _SampleScene(
       title: "Splash Intro",
       build: () => const SplashIntroMain(),
+      thumbnail: 'assets/thumbs/example_splash_intro.png',
     ),
     if (isSkia)
       _SampleScene(
         title: "Lined Button",
         build: () => const LinedButtonMain(),
+        thumbnail: 'assets/thumbs/example_lined_button.png',
       ),
     _SampleScene(
       title: "Color Picker",
       build: () => const ColorPickerMain(),
+      thumbnail: 'assets/thumbs/example_color_picker.png',
     ),
-    if (isSkia && isWebDesktop)
+    if (isSkia && isDesktop)
       _SampleScene(
         title: "Altitude Indicator",
         build: () => const AltitudeIndicatorMain(),
+        thumbnail: 'assets/thumbs/example_altitud_indicator.png',
       ),
-    if (isWebDesktop)
+    if (isDesktop)
       _SampleScene(
         title: "Breakout",
         build: () => const BreakoutMain(),
+        thumbnail: 'assets/thumbs/example_breakout.png',
       ),
     _SampleScene(
       title: "Xmas",
       build: () => const XmasMain(),
+      thumbnail: 'assets/thumbs/example_xmas.png',
     ),
     _SampleScene(
       title: "Simple Radial Menu",
       build: () => const SimpleRadialMenuMain(),
+      thumbnail: 'assets/thumbs/example_radial_menu.png',
     ),
     _SampleScene(
       title: "Murat Coffee",
       build: () => const MuratCoffeeMain(),
+      thumbnail: 'assets/thumbs/example_murat_coffee.png',
     ),
     _SampleScene(
       title: "Pie Chart",
       build: () => const PieChartMain(),
+      thumbnail: 'assets/thumbs/example_pie_chart.png',
     ),
     _SampleScene(
       title: "Bezier Chart",
       build: () => const ChartBezierMain(),
+      thumbnail: 'assets/thumbs/example_bezier_chart.png',
     ),
     if (isSkia)
       _SampleScene(
-        title: "Run Hero Canvas",
+        title: "Run Hero",
         build: () => const RunHeroCanvasMain(),
+        thumbnail: 'assets/thumbs/example_run_hero.png',
       ),
     _SampleScene(
       title: "Elastic Band",
       build: () => const ElasticBandMain(),
+      thumbnail: 'assets/thumbs/example_elastic_band.png',
     ),
     _SampleScene(
       title: "Flower Gradient",
       build: () => const FlowerGradientMain(),
+      thumbnail: 'assets/thumbs/example_gradient_flower.png',
     ),
     _SampleScene(
       title: "Nokia Snake",
       build: () => const NokiaSnakeMain(),
+      thumbnail: 'assets/thumbs/example_nokia_snake.png',
     ),
     _SampleScene(
       title: "Heart Reaction",
       build: () => HeartReactionMain(),
+      thumbnail: 'assets/thumbs/example_heart_reaction.png',
     ),
     _SampleScene(
       title: "Simple Toast",
       build: () => const SimpleToastMain(),
+      thumbnail: 'assets/thumbs/example_toast.png',
     ),
     if (isSkia)
       _SampleScene(
         title: "Rating Stars",
         build: () => const RatingStarsMain(),
+        thumbnail: 'assets/thumbs/example_stars.png',
       ),
     _SampleScene(
       title: "Pizza Box",
       build: () => const PizzaBoxMain(),
+      thumbnail: 'assets/thumbs/example_pizza.png',
     ),
     _SampleScene(
       title: "Drawing Pad Bezier",
       build: () => const DrawingPadBezierMain(),
+      thumbnail: 'assets/thumbs/example_drawing_pad_bezier.png',
     ),
     _SampleScene(
       title: "Isma Chart",
       build: () => const IsmaChartMain(),
+      thumbnail: 'assets/thumbs/example_isma_chart.png',
     ),
     _SampleScene(
       title: "TriGrid",
       build: () => const TriGridMain(),
+      thumbnail: 'assets/thumbs/example_tri_grid.png',
     ),
     _SampleScene(
       title: "Nico Loading",
       build: () => const NicoLoadingIndicatorMain(),
+      thumbnail: 'assets/thumbs/example_nico_loading.png',
     ),
     _SampleScene(
       title: "Feeling Switch",
       build: () => const FeelingSwitchMain(),
+      thumbnail: 'assets/thumbs/example_feeling_switch.png',
     ),
     _SampleScene(
       title: "Mouse Repulsion",
       build: () => const MouseRepulsionMain(),
+      thumbnail: 'assets/thumbs/example_lines_repulsion.png',
     ),
     _SampleScene(
       title: "Globe 3d",
       build: () => const Globe3dMain(),
+      thumbnail: 'assets/thumbs/example_globe_3d.png',
     ),
     _SampleScene(
       title: "Lungs Animation",
       build: () => const LungsAnimationMain(),
+      thumbnail: 'assets/thumbs/example_lungs.png',
     ),
     _SampleScene(
       title: "Expander Fab",
       build: () => const ExpanderFabMenu(),
+      thumbnail: 'assets/thumbs/example_expander_fab.png',
     ),
-    if (isWebDesktop)
+    if (isDesktop)
       _SampleScene(
-        title: "Page Indicator (desktop)",
+        title: "Page Indicator",
         build: () => const PageIndicatorMain(),
+        thumbnail: 'assets/thumbs/example_page_indicator.png',
       ),
     _ExternalScene(
-      title: 'Fly Dash 🡥',
+      title: 'Fly Dash !',
       url: Uri.parse('https://graphx-dash-game.surge.sh'),
       thumbnail: 'assets/thumbs/graphx-dash-game.surge.sh.png',
     ),
@@ -469,41 +521,38 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Center(
-              child: SvgPicture.asset(
-        'assets/graphx_logo.svg',
-        color: Colors.white,
-        height: 20,
-      ))),
-      backgroundColor: Color(0xff241e30),
-      body: ListView.separated(
-        separatorBuilder: (context, index) => SizedBox(
-          height: 10,
+        title: Center(
+          child: SvgPicture.asset(
+            'assets/graphx_logo.svg',
+            color: Colors.white,
+            height: 20,
+          ),
         ),
-        padding: EdgeInsets.all(20),
+      ),
+      backgroundColor: const Color(0xff241e30),
+      body: ListView.separated(
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        padding: const EdgeInsets.all(20),
         itemCount: demos.length,
         itemBuilder: (context, index) {
           final demo = demos[index];
           return Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
               color: Colors.white.withAlpha(60),
             ),
             child: ListTile(
               leading: demo.thumbnail?.isNotEmpty == true
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        demo.thumbnail!,
-                        width: 50.0,
-                        height: 50.0,
-                        fit: BoxFit.cover,
-                      ),
+                  ? Image.asset(
+                      demo.thumbnail!,
+                      width: 50.0,
+                      height: 50.0,
+                      fit: BoxFit.cover,
                     )
                   : null,
+              contentPadding: const EdgeInsets.all(8),
               title: Text(
                 demo.title.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w700),
@@ -515,7 +564,6 @@ class Home extends StatelessWidget {
                   launchUrl(demo.url);
                   return;
                 }
-
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return Demo(text: demo.title, child: demo.build() as Widget);
                 }));
