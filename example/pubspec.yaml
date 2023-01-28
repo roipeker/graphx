@@ -12,6 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^1.0.3
+  
+  url_launcher: ^6.1.8
+
   graphx:
     path: ../
 
@@ -24,6 +27,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/thumbs/
     - assets/fb_reactions/
     - assets/bookmark_button/
     - assets/card_rotation/
