@@ -35,7 +35,7 @@ class SceneBuilderWidget extends StatefulWidget {
   });
 
   @override
-  createState() => SceneBuilderWidgetState();
+  SceneBuilderWidgetState createState() => SceneBuilderWidgetState();
 }
 
 class SceneBuilderWidgetState extends State<SceneBuilderWidget> {
