@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import '../../graphx.dart';
 
 /// typedef for [MPSBuilder.builder()].
@@ -32,7 +33,7 @@ class MPSBuilder<T> extends StatefulWidget {
   });
 
   @override
-  createState() => MPSBuilderState<T>();
+  MPSBuilderState<T> createState() => MPSBuilderState<T>();
 }
 
 class MPSBuilderState<T> extends State<MPSBuilder<T>> {
@@ -64,8 +65,7 @@ class MPSBuilderState<T> extends State<MPSBuilder<T>> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      widget.builder(context, _data, widget.child);
+  Widget build(BuildContext context) => widget.builder(context, _data, widget.child);
 
   @override
   void dispose() {
