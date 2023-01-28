@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'demos/demos.dart';
@@ -6,7 +7,11 @@ import 'utils/utils.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
+    MaterialApp(
+      theme: ThemeData(
+          primaryColor: Color(0xff241e30),
+          fontFamily: 'Roboto',
+          appBarTheme: AppBarTheme(color: Color(0xff241e30), elevation: 0)),
       home: Home(),
     ),
   );
@@ -369,7 +374,7 @@ class Home extends StatelessWidget {
     _ExternalScene(
       title: '(Bad) Candle Chart Concept',
       url: Uri.parse('https://graphx-candlechart-skia.surge.sh'),
-      thumbnail: 'assets/thumbs/graphx-candlechart-skia.surge.sh.png',
+      thumbnail: 'assets/thumbs/roi-taso-chart19.surge.sh.png',
     ),
     _ExternalScene(
       title: 'Candle Chart Animated',
@@ -464,33 +469,55 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GraphX Gallery'),
-      ),
-      body: ListView.builder(
+          title: Center(
+              child: SvgPicture.asset(
+        'assets/graphx_logo.svg',
+        color: Colors.white,
+        height: 20,
+      ))),
+      backgroundColor: Color(0xff241e30),
+      body: ListView.separated(
+        separatorBuilder: (context, index) => SizedBox(
+          height: 10,
+        ),
+        padding: EdgeInsets.all(20),
         itemCount: demos.length,
         itemBuilder: (context, index) {
           final demo = demos[index];
-          return ListTile(
-            leading: demo.thumbnail?.isNotEmpty == true
-                ? Image.asset(
-                    demo.thumbnail!,
-                    width: 64.0,
-                    height: 64.0,
-                    fit: BoxFit.cover,
-                  )
-                : null,
-            title: Text(demo.title),
-            subtitle: demo is _ExternalScene ? Text(demo.url.toString()) : null,
-            onTap: () {
-              if (demo is _ExternalScene) {
-                launchUrl(demo.url);
-                return;
-              }
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white.withAlpha(60),
+            ),
+            child: ListTile(
+              leading: demo.thumbnail?.isNotEmpty == true
+                  ? Image.asset(
+                      demo.thumbnail!,
+                      width: 50.0,
+                      height: 50.0,
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+              title: Text(
+                demo.title.toUpperCase(),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700),
+              ),
+              subtitle:
+                  demo is _ExternalScene ? Text(demo.url.toString()) : null,
+              onTap: () {
+                if (demo is _ExternalScene) {
+                  launchUrl(demo.url);
+                  return;
+                }
 
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Demo(text: demo.title, child: demo.build() as Widget);
-              }));
-            },
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return Demo(text: demo.title, child: demo.build() as Widget);
+                }));
+              },
+            ),
           );
         },
       ),
