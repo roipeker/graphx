@@ -25,14 +25,14 @@ class SceneBuilderWidget extends StatefulWidget {
   final bool autoSize;
 
   const SceneBuilderWidget({
-    Key? key,
+    super.key,
     required this.builder,
     this.child,
     this.painterIsComplex = true,
     this.mouseOpaque = true,
     this.pointerBehaviour = HitTestBehavior.translucent,
     this.autoSize = false,
-  }) : super(key: key);
+  });
 
   @override
   createState() => SceneBuilderWidgetState();
@@ -103,7 +103,6 @@ Use `Expanded()` or `Flexible()` in Flex Widgets like Column() or Row().
         onEnter: converter.pointerEnter,
         onExit: converter.pointerExit,
         onHover: converter.pointerHover,
-        cursor: MouseCursor.defer,
         opaque: widget.mouseOpaque,
         child: Listener(
           behavior: widget.pointerBehaviour,

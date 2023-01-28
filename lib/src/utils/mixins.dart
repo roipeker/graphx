@@ -122,13 +122,11 @@ mixin DisplayMasking {
     if (maskRect!.hasCorners) {
       c!.clipRRect(
         maskRect!.toRoundNative(),
-        doAntiAlias: true,
       );
     } else {
       c!.clipRect(
         maskRect!.toNative(),
         clipOp: maskRectInverted ? ClipOp.difference : ClipOp.intersect,
-        doAntiAlias: true,
       );
     }
   }

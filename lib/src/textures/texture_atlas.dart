@@ -127,7 +127,6 @@ class GTextureAtlas {
         GSubTexture(
           _atlasTexture!,
           region: region,
-          ownsParent: false,
           frame: frame,
           rotated: rotated,
         ));

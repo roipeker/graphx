@@ -87,7 +87,6 @@ void trace(
     name: name,
     time: DateTime.now(),
     sequenceNumber: _traceCount,
-    level: 0,
   );
 }
 

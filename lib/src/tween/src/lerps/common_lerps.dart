@@ -2,12 +2,9 @@ part of gtween;
 
 class GTweenLerpColor extends GTweenLerpProp<Color?> {
   GTweenLerpColor({
-    GTweenSetProp<Color?>? setProp,
-    GTweenGetProp<Color?>? getProp,
-  }) : super(
-          setProp: setProp,
-          getProp: getProp,
-        );
+    super.setProp,
+    super.getProp,
+  });
 
   @override
   Color? resolve(double ratio) {

@@ -5,7 +5,6 @@ abstract class SystemUtils {
     if (!kIsWeb) {
       return true;
     }
-    return const bool.fromEnvironment('FLUTTER_WEB_USE_SKIA',
-        defaultValue: false);
+    return const bool.fromEnvironment('FLUTTER_WEB_USE_SKIA');
   }
 }

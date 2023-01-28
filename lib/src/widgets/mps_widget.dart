@@ -24,12 +24,12 @@ class MPSBuilder<T> extends StatefulWidget {
   final List<String> topics;
 
   const MPSBuilder({
-    Key? key,
+    super.key,
     required this.builder,
     required this.topics,
     required this.mps,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
   createState() => MPSBuilderState<T>();

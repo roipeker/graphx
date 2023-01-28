@@ -5,17 +5,13 @@ class SceneConfig {
   /// This is the lightest GraphX instance you can build.
   /// Only to make custom drawings.
   static final SceneConfig static = SceneConfig(
-    usePointer: false,
-    useKeyboard: false,
     painterWillChange: false,
     autoUpdateRender: false,
-    useTicker: false,
   );
 
   /// **games** configuration, setup this GraphX Widget to render
   /// with full support for auto rendering, updates, mouse and keyboard.
   static final SceneConfig games = SceneConfig(
-    autoUpdateRender: true,
     useTicker: true,
     useKeyboard: true,
     usePointer: true,
@@ -30,9 +26,7 @@ class SceneConfig {
   /// Useful for mobile interactions or custom UI components, runs with all
   /// features except [useKeyboard].
   static final SceneConfig interactive = SceneConfig(
-    autoUpdateRender: true,
     useTicker: true,
-    useKeyboard: false,
     usePointer: true,
   );
 
@@ -41,10 +35,7 @@ class SceneConfig {
   /// with no input support. Might be useful for external control of the layers,
   /// animated backgrounds, etc.
   static final SceneConfig autoRender = SceneConfig(
-    autoUpdateRender: true,
     useTicker: true,
-    useKeyboard: false,
-    usePointer: false,
   );
 
   static SceneConfig defaultConfig = interactive;
