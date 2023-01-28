@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:url_launcher/url_launcher.dart';
+
 import 'demos/demos.dart';
 import 'utils/utils.dart';
 
@@ -10,115 +12,453 @@ void main() {
   );
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  final demos = {
-    "Simple Shapes": const SimpleShapesMain(),
-    "Simple Tween": SimpleTweenMain(),
-    "Svg Icons": const DemoSvgIconsMain(),
-    if (isWebDesktop) "Simple Interactions": const SimpleInteractionsMain(),
-    if (isSkia) "Graphics Clipper": const GraphicsClipperDemo(),
-    if (isSkia) "Facebook Reactions": FacebookReactionsMain(),
-    if (isSkia) "Dripping IV": const DrippingIVMain(),
-    "Chart Mountain": const ChartMountainMain(),
-    "Glowing Circle": const GlowingCircleMain(),
-    if (isSkia) "Sorting Button": const SortingButtonMain(),
-    "Bookmark Button": const BookmarkButtonMain(),
-    "Submit Button": const SubmitButtonMain(),
-    "Card Rotation 3d": const CardRotation3dMain(),
-    "Raster Draw": const RasterDrawMain(),
-    "Dialer": const DialerMain(),
-    "Gauge Meter": const GaugeMeterMain(),
-    "Spiral Loader": const SpiralLoaderMain(),
-    "Universo Flutter Intro": const UniversoFlutterIntroMain(),
-    if (isSkia) "Colorful Loader": const ColorfulLoaderMain(),
-    "Jelly Thing": const JellyThingMain(),
-    "Ball vs Line": const BallVsLineMain(),
-    "DNA 3d": const Dna3dMain(),
-    "Splash Intro": const SplashIntroMain(),
-    if (isSkia) "Lined Button": const LinedButtonMain(),
-    "Color Picker": const ColorPickerMain(),
+class Home extends StatelessWidget {
+  static final demos = <_Scene>[
+    _SampleScene(
+      title: "Simple Shapes",
+      build: () => const SimpleShapesMain(),
+    ),
+    _SampleScene(
+      title: "Simple Tween",
+      build: () => SimpleTweenMain(),
+    ),
+    _SampleScene(
+      title: "Svg Icons",
+      build: () => const DemoSvgIconsMain(),
+    ),
+    if (isWebDesktop)
+      _SampleScene(
+        title: "Simple Interactions",
+        build: () => const SimpleInteractionsMain(),
+      ),
+    if (isSkia)
+      _SampleScene(
+        title: "Graphics Clipper",
+        build: () => const GraphicsClipperDemo(),
+      ),
+    if (isSkia)
+      _SampleScene(
+        title: "Facebook Reactions",
+        build: () => FacebookReactionsMain(),
+      ),
+    if (isSkia)
+      _SampleScene(
+        title: "Dripping IV",
+        build: () => const DrippingIVMain(),
+      ),
+    _SampleScene(
+      title: "Chart Mountain",
+      build: () => const ChartMountainMain(),
+    ),
+    _SampleScene(
+      title: "Glowing Circle",
+      build: () => const GlowingCircleMain(),
+    ),
+    if (isSkia)
+      _SampleScene(
+        title: "Sorting Button",
+        build: () => const SortingButtonMain(),
+      ),
+    _SampleScene(
+      title: "Bookmark Button",
+      build: () => const BookmarkButtonMain(),
+    ),
+    _SampleScene(
+      title: "Submit Button",
+      build: () => const SubmitButtonMain(),
+    ),
+    _SampleScene(
+      title: "Card Rotation 3d",
+      build: () => const CardRotation3dMain(),
+    ),
+    _SampleScene(
+      title: "Raster Draw",
+      build: () => const RasterDrawMain(),
+    ),
+    _SampleScene(
+      title: "Dialer",
+      build: () => const DialerMain(),
+    ),
+    _SampleScene(
+      title: "Gauge Meter",
+      build: () => const GaugeMeterMain(),
+    ),
+    _SampleScene(
+      title: "Spiral Loader",
+      build: () => const SpiralLoaderMain(),
+    ),
+    _SampleScene(
+      title: "Universo Flutter Intro",
+      build: () => const UniversoFlutterIntroMain(),
+    ),
+    if (isSkia)
+      _SampleScene(
+        title: "Colorful Loader",
+        build: () => const ColorfulLoaderMain(),
+      ),
+    _SampleScene(
+      title: "Jelly Thing",
+      build: () => const JellyThingMain(),
+    ),
+    _SampleScene(
+      title: "Ball vs Line",
+      build: () => const BallVsLineMain(),
+    ),
+    _SampleScene(
+      title: "DNA 3d",
+      build: () => const Dna3dMain(),
+    ),
+    _SampleScene(
+      title: "Splash Intro",
+      build: () => const SplashIntroMain(),
+    ),
+    if (isSkia)
+      _SampleScene(
+        title: "Lined Button",
+        build: () => const LinedButtonMain(),
+      ),
+    _SampleScene(
+      title: "Color Picker",
+      build: () => const ColorPickerMain(),
+    ),
     if (isSkia && isWebDesktop)
-      "Altitude Indicator": const AltitudeIndicatorMain(),
-    if (isWebDesktop) "Breakout": const BreakoutMain(),
-    "Xmas": const XmasMain(),
-    "Simple Radial Menu": const SimpleRadialMenuMain(),
-    "Murat Coffee": const MuratCoffeeMain(),
-    "Pie Chart": const PieChartMain(),
-    "Bezier Chart": const ChartBezierMain(),
-    if (isSkia) "Run Hero Canvas": const RunHeroCanvasMain(),
-    "Elastic Band": const ElasticBandMain(),
-    "Flower Gradient": const FlowerGradientMain(),
-    "Nokia Snake": const NokiaSnakeMain(),
-    "Heart Reaction": HeartReactionMain(),
-    "Simple Toast": const SimpleToastMain(),
-    if (isSkia) "Rating Stars": const RatingStarsMain(),
-    "Pizza Box": const PizzaBoxMain(),
-    "Drawing Pad Bezier": const DrawingPadBezierMain(),
-    "Isma Chart": const IsmaChartMain(),
-    "TriGrid": const TriGridMain(),
-    "Nico Loading": const NicoLoadingIndicatorMain(),
-    "Feeling Switch": const FeelingSwitchMain(),
-    "Mouse Repulsion": const MouseRepulsionMain(),
-    "Globe 3d": const Globe3dMain(),
-    "Lungs Animation": const LungsAnimationMain(),
-    "Expander Fab": const ExpanderFabMenu(),
-    if (isWebDesktop) "Page Indicator (desktop)": const PageIndicatorMain(),
+      _SampleScene(
+        title: "Altitude Indicator",
+        build: () => const AltitudeIndicatorMain(),
+      ),
+    if (isWebDesktop)
+      _SampleScene(
+        title: "Breakout",
+        build: () => const BreakoutMain(),
+      ),
+    _SampleScene(
+      title: "Xmas",
+      build: () => const XmasMain(),
+    ),
+    _SampleScene(
+      title: "Simple Radial Menu",
+      build: () => const SimpleRadialMenuMain(),
+    ),
+    _SampleScene(
+      title: "Murat Coffee",
+      build: () => const MuratCoffeeMain(),
+    ),
+    _SampleScene(
+      title: "Pie Chart",
+      build: () => const PieChartMain(),
+    ),
+    _SampleScene(
+      title: "Bezier Chart",
+      build: () => const ChartBezierMain(),
+    ),
+    if (isSkia)
+      _SampleScene(
+        title: "Run Hero Canvas",
+        build: () => const RunHeroCanvasMain(),
+      ),
+    _SampleScene(
+      title: "Elastic Band",
+      build: () => const ElasticBandMain(),
+    ),
+    _SampleScene(
+      title: "Flower Gradient",
+      build: () => const FlowerGradientMain(),
+    ),
+    _SampleScene(
+      title: "Nokia Snake",
+      build: () => const NokiaSnakeMain(),
+    ),
+    _SampleScene(
+      title: "Heart Reaction",
+      build: () => HeartReactionMain(),
+    ),
+    _SampleScene(
+      title: "Simple Toast",
+      build: () => const SimpleToastMain(),
+    ),
+    if (isSkia)
+      _SampleScene(
+        title: "Rating Stars",
+        build: () => const RatingStarsMain(),
+      ),
+    _SampleScene(
+      title: "Pizza Box",
+      build: () => const PizzaBoxMain(),
+    ),
+    _SampleScene(
+      title: "Drawing Pad Bezier",
+      build: () => const DrawingPadBezierMain(),
+    ),
+    _SampleScene(
+      title: "Isma Chart",
+      build: () => const IsmaChartMain(),
+    ),
+    _SampleScene(
+      title: "TriGrid",
+      build: () => const TriGridMain(),
+    ),
+    _SampleScene(
+      title: "Nico Loading",
+      build: () => const NicoLoadingIndicatorMain(),
+    ),
+    _SampleScene(
+      title: "Feeling Switch",
+      build: () => const FeelingSwitchMain(),
+    ),
+    _SampleScene(
+      title: "Mouse Repulsion",
+      build: () => const MouseRepulsionMain(),
+    ),
+    _SampleScene(
+      title: "Globe 3d",
+      build: () => const Globe3dMain(),
+    ),
+    _SampleScene(
+      title: "Lungs Animation",
+      build: () => const LungsAnimationMain(),
+    ),
+    _SampleScene(
+      title: "Expander Fab",
+      build: () => const ExpanderFabMenu(),
+    ),
+    if (isWebDesktop)
+      _SampleScene(
+        title: "Page Indicator (desktop)",
+        build: () => const PageIndicatorMain(),
+      ),
+    _ExternalScene(
+      title: 'Fly Dash 🡥',
+      url: Uri.parse('https://graphx-dash-game.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-dash-game.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Cells (1st demo)',
+      url: Uri.parse('https://roi-graphx-cells.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-cells.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Snake',
+      url: Uri.parse('https://graphx-snake-game.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-snake-game.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Draw Pad',
+      url: Uri.parse('https://graphx-drawpad2.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-drawpad2.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Node Garden',
+      url: Uri.parse('https://graphx-node-garden.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-node-garden.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Puzzle',
+      url: Uri.parse('https://roi-puzzle-v2.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-puzzle-v2.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Widget Mix',
+      url: Uri.parse('https://roi-graphx-widgetmix.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-widgetmix.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Space Shooter',
+      url: Uri.parse('https://roi-graphx-spaceshooter.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-spaceshooter.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Split RGB',
+      url: Uri.parse('https://roi-graphx-rgbsplit.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-rgbsplit.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Input Text Particles',
+      url: Uri.parse('https://roi-graphx-particles-input.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-particles-input.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Fish Eye',
+      url: Uri.parse('https://roi-graphx-fisheyeparticles.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-fisheyeparticles.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Fish Eye Text',
+      url: Uri.parse('https://roi-graphx-fisheyetext.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-fisheyetext.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Particle Emitter',
+      url: Uri.parse('https://roi-graphx-particles2.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-particles2.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Shape Maker Clone',
+      url: Uri.parse('https://roi-graphx-shapemaker.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-shapemaker.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Mouse Follow',
+      url: Uri.parse('https://roi-graphx-dotchain.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-dotchain.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Basic Hit Test',
+      url: Uri.parse('http://roi-graphx-hittest.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-hittest.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Spritesheet Sample',
+      url: Uri.parse('https://roi-graphx-spritesheet.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-spritesheet.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Text Pivot',
+      url: Uri.parse('https://roi-graphx-textpivot.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-textpivot.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Solo Ping-Pong',
+      url: Uri.parse('https://roi-graphx-pingpong.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-pingpong.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Mask Demo',
+      url: Uri.parse('https://roi-graphx-sample-masking.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-sample-masking.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Image Stack Web Page',
+      url: Uri.parse('https://roi-graphx-web-image-stack-grid.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-graphx-web-image-stack-grid.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Fly Hero',
+      url: Uri.parse('https://graphx-hh.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-hh.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Displacement Bitmapdata (Wrong Colors)',
+      url: Uri.parse('https://graphx-weird-displacement.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-weird-displacement.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'LOST Clock',
+      url: Uri.parse('https://graphx-lost-clock-skia.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-lost-clock-skia.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'HUGE INC Website Clone',
+      url: Uri.parse('https://graphx-hugeinc.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-hugeinc.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Open Maps',
+      url: Uri.parse('https://graphx-openmaps2.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-openmaps2.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Raster In Bitmap',
+      url: Uri.parse('https://graphx-raster1.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-raster1.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Meteor Shower',
+      url: Uri.parse('https://graphx-meteor-shower.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-meteor-shower.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: '(Bad) Candle Chart Concept',
+      url: Uri.parse('https://graphx-candlechart-skia.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-candlechart-skia.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Candle Chart Animated',
+      url: Uri.parse('https://roi-taso-chart19.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-taso-chart19.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Waltz Circles',
+      url: Uri.parse('https://roi-fp5-waltz-circ.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-fp5-waltz-circ.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Waltz Circles (BMP)',
+      url: Uri.parse('https://roi-fp5-waltz-circ-bmp.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-fp5-waltz-circ-bmp.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'CrypterIcon Logo',
+      url: Uri.parse('https://cryptericon-logo-dot3.surge.sh'),
+      thumbnail: 'assets/thumbs/cryptericon-logo-dot3.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Runner Mark Test',
+      url: Uri.parse('https://graphx-runnermark.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-runnermark.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Minimalcomps (Flash)',
+      url: Uri.parse('https://graphx-minimalcomps.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-minimalcomps.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Pan Zoom',
+      url: Uri.parse('https://graphx-gesture-sample.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-gesture-sample.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Simple Transform',
+      url: Uri.parse('https://graphx-gesture-simple.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-gesture-simple.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Dots Sphere Rotation',
+      url: Uri.parse('https://graphx-sphere-dots-rotation.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-sphere-dots-rotation.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Falling Boxes',
+      url: Uri.parse('https://graphx-burn-boxes.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-burn-boxes.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Sunburst Chart',
+      url: Uri.parse('https://graphx-sunburst-chart.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-sunburst-chart.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: '3d Stars',
+      url: Uri.parse('https://roi-swr3d-stars.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-swr3d-stars.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Manu Painter Particles',
+      url: Uri.parse('https://roi-particles-manu-painter2.surge.sh'),
+      thumbnail: 'assets/thumbs/roi-particles-manu-painter2.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Perlin Noise Terrain',
+      url: Uri.parse('https://graphx-perlin-map.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-perlin-map.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Fly Dash 1',
+      url: Uri.parse('https://graphx-trees.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-trees.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Puzzle Interaction',
+      url: Uri.parse('https://graphx-puzzle-ref.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-puzzle-ref.surge.sh.png',
+    ),
+    _ExternalScene(
+      title: 'Simple Particles',
+      url: Uri.parse('https://graphx-simple-particles.surge.sh'),
+      thumbnail: 'assets/thumbs/graphx-simple-particles.surge.sh.png',
+    ),
+  ];
 
-    /// TODO: add web links.
-    // fly dash: https://graphx-dash-game.surge.sh/#/
-    // cells (1st demo): https://roi-graphx-cells.surge.sh/#/
-    // snake: https://graphx-snake-game.surge.sh/#/
-    // draw pad: https://graphx-drawpad2.surge.sh/
-    // node garden: https://graphx-node-garden.surge.sh/#/
-    // puzzle: https://roi-puzzle-v2.surge.sh/#/
-    // widget mix: https://roi-graphx-widgetmix.surge.sh/#/
-    // space shooter: https://roi-graphx-spaceshooter.surge.sh/#/
-    // split rgb: https://roi-graphx-rgbsplit.surge.sh/
-    // input text particles: https://roi-graphx-particles-input.surge.sh/#/
-    // fish eye: https://roi-graphx-fisheyeparticles.surge.sh/#/
-    // fish eye text: https://roi-graphx-fisheyetext.surge.sh/#/
-    // particle emitter: https://roi-graphx-particles2.surge.sh/
-    // shape maker clone: https://roi-graphx-shapemaker.surge.sh/#/
-    // mouse follow: https://roi-graphx-dotchain.surge.sh/#/
-    // basic hit test: http://roi-graphx-hittest.surge.sh/#/
-    // spritesheet sample: https://roi-graphx-spritesheet.surge.sh/#/
-    // text pivot: https://roi-graphx-textpivot.surge.sh/
-    // solo ping-pong: https://roi-graphx-pingpong.surge.sh/#/
-    // mask demo: https://roi-graphx-sample-masking.surge.sh/#/
-    // image stack web page: https://roi-graphx-web-image-stack-grid.surge.sh/#/
-    // fly hero: https://graphx-hh.surge.sh/#/
-    // displacement bitmapdata (wrong colors): https://graphx-weird-displacement.surge.sh/#/
-    // LOST clock: https://graphx-lost-clock-skia.surge.sh/#/
-    // HUGE INC website clone: https://graphx-hugeinc.surge.sh/#/
-    // OPEN maps: https://graphx-openmaps2.surge.sh/#/
-    // Raster in bitmap: https://graphx-raster1.surge.sh/#/
-    // Meteor shower: https://graphx-meteor-shower.surge.sh/#/
-    // (bad) candle chart concept: https://graphx-candlechart-skia.surge.sh/#/
-    // candle chart animated: https://roi-taso-chart19.surge.sh/#/
-    // waltz circles: https://roi-fp5-waltz-circ.surge.sh/
-    // waltz circles (bmp): https://roi-fp5-waltz-circ-bmp.surge.sh/
-    // CrypterIcon logo: https://cryptericon-logo-dot3.surge.sh/#/
-    // Runner mark test: https://graphx-runnermark.surge.sh/
-    // Minimalcomps (Flash): https://graphx-minimalcomps.surge.sh/#/
-    // Pan zoom: https://graphx-gesture-sample.surge.sh/#/
-    // Simple transform: https://graphx-gesture-simple.surge.sh/#/
-    // Dots sphere rotation: https://graphx-sphere-dots-rotation.surge.sh/#/
-    // falling boxes: https://graphx-burn-boxes.surge.sh/#/
-    // Sunburst chart: https://graphx-sunburst-chart.surge.sh/#/
-    // 3d stars: https://roi-swr3d-stars.surge.sh/#/
-    // manu painter particles: https://roi-particles-manu-painter2.surge.sh/#/
-    // perlin noise terrain: https://graphx-perlin-map.surge.sh/#/
-    // fly dash 1: https://graphx-trees.surge.sh/#/
-    // puzzle interaction: https://graphx-puzzle-ref.surge.sh/#/
-    // simple particles: https://graphx-simple-particles.surge.sh/#/
-  };
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -129,21 +469,28 @@ class _HomeState extends State<Home> {
       body: ListView.builder(
         itemCount: demos.length,
         itemBuilder: (context, index) {
-          final demo = demos.entries.elementAt(index);
-          final title = demo.key;
-          //     .replaceAllMapped(
-          //   RegExp(r'([A-Z])'),
-          //   (match) => ' ${match.group(0)}',
-          // );
-
-          final widget = demo.value;
+          final demo = demos[index];
           return ListTile(
-            title: Text(title),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => Demo(text: title, child: widget),
-              ),
-            ),
+            leading: demo.thumbnail?.isNotEmpty == true
+                ? Image.asset(
+                    demo.thumbnail!,
+                    width: 64.0,
+                    height: 64.0,
+                    fit: BoxFit.cover,
+                  )
+                : null,
+            title: Text(demo.title),
+            subtitle: demo is _ExternalScene ? Text(demo.url.toString()) : null,
+            onTap: () {
+              if (demo is _ExternalScene) {
+                launchUrl(demo.url);
+                return;
+              }
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Demo(text: demo.title, child: demo.build() as Widget);
+              }));
+            },
           );
         },
       ),
@@ -174,4 +521,34 @@ class Demo extends StatelessWidget {
       ),
     );
   }
+}
+
+abstract class _Scene<T> {
+  final String title;
+  final T Function() build;
+  final String? thumbnail;
+
+  const _Scene({
+    required this.title,
+    required this.build,
+    this.thumbnail,
+  });
+}
+
+class _SampleScene extends _Scene<Widget> {
+  const _SampleScene({
+    required super.title,
+    required super.build,
+    super.thumbnail,
+  });
+}
+
+class _ExternalScene extends _Scene<Uri> {
+  final Uri url;
+
+  _ExternalScene({
+    required super.title,
+    required this.url,
+    super.thumbnail,
+  }) : super(build: () => url);
 }
