@@ -27,6 +27,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - assets/thumbs/
     - assets/fb_reactions/
     - assets/bookmark_button/
@@ -45,3 +46,9 @@ flutter:
     - family: pressstart
       fonts:
         - asset: assets/fonts/pressstart.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/RobotoCondensed-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/RobotoCondensed-Bold.ttf
+          weight: 700
