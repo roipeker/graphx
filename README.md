@@ -20,6 +20,9 @@ To get some extended, boring explanations, and eventually some sample codes, che
 
 ---
 
+[Try out the examples](http://graphx-gallery.surge.sh/#/)
+
+
 [Try Graphx (0.0.9) on Dart Pad](https://dartpad.dev/21b6670a42d32e37440192e19279e71b?)
 
 #### news!
