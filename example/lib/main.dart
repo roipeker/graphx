@@ -9,10 +9,10 @@ void main() {
   runApp(
     MaterialApp(
       theme: ThemeData(
-          primaryColor: Color(0xff241e30),
+          primaryColor: const Color(0xff241e30),
           fontFamily: 'Roboto',
-          appBarTheme: AppBarTheme(color: Color(0xff241e30), elevation: 0)),
-      home: Home(),
+          appBarTheme: const AppBarTheme(color: Color(0xff241e30), elevation: 0)),
+      home: const Home(),
     ),
   );
 }
@@ -469,26 +469,25 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Center(
-              child: SvgPicture.asset(
-        'assets/graphx_logo.svg',
-        color: Colors.white,
-        height: 20,
-      ))),
-      backgroundColor: Color(0xff241e30),
-      body: ListView.separated(
-        separatorBuilder: (context, index) => SizedBox(
-          height: 10,
+        title: Center(
+          child: SvgPicture.asset(
+            'assets/graphx_logo.svg',
+            color: Colors.white,
+            height: 20,
+          ),
         ),
-        padding: EdgeInsets.all(20),
+      ),
+      backgroundColor: const Color(0xff241e30),
+      body: ListView.separated(
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        padding: const EdgeInsets.all(20),
         itemCount: demos.length,
         itemBuilder: (context, index) {
           final demo = demos[index];
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white.withAlpha(60),
-            ),
+          return Material(
+            color: Colors.white.withAlpha(60),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            clipBehavior: Clip.antiAlias,
             child: ListTile(
               leading: demo.thumbnail?.isNotEmpty == true
                   ? ClipRRect(
@@ -503,13 +502,10 @@ class Home extends StatelessWidget {
                   : null,
               title: Text(
                 demo.title.toUpperCase(),
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700),
+                style:
+                    const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
               ),
-              subtitle:
-                  demo is _ExternalScene ? Text(demo.url.toString()) : null,
+              subtitle: demo is _ExternalScene ? Text(demo.url.toString()) : null,
               onTap: () {
                 if (demo is _ExternalScene) {
                   launchUrl(demo.url);
@@ -545,8 +541,7 @@ class Demo extends StatelessWidget {
       appBar: AppBar(title: Text(text)),
       body: Center(
         child: Navigator(
-          onGenerateRoute: (settings) =>
-              MaterialPageRoute(builder: (context) => child),
+          onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) => child),
         ),
       ),
     );
