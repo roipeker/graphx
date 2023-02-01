@@ -10,10 +10,10 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: const Color(0xff241e30),
-          fontFamily: 'Roboto',
-          appBarTheme:
-              const AppBarTheme(color: Color(0xff241e30), elevation: 0)),
+        primaryColor: const Color(0xff241e30),
+        fontFamily: 'Roboto',
+        appBarTheme: const AppBarTheme(color: Color(0xff241e30), elevation: 0),
+      ),
       home: const Home(),
     ),
   );
@@ -536,10 +536,12 @@ class Home extends StatelessWidget {
         itemCount: demos.length,
         itemBuilder: (context, index) {
           final demo = demos[index];
-          return Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withAlpha(60),
-            ),
+
+          return Material(
+            color: Colors.white.withAlpha(60),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            clipBehavior: Clip.antiAlias,
             child: ListTile(
               leading: demo.thumbnail?.isNotEmpty == true
                   ? Image.asset(
