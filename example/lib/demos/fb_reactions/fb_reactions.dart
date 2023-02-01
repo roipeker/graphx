@@ -10,11 +10,24 @@ import 'scene/menu_scene.dart';
 
 const _kBlue = Color(0xff3578EA);
 
-class FacebookReactionsMain extends StatelessWidget {
+class FacebookReactionsMain extends StatefulWidget {
   FacebookReactionsMain({super.key}) {
     if (posts.isEmpty) {
       buildPostData();
     }
+  }
+
+  @override
+  State<FacebookReactionsMain> createState() => _FacebookReactionsMainState();
+}
+
+class _FacebookReactionsMainState extends State<FacebookReactionsMain> {
+  final scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,7 +58,9 @@ class FacebookReactionsMain extends StatelessWidget {
         autoSize: true,
         builder: () => SceneController(front: MenuScene()),
         child: Scrollbar(
+          controller: scrollController,
           child: ListView.separated(
+            controller: scrollController,
             padding: const EdgeInsets.symmetric(vertical: 54),
             separatorBuilder: (context, index) => const SizedBox(height: 8),
             itemBuilder: (context, index) => InnerCardItem(data: posts[index]),
@@ -180,6 +195,7 @@ class _IconReaction extends StatelessWidget {
     this.color = Colors.black,
     this.count,
   });
+
   const _IconReaction.likes({this.count})
       : iconData = Icons.favorite,
         color = const Color(0xffDB615C);
