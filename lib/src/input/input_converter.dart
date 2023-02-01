@@ -34,7 +34,7 @@ class InputConverter {
   void pointerSignal(PointerSignalEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.scroll,
-      rawEvent: event as PointerScrollEvent,
+      rawEvent: event,
     ));
   }
 

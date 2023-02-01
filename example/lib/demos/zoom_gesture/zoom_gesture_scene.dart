@@ -55,8 +55,6 @@ class ZoomGestureScene extends GSprite {
   }
 
   void onScaleStart(ScaleStartDetails details) {
-    trace('update!');
-
     /// If you need, you can detect 1 or more fingers here.
     /// for move vs zoom.
     if (details.pointerCount == 1) {}

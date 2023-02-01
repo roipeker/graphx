@@ -58,7 +58,6 @@ class MenuScene extends GSprite {
 
   @override
   Future<void> addedToStage() async {
-
     /// If we use hot reload, we need to remove the listener.
     stage!.onHotReload.addOnce(() {
       mps.off('showMenu', onShowMenu);
