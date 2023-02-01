@@ -10,11 +10,11 @@
 
 | rendering | prototype | design |
 
-Making drawings and animations in Flutter extremely simple.
+Making drawings and animations in Flutter extremely simple and easy!
 
 </div>
 
-### wiki-tips.
+### wiki-tips
 
 To get some extended, boring explanations, and eventually some sample codes, check the [GraphX™ Wiki](<https://github.com/roipeker/graphx/wiki/GraphX-tips-and-random%5BnextInt()%5D-stuffs.#graphx-general-tips>)
 
@@ -22,10 +22,9 @@ To get some extended, boring explanations, and eventually some sample codes, che
 
 [Try out the examples](http://graphx-gallery.surge.sh/#/)
 
-
 [Try Graphx (0.0.9) on Dart Pad](https://dartpad.dev/21b6670a42d32e37440192e19279e71b?)
 
-#### news!
+#### news
 
 - Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety)
 - Support for HotReload
@@ -45,8 +44,8 @@ For your GraphX scene to support **Hot Reload**, you should initialize your vari
 ... jump to [other gifs samples](#screencast-demos) ...
 
 <div align="left">
-    
-## Background.
+
+## Background
 
 GraphX™ is here to help you build custom drawings in your Flutter apps. Providing a great versatility to power those screen pixels to a different level.
 
@@ -60,7 +59,7 @@ Can be used to simple draw a line, a circle, maybe a custom button, some splash 
 
 Mix and match with Flutter as you please, as **GraphX**™ uses `CustomPainter`, it is part of your Widget's tree.
 
-## Concept.
+## Concept
 
 The repo is in early stages. You can check the changelog to get the latest updates.
 
@@ -104,7 +103,7 @@ GraphX™ drives a `CustomPainter` inside. The idea is to simplify the usage of 
 
 The library has its own rendering cycle using Flutter's `Ticker` (pretty much like `AnimationController` does), and each `SceneWidgetBuilder` does its own input capture and processing (mouse, keyboard, touches). Even if it runs on the Widget tree, you can enable the flags to capture mouse/touch input, or keystrokes events (if u wanna do some simple game, or desktop/web tool).
 
-### Sample code.
+### Sample code
 
 ```dart
   body: Center(
@@ -220,7 +219,7 @@ They all emit a `MouseInputData` with all the needed info inside, like stage coo
 
 ---
 
-### Demos.
+### Demos
 
 _Some demos are only using **GraphX™** partially_
 
@@ -297,7 +296,7 @@ SKIA is pretty powerful!
 
 ---
 
-### help & socialize.
+### help & socialize
 
 | **Discord**                                                                                                                                | **Telegram**                                                                                                                                            |
 | :----------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -305,7 +304,7 @@ SKIA is pretty powerful!
 
 ---
 
-### Screencast Demos.
+### Screencast Demos
 
 (Some demos uses GraphX's only for ticker, input events or initial scene graph, making usage of
 direct `Canvas` calls).\_
