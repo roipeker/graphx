@@ -10,22 +10,29 @@ class FunMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return DemoSingleSceneWidget(
       root: FunScene(),
-      config: SceneConfig.static,
+      config: SceneConfig.autoRender,
     );
   }
 }
 
 class FunScene extends GSprite {
   late GSprite container;
+  late GSprite overlay;
   late GText label;
+  late GShape triangle;
+  late GShape circle;
+  late GShape topLeftRectangle;
+  late GShape bottomRightRectangle;
 
   @override
   void addedToStage() {
+    stage?.$debugBounds = true;
     _init();
   }
 
   @override
   void update(double delta) {
+    trace('update');
     super.update(delta);
     _update(delta);
   }
@@ -51,31 +58,60 @@ class FunScene extends GSprite {
     // Rectangle
     final GShape rectangle = () {
       final shape = GShape();
-      shape.graphics.lineStyle(2, const Color.fromARGB(255, 194, 220, 245));
-      shape.graphics.drawRect(-160, -160, 320, 320);
-      shape.graphics.endFill();
+      final grx = shape.graphics;
+
+      grx.lineStyle(2, const Color.fromARGB(255, 194, 220, 245));
+      grx.drawRect(-160, -160, 320, 320);
+      grx.endFill();
+      return shape;
+    }();
+
+    topLeftRectangle = () {
+      final shape = GShape();
+      final grx = shape.graphics;
+
+      grx.lineStyle(2, const Color.fromARGB(255, 156, 152, 255));
+      grx.drawRect(0, 0, 32, 32);
+      grx.endFill();
+      return shape;
+    }();
+
+    bottomRightRectangle = () {
+      final shape = GShape();
+      final grx = shape.graphics;
+
+      grx.lineStyle(2, const Color.fromARGB(255, 142, 146, 248));
+      grx.drawRect(0, 0, 32, 32);
+      grx.endFill();
       return shape;
     }();
 
     // Circle
-    final GShape circle = () {
+    circle = () {
       final shape = GShape();
-      shape.graphics.beginFill(const Color.fromARGB(255, 246, 104, 104)).drawCircle(0, 0, 20).endFill();
+      final grx = shape.graphics;
+
+      grx.beginFill(const Color.fromARGB(255, 246, 104, 104)).drawCircle(0, 0, 20).endFill();
       return shape;
     }();
 
-    // Face 1
+    // Face
     final GShape face = () {
       final shape = GShape();
+      final grx = shape.graphics;
 
       // Head
-      shape.graphics.beginFill(const Color.fromARGB(255, 255, 234, 77)).drawCircle(0, 0, 60).endFill();
+      grx
+          .lineStyle(4, const Color.fromARGB(255, 148, 159, 23))
+          .beginFill(const Color.fromARGB(255, 255, 234, 77))
+          .drawCircle(0, 0, 60)
+          .endFill();
 
       // Eyes
-      shape.graphics.beginFill(Colors.black).drawEllipse(-20, -20, 4, 8).drawEllipse(20, -20, 4, 8).endFill();
+      grx.beginFill(Colors.black).drawEllipse(-20, -20, 4, 8).drawEllipse(20, -20, 4, 8).endFill();
 
       /// mouth
-      shape.graphics.lineStyle(2).moveTo(-16, 32).lineTo(16, 32);
+      grx.lineStyle(2).moveTo(-16, 32).lineTo(16, 32);
 
       return shape;
     }();
@@ -83,15 +119,20 @@ class FunScene extends GSprite {
     // Happy Face
     final GShape happyFace = () {
       final shape = GShape();
+      final grx = shape.graphics;
 
       // Head
-      shape.graphics.beginFill(const Color.fromARGB(255, 238, 137, 74)).drawCircle(0, 0, 40).endFill();
+      grx
+          .lineStyle(4, const Color.fromARGB(255, 186, 99, 53))
+          .beginFill(const Color.fromARGB(255, 238, 137, 74))
+          .drawCircle(0, 0, 40)
+          .endFill();
 
       // Eyes
-      shape.graphics.beginFill(Colors.black).drawEllipse(-16, -8, 4, 8).drawEllipse(16, -8, 4, 8).endFill();
+      grx.beginFill(Colors.black).drawEllipse(-16, -8, 4, 4).drawEllipse(16, -8, 4, 4).endFill();
 
       // mouth
-      shape.graphics.lineStyle(2).arc(0, 5, 16, deg2rad(45), deg2rad(90)).endFill();
+      grx.lineStyle(2).arc(0, 5, 16, deg2rad(45), deg2rad(90)).endFill();
 
       return shape;
     }();
@@ -99,23 +140,30 @@ class FunScene extends GSprite {
     // Sad Face
     final GShape sadFace = () {
       final shape = GShape();
+      final grx = shape.graphics;
 
       // Head
-      shape.graphics.beginFill(const Color.fromARGB(255, 143, 181, 97)).drawCircle(0, 0, 40).endFill();
+      grx
+          .lineStyle(4, const Color.fromARGB(255, 35, 148, 35))
+          .beginFill(const Color.fromARGB(255, 143, 181, 97))
+          .drawCircle(0, 0, 40)
+          .endFill();
 
       // Eyes
-      shape.graphics.beginFill(Colors.black).drawEllipse(-16, -8, 4, 8).drawEllipse(16, -8, 4, 8).endFill();
+      grx.beginFill(Colors.black).drawEllipse(-16, -8, 3, 10).drawEllipse(16, -8, 3, 10).endFill();
 
       // mouth
-      shape.graphics.lineStyle(2).arc(0, 32, 16, deg2rad(45 + 180), deg2rad(90)).endFill();
+      grx.lineStyle(2).arc(0, 36, 16, deg2rad(45 + 180), deg2rad(90)).endFill();
 
       return shape;
     }();
 
     // Triangle
-    final GShape triangle = () {
+    triangle = () {
       final shape = GShape();
-      shape.graphics.beginGradientFill(
+      final grx = shape.graphics;
+
+      grx.beginGradientFill(
         GradientType.linear,
         [
           Colors.blue,
@@ -128,11 +176,21 @@ class FunScene extends GSprite {
       );
       shape.graphics.drawPolygonFaces(0, 0, 140, 3).endFill();
       shape.rotation = -Math.PI / 2;
+
+      shape.$debugBounds = true;
+
       return shape;
     }();
 
     container = GSprite();
+    overlay = GSprite();
+
+    // Add root containers
     addChild(container);
+    addChild(overlay);
+
+    overlay.addChild(topLeftRectangle);
+    overlay.addChild(bottomRightRectangle);
 
     // Position and scale
     sadFace.x = 80;
@@ -143,10 +201,10 @@ class FunScene extends GSprite {
 
     label.y = 100;
 
-    // Painter's algorithm
+    // Add to container (Painter's algorithm, last child on top)
     container.addChild(triangle);
-    container.addChild(face);
     container.addChild(sadFace);
+    container.addChild(face);
     container.addChild(happyFace);
     container.addChild(circle);
     container.addChild(rectangle);
@@ -154,10 +212,13 @@ class FunScene extends GSprite {
 
     // Fit container size and position to current stage
     stage!.onResized.add(() {
+      // Handle Size changes
+
       var bounds = container.bounds!;
       var stageWidth = stage!.stageWidth;
       var stageHeight = stage!.stageHeight;
 
+      // Container
       var stageRatio = stageWidth / stageHeight;
       var boundsRatio = bounds.width / bounds.height;
       if (stageRatio < boundsRatio) {
@@ -168,11 +229,34 @@ class FunScene extends GSprite {
         container.scaleX = container.scaleY;
       }
       container.setPosition(stageWidth / 2, stageHeight / 2);
+
+      // if (topLeft != null) {
+      //   topLeftRectangle.setPosition(-topLeft.left, -topLeft.top);
+      // }
+
+      topLeftRectangle.setPosition(16, 16);
+
+      final bottomRight = topLeftRectangle.getBounds(stage!);
+      if (bottomRight != null) {
+        bottomRightRectangle.setPosition(
+          stageWidth - 16 - bottomRight.width,
+          stageHeight - 16 - bottomRight.height,
+        );
+      }
     });
   }
 
   void _update(double delta) {
-    var t = getTimer() / 100;
+    // Handle Animation
+
+    var t = getTimer() / 1000;
     var percent = 0.5 + Math.sin(t) / 2;
+
+    triangle.rotation = percent * Math.PI * .8;
+
+    circle.scale = percent + 0.25;
+
+    label.text = (percent * 100).round().toString();
+    label.alignPivot();
   }
 }

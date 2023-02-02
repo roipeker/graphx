@@ -26,7 +26,7 @@ class Home extends StatelessWidget {
         _SampleScene(
           title: "Fun",
           build: () => const FunMain(),
-          thumbnail: 'assets/thumbs/example_simple_shapes.png',
+          thumbnail: 'assets/thumbs/ss-fun.png',
         ),
         _SampleScene(
           title: "Simple Shapes",
