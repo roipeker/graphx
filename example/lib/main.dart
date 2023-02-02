@@ -24,6 +24,11 @@ void main() {
 class Home extends StatelessWidget {
   static get demos => <_Scene>[
         _SampleScene(
+          title: "Fun",
+          build: () => const FunMain(),
+          thumbnail: 'assets/thumbs/example_simple_shapes.png',
+        ),
+        _SampleScene(
           title: "Simple Shapes",
           build: () => const SimpleShapesMain(),
           thumbnail: 'assets/thumbs/example_simple_shapes.png',

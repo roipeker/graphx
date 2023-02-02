@@ -16,6 +16,7 @@ export 'expander_fab_menu/expander_fab_menu.dart';
 export 'fb_reactions/fb_reactions.dart';
 export 'feeling_switch/feeling_switch.dart';
 export 'flower_gradient/flower_gradient.dart';
+export 'fun/fun.dart';
 export 'gauge_meter/gauge_meter.dart';
 export 'globe_3d/globe_3d.dart';
 export 'glowing_circle/glowing_circle.dart';
