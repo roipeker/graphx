@@ -12,9 +12,9 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xff241e30),
+        // primaryColor: const Color(0xff241e30),
         fontFamily: 'Roboto',
-        appBarTheme: const AppBarTheme(color: Color(0xff241e30), elevation: 0),
+        // appBarTheme: const AppBarTheme(color: Color(0xff241e30), elevation: 0),
       ),
       home: const Home(),
     ),
@@ -398,8 +398,7 @@ class Home extends StatelessWidget {
         _ExternalScene(
           title: 'Image Stack Web Page',
           url: Uri.parse('https://roi-graphx-web-image-stack-grid.surge.sh'),
-          thumbnail:
-              'assets/thumbs/roi-graphx-web-image-stack-grid.surge.sh.png',
+          thumbnail: 'assets/thumbs/roi-graphx-web-image-stack-grid.surge.sh.png',
         ),
         _ExternalScene(
           title: 'Fly Hero',
@@ -532,56 +531,214 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color menuColor = const Color.fromARGB(255, 255, 255, 255);
+    Color backgroundColor = const Color.fromARGB(255, 180, 180, 220);
+    Color logoColor = const Color.fromARGB(255, 108, 103, 255);
+
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: menuColor,
         title: Center(
           child: SvgPicture.asset(
             'assets/graphx_logo.svg',
-            color: Colors.white,
+            color: logoColor,
             height: 20,
           ),
         ),
       ),
-      backgroundColor: const Color(0xff241e30),
-      body: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        padding: const EdgeInsets.all(20),
+      backgroundColor: backgroundColor,
+      body: Container(
+        color: backgroundColor,
+        child: _gridView(),
+        // child: _listView(),
+      ),
+    );
+  }
+
+  // GridView
+
+  Widget _gridView() {
+    double gridHorizontalInset = 16;
+
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        childAspectRatio: 3 / 2,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+      ),
+      padding: EdgeInsets.symmetric(
+        vertical: 8,
+        horizontal: gridHorizontalInset,
+      ),
+      itemCount: demos.length,
+      itemBuilder: (context, index) {
+        return _demoCard(context, demos[index]);
+      },
+    );
+  }
+
+  Widget _demoCard(
+    BuildContext context,
+    _Scene demo,
+  ) {
+    return Container(
+      decoration: const ShapeDecoration(
+        // Rounded corners
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        // Soft shadow
+        shadows: [
+          BoxShadow(
+            color: Color.fromARGB(32, 0, 0, 0),
+            blurRadius: 6,
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: GestureDetector(
+        onTap: () {
+          if (demo is _ExternalScene) {
+            launchUrl(demo.url);
+            return;
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return Demo(
+                  text: demo.title,
+                  child: demo.build() as Widget,
+                );
+              }),
+            );
+          }
+        },
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Cover image
+            demo.thumbnail?.isNotEmpty == true
+                ? Image.asset(
+                    demo.thumbnail!,
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    'assets/thumbs/roi-simple-shapes.png',
+                    fit: BoxFit.cover,
+                  ),
+            // Gradient
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [
+                    0.5,
+                    0.8,
+                    1.0,
+                  ],
+                  colors: [
+                    Color.fromARGB(32, 0, 0, 0),
+                    Color.fromARGB(96, 0, 0, 0),
+                    Color.fromARGB(192, 0, 0, 0),
+                  ],
+                ),
+              ),
+            ),
+            // Text
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  demo.title,
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 231, 231, 231),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+            // External hint
+            Visibility(
+              visible: demo is _ExternalScene,
+              child: const Positioned(
+                top: 4,
+                right: 8,
+                child: Icon(
+                  Icons.link_sharp,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ListView
+
+  Widget _listView() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const SizedBox(height: 8),
+        padding: const EdgeInsets.all(8),
         itemCount: demos.length,
         itemBuilder: (context, index) {
-          final demo = demos[index];
+          return _demoCell(context, demos[index]);
+        },
+      ),
+    );
+  }
 
-          return Material(
-            color: Colors.white.withAlpha(60),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            clipBehavior: Clip.antiAlias,
-            child: ListTile(
-              leading: demo.thumbnail?.isNotEmpty == true
-                  ? Image.asset(
-                      demo.thumbnail!,
-                      width: 50.0,
-                      height: 50.0,
-                      fit: BoxFit.cover,
-                    )
-                  : null,
-              contentPadding: const EdgeInsets.all(8),
-              title: Text(
-                demo.title.toUpperCase(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700),
-              ),
-              subtitle:
-                  demo is _ExternalScene ? Text(demo.url.toString()) : null,
-              onTap: () {
-                if (demo is _ExternalScene) {
-                  launchUrl(demo.url);
-                  return;
-                }
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Demo(text: demo.title, child: demo.build() as Widget);
-                }));
+  Widget _demoCell(
+    BuildContext context,
+    _Scene demo,
+  ) {
+    return Material(
+      color: const Color.fromARGB(255, 255, 255, 255),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        minVerticalPadding: 24,
+        leading: demo.thumbnail?.isNotEmpty == true
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.asset(
+                  demo.thumbnail!,
+                  width: 128.0,
+                  height: 508.0,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : null,
+        title: Text(
+          demo.title.toUpperCase(),
+          style: const TextStyle(
+            color: Color.fromARGB(255, 127, 127, 127),
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        subtitle: demo is _ExternalScene ? Text(demo.url.toString()) : null,
+        onTap: () {
+          if (demo is _ExternalScene) {
+            launchUrl(demo.url);
+            return;
+          }
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return Demo(
+                  text: demo.title,
+                  child: demo.build() as Widget,
+                );
               },
             ),
           );
@@ -608,8 +765,7 @@ class Demo extends StatelessWidget {
       appBar: AppBar(title: Text(text)),
       body: Center(
         child: Navigator(
-          onGenerateRoute: (settings) =>
-              MaterialPageRoute(builder: (context) => child),
+          onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) => child),
         ),
       ),
     );
