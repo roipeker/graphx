@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'geom.dart';
 
 class GRect {
-
   // Creates a new GRect object based on the Rect counterpart.
   static GRect fromNative(Rect nativeRect) => GRect(
       nativeRect.left, nativeRect.top, nativeRect.width, nativeRect.height);
@@ -101,22 +100,42 @@ class GRect {
 
   // Copies all of rectangle data from the source GRect object into
   // the calling GRect object.
-  GRect copyFrom(GRect other) {
-    return setTo(other.x, other.y, other.width, other.height);
+  GRect copyFrom(GRect sourceRect) {
+    x = sourceRect.x;
+    y = sourceRect.y;
+    width = sourceRect.width;
+    height = sourceRect.height;
+    return this;
   }
 
-  // If the GRect object specified in the `rect` parameter intersects
+  // Determines whether the object specified in the `toCompare`
+  // parameter is equal to this Rectangle object. This method compares the
+  // `x`, `y`, `width`, and `height` properties of an object against the same
+  // properties of this Rectangle object.
+  bool equals(GRect? toCompare) {
+    if (toCompare == this) {
+      return true;
+    } else {
+      return toCompare != null &&
+          x == toCompare.x &&
+          y == toCompare.y &&
+          width == toCompare.width &&
+          height == toCompare.height;
+    }
+  }
+
+  // If the GRect object specified in the `toIntersect` parameter intersects
   // with this GRect object, returns the area of intersection
   // as a GRect object.
-  GRect intersection(GRect rect) {
-    GRect result;
-    var x0 = x < rect.x ? rect.x : 0.0;
-    var x1 = right > rect.right ? rect.right : right;
+  GRect intersection(GRect toIntersect) {
+    late GRect result;
+    var x0 = x < toIntersect.x ? toIntersect.x : 0.0;
+    var x1 = right > toIntersect.right ? toIntersect.right : right;
     if (x1 <= 0) {
       result = GRect();
     } else {
-      var y0 = y < rect.y ? rect.y : y;
-      var y1 = bottom > rect.bottom ? rect.bottom : bottom;
+      var y0 = y < toIntersect.y ? toIntersect.y : y;
+      var y1 = bottom > toIntersect.bottom ? toIntersect.bottom : bottom;
       if (y1 <= y0) {
         result = GRect();
       } else {
@@ -139,7 +158,26 @@ class GRect {
     return false;
   }
 
-  /// Like AS3 Rectangle::union
+  // Adds two rectangles together to create a new GRect object, by
+  // filling in the horizontal and vertical space between the two
+  // rectangles.
+  // Note: The `union()` method ignores rectangles with `0` as the
+  // height or width value, such as:
+  // `var rect2:Rectangle = new Rectangle(300,300,50,0);`
+  GRect union(GRect toUnion) {
+    if (width == 0 || height == 0) {
+      return toUnion.clone();
+    } else if (toUnion.width == 0 || toUnion.height == 0) {
+      return clone();
+    }
+    final x0 = x > toUnion.x ? toUnion.x : x;
+    final x1 = right < toUnion.right ? toUnion.right : right;
+    final y0 = y > toUnion.y ? toUnion.y : y;
+    final y1 = bottom < toUnion.bottom ? toUnion.bottom : bottom;
+    return GRect(x0, y0, x1 - x0, y1 - y0);
+  }
+
+  /// Like GRect::union
   /// Adds two rectangles together to create a new GRect object,
   /// by filling in the horizontal and vertical space
   /// between the two rectangles.
@@ -169,12 +207,23 @@ class GRect {
     return this;
   }
 
-  // Increases the size of the GRect object by the specified amounts, in pixels.
+  // Increases the size of the GRect object by the specified amounts,
+  // in pixels. The center point of the Rectangle object stays the same,
+  // and its size increases to the left and right by the `dx` value, and to
+  // the top and the bottom by the `dy` value.
   GRect inflate(double dx, double dy) {
     x -= dx;
     y -= dy;
     width += dx * 2;
     height += dy * 2;
+    return this;
+  }
+
+  // Increases the size of the GRect object. This method is similar to
+  // the `GRect.inflate()` method except it takes a Point object as a
+  // parameter.
+  GRect inflatePoint(GPoint point) {
+    inflate(point.x, point.y);
     return this;
   }
 
@@ -196,6 +245,61 @@ class GRect {
   bool containsPoint(GPoint point) =>
       point.x >= x && point.y >= y && point.x < right && point.y < bottom;
 
+  // Determines whether the Rectangle object specified by the `rect`
+  // parameter is contained within this Rectangle object. A Rectangle object is
+  // said to contain another if the second Rectangle object falls entirely
+  // within the boundaries of the first.
+  bool containsRect(GRect rect) {
+    if (rect.width <= 0 || rect.height <= 0) {
+      return rect.x > x &&
+          rect.y > y &&
+          rect.right < right &&
+          rect.bottom < bottom;
+    } else {
+      return rect.x >= x &&
+          rect.y >= y &&
+          rect.right <= right &&
+          rect.bottom <= bottom;
+    }
+  }
+
+  // Transform `input` GRect by `m` GMatrix.
+  // Returns the transformed Rectangle.
+  // static GRect transform(GRect input, GMatrix m, [GRect? output]) {
+  //   output ??= GRect();
+  //   var tx0 = m.a * input.x + m.c * input.y;
+  //   var tx1 = tx0;
+  //   var ty0 = m.b * input.x + m.d * input.y;
+  //   var ty1 = ty0;
+  //
+  //   var tx = m.a * (input.x + input.width) + m.c * input.y;
+  //   var ty = m.b * (input.x + input.width) + m.d * input.y;
+  //
+  //   if (tx < tx0) tx0 = tx;
+  //   if (ty < ty0) ty0 = ty;
+  //   if (tx > tx1) tx1 = tx;
+  //   if (ty > ty1) ty1 = ty;
+  //
+  //   tx = m.a * (input.x + input.width) + m.c * (input.y + input.height);
+  //   ty = m.b * (input.x + input.width) + m.d * (input.y + input.height);
+  //
+  //   if (tx < tx0) tx0 = tx;
+  //   if (ty < ty0) ty0 = ty;
+  //   if (tx > tx1) tx1 = tx;
+  //   if (ty > ty1) ty1 = ty;
+  //
+  //   tx = m.a * input.x + m.c * (input.y + input.height);
+  //   ty = m.b * input.x + m.d * (input.y + input.height);
+  //
+  //   if (tx < tx0) tx0 = tx;
+  //   if (ty < ty0) ty0 = ty;
+  //   if (tx > tx1) tx1 = tx;
+  //   if (ty > ty1) ty1 = ty;
+  //
+  //   return output.setTo(tx0 + m.tx, ty0 + m.ty, tx1 - tx0, ty1 - ty0);
+  // }
+
+  // Scales the GRect object on x, y, width, height by the `scale` factor.
   GRect operator *(double scale) {
     x *= scale;
     y *= scale;
@@ -204,6 +308,7 @@ class GRect {
     return this;
   }
 
+  // Divides the GRect object on x, y, width, height by the `scale` factor.
   GRect operator /(double scale) {
     x /= scale;
     y /= scale;
@@ -215,6 +320,8 @@ class GRect {
   /// --- Round Rect implementation ---
   GxRectCornerRadius? _corners;
 
+  // Returns true if GRect has custom `corners`.
+  // Used for RoundRects
   bool get hasCorners => _corners?.isNotEmpty ?? false;
 
   GxRectCornerRadius? get corners {

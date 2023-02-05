@@ -127,11 +127,9 @@ abstract class GDisplayObject
     }
   }
 
-  void $dispatchMouseCallback(
-    MouseInputType type,
-    GDisplayObject object,
-    MouseInputData input,
-  ) {
+  void $dispatchMouseCallback(MouseInputType type,
+      GDisplayObject object,
+      MouseInputData input,) {
     if (mouseEnabled) {
       var mouseInput = input.clone(this, object, type);
       switch (type) {
@@ -245,10 +243,18 @@ abstract class GDisplayObject
   Object? userData;
   String? name;
 
-  double _x = 0, _y = 0, _scaleX = 1, _scaleY = 1, _rotation = 0;
-  double _pivotX = 0, _pivotY = 0;
-  double _skewX = 0, _skewY = 0;
-  double _z = 0, _rotationX = 0, _rotationY = 0;
+  double _x = 0,
+      _y = 0,
+      _scaleX = 1,
+      _scaleY = 1,
+      _rotation = 0;
+  double _pivotX = 0,
+      _pivotY = 0;
+  double _skewX = 0,
+      _skewY = 0;
+  double _z = 0,
+      _rotationX = 0,
+      _rotationY = 0;
 
   double get rotationX => _rotationX;
 
@@ -611,18 +617,16 @@ abstract class GDisplayObject
     }
   }
 
-  void $updateTransformationMatrices(
-    double? x,
-    double? y,
-    double pivotX,
-    double pivotY,
-    double scaleX,
-    double scaleY,
-    double skewX,
-    double skewY,
-    double rotation,
-    GMatrix out,
-  ) {
+  void $updateTransformationMatrices(double? x,
+      double? y,
+      double pivotX,
+      double pivotY,
+      double scaleX,
+      double scaleY,
+      double skewX,
+      double skewY,
+      double rotation,
+      GMatrix out,) {
     out.identity();
     if (skewX == 0 && skewY == 0) {
       /// optimization, no skewing.
@@ -711,8 +715,8 @@ abstract class GDisplayObject
     return out;
   }
 
-  static GDisplayObject _findCommonParent(
-      GDisplayObject obj1, GDisplayObject obj2) {
+  static GDisplayObject _findCommonParent(GDisplayObject obj1,
+      GDisplayObject obj2) {
     GDisplayObject? current = obj1;
 
     /// TODO: use faster Hash access.
@@ -836,7 +840,9 @@ abstract class GDisplayObject
       }
       filter.expandBounds(layerBounds, resultBounds);
       if (alphaPaint != null) {
+        filter.currentObject = this;
         filter.resolvePaint(alphaPaint);
+        filter.currentObject = null;
       }
     }
     return resultBounds;
@@ -855,6 +861,7 @@ abstract class GDisplayObject
     if (!$hasVisibleArea || !visible) {
       return;
     }
+    $onPreTransform?.dispatch(canvas);
     final hasScale = _scaleX != 1 || _scaleY != 1;
     final hasTranslate = _x != 0 || _y != 0;
     final hasPivot = _pivotX != 0 || _pivotY != 0;
@@ -923,7 +930,9 @@ abstract class GDisplayObject
             composerFilters ??= <GComposerFilter>[];
             composerFilters.add(filter);
           } else {
+            filter.currentObject = this;
             filter.resolvePaint(alphaPaint);
+            filter.currentObject = null;
           }
         }
         layerBounds = resultBounds;
@@ -962,17 +971,18 @@ abstract class GDisplayObject
       }
     }
 
-    $onPrePaint?.dispatch(canvas);
-
     if (composerFilters != null) {
       for (var filter in composerFilters) {
         if (filter.hideObject ||
             (filter is GDropShadowFilter && filter.innerShadow)) {
           filterHidesObject = true;
         }
+        filter.currentObject = this;
         filter.process(canvas, $applyPaint);
+        filter.currentObject = null;
       }
     }
+    $onPrePaint?.dispatch(canvas);
     if (!filterHidesObject) {
       $applyPaint(canvas);
     }
@@ -1007,6 +1017,7 @@ abstract class GDisplayObject
 
   /// override this method for custom drawing using Flutter's API.
   /// Access `$canvas` from here.
+  /// Make sure to implement getBounds() and hitTest() as well.
   void $applyPaint(ui.Canvas canvas) {}
 
   @mustCallSuper
@@ -1033,7 +1044,7 @@ abstract class GDisplayObject
     if (ancestor == this) {
       throw ArgumentError(
           'An object cannot be added as a child to itself or one '
-          'of its children (or children\'s children, etc.)');
+              'of its children (or children\'s children, etc.)');
     } else {
       $parent = value;
     }
@@ -1069,9 +1080,8 @@ abstract class GDisplayObject
   /// Beware to call this before applying any
   /// transformations (x, y, scale, etc) if you intend to use in it's "original"
   /// form.
-  ui.Picture createPicture(
-      [void Function(ui.Canvas)? prePaintCallback,
-      void Function(ui.Canvas)? postPaintCallback]) {
+  ui.Picture createPicture([void Function(ui.Canvas)? prePaintCallback,
+    void Function(ui.Canvas)? postPaintCallback]) {
     final r = ui.PictureRecorder();
     final c = ui.Canvas(r);
     prePaintCallback?.call(c);
