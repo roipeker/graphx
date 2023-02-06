@@ -1,3 +1,13 @@
+## [1.0.8]
+- updated examples gallery
+- updated README.md
+- small fixes in demos and signal mapping in mouse event.
+- `OutlineFilter(width, color)` to create a border around the target object.
+- separate base_filter from blur_filter file for cleanup.
+- added `currentObject` to GBaseFilter, so the filters can access transformation data from the DisplayObject (like OutlineFilter).
+- added `DisplayObject::onPreTransform` signal that runs at the beginning of the rendering (before any filter, mask or transformation is applied).
+- expose `stage!.controller.pointer.lastEvent` getter to read last mouse/touch event independently of the signals events.
+
 ## [1.0.7]
 - upgrade to Flutter 3.7 constrains.
 - `createImageSync()` and `createImageTextureSync()`

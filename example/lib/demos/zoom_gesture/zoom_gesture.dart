@@ -22,9 +22,6 @@ class _ZoomGestureMain extends State<ZoomGestureMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Simple Gesture zoom transform'),
-      ),
       body: GestureDetector(
         onScaleStart: scene.onScaleStart,
         onScaleUpdate: scene.onScaleUpdate,
