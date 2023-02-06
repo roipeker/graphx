@@ -12,18 +12,24 @@ Making drawings and animations in Flutter, super simple and *FUN*.
 
 </div>
 
-- Check our [web 🎨 gallery !](http://graphx-gallery.surge.sh/#/)
+- Check our [web 🎨 gallery !](https://graphx-gallery.surge.sh/#/)
 
-- Play with the examples code directly [on Zapp!](https://zapp.run/pub/graphx?entry=lib/main.dart&file=lib/main.dart)
+- Play with the examples directly [on Zapp!](https://zapp.run/pub/graphx?entry=lib/main.dart&file=lib/main.dart)
 
 ---
 
 ### video showcase.
 
 Used at [Flutter Forward Extended London](https://gdg.community.dev/events/details/google-gdg-london-presents-flutter-forward-extended-london/) (Jan 2023)
+<div align="left">
+
+- GraphX compilation
 [![GraphX Intro](https://img.youtube.com/vi/51LJvwWP16A/1.jpg)](https://www.youtube.com/watch?v=51LJvwWP16A "GraphX Intro")
 
+- Fly Dash! demo
 [![Fly Dash!](https://img.youtube.com/vi/T_SkP68BXSY/1.jpg)](https://www.youtube.com/watch?v=T_SkP68BXSY "Fly Dash! demo")
+
+</div>
 
 ### wiki-tips.
 
