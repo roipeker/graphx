@@ -30,6 +30,10 @@ Used at [Flutter Forward Extended London](https://gdg.community.dev/events/detai
 
   [![Fly Dash!](https://img.youtube.com/vi/T_SkP68BXSY/1.jpg)](https://www.youtube.com/watch?v=T_SkP68BXSY "Fly Dash! demo")
 
+### news.
+
+Check our [CHANGELOG](https://github.com/roipeker/graphx/blob/master/CHANGELOG.md).
+ 
 ### wiki-tips.
 
 To get some extended, boring explanations, and eventually some sample codes, check
@@ -78,7 +82,7 @@ Widget's tree.
 
 ## Concept.
 
-The repo is in early stages. You can check the changelog to get the latest updates.
+The repo is in early stages. You can check the [changelog](https://github.com/roipeker/graphx/blob/master/CHANGELOG.md) to get the latest updates.
 
 GraphX has support for loading `rootBundle` assets:
 
