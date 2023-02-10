@@ -107,4 +107,10 @@ class GPoint {
     x += dx;
     y += dy;
   }
+
+  // Multiplies the Point object by the specified amount.
+  void multiply([double dx = 1, double dy = 1]) {
+    x *= dx;
+    y *= dy;
+  }
 }

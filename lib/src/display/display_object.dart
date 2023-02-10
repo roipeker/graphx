@@ -127,9 +127,11 @@ abstract class GDisplayObject
     }
   }
 
-  void $dispatchMouseCallback(MouseInputType type,
-      GDisplayObject object,
-      MouseInputData input,) {
+  void $dispatchMouseCallback(
+    MouseInputType type,
+    GDisplayObject object,
+    MouseInputData input,
+  ) {
     if (mouseEnabled) {
       var mouseInput = input.clone(this, object, type);
       switch (type) {
@@ -243,18 +245,10 @@ abstract class GDisplayObject
   Object? userData;
   String? name;
 
-  double _x = 0,
-      _y = 0,
-      _scaleX = 1,
-      _scaleY = 1,
-      _rotation = 0;
-  double _pivotX = 0,
-      _pivotY = 0;
-  double _skewX = 0,
-      _skewY = 0;
-  double _z = 0,
-      _rotationX = 0,
-      _rotationY = 0;
+  double _x = 0, _y = 0, _scaleX = 1, _scaleY = 1, _rotation = 0;
+  double _pivotX = 0, _pivotY = 0;
+  double _skewX = 0, _skewY = 0;
+  double _z = 0, _rotationX = 0, _rotationY = 0;
 
   double get rotationX => _rotationX;
 
@@ -533,9 +527,11 @@ abstract class GDisplayObject
 
   void alignPivot([painting.Alignment alignment = painting.Alignment.center]) {
     var bounds = getBounds(this, _sHelperRect)!;
+
     if (bounds.isEmpty) return;
     var ax = 0.5 + alignment.x / 2;
     var ay = 0.5 + alignment.y / 2;
+
     pivotX = bounds.x + bounds.width * ax;
     pivotY = bounds.y + bounds.height * ay;
   }
@@ -617,16 +613,18 @@ abstract class GDisplayObject
     }
   }
 
-  void $updateTransformationMatrices(double? x,
-      double? y,
-      double pivotX,
-      double pivotY,
-      double scaleX,
-      double scaleY,
-      double skewX,
-      double skewY,
-      double rotation,
-      GMatrix out,) {
+  void $updateTransformationMatrices(
+    double? x,
+    double? y,
+    double pivotX,
+    double pivotY,
+    double scaleX,
+    double scaleY,
+    double skewX,
+    double skewY,
+    double rotation,
+    GMatrix out,
+  ) {
     out.identity();
     if (skewX == 0 && skewY == 0) {
       /// optimization, no skewing.
@@ -715,8 +713,8 @@ abstract class GDisplayObject
     return out;
   }
 
-  static GDisplayObject _findCommonParent(GDisplayObject obj1,
-      GDisplayObject obj2) {
+  static GDisplayObject _findCommonParent(
+      GDisplayObject obj1, GDisplayObject obj2) {
     GDisplayObject? current = obj1;
 
     /// TODO: use faster Hash access.
@@ -948,18 +946,20 @@ abstract class GDisplayObject
       // onPreTransform.dispatch();
       canvas.save();
       var m = transformationMatrix.toNative();
-      canvas.transform(m.storage);
       if (_is3D) {
         /// TODO: experimental, just transforms
-        m = GMatrix().toNative();
-        m.setEntry(3, 2, 0.004);
-        m.rotateX(_rotationX);
-        m.rotateY(_rotationY);
+        final m2 = GMatrix().toNative();
+        m2.setEntry(3, 2, 0.004);
+        m2.translate(_pivotX, _pivotY);
         if (z != 0) {
-          m.translate(0.0, 0.0, z);
+          m2.translate(.0, .0, z);
         }
-        canvas.transform(m.storage);
+        m2.rotateX(_rotationX);
+        m2.rotateY(_rotationY);
+        m2.translate(-_pivotX, -_pivotY);
+        m.multiply(m2);
       }
+      canvas.transform(m.storage);
     }
 
     if (hasMask) {
@@ -1044,7 +1044,7 @@ abstract class GDisplayObject
     if (ancestor == this) {
       throw ArgumentError(
           'An object cannot be added as a child to itself or one '
-              'of its children (or children\'s children, etc.)');
+          'of its children (or children\'s children, etc.)');
     } else {
       $parent = value;
     }
@@ -1080,8 +1080,9 @@ abstract class GDisplayObject
   /// Beware to call this before applying any
   /// transformations (x, y, scale, etc) if you intend to use in it's "original"
   /// form.
-  ui.Picture createPicture([void Function(ui.Canvas)? prePaintCallback,
-    void Function(ui.Canvas)? postPaintCallback]) {
+  ui.Picture createPicture(
+      [void Function(ui.Canvas)? prePaintCallback,
+      void Function(ui.Canvas)? postPaintCallback]) {
     final r = ui.PictureRecorder();
     final c = ui.Canvas(r);
     prePaintCallback?.call(c);

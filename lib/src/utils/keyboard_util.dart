@@ -17,6 +17,18 @@ class GKeyboard {
     return _justReleased[key] != null;
   }
 
+  static bool anyDown(Iterable<GKey> keys) {
+    for (final key in keys) {
+      if (_metaKeys.containsKey(key)) {
+        return _metaKeys[key]!();
+      }
+      if (_pressed.containsKey(key)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   static bool isDown(GKey key) {
     if (_metaKeys.containsKey(key)) {
       return _metaKeys[key]!();

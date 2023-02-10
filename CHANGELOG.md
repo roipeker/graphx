@@ -1,3 +1,11 @@
+## [1.0.9]
+- minor "fix" for pivot support when doing a rotation in 3d (still missing proper transforms)
+- added [GPoint.multiply]
+- added Support for variable fonts in [GIcon] with [GlyphVariation].
+- added [GKeyboard.anyDown] and [KeyboardEventData.any]
+- added [Graphics.beginPaint] to add raw Paint() instances in graphics.
+- added [DisplayShader] as an utility wrapper for FragmentShaders and the complementary [graphics.beginShader] and [graphics.lineShaderStyle] and the utility [ResourceLoader.loadShader] to load the FragmentProgram from assets.
+
 ## [1.0.8]
 - updated examples gallery
 - updated README.md

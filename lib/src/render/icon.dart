@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/widgets.dart' as widgets;
 
 import '../../graphx.dart';
+import '../display/glyph_variation.dart';
 
 class GIcon extends GDisplayObject {
   static final _sHelperMatrix = GMatrix();
@@ -26,15 +27,15 @@ class GIcon extends GDisplayObject {
     return _localBounds.containsPoint(localPoint) ? this : null;
   }
 
-  widgets.IconData? _data;
-  double _size = 0.0;
-  ui.Color? _color;
-
   bool _invalidStyle = false;
 
-  ui.Color? get color => _color;
+  widgets.IconData? _data;
+  double _size = 0.0;
+  late ui.Color _color;
 
-  set color(ui.Color? value) {
+  ui.Color get color => _color;
+
+  set color(ui.Color value) {
     if (value == _color) return;
     _color = value;
     _invalidStyle = true;
@@ -98,14 +99,35 @@ class GIcon extends GDisplayObject {
     requiresRedraw();
   }
 
+  /// This TextStyle might be used to tweak the some properties not exposed
+  /// directly in [GIcon]:
+  /// height, background, leadingDistribution, letterSpacing, textBaseline,
+  /// fontFeatures.
+  widgets.TextStyle? _textStyle;
+  widgets.TextStyle? get textStyle => _textStyle;
+  set textStyle(widgets.TextStyle? value) {
+    if (_textStyle == value) return;
+    _textStyle = value;
+    _invalidStyle = true;
+    requiresRedraw();
+  }
+
   void _updateStyle() {
     if (_data == null) return;
+    final realColor = color.withOpacity(color.opacity * $alpha);
     _style = ui.TextStyle(
-      color: _paint == null ? color : null,
+      color: _paint == null ? realColor : null,
       fontSize: _size,
       fontFamily: _resolveFontFamily(),
       foreground: _paint,
-      shadows: _shadow != null ? [_shadow!] : null,
+      shadows: _shadow != null ? [_shadow!] : _textStyle?.shadows,
+      fontVariations: _variations?.data,
+      height: _textStyle?.height,
+      background: _textStyle?.background,
+      leadingDistribution: _textStyle?.leadingDistribution,
+      letterSpacing: _textStyle?.letterSpacing,
+      textBaseline: _textStyle?.textBaseline,
+      fontFeatures: _textStyle?.fontFeatures,
     );
     _builder = ui.ParagraphBuilder(ui.ParagraphStyle());
     // _builder.pop();
@@ -141,4 +163,37 @@ class GIcon extends GDisplayObject {
       canvas!.drawParagraph(_paragraph!, ui.Offset.zero);
     }
   }
+
+  GlyphVariations? _variations;
+
+  GlyphVariations get variations {
+    if (_variations == null) {
+      _variations = GlyphVariations();
+      _variations?.onUpdate = () {
+        _invalidStyle = true;
+        requiresRedraw();
+      };
+    }
+    return _variations!;
+  }
+
+  /// See [GlyphVariations.weight].
+  double? get weight => variations.weight;
+
+  set weight(double? value) => variations.weight = value;
+
+  /// See [GlyphVariations.grade].
+  double? get grade => variations.grade;
+
+  set grade(double? value) => variations.grade = value;
+
+  /// See [GlyphVariations.opticalSize].
+  double? get opticalSize => variations.opticalSize;
+
+  set opticalSize(double? value) => variations.opticalSize = value;
+
+  /// See [GlyphVariations.fill].
+  double? get fill => variations.fill;
+
+  set fill(double? value) => variations.fill = value;
 }

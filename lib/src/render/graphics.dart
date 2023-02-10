@@ -144,6 +144,26 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  /// Starts a fill with a raw [Paint] instance.
+  Graphics beginPaint(Paint paint) {
+    if (_holeMode) return this;
+    _addFill(paint);
+    return this;
+  }
+
+  /// Starts a fill with a raw [Shader] instance.
+  Graphics beginShader(Shader shader) {
+    if (_holeMode) return this;
+    final fill = Paint();
+    if (shader is DisplayShader) {
+      assert(shader.shader != null);
+      shader = shader.shader!;
+    }
+    fill.shader = shader;
+    _addFill(fill);
+    return this;
+  }
+
   Graphics drawPicture(ui.Picture picture) {
     _drawingQueue.add(GraphicsDrawingData()..picture = picture);
     return this;
@@ -332,15 +352,26 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  // Use after [lineStyle()] to apply a shader into the current Paint.
+  Graphics lineShaderStyle(Shader shader) {
+    if (_holeMode) return this;
+    assert(_currentDrawing!.fill?.style == PaintingStyle.stroke);
+    if (shader is DisplayShader) {
+      assert(shader.shader != null);
+      shader = shader.shader!;
+    }
+    _currentDrawing!.fill!.shader = shader;
+    return this;
+  }
+
   Graphics lineBitmapStyle(
     GTexture texture, [
     GMatrix? matrix,
     bool repeat = true,
     bool smooth = false,
   ]) {
-    /// actual paint must be stroke.
-    assert(_currentDrawing!.fill?.style == PaintingStyle.stroke);
     if (_holeMode) return this;
+    assert(_currentDrawing!.fill?.style == PaintingStyle.stroke);
     final fill = _currentDrawing!.fill!;
     fill.isAntiAlias = smooth;
     var tileMode = !repeat ? TileMode.clamp : TileMode.repeated;

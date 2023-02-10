@@ -12,7 +12,16 @@ class KeyboardEventData {
 
   bool isPressed(GKey key) => rawEvent.isKeyPressed(key);
 
+  // Returns true if the [GKey] (LogicalKeyboardKey) matches.
   bool isKey(GKey key) => rawEvent.logicalKey == key;
+
+  // Returns true if any matches a LogicalKeyboardKey from the Iterable.
+  bool any(Iterable<GKey> list) => list.contains(rawEvent.logicalKey);
+
+  @override
+  String toString() {
+    return 'KeyboardEventData#$type - ${rawEvent.logicalKey}';
+  }
 }
 
 extension MyKeyEventExt on KeyboardEventData {
