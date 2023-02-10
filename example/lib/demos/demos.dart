@@ -7,6 +7,7 @@ export 'chart_bezier/chart_bezier.dart';
 export 'chart_mountain/chart_mountain.dart';
 export 'color_picker/color_picker.dart';
 export 'colorful_loader/colorful_loader.dart';
+export 'colorful_shaders/colorful_shaders.dart';
 export 'dialer/dialer_main.dart';
 export 'dna_3d/dna_3d.dart';
 export 'drawing_pad_bezier/drawing_pad_bezier.dart';

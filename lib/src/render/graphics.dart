@@ -151,6 +151,13 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     return this;
   }
 
+  /// Applies [blendMode] to the current drawing fill (or stroke).
+  Graphics blendMode(ui.BlendMode blendMode) {
+    if (_holeMode) return this;
+    _currentDrawing?.fill?.blendMode = blendMode;
+    return this;
+  }
+
   /// Starts a fill with a raw [Shader] instance.
   Graphics beginShader(Shader shader) {
     if (_holeMode) return this;

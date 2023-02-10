@@ -10,9 +10,9 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // primaryColor: const Color(0xff241e30),
         fontFamily: 'Roboto',
-        // appBarTheme: const AppBarTheme(color: Color(0xff241e30), elevation: 0),
+        primaryColor: const Color(0xff241e30),
+        appBarTheme: const AppBarTheme(color: Color(0xff241e30), elevation: 0),
       ),
       home: const Home(),
     ),
@@ -272,11 +272,16 @@ class Demo extends StatelessWidget {
   Widget build(BuildContext context) {
     // return child;
     return Scaffold(
-      appBar: AppBar(title: Text(text)),
-      body: Center(
-        child: Navigator(
-          onGenerateRoute: (settings) =>
-              MaterialPageRoute(builder: (context) => child),
+      appBar: AppBar(
+        title: Text(text),
+        elevation: 0,
+      ),
+      body: ClipRect(
+        child: Center(
+          child: Navigator(
+            onGenerateRoute: (settings) =>
+                MaterialPageRoute(builder: (context) => child),
+          ),
         ),
       ),
     );

@@ -7,6 +7,13 @@ extension GitUrl on String {
 }
 
 final demos = <Scene>[
+  if (isSkia)
+    SampleScene(
+      title: "Colorful Shaders",
+      build: () => const ColorfulShadersMain(),
+      thumbnail: 'assets/thumbs/example_colorful_shaders.png',
+      source: 'colorful_shaders'.git,
+    ),
   SampleScene(
     title: "Simple Shapes",
     build: () => const SimpleShapesMain(),

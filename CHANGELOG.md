@@ -5,6 +5,9 @@
 - added [GKeyboard.anyDown] and [KeyboardEventData.any]
 - added [Graphics.beginPaint] to add raw Paint() instances in graphics.
 - added [DisplayShader] as an utility wrapper for FragmentShaders and the complementary [graphics.beginShader] and [graphics.lineShaderStyle] and the utility [ResourceLoader.loadShader] to load the FragmentProgram from assets.
+- added [graphics.blendMode()] to assign a [BlendMode] to the current drawing fill (or stroke).
+- new [ColorfulShaders] example to demonstrate the new features.
+- cleanup examples code.
 
 ## [1.0.8]
 - updated examples gallery
