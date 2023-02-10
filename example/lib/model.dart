@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'demos/demos.dart';
 import 'utils/utils.dart';
 
@@ -7,7 +9,7 @@ extension GitUrl on String {
 }
 
 final demos = <Scene>[
-  if (isSkia)
+  if (!kIsWeb)
     SampleScene(
       title: "Colorful Shaders",
       build: () => const ColorfulShadersMain(),
