@@ -83,6 +83,7 @@ class PointerManager<T extends PointerEventData> {
     _signalMapper[PointerEventType.exit] = () => _onExit;
   }
 
+  PointerEvent? get lastEvent => _lastEvent?.rawEvent;
   bool get isDown => _lastEvent?.rawEvent.down ?? false;
 
   double get mouseX => _lastEvent?.rawEvent.localPosition.dx ?? 0;

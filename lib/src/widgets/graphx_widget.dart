@@ -119,12 +119,17 @@ Use `Expanded()` or `Flexible()` in Flex Widgets like Column() or Row().
       );
     }
     if (_controller.config.useKeyboard) {
-      child = RawKeyboardListener(
-        onKey: converter.handleKey,
-        autofocus: true,
-        includeSemantics: false,
-        focusNode: converter.keyboard.focusNode,
-        child: child,
+      child = Focus(
+        onKeyEvent: (node, event) => KeyEventResult.handled,
+        // autofocus: true,
+        // descendantsAreFocusable: true,
+        child: RawKeyboardListener(
+          onKey: converter.handleKey,
+          autofocus: true,
+          includeSemantics: false,
+          focusNode: converter.keyboard.focusNode,
+          child: child,
+        ),
       );
     }
     return child;

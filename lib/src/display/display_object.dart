@@ -527,9 +527,11 @@ abstract class GDisplayObject
 
   void alignPivot([painting.Alignment alignment = painting.Alignment.center]) {
     var bounds = getBounds(this, _sHelperRect)!;
+
     if (bounds.isEmpty) return;
     var ax = 0.5 + alignment.x / 2;
     var ay = 0.5 + alignment.y / 2;
+
     pivotX = bounds.x + bounds.width * ax;
     pivotY = bounds.y + bounds.height * ay;
   }
@@ -836,7 +838,9 @@ abstract class GDisplayObject
       }
       filter.expandBounds(layerBounds, resultBounds);
       if (alphaPaint != null) {
+        filter.currentObject = this;
         filter.resolvePaint(alphaPaint);
+        filter.currentObject = null;
       }
     }
     return resultBounds;
@@ -855,6 +859,7 @@ abstract class GDisplayObject
     if (!$hasVisibleArea || !visible) {
       return;
     }
+    $onPreTransform?.dispatch(canvas);
     final hasScale = _scaleX != 1 || _scaleY != 1;
     final hasTranslate = _x != 0 || _y != 0;
     final hasPivot = _pivotX != 0 || _pivotY != 0;
@@ -923,7 +928,9 @@ abstract class GDisplayObject
             composerFilters ??= <GComposerFilter>[];
             composerFilters.add(filter);
           } else {
+            filter.currentObject = this;
             filter.resolvePaint(alphaPaint);
+            filter.currentObject = null;
           }
         }
         layerBounds = resultBounds;
@@ -939,18 +946,20 @@ abstract class GDisplayObject
       // onPreTransform.dispatch();
       canvas.save();
       var m = transformationMatrix.toNative();
-      canvas.transform(m.storage);
       if (_is3D) {
         /// TODO: experimental, just transforms
-        m = GMatrix().toNative();
-        m.setEntry(3, 2, 0.004);
-        m.rotateX(_rotationX);
-        m.rotateY(_rotationY);
+        final m2 = GMatrix().toNative();
+        m2.setEntry(3, 2, 0.004);
+        m2.translate(_pivotX, _pivotY);
         if (z != 0) {
-          m.translate(0.0, 0.0, z);
+          m2.translate(.0, .0, z);
         }
-        canvas.transform(m.storage);
+        m2.rotateX(_rotationX);
+        m2.rotateY(_rotationY);
+        m2.translate(-_pivotX, -_pivotY);
+        m.multiply(m2);
       }
+      canvas.transform(m.storage);
     }
 
     if (hasMask) {
@@ -962,17 +971,18 @@ abstract class GDisplayObject
       }
     }
 
-    $onPrePaint?.dispatch(canvas);
-
     if (composerFilters != null) {
       for (var filter in composerFilters) {
         if (filter.hideObject ||
             (filter is GDropShadowFilter && filter.innerShadow)) {
           filterHidesObject = true;
         }
+        filter.currentObject = this;
         filter.process(canvas, $applyPaint);
+        filter.currentObject = null;
       }
     }
+    $onPrePaint?.dispatch(canvas);
     if (!filterHidesObject) {
       $applyPaint(canvas);
     }
@@ -1007,6 +1017,7 @@ abstract class GDisplayObject
 
   /// override this method for custom drawing using Flutter's API.
   /// Access `$canvas` from here.
+  /// Make sure to implement getBounds() and hitTest() as well.
   void $applyPaint(ui.Canvas canvas) {}
 
   @mustCallSuper

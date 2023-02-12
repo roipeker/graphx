@@ -1,3 +1,4 @@
+export 'display_shader.dart';
 export 'filters/blur_filter.dart';
 export 'filters/color_filter.dart';
 export 'graphics.dart';
