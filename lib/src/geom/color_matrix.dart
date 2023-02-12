@@ -227,7 +227,7 @@ class ColorMatrix {
   String toString() => "ColorMatrix [ ${_storage.join(" , ")} ]";
 
   /// return a length 20 array (5x4):
-  List<double?> get storage =>
+  List<double> get storage =>
       _storage.sublist(0, math.min(_storage.length, 20)).toList();
 
   // Copy the specified matrix's values to this matrix.

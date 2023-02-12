@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:graphx/graphx.dart';
+
 /// Utility wrapper for FragmentShader
 /// Allows to set the shader properties and update the shader
 ///
@@ -65,6 +67,25 @@ import 'dart:ui';
 // ```
 
 abstract class DisplayShader implements FragmentShader {
+  static Future<FragmentProgram> load(String id) async {
+    return await ResourceLoader.loadShader(id, id);
+  }
+
+  bool fromCache(String id) {
+    final program = ResourceLoader.getShader(id);
+    if (program == null) {
+      return false;
+    }
+    shader = program.fragmentShader();
+    return true;
+  }
+
+  // Utility to get the size of an image (width and height) as List<double>
+  // to populate the [floats] in the Shader.
+  @protected
+  List<double> imageSize(Image? img) =>
+      img == null ? const [0.0, 0.0] : [img.width + .0, img.height + .0];
+
   static final _emptySamplers = List<Image>.empty();
 
   FragmentShader? shader;
@@ -76,7 +97,14 @@ abstract class DisplayShader implements FragmentShader {
   /// List of Images IN ORDER to be set into the shader as sampler2d.
   List<Image> get samplers => _emptySamplers;
 
-  DisplayShader({this.shader});
+  DisplayShader({this.shader, String? id}) {
+    if (shader == null && id != null) {
+      if (!fromCache(id)) {
+        trace('''Warning, shader "$id" not found in cache.
+Did you call await DisplayShader.load("$id")?''');
+      }
+    }
+  }
 
   /// Shortcut for callable instance. Instead of calling `shader.update()`
   /// When a property of a subclass is modified has to be called to commit
