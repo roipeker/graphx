@@ -2,10 +2,21 @@ import '../../utils/utils.dart';
 import 'simple_tween_scene.dart';
 import 'tween_controller.dart';
 
-class SimpleTweenMain extends StatelessWidget {
+class SimpleTweenMain extends StatefulWidget {
+  const SimpleTweenMain({super.key});
+
+  @override
+  State<SimpleTweenMain> createState() => _SimpleTweenMainState();
+}
+
+class _SimpleTweenMainState extends State<SimpleTweenMain> {
   final controller = TweenSceneController();
 
-  SimpleTweenMain({super.key});
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +81,8 @@ class _TweenMenu extends StatelessWidget {
     );
   }
 
-  Widget _addButton({required String label, IconData? icon, VoidCallback? onPressed}) {
+  Widget _addButton(
+      {required String label, IconData? icon, VoidCallback? onPressed}) {
     return TextButton(
       // color: Colors.red,
       onPressed: onPressed,

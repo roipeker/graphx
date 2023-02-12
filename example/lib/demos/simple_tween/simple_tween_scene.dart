@@ -7,7 +7,13 @@ import 'tween_controller.dart';
 class SimpleTweenScene extends GSprite {
   final TweenSceneController controller;
 
-  MyBox? box;
+  @override
+  void dispose() {
+    GTween.killAll();
+    super.dispose();
+  }
+
+  late MyBox box;
   late GSprite centeredContainer;
 
   SimpleTweenScene(this.controller);
@@ -30,13 +36,13 @@ class SimpleTweenScene extends GSprite {
 
     /// add the box as child of the container (will inherit all the
     /// transformations from the parent).
-    centeredContainer.addChild(box!);
+    centeredContainer.addChild(box);
     // add the container to the root scene.
     addChild(centeredContainer);
 
     /// now the box is drawn from the top left corner drawRect(0,0,width,height)
     /// so we can change the pivots so it centers itself in the parent
-    box!.alignPivot();
+    box.alignPivot();
 
     controller.onRotate.add(_rotateBox);
     controller.onScale.add(_scaleBox);
@@ -87,13 +93,13 @@ class SimpleTweenScene extends GSprite {
 
   void _moveBox(int dir) {
     if (dir == 0) {
-      box!.tween(duration: .5, x: 0, ease: GEase.elasticOut);
+      box.tween(duration: .5, x: 0, ease: GEase.elasticOut);
     } else {
       final relativeMove = 10.0 * dir;
 
       /// using Strings we can tween any value relative to the current value
       /// of the object.
-      box!.tween(duration: .5, x: '$relativeMove');
+      box.tween(duration: .5, x: '$relativeMove');
     }
   }
 
@@ -101,19 +107,19 @@ class SimpleTweenScene extends GSprite {
     /// kill any running tweens on `box`
     GTween.killTweensOf(box);
 
-    box!.tween(
+    box.tween(
       duration: 1,
       scaleX: 2,
       ease: GEase.bounceOut,
     );
 
-    box!.tween(
+    box.tween(
         duration: 1,
         scaleY: 3,
         delay: .4,
         ease: GEase.bounceOut,
         onComplete: () {
-          box!.tween(
+          box.tween(
             duration: .4,
             scale: 1, // scale modifies scaleX, scaleY proportionally.
             ease: GEase.easeOutBack,
@@ -125,12 +131,12 @@ class SimpleTweenScene extends GSprite {
     /// kill any running tweens on `box`
     GTween.killTweensOf(box);
 
-    box!.tween(
+    box.tween(
       duration: 1.5,
       rotation: Math.PI_2, // radians, or use `deg2rad(360)`
       ease: GEase.easeInOutExpo,
       onComplete: () {
-        box!.tween(
+        box.tween(
           duration: .5,
           rotation: 0, // radians, or use `deg2rad(360)`
           ease: GEase.easeOutBack,
