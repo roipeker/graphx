@@ -4,8 +4,7 @@ import 'demos/demos.dart';
 import 'utils/utils.dart';
 
 extension GitUrl on String {
-  String get git =>
-      'https://github.com/roipeker/graphx/tree/master/example/lib/demos/$this';
+  String get git => 'https://github.com/roipeker/graphx/tree/master/example/lib/demos/$this';
 }
 
 final demos = <Scene>[
@@ -21,6 +20,12 @@ final demos = <Scene>[
     build: () => const SimpleShapesMain(),
     thumbnail: 'assets/thumbs/example_simple_shapes.png',
     source: 'simple_shape'.git,
+  ),
+  SampleScene(
+    title: "Fun",
+    build: () => const FunMain(),
+    thumbnail: 'assets/thumbs/ss-fun.png',
+    source: 'fun'.git,
   ),
   SampleScene(
     title: "Simple Tween",
