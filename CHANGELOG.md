@@ -1,3 +1,24 @@
+## [1.0.9]
+- minor "fix" for pivot support when doing a rotation in 3d (still missing proper transforms)
+- added [GPoint.multiply]
+- added Support for variable fonts in [GIcon] with [GlyphVariation].
+- added [GKeyboard.anyDown] and [KeyboardEventData.any]
+- added [Graphics.beginPaint] to add raw Paint() instances in graphics.
+- added [DisplayShader] as an utility wrapper for FragmentShaders and the complementary [graphics.beginShader] and [graphics.lineShaderStyle] and the utility [ResourceLoader.loadShader] to load the FragmentProgram from assets.
+- added [graphics.blendMode()] to assign a [BlendMode] to the current drawing fill (or stroke).
+- new [ColorfulShaders] example to demonstrate the new features.
+- cleanup examples code.
+
+## [1.0.8]
+- updated examples gallery
+- updated README.md
+- small fixes in demos and signal mapping in mouse event.
+- `OutlineFilter(width, color)` to create a border around the target object.
+- separate base_filter from blur_filter file for cleanup.
+- added `currentObject` to GBaseFilter, so the filters can access transformation data from the DisplayObject (like OutlineFilter).
+- added `DisplayObject::onPreTransform` signal that runs at the beginning of the rendering (before any filter, mask or transformation is applied).
+- expose `stage!.controller.pointer.lastEvent` getter to read last mouse/touch event independently of the signals events.
+
 ## [1.0.7]
 - upgrade to Flutter 3.7 constrains.
 - `createImageSync()` and `createImageTextureSync()`

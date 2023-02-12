@@ -107,7 +107,9 @@ class GBitmap extends GDisplayObject {
     if (hasFilters) {
       for (var filter in filters!) {
         filter.update();
+        filter.currentObject = this;
         filter.resolvePaint(_paint);
+        filter.currentObject = null;
       }
     }
     texture?.render(canvas, _paint);

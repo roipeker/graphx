@@ -3,7 +3,7 @@ description: Graphx rendering prototype examples
 
 publish_to: "none"
 
-version: 1.0.8+30
+version: 1.0.9+32
 
 environment:
   sdk: ">=2.19.0 <3.0.0"
@@ -25,6 +25,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  shaders:
+      - shaders/colorful.frag
 
   assets:
     - assets/

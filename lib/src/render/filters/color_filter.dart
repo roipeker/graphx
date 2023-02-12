@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import '../../geom/grect.dart';
-import 'blur_filter.dart';
+import 'base_filter.dart';
 
 class GColorFilters {
   static const ColorFilter invert = ColorFilter.matrix(<double>[

@@ -2,27 +2,6 @@ import 'dart:ui' as ui;
 
 import '../../../graphx.dart';
 
-class GBaseFilter {
-  void resolvePaint(ui.Paint paint) {}
-
-  bool dirty = false;
-  void update() {
-    if (dirty) {
-      dirty = false;
-      if (isValid) {
-        buildFilter();
-      }
-    }
-  }
-
-  void buildFilter() {}
-  bool get isValid => true;
-  GRect? layerBounds;
-  void expandBounds(GRect layerBounds, GRect outputBounds) {
-    this.layerBounds = layerBounds;
-  }
-}
-
 class GBlurFilter extends GBaseFilter {
   double _blurX = 0;
   double _blurY = 0;

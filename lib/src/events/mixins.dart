@@ -76,18 +76,29 @@ mixin DisplayListSignalsMixin {
 }
 
 mixin RenderSignalMixin {
+  EventSignal<Canvas>? $onPreTransform;
   EventSignal<Canvas>? $onPrePaint;
   EventSignal<Canvas>? $onPostPaint;
 
 //  EventSignal<Canvas> $onPaint;
 
+  // Runs right away when paint(Canvas) is called, before any mask, filters,
+  // are applied. This is the first signal to run on rendering.
+  EventSignal<Canvas> get onPreTransform =>
+      $onPreTransform ??= EventSignal<Canvas>();
+
+  // Runs before $applyPaint(Canvas), which is the render method to subclass.
   EventSignal<Canvas> get onPrePaint => $onPrePaint ??= EventSignal<Canvas>();
 
+  // Runs right after $applyPaint(Canvas) is called.
   EventSignal<Canvas> get onPostPaint => $onPostPaint ??= EventSignal<Canvas>();
 
 //  EventSignal<Canvas> get onPaint => $onPaint ??= EventSignal<Canvas>();
 
   void $disposeRenderSignals() {
+    $onPreTransform?.removeAll();
+    $onPreTransform = null;
+
     $onPrePaint?.removeAll();
     $onPrePaint = null;
     $onPostPaint?.removeAll();

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:ui' as ui;
+import 'dart:ui';
 
 import '../../graphx.dart';
 import 'network_image_loader.dart';
 
 abstract class ResourceLoader {
   static Map<String, SvgData> svgCache = <String, SvgData>{};
+  static Map<String, FragmentProgram> shaderCache = <String, FragmentProgram>{};
   static Map<String, GTexture> textureCache = <String, GTexture>{};
   static Map<String, GTextureAtlas> atlasCache = <String, GTextureAtlas>{};
   static Map<String, GifAtlas> gifCache = <String, GifAtlas>{};
@@ -23,6 +25,10 @@ abstract class ResourceLoader {
     for (var vo in gifCache.values) {
       vo.dispose();
     }
+  }
+
+  static FragmentProgram? getShader(String cacheId) {
+    return shaderCache[cacheId];
   }
 
   static GTexture? getTexture(String cacheId) {
@@ -151,6 +157,16 @@ abstract class ResourceLoader {
       textureCache[cacheId] = response.texture!;
     }
     return response.texture!;
+  }
+
+  static Future<FragmentProgram> loadShader(String path,
+      [String? cacheId]) async {
+    if (shaderCache.containsKey(cacheId)) {
+      return shaderCache[cacheId]!;
+    }
+    final program = await FragmentProgram.fromAsset(path);
+    if (cacheId != null) shaderCache[cacheId] = program;
+    return program;
   }
 
   static Future<GTexture> loadTexture(

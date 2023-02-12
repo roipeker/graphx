@@ -1,8 +1,6 @@
 <div align="center">
-    <a>
-        <h3>🎨</h3>
-        <h1>GraphX™</h1>
-    </a>
+
+![GraphX™](https://raw.githubusercontent.com/roipeker/graphx/master/example/assets/graphx_logo.svg?sanitize=true)
 
 [![pub package](https://img.shields.io/pub/v/graphx.svg?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwKSI+CjxwYXRoIGQ9Ik0xNiAtMS4zOTg3NmUtMDZMNDggMEw0OCAyNS41OTM4TDQxLjU5MzcgMjUuNTkzN0w0MS41OTM3IDYuMzk4NDRMMjIuMzk4NCA2LjM5ODQ0TDIyLjM5ODQgMTkuMTk1M0wyOC43OTY5IDE5LjE5NTNMMjguNzk2OSAxMi43OTY5TDM1LjE5NTMgMTIuNzk2OUwzNS4xOTUzIDI1LjU5MzdMMTYgMjUuNTkzN0wxNiAtMS4zOTg3NmUtMDZaIiBmaWxsPSIjNDBDNEZGIi8+CjxwYXRoIGQ9Ik0xNiAzMkwyMi4zOTg0IDMyTDIyLjM5ODQgMzguMzk4NEwxNiAzOC4zOTg0TDE2IDMyWk0xNiA1Ny41OTM3TDIyLjM5ODQgNTcuNTkzN0wyMi4zOTg0IDY0TDE2IDY0TDE2IDU3LjU5MzdaTTIyLjM5ODQgMzguMzk4NEwyOC43OTY5IDM4LjM5ODRMMjguNzk2OSA0NC43OTY5TDIyLjM5ODQgNDQuNzk2OUwyMi4zOTg0IDM4LjM5ODRaTTIyLjM5ODQgNTEuMTk1M0wyOC43OTY5IDUxLjE5NTNMMjguNzk2OSA1Ny41OTM3TDIyLjM5ODQgNTcuNTkzN0wyMi4zOTg0IDUxLjE5NTNaTTI4Ljc5NjkgNDQuNzk2OUwzNS4xOTUzIDQ0Ljc5NjlMMzUuMTk1MyA1MS4xOTUzTDI4Ljc5NjkgNTEuMTk1M0wyOC43OTY5IDQ0Ljc5NjlaTTM1LjE5NTMgMzguMzk4NEw0MS41OTM3IDM4LjM5ODRMNDEuNTkzNyA0NC43OTY5TDM1LjE5NTMgNDQuNzk2OUwzNS4xOTUzIDM4LjM5ODRaTTM1LjE5NTMgNTEuMTk1M0w0MS41OTM3IDUxLjE5NTNMNDEuNTkzNyA1Ny41OTM3TDM1LjE5NTMgNTcuNTkzN0wzNS4xOTUzIDUxLjE5NTNaTTQxLjU5MzggMzJMNDggMzJMNDggMzguMzk4NEw0MS41OTM3IDM4LjM5ODRMNDEuNTkzOCAzMlpNNDEuNTkzNyA1Ny41OTM3TDQ4IDU3LjU5MzhMNDggNjRMNDEuNTkzNyA2NEw0MS41OTM3IDU3LjU5MzdaIiBmaWxsPSIjMjlCNkY2Ii8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDAiPgo8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IndoaXRlIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==&label=graphx&style=for-the-badge&color=blue)](https://pub.dev/packages/graphx)
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg?style=for-the-badge&color=blue)](https://pub.dev/packages/effective_dart)
@@ -10,30 +8,44 @@
 
 | rendering | prototype | design |
 
-Making drawings and animations in Flutter extremely simple and easy!
+Making drawings and animations in Flutter, super simple and *FUN*.
 
 </div>
 
-### wiki-tips
+- Check our [web 🎨 gallery !](https://graphx-gallery.surge.sh/#/)
 
-To get some extended, boring explanations, and eventually some sample codes, check the [GraphX™ Wiki](<https://github.com/roipeker/graphx/wiki/GraphX-tips-and-random%5BnextInt()%5D-stuffs.#graphx-general-tips>)
+- Play with the examples directly [on Zapp!](https://zapp.run/pub/graphx?entry=lib/main.dart&file=lib/main.dart)
 
 ---
 
-[Try out the examples](http://graphx-gallery.surge.sh/#/)
+### video showcase.
 
-[Try Graphx (0.0.9) on Dart Pad](https://dartpad.dev/21b6670a42d32e37440192e19279e71b?)
+Used at [Flutter Forward Extended London](https://gdg.community.dev/events/details/google-gdg-london-presents-flutter-forward-extended-london/) (Jan 2023)
 
-#### news
+- GraphX compilation
 
-- Support for [null-safety](https://github.com/roipeker/graphx/tree/null-safety)
-- Support for HotReload
+  [![GraphX Intro](https://img.youtube.com/vi/51LJvwWP16A/1.jpg)](https://www.youtube.com/watch?v=51LJvwWP16A "GraphX Intro")
 
-#### prototyping
+- Fly Dash! demo
 
-GraphX is all about visuals, here you have some screen captures of random prototypes I've been doing, while developing and testing graphx.
+  [![Fly Dash!](https://img.youtube.com/vi/T_SkP68BXSY/1.jpg)](https://www.youtube.com/watch?v=T_SkP68BXSY "Fly Dash! demo")
 
-For your GraphX scene to support **Hot Reload**, you should initialize your variables and DisplayObjects inside `addedToStage`, and optionally clean them in `dispose`.
+### news.
+
+Check our [CHANGELOG](https://github.com/roipeker/graphx/blob/master/CHANGELOG.md).
+ 
+### wiki-tips.
+
+To get some extended, boring explanations, and eventually some sample codes, check
+the [GraphX™ Wiki](<https://github.com/roipeker/graphx/wiki/GraphX-tips-and-random%5BnextInt()%5D-stuffs.#graphx-general-tips>)
+
+### prototyping.
+
+GraphX is all about visuals, here you have some screen captures of random prototypes I've been
+doing, while developing and testing graphx.
+
+For your GraphX scene to support **Hot Reload**, you should initialize your variables and
+DisplayObjects inside `addedToStage`, and optionally clean them in `dispose`.
 
 [![artificial horizon](https://media.giphy.com/media/NMG8gfpJxFiu1eALZo/giphy.gif)](https://media.giphy.com/media/NMG8gfpJxFiu1eALZo/source.mp4)
 [![parallax game](https://media.giphy.com/media/RIrvhfZoDtal41Tb4e/giphy-downsized.gif)](https://media.giphy.com/media/RIrvhfZoDtal41Tb4e/source.mp4)
@@ -45,52 +57,79 @@ For your GraphX scene to support **Hot Reload**, you should initialize your vari
 
 <div align="left">
 
-## Background
+## Background.
 
-GraphX™ is here to help you build custom drawings in your Flutter apps. Providing a great versatility to power those screen pixels to a different level.
+GraphX™ is here to help you build custom drawings in your Flutter apps. Providing a great
+versatility to power those screen pixels to a different level.
 
-It's inspired by the good-old Flash API, which forged my way into programming back in the days, and inspired many other rendering frameworks, in several languages through the years.
+It's inspired by the good-old Flash API, which forged my way into programming back in the days, and
+inspired many other rendering frameworks, in several languages through the years.
 
-I was thinking how much I missed to "play" with code, to make things more organic, artistic, alive... I totally love Flutter, but I always feel that it requires too much boilerplate to make things move around (compared to what I used to code).
+I was thinking how much I missed to "play" with code, to make things more organic, artistic,
+alive... I totally love Flutter, but I always feel that it requires too much boilerplate to make
+things move around (compared to what I used to code).
 
-Even if GraphX™ is not an animation library (although has a small tween engine), nor a game engine, It can help you build really awesome user experiences! It just runs on top of `CustomPainter`... Using what Flutter SDK exposes from the SKIA engine through the Canvas, yet, gives you some "framework" to run `isolated` from the Widget's world.
+Even if GraphX™ is not an animation library (although has a small tween engine), nor a game engine,
+It can help you build really awesome user experiences! It just runs on top of `CustomPainter`...
+Using what Flutter SDK exposes from the SKIA engine through the Canvas, yet, gives you some "
+framework" to run `isolated` from the Widget's world.
 
-Can be used to simple draw a line, a circle, maybe a custom button, some splash effect on your UI, or even a full-blown game in a portion of the screen.
+Can be used to simple draw a line, a circle, maybe a custom button, some splash effect on your UI,
+or even a full-blown game in a portion of the screen.
 
-Mix and match with Flutter as you please, as **GraphX**™ uses `CustomPainter`, it is part of your Widget's tree.
+Mix and match with Flutter as you please, as **GraphX**™ uses `CustomPainter`, it is part of your
+Widget's tree.
 
-## Concept
+## Concept.
 
-The repo is in early stages. You can check the changelog to get the latest updates.
+The repo is in early stages. You can check the [changelog](https://github.com/roipeker/graphx/blob/master/CHANGELOG.md) to get the latest updates.
 
 GraphX has support for loading `rootBundle` assets:
 
 ```dart
-ResourceLoader.loadBinary(assetId)
+ResourceLoader.loadBinary
+(
+assetId)
 ResourceLoader.loadGif(assetId)
 ResourceLoader.loadTextureAtlas(imagePath, xmlPath)
 ResourceLoader.loadTexture(assetId)
 ResourceLoader.loadImage(assetId)
 ResourceLoader.loadString(assetId)
 ResourceLoader.loadJson(assetId)
-ResourceLoader.loadSvg(assetId)
+ResourceLoader.
+loadSvg
+(
+assetId
+)
 ```
 
 As well as network images (SVG is not supported on non-SKIA targets):
 
 ```dart
-ResourceLoader.loadNetworkTexture(url);
-ResourceLoader.loadNetworkSvg(url);
+ResourceLoader.loadNetworkTexture
+(
+url
+);
+ResourceLoader
+.
+loadNetworkSvg
+(
+url
+);
 ```
 
-ResourceLoader also stores in cache based on the `assetId` or `url` provided. You can pass `cacheId` in most methods
+ResourceLoader also stores in cache based on the `assetId` or `url` provided. You can pass `cacheId`
+in most methods
 to override that, once the resources loaded, you can access them with:
 
 ```dart
-ResourceLoader.getTexture(id);
+ResourceLoader.getTexture
+(
+id);
 ResourceLoader.getSvg(id);
 ResourceLoader.getAtlas(id);
-ResourceLoader.getGif(id);
+ResourceLoader.getGif(id
+);
 ```
 
 GraphX™ also provides "raw" support for Text rendering, using the `StaticText` class.
@@ -99,33 +138,44 @@ GraphX™ also provides "raw" support for Text rendering, using the `StaticText`
 
 How does it work?
 
-GraphX™ drives a `CustomPainter` inside. The idea is to simplify the usage of Flutter's `Canvas`, plus adding the **display list** concept, very similar to the Widget Tree concept; so you can imperatively code, manage and create more complex "Scenes".
+GraphX™ drives a `CustomPainter` inside. The idea is to simplify the usage of Flutter's `Canvas`,
+plus adding the **display list** concept, very similar to the Widget Tree concept; so you can
+imperatively code, manage and create more complex "Scenes".
 
-The library has its own rendering cycle using Flutter's `Ticker` (pretty much like `AnimationController` does), and each `SceneWidgetBuilder` does its own input capture and processing (mouse, keyboard, touches). Even if it runs on the Widget tree, you can enable the flags to capture mouse/touch input, or keystrokes events (if u wanna do some simple game, or desktop/web tool).
+The library has its own rendering cycle using Flutter's `Ticker` (pretty much
+like `AnimationController` does), and each `SceneWidgetBuilder` does its own input capture and
+processing (mouse, keyboard, touches). Even if it runs on the Widget tree, you can enable the flags
+to capture mouse/touch input, or keystrokes events (if u wanna do some simple game, or desktop/web
+tool).
 
-### Sample code
+### Sample code.
 
 ```dart
-  body: Center(
-    child: SceneBuilderWidget( /// wrap any Widget with SceneBuilderWidget
-      builder: () => SceneController(
-        back: GameSceneBack(), /// optional provide the background layer
-        front: GameSceneFront(), /// optional provide the foreground layer
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'You have pushed the button this many times:',
-          ),
-          Text(
-            '$_counter',
-            style: Theme.of(context).textTheme.headline4,
-          ),
-        ],
-      ),
-    ),
-  ),
+  body: Center
+(
+child: SceneBuilderWidget( /// wrap any Widget with SceneBuilderWidget
+builder: () => SceneController(
+back: GameSceneBack(), /// optional provide the background layer
+front: GameSceneFront(), /// optional provide the foreground layer
+),
+child: Column(
+mainAxisAlignment: MainAxisAlignment.center,
+children: <Widget>[
+Text(
+'You have pushed the button this many times:',
+),
+Text(
+'$_counter',
+style: Theme.of(context).textTheme.headline4,
+),
+]
+,
+)
+,
+)
+,
+)
+,
 ```
 
 GraphX™ is based on "Scenes", each `SceneBuilderWidget` requires a `SceneController`.
@@ -139,18 +189,30 @@ Also takes a `SceneConfig()`, so you can configure what you need from the Widget
 You can make use of some predefined Scene configurators:
 
 - `SceneConfig.static`: If you plan to only use this scene to draw some graphics, like a background.
-- `SceneConfig.games`: Activates all GraphX features, auto render and update, pointers and keyboard support.
-- `SceneConfig.tools`: Shortcut of _games_, helpful if you wanna use it in some custom drawing editor, or similar with keyboard shortcuts.
-- `SceneConfig.interactive` (_default_): Probably the most common setup for mobile, enables all features except keyboard support.
-- `SceneConfig.autoRender`: Allows you to have a ticker running, and auto update the scene, with NO inputs (mouse/touch/keyboard), if you wanna have an animated Widget, or maybe if you wanna control it externally.
+- `SceneConfig.games`: Activates all GraphX features, auto render and update, pointers and keyboard
+  support.
+- `SceneConfig.tools`: Shortcut of _games_, helpful if you wanna use it in some custom drawing
+  editor, or similar with keyboard shortcuts.
+- `SceneConfig.interactive` (_default_): Probably the most common setup for mobile, enables all
+  features except keyboard support.
+- `SceneConfig.autoRender`: Allows you to have a ticker running, and auto update the scene, with NO
+  inputs (mouse/touch/keyboard), if you wanna have an animated Widget, or maybe if you wanna control
+  it externally.
 
-Each "Scene" has to extend `Sprite`, this root class represents the starting point of that particular scene hierarchy. Think of it as `MaterialApp` widget is to all other children Widgets in the tree.
+Each "Scene" has to extend `Sprite`, this root class represents the starting point of that
+particular scene hierarchy. Think of it as `MaterialApp` widget is to all other children Widgets in
+the tree.
 
 Here we get into **GraphX™** world, no more Widgets trees or immutable properties.
 
-You can make custom UI widgets, games, or make use of GraphX to create a static drawing, like curved backgrounds, or complex shapes.
+You can make custom UI widgets, games, or make use of GraphX to create a static drawing, like curved
+backgrounds, or complex shapes.
 
-Is a good practice to override `addedToStage()` as your entry point, here the Scene is ready, the `root` class has been added to the _glorified stage_, so you can access the Canvas size through `stage.stageWidth` and `stage.stageHeight`, the keyboard manager (if available), and lots of other properties, up to the `SceneController` that owns the scene (`stage.scene.core`, although, that's irrelevant for now):
+Is a good practice to override `addedToStage()` as your entry point, here the Scene is ready,
+the `root` class has been added to the _glorified stage_, so you can access the Canvas size
+through `stage.stageWidth` and `stage.stageHeight`, the keyboard manager (if available), and lots of
+other properties, up to the `SceneController` that owns the scene (`stage.scene.core`, although,
+that's irrelevant for now):
 
 ```dart
 class GameScene extends Sprite {
@@ -165,45 +227,61 @@ class GameScene extends Sprite {
 ```
 
 For now, GraphX™ has a few classes for rendering in the "display list":
-Like `Shape` (for "pen" drawings commands through it's `graphics` property), `Sprite` (create hierarchies of rendering objects), `StaticText` (for Texts), `GxIcon` (for Flutter icons), `Bitmap` (for `GTexture`, which is a wrapper around `dart:ui.Image`), `MovieClip`(for Spritesheet and Gif support), `SvgShape` (dependency for `svg`, package not included), `SimpleParticleSystem` (to create optimized particles for games), and Flare/Rive render objects which will live in another package/utility eventually to avoid dependencies.
+Like `Shape` (for "pen" drawings commands through it's `graphics` property), `Sprite` (create
+hierarchies of rendering objects), `StaticText` (for Texts), `GxIcon` (for Flutter icons)
+, `Bitmap` (for `GTexture`, which is a wrapper around `dart:ui.Image`), `MovieClip`(for Spritesheet
+and Gif support), `SvgShape` (dependency for `svg`, package not included), `SimpleParticleSystem` (
+to create optimized particles for games), and Flare/Rive render objects which will live in another
+package/utility eventually to avoid dependencies.
 
-By the way, in the previous example, `GameScene` is the `root` node in the _display tree_, the entry point where DisplayObjects renders, and where you need to add your own objects.
+By the way, in the previous example, `GameScene` is the `root` node in the _display tree_, the entry
+point where DisplayObjects renders, and where you need to add your own objects.
 
 For instance, to create a simple purple circle:
 
 ```dart
 @override
-void addedToStage(){
-    var circle = Shape();
-    circle.graphics.lineStyle(2, Colors.purple.value) /// access HEX value of Color
-      ..drawCircle(0, 0, 20)
-      ..endFill();
-    addChild(circle); // add the child to the rootScene.
+void addedToStage() {
+  var circle = Shape();
+  circle.graphics.lineStyle(2, Colors.purple.value)
+
+  /// access HEX value of Color
+    ..drawCircle(0, 0, 20)
+    ..endFill();
+  addChild(circle); // add the child to the rootScene.
 }
 ```
 
-`Sprite` internally extends from the abstract class `DisplayObjectContainer`, and as the name implies, is a container that can contain more `DisplayObject`s. Yet, `Shape` is a `DisplayObject` (another abstract class, and also, the root class of all rendering objects in **GraphX**), so it can't contain children. That makes it a bit more performant on each painter step.
-So, when you need to group objects, you should create `Sprite`s and add children into it, even other `Sprite`s, that's the idea of **GraphX** after all, group rendering objects so you can transform them independently or transform a parent `Sprite` (or subclass of it), and apply it to the tree inside of it, transformations are accumulative from parent to child ...
+`Sprite` internally extends from the abstract class `DisplayObjectContainer`, and as the name
+implies, is a container that can contain more `DisplayObject`s. Yet, `Shape` is a `DisplayObject` (
+another abstract class, and also, the root class of all rendering objects in **GraphX**), so it
+can't contain children. That makes it a bit more performant on each painter step.
+So, when you need to group objects, you should create `Sprite`s and add children into it, even
+other `Sprite`s, that's the idea of **GraphX** after all, group rendering objects so you can
+transform them independently or transform a parent `Sprite` (or subclass of it), and apply it to the
+tree inside of it, transformations are accumulative from parent to child ...
 
 #### What is a transformation?
 
-The ability to translate, scale, rotate, skew a `DisplayObject` through his properties: x, y, width, height, scaleX, scaleY, rotation, skewX, skewY, etc.
+The ability to translate, scale, rotate, skew a `DisplayObject` through his properties: x, y, width,
+height, scaleX, scaleY, rotation, skewX, skewY, etc.
 
 We could also use our root scene to draw things:
 
 ```dart
 @override
-addedToStage(){
+addedToStage() {
   graphics.beginFill(0x0000ff, .6)
-  ..drawRoundRect(100, 100, 40, 40, 4)
-  ..endFill();
-...
+    ..drawRoundRect(100, 100, 40, 40, 4)
+    ..endFill();
+  ...
 }
 ```
 
 #### Pointer access
 
-Pointer signals has been "simplified" as Mouse events now... as it's super easy to work with single touch / mouse interactions in `DisplayObject`s.
+Pointer signals has been "simplified" as Mouse events now... as it's super easy to work with single
+touch / mouse interactions in `DisplayObject`s.
 There are a bunch of signals to listen on each object... taken from AS3, and JS.
 
 - onMouseDoubleClick
@@ -215,11 +293,12 @@ There are a bunch of signals to listen on each object... taken from AS3, and JS.
 - onMouseOut
 - onMouseScroll
 
-They all emit a `MouseInputData` with all the needed info inside, like stage coordinates, or translated local coordinates, which "mouse" button is pressed, etc.
+They all emit a `MouseInputData` with all the needed info inside, like stage coordinates, or
+translated local coordinates, which "mouse" button is pressed, etc.
 
 ---
 
-### Demos
+### Demos.
 
 _Some demos are only using **GraphX™** partially_
 
@@ -229,7 +308,8 @@ _Some demos are only using **GraphX™** partially_
 - [3d card with shadow ⇢](https://graphx-dropshadow-card.surge.sh/)
 - [rating ⇢](https://graphx-star-rating.surge.sh/) ([dribbble design](https://dribbble.com/shots/12287144-Rating))
 
-- [drawpad ⇢](https://graphx-drawpad3.surge.sh/) // [creepy version ⇢](https://graphx-drawpad2.surge.sh/)
+- [drawpad ⇢](https://graphx-drawpad3.surge.sh/)
+  // [creepy version ⇢](https://graphx-drawpad2.surge.sh/)
 
 - [node garden ⇢](https://graphx-node-garden.surge.sh/)
 
@@ -248,7 +328,8 @@ _Some demos are only using **GraphX™** partially_
 
 - [splashscreen ⇢](https://roi-graphx-splash.surge.sh/) ([source](https://gist.github.com/roipeker/37374272d15539aa60c2bdc39001a035))
 
-- [color spectrum ⇢](https://roi-graphx-color-picker.surge.sh/) (based on [SuperDeclarative! workshop](https://www.youtube.com/watch?v=HURA4DKjA1c))
+- [color spectrum ⇢](https://roi-graphx-color-picker.surge.sh/) (based
+  on [SuperDeclarative! workshop](https://www.youtube.com/watch?v=HURA4DKjA1c))
 
 - [ui line button ⇢](https://roi-graphx-linebutton.surge.sh/)
 
@@ -288,7 +369,8 @@ _Some demos are only using **GraphX™** partially_
 
 ---
 
-Feel free to play around with the current API, even if it's still rough on edges and unoptimized, it might help you do things quicker.
+Feel free to play around with the current API, even if it's still rough on edges and unoptimized, it
+might help you do things quicker.
 
 SKIA is pretty powerful!
 
@@ -296,15 +378,17 @@ SKIA is pretty powerful!
 
 ---
 
-### help & socialize
+### help & socialize.
 
-| **Discord**                                                                                                                                | **Telegram**                                                                                                                                            |
+| **
+Discord**                                                                                                                                | **
+Telegram**                                                                                                                                            |
 | :----------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [![Discord Shield](https://img.shields.io/discord/777232130991718440.svg?style=for-the-badge&logo=discord)](https://discord.gg/5aTX6HzS5Q) | [![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg?style=for-the-badge&logo=telegram)](https://t.me/joinchat/Mbc7jBxxAm4K1uhaVPIR-Q) |
 
 ---
 
-### Screencast Demos
+### Screencast Demos.
 
 (Some demos uses GraphX's only for ticker, input events or initial scene graph, making usage of
 direct `Canvas` calls).\_
@@ -529,8 +613,10 @@ direct `Canvas` calls).\_
 
 #### Donation
 
-You can [buymeacoffee](https://www.buymeacoffee.com/roipeker) or support **GraphX™** via [Paypal](https://www.paypal.me/roipeker/)
+You can [buymeacoffee](https://www.buymeacoffee.com/roipeker) or support **GraphX™**
+via [Paypal](https://www.paypal.me/roipeker/)
 
 [![Donate via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/roipeker/)
 
 ## [![Support via buymeacoffee](https://cdn.buymeacoffee.com/buttons/v2/default-white.png)](https://www.buymeacoffee.com/roipeker)
+
