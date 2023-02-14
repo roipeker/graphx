@@ -26,12 +26,9 @@ class PainterRawScene extends GSprite {
 
   Future<void> _loadAssets() async {
     GTextureUtils.resolution = 2;
-    await ResourceLoader.loadTexture(
-        'assets/run_hero/parallax/layer_01.png', 2, 'l1');
-    await ResourceLoader.loadTexture(
-        'assets/run_hero/parallax/layer_02.png', 2, 'l2');
-    await ResourceLoader.loadTexture(
-        'assets/run_hero/parallax/layer_03.png', 2, 'l3');
+    await ResourceLoader.loadTexture('assets/run_hero/parallax/layer_01.png', 2, 'l1');
+    await ResourceLoader.loadTexture('assets/run_hero/parallax/layer_02.png', 2, 'l2');
+    await ResourceLoader.loadTexture('assets/run_hero/parallax/layer_03.png', 2, 'l3');
     await ResourceLoader.loadTexture(
       'assets/run_hero/parallax/layer_04.png',
       2,

@@ -22,8 +22,14 @@ final demos = <Scene>[
     source: 'simple_shape'.git,
   ),
   SampleScene(
+    title: "Fun",
+    build: () => const FunMain(),
+    thumbnail: 'assets/thumbs/ss-fun.png',
+    source: 'fun'.git,
+  ),
+  SampleScene(
     title: "Simple Tween",
-    build: () => SimpleTweenMain(),
+    build: () => const SimpleTweenMain(),
     thumbnail: 'assets/thumbs/example_tween.png',
     source: 'simple_tween'.git,
   ),
