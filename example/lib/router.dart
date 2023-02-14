@@ -10,6 +10,7 @@ final appRouter = GoRouter(routes: [
       .map(
         (e) => GoRoute(
           path: e.path,
+          name: e.title,
           builder: (context, state) => Demo(text: e.title, child: e.build()),
         ),
       )

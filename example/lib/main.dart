@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,7 @@ void main() {
   usePathUrlStrategy();
   runApp(
     MaterialApp.router(
+      title: 'GraphX Gallery',
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -259,7 +261,7 @@ class Home extends StatelessWidget {
   }
 }
 
-class Demo extends StatelessWidget {
+class Demo extends StatefulWidget {
   const Demo({
     super.key,
     required this.text,
@@ -270,17 +272,34 @@ class Demo extends StatelessWidget {
   final Widget child;
 
   @override
+  State<Demo> createState() => _DemoState();
+}
+
+class _DemoState extends State<Demo> {
+  @override
+  void dispose() {
+    SystemChrome.setApplicationSwitcherDescription(
+      const ApplicationSwitcherDescription(label: 'GraphX Gallery'),
+    );
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // return child;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(text),
-        elevation: 0,
-      ),
-      body: ClipRect(
-        child: Center(
-          child: Navigator(
-            onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) => child),
+    return Title(
+      title: 'GraphX Gallery | ${widget.text}',
+      color: Colors.white,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.text),
+          elevation: 0,
+        ),
+        body: ClipRect(
+          child: Center(
+            child: Navigator(
+              onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) => widget.child),
+            ),
           ),
         ),
       ),
