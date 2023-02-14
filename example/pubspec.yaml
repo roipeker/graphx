@@ -26,14 +26,14 @@ dependencies:
 dev_dependencies:
   flutter_lints: ^2.0.1
   flutter_test:
-    sdk: flutter
+    sdk: flutter 
 
 flutter:
   uses-material-design: true
   shaders:
       - shaders/colorful.frag
 
-  assets:
+  assets: 
     - assets/
     - assets/thumbs/
     - assets/fb_reactions/
@@ -58,4 +58,4 @@ flutter:
         - asset: assets/fonts/RobotoCondensed-Regular.ttf
           weight: 400
         - asset: assets/fonts/RobotoCondensed-Bold.ttf
-          weight: 700
+          weight: 700  

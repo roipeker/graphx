@@ -127,7 +127,7 @@ class Home extends StatelessWidget {
                 imageFit: BoxFit.cover,
               ),
 
-            if (demo.hash == null)
+            if (!kIsWeb)
               Image.asset(
                 demo.thumbnail,
                 fit: BoxFit.cover,
@@ -183,8 +183,8 @@ class Home extends StatelessWidget {
             // github source link,
             if (demo.source != null)
               Positioned(
-                top: 4,
-                left: 8,
+                top: -4,
+                left: -4,
                 child: _GitLink(
                   uri: demo.sourceUri!,
                 ),
@@ -221,11 +221,11 @@ class Home extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: ListTile(
         minVerticalPadding: 24,
-        leading: demo.thumbnail?.isNotEmpty == true
+        leading: demo.thumbnail.isNotEmpty == true
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: Image.asset(
-                  demo.thumbnail!,
+                  demo.thumbnail,
                   width: 128.0,
                   height: 508.0,
                   fit: BoxFit.cover,
@@ -304,8 +304,7 @@ class _DemoState extends State<Demo> {
         body: ClipRect(
           child: Center(
             child: Navigator(
-              onGenerateRoute: (settings) =>
-                  MaterialPageRoute(builder: (context) => widget.child),
+              onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) => widget.child),
             ),
           ),
         ),
@@ -318,8 +317,7 @@ class _DartLink extends StatelessWidget {
   final Uri uri;
   final String tooltip;
 
-  const _DartLink(
-      {super.key, required this.uri, this.tooltip = 'Dart package'});
+  const _DartLink({super.key, required this.uri, this.tooltip = 'Dart package'});
 
   @override
   Widget build(BuildContext context) {
@@ -341,11 +339,7 @@ class _GitLink extends StatelessWidget {
   final Color color;
   final String tooltip;
 
-  const _GitLink(
-      {super.key,
-      required this.uri,
-      this.color = Colors.white,
-      this.tooltip = 'Source code'});
+  const _GitLink({super.key, required this.uri, this.color = Colors.white, this.tooltip = 'Source code'});
 
   @override
   Widget build(BuildContext context) {

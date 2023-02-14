@@ -13,9 +13,19 @@ class BallVsLineMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SceneBuilderWidget(
-      builder: () => SceneController(front: CollisionScene()),
-      autoSize: true,
+    return Container(
+      decoration: const BoxDecoration(
+        // color: Color.fromARGB(255, 176, 209, 234),
+        gradient: LinearGradient(
+          colors: [Color.fromARGB(255, 6, 4, 96), Color.fromARGB(255, 143, 212, 238)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: SceneBuilderWidget(
+        builder: () => SceneController(front: CollisionScene()),
+        autoSize: true,
+      ),
     );
   }
 }

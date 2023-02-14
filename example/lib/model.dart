@@ -4,8 +4,7 @@ import 'demos/demos.dart';
 import 'utils/utils.dart';
 
 extension GitUrl on String {
-  String get git =>
-      'https://github.com/roipeker/graphx/tree/master/example/lib/demos/$this';
+  String get git => 'https://github.com/roipeker/graphx/tree/master/example/lib/demos/$this';
 }
 
 final demos = <Scene>[
@@ -23,6 +22,20 @@ final demos = <Scene>[
     thumbnail: 'assets/thumbs/example_simple_shapes.png',
     hash: 'LVSF%[\$]bgR?V@fjfRa#%QN4jBt0',
     source: 'simple_shape'.git,
+  ),
+  SampleScene(
+    title: 'Connected Canvas',
+    build: () => const ConnectedCanvasMain(),
+    thumbnail: 'assets/thumbs/ss-connection-canvas.png',
+    hash: 'U16uRx%v?r_K~nD?i{%L.6W;_Jxt8|NL%doz',
+    source: 'connected'.git,
+  ),
+  SampleScene(
+    title: 'Connected',
+    build: () => const ConnectedMain(),
+    thumbnail: 'assets/thumbs/ss-connection.png',
+    hash: 'U16uRx%v?r_K~nD?i{%L.6W;_Jxt8|NL%doz',
+    source: 'connected'.git,
   ),
   SampleScene(
     title: "Fun",
@@ -259,7 +272,7 @@ final demos = <Scene>[
   ),
   if (isSkia)
     SampleScene(
-      title: "Run Hero",
+      title: "Run Hero Canvas",
       build: () => const RunHeroCanvasMain(),
       thumbnail: 'assets/thumbs/example_run_hero.png',
       hash: 'LRN0uE-O01D%x*o|9FE1_MM}xaxu',

@@ -82,48 +82,33 @@ class RunHeroParallaxView extends GDisplayObjectContainer {
       paintings.add(Paint());
     });
     mps.on('jump', _onHeroJump);
-    heroState('hero');
-  }
-
-  void _onHeroJump() {
-    heroState('hero_air');
-    jumpY.tween(
-      -100,
-      duration: .8,
-      ease: GEase.easeOut,
-      onComplete: () {
-        heroState('hero');
-        jumpY.tween(
-          0,
-          duration: .6,
-          ease: GEase.bounceOut,
-        );
-      },
-    );
+    _heroState('hero');
   }
 
   @override
   void addedToStage() {
-    gradientPaint.blendMode = BlendMode.color;
-    final gradCenter = Offset(
-      stage!.stageWidth / 2,
-      stage!.stageHeight / 2,
-    );
-    final gradMatrix = Matrix4.identity()..scale(0.9);
-    gradientPaint.shader = ui.Gradient.radial(
-      gradCenter,
-      stage!.stageWidth,
-      [
-        Colors.red.withOpacity(.3),
-        Colors.blue.withOpacity(1),
-      ],
-      [0.1, .9],
-      TileMode.clamp,
-      gradMatrix.storage,
-    );
+    // Gradient overlay
+    () {
+      gradientPaint.blendMode = BlendMode.color;
+      final gradCenter = Offset(
+        stage!.stageWidth * 0.25,
+        stage!.stageHeight * 0.25,
+      );
+      final gradMatrix = Matrix4.identity()..scale(1.9);
+      gradientPaint.shader = ui.Gradient.radial(
+        gradCenter,
+        stage!.stageWidth,
+        [
+          Colors.red.withOpacity(1),
+          Colors.green.withOpacity(1),
+          Colors.blue.withOpacity(1),
+        ],
+        [0.1, 0.5, 1.0],
+        TileMode.clamp,
+        gradMatrix.storage,
+      );
+    }();
   }
-
-  void heroState(String id) => hero = ResourceLoader.getGif(id);
 
   @override
   void $applyPaint(Canvas? canvas) {
@@ -137,20 +122,39 @@ class RunHeroParallaxView extends GDisplayObjectContainer {
     matrices[3].translate(-12.0);
     matrices[4].translate(-14.0);
 
-    drawLayer(canvas, 0);
-    drawLayer(canvas, 1);
-    drawLayer(canvas, 2);
-    drawLayer(canvas, 3);
-    drawLayer(canvas, 4);
+    _drawLayer(canvas, 0);
+    _drawLayer(canvas, 1);
+    _drawLayer(canvas, 2);
+    _drawLayer(canvas, 3);
+    _drawLayer(canvas, 4);
 
-    drawGradient(canvas);
+    _drawGradient(canvas);
 
     canvas.restore();
 
-    drawHero(canvas);
+    _drawHero(canvas);
   }
 
-  void drawLayer(Canvas canvas, int index) {
+  void _heroState(String id) => hero = ResourceLoader.getGif(id);
+
+  void _onHeroJump() {
+    _heroState('hero_air');
+    jumpY.tween(
+      -100,
+      duration: .8,
+      ease: GEase.easeOut,
+      onComplete: () {
+        _heroState('hero');
+        jumpY.tween(
+          0,
+          duration: .6,
+          ease: GEase.bounceOut,
+        );
+      },
+    );
+  }
+
+  void _drawLayer(Canvas canvas, int index) {
     paintings[index].shader = ImageShader(
       layers[index]!.root!,
       TileMode.repeated,
@@ -160,7 +164,7 @@ class RunHeroParallaxView extends GDisplayObjectContainer {
     canvas.drawPaint(paintings[index]);
   }
 
-  void drawHero(Canvas canvas) {
+  void _drawHero(Canvas canvas) {
     if (++heroFrame % 4 == 0) {
       hero!.nextFrame();
     }
@@ -177,7 +181,7 @@ class RunHeroParallaxView extends GDisplayObjectContainer {
     canvas.restore();
   }
 
-  void drawGradient(Canvas canvas) {
+  void _drawGradient(Canvas canvas) {
     canvas.drawPaint(gradientPaint);
   }
 }
