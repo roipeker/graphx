@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/services.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,7 +10,8 @@ import 'router.dart';
 import 'utils/utils.dart';
 
 void main() {
-  usePathUrlStrategy();
+  // doesn't work with surge.sh
+  // usePathUrlStrategy();
   runApp(
     MaterialApp.router(
       title: 'GraphX Gallery',
@@ -117,15 +118,19 @@ class Home extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             // Cover image
-            demo.thumbnail?.isNotEmpty == true
-                ? Image.asset(
-                    demo.thumbnail!,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'assets/thumbs/roi-simple-shapes.png',
-                    fit: BoxFit.cover,
-                  ),
+            if (demo.hash != null)
+              BlurHash(
+                hash: demo.hash!,
+                image: demo.thumbnail,
+                duration: const Duration(milliseconds: 1400),
+                curve: Curves.easeOutSine,
+                imageFit: BoxFit.cover,
+              ),
+            if (demo.hash == null)
+              Image.asset(
+                demo.thumbnail,
+                fit: BoxFit.cover,
+              ),
             // Gradient
             Container(
               decoration: const BoxDecoration(
@@ -298,7 +303,8 @@ class _DemoState extends State<Demo> {
         body: ClipRect(
           child: Center(
             child: Navigator(
-              onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) => widget.child),
+              onGenerateRoute: (settings) =>
+                  MaterialPageRoute(builder: (context) => widget.child),
             ),
           ),
         ),
@@ -311,7 +317,8 @@ class _DartLink extends StatelessWidget {
   final Uri uri;
   final String tooltip;
 
-  const _DartLink({super.key, required this.uri, this.tooltip = 'Dart package'});
+  const _DartLink(
+      {super.key, required this.uri, this.tooltip = 'Dart package'});
 
   @override
   Widget build(BuildContext context) {
@@ -334,7 +341,10 @@ class _GitLink extends StatelessWidget {
   final String tooltip;
 
   const _GitLink(
-      {super.key, required this.uri, this.color = Colors.white, this.tooltip = 'Source code'});
+      {super.key,
+      required this.uri,
+      this.color = Colors.white,
+      this.tooltip = 'Source code'});
 
   @override
   Widget build(BuildContext context) {

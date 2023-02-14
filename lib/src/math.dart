@@ -122,7 +122,7 @@ abstract class Math {
 
   /// Computes and returns an absolute value for the number specified by
   /// the parameter `value`.
-  static num abs(num value) => value.abs();
+  static T abs<T extends num>(T value) => value.abs() as T;
 
   /// Returns a pseudo-random boolean (true or false).
   /// Using the `Random()` class.
