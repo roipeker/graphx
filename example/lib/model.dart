@@ -4,8 +4,7 @@ import 'demos/demos.dart';
 import 'utils/utils.dart';
 
 extension GitUrl on String {
-  String get git =>
-      'https://github.com/roipeker/graphx/tree/master/example/lib/demos/$this';
+  String get git => 'https://github.com/roipeker/graphx/tree/master/example/lib/demos/$this';
 }
 
 final demos = <Scene>[
@@ -589,12 +588,14 @@ abstract class Scene<T> {
 }
 
 class SampleScene extends Scene<Widget> {
-  const SampleScene({
+  SampleScene({
     required super.title,
     required super.build,
     super.thumbnail,
     super.source,
-  });
+    String? path,
+  }) : path = path ?? "/${title.replaceAll(' ', '_').toLowerCase()}";
+  final String path;
 }
 
 class ExternalScene extends Scene<Uri> {
