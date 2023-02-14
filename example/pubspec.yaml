@@ -11,12 +11,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   flutter_svg: ^1.0.3
   
   url_launcher: ^6.1.8
 
   graphx:
     path: ../
+  go_router: ^6.0.6
 
 dev_dependencies:
   flutter_lints: ^2.0.1

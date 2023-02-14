@@ -1,20 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'model.dart';
+import 'router.dart';
 import 'utils/utils.dart';
 
 void main() {
+  usePathUrlStrategy();
   runApp(
-    MaterialApp(
+    MaterialApp.router(
+      routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Roboto',
         primaryColor: const Color(0xff241e30),
         appBarTheme: const AppBarTheme(color: Color(0xff241e30), elevation: 0),
       ),
-      home: const Home(),
+      // home: const Home(),
     ),
   );
 }
@@ -97,21 +102,13 @@ class Home extends StatelessWidget {
         ],
       ),
       clipBehavior: Clip.antiAlias,
-      child: GestureDetector(
+      child: InkWell(
         onTap: () {
           if (demo is ExternalScene) {
             launchUrl(demo.url);
             return;
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return Demo(
-                  text: demo.title,
-                  child: demo.build() as Widget,
-                );
-              }),
-            );
+          } else if (demo is SampleScene) {
+            GoRouter.of(context).push(demo.path);
           }
         },
         child: Stack(
@@ -161,6 +158,7 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
+
             // External hint
             Visibility(
               visible: demo is ExternalScene,
@@ -240,18 +238,21 @@ class Home extends StatelessWidget {
             launchUrl(demo.url);
             return;
           }
+          if (demo is SampleScene) {
+            GoRouter.of(context).push(demo.path);
+          }
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return Demo(
-                  text: demo.title,
-                  child: demo.build() as Widget,
-                );
-              },
-            ),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) {
+          //       return Demo(
+          //         text: demo.title,
+          //         child: demo.build() as Widget,
+          //       );
+          //     },
+          //   ),
+          // );
         },
       ),
     );
@@ -279,8 +280,7 @@ class Demo extends StatelessWidget {
       body: ClipRect(
         child: Center(
           child: Navigator(
-            onGenerateRoute: (settings) =>
-                MaterialPageRoute(builder: (context) => child),
+            onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) => child),
           ),
         ),
       ),
@@ -292,8 +292,7 @@ class _DartLink extends StatelessWidget {
   final Uri uri;
   final String tooltip;
 
-  const _DartLink(
-      {super.key, required this.uri, this.tooltip = 'Dart package'});
+  const _DartLink({super.key, required this.uri, this.tooltip = 'Dart package'});
 
   @override
   Widget build(BuildContext context) {
@@ -316,10 +315,7 @@ class _GitLink extends StatelessWidget {
   final String tooltip;
 
   const _GitLink(
-      {super.key,
-      required this.uri,
-      this.color = Colors.white,
-      this.tooltip = 'Source code'});
+      {super.key, required this.uri, this.color = Colors.white, this.tooltip = 'Source code'});
 
   @override
   Widget build(BuildContext context) {
