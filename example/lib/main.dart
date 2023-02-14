@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -118,14 +119,14 @@ class Home extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             // Cover image
-            if (demo.hash != null)
+            if (demo.hash != null && kIsWeb)
               BlurHash(
                 hash: demo.hash!,
                 image: demo.thumbnail,
-                duration: const Duration(milliseconds: 1400),
-                curve: Curves.easeOutSine,
+                duration: const Duration(milliseconds: 700),
                 imageFit: BoxFit.cover,
               ),
+
             if (demo.hash == null)
               Image.asset(
                 demo.thumbnail,
