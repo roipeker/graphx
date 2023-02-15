@@ -1,12 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:graphx/graphx.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'model.dart';
+import 'router.dart';
 
 class Demo extends StatefulWidget {
   const Demo({
@@ -39,6 +39,20 @@ class _DemoState extends State<Demo> {
       color: Colors.white,
       child: Scaffold(
         appBar: AppBar(
+          leading: !appRouter.canPop()
+              ? IconButton(
+                  onPressed: () {
+                    appRouter.go('/');
+                  },
+                  tooltip: 'Gallery Home',
+                  icon: SvgPicture.asset(
+                    'assets/gx_logo.svg',
+                    height: 24,
+                    semanticsLabel: 'GraphX Logo',
+                    // color: Colors.white,
+                  ),
+                )
+              : null,
           title: Text(widget.text),
           elevation: 0,
         ),
