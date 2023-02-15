@@ -20,20 +20,43 @@ class ConnectedCanvasMain extends StatelessWidget {
 
 class ConnectedCanvasScene extends GSprite {
   double get stageWidth => stage!.stageWidth;
+
   double get stageHeight => stage!.stageHeight;
 
-  late List<SimpleBall> balls;
+  List<SimpleBall> balls = [];
+
+  final linePaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeCap = StrokeCap.round;
+
+  final ballPaint = Paint()..style = PaintingStyle.fill;
+
+  // Get the number of balls to create based on the stage size.
+  // if size is too small (<100) reduce it more.
+  // take an average of 25pt per "node".
+  int _axisCount(double value) => (value < 100 ? value * 0.6 : value) ~/ 25;
 
   @override
   void addedToStage() {
     super.addedToStage();
-    _init();
+    stage!.onResized.add(_onStageResize);
+    _init(300);
   }
 
-  Future<void> _init() async {
-    balls = [];
+  void _onStageResize() {
+    var total = _axisCount(stageWidth) * _axisCount(stageHeight);
+    // clamp the total to a reasonable range.
+    total = total.clamp(10, 750);
+    // if the difference is too big, re-init the system.
+    final difference = total - balls.length;
+    if (difference.abs() > 100) {
+      _init(total);
+    }
+  }
 
-    for (int i = 0; i < 750; i++) {
+  Future<void> _init(int count) async {
+    balls.clear();
+    for (int i = 0; i < count; i++) {
       balls.add(SimpleBall(width: stageWidth, height: stageHeight));
     }
   }
@@ -44,7 +67,8 @@ class ConnectedCanvasScene extends GSprite {
   }
 
   // Distance gross approximation
-  double _distanceFast(double x1, double y1, double x2, double y2, double maxDistance) {
+  double _distanceFast(
+      double x1, double y1, double x2, double y2, double maxDistance) {
     final dx = (x1 - x2).abs();
     if (dx > maxDistance) {
       return maxDistance;
@@ -57,8 +81,7 @@ class ConnectedCanvasScene extends GSprite {
   }
 
   @override
-  void $applyPaint(Canvas? canvas) {
-    if (canvas == null) return;
+  void paint(Canvas canvas) {
     canvas.save();
     for (var i = 0; i < balls.length; i++) {
       var ball = balls[i];
@@ -89,15 +112,14 @@ class ConnectedCanvasScene extends GSprite {
       for (var j = i + 1; j < balls.length; j++) {
         final nextParticle = balls[j];
 
-        final distance = _distanceFast(ball.x, ball.y, nextParticle.x, nextParticle.y, maxDistance);
+        final distance = _distanceFast(
+            ball.x, ball.y, nextParticle.x, nextParticle.y, maxDistance);
         // final distance = dist(particle.x, particle.y, nextParticle.x, nextParticle.y);
 
         if (distance < maxDistance) {
-          var linePaint = Paint()
-            ..color = const Color.fromARGB(255, 255, 255, 255).withOpacity(1 - (distance / maxDistance))
-            ..style = PaintingStyle.stroke
-            ..strokeCap = StrokeCap.round
-            ..strokeWidth = 4 - 4 * (distance / maxDistance);
+          linePaint.color = const Color.fromARGB(255, 255, 255, 255)
+              .withOpacity(1 - (distance / maxDistance));
+          linePaint.strokeWidth = 4 - 4 * (distance / maxDistance);
 
           Offset point1 = Offset(ball.x, ball.y);
           Offset point2 = Offset(nextParticle.x, nextParticle.y);
@@ -109,20 +131,18 @@ class ConnectedCanvasScene extends GSprite {
       }
 
       // Particle color
-      var paint = Paint()
-        ..color = Color.lerp(
-              const Color.fromARGB(255, 43, 137, 188),
-              const Color.fromARGB(255, 255, 255, 0),
-              min(near / 10, 1),
-            ) ??
-            Colors.red
-        ..style = PaintingStyle.fill;
+      ballPaint.color = Color.lerp(
+            const Color.fromARGB(255, 43, 137, 188),
+            const Color.fromARGB(255, 255, 255, 0),
+            min(near / 10, 1),
+          ) ??
+          Colors.red;
 
       // Draw particle
       canvas.drawCircle(
         Offset(ball.x, ball.y),
         ball.radius,
-        paint,
+        ballPaint,
       );
     }
     canvas.restore();

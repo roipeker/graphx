@@ -24,10 +24,26 @@ class ConnectedScene extends GSprite {
 
   List<Node> nodes = [];
 
+  // Get the number of balls to create based on the stage size.
+  // if size is too small (<100) reduce it more.
+  // take an average of 25pt per "node".
+  int _axisCount(double value) => (value < 100 ? value * 0.6 : value) ~/ 25;
+
   @override
   void addedToStage() {
     super.addedToStage();
-    _init();
+    _init(300);
+  }
+
+  void _onStageResize() {
+    var total = _axisCount(stageWidth) * _axisCount(stageHeight);
+    // clamp the total to a reasonable range.
+    total = total.clamp(10, 750);
+    // if the difference is too big, re-init the system.
+    final difference = total - nodes.length;
+    if (difference.abs() > 100) {
+      _init(total);
+    }
   }
 
   @override
@@ -36,11 +52,11 @@ class ConnectedScene extends GSprite {
     _update(delta);
   }
 
-  Future<void> _init() async {
-    nodes = [];
+  Future<void> _init(int count) async {
+    nodes.clear();
 
     // Create some nodes
-    for (int i = 0; i < 750; i++) {
+    for (int i = 0; i < count; i++) {
       final newNode = Node.create(width: stageWidth, height: stageHeight);
       nodes.add(newNode);
     }
@@ -52,7 +68,8 @@ class ConnectedScene extends GSprite {
   }
 
   // Distance gross approximation
-  double _distanceFast(double x1, double y1, double x2, double y2, double maxDistance) {
+  double _distanceFast(
+      double x1, double y1, double x2, double y2, double maxDistance) {
     final dx = (x1 - x2).abs();
     if (dx > maxDistance) {
       return maxDistance;
@@ -111,23 +128,20 @@ class ConnectedScene extends GSprite {
         for (var j = i + 1; j < nodes.length; j++) {
           final node2 = nodes[j];
 
-          final distance = _distanceFast(node.x, node.y, node2.x, node2.y, maxDistance);
+          final distance =
+              _distanceFast(node.x, node.y, node2.x, node2.y, maxDistance);
           // final distance = _distance(node.x, node.y, node2.x, node2.y);
 
           if (distance < maxDistance) {
             node.near++;
             final double thickness = 4 - 4 * (distance / maxDistance);
-
-            final opacity = max(1.0, min(0.0, (1 - (distance / maxDistance))));
-            // final double opacity = (1 - (distance / maxDistance)).clamp(0.0, 1.0);
+            final opacity = (1 - (distance / maxDistance)).clamp(0.0, 1.0);
             final Color color = Colors.white.withOpacity(opacity);
 
             graphics
                 .lineStyle(thickness, color)
-                .beginFill(color.withOpacity(0.5))
                 .moveTo(node.x, node.y)
                 .lineTo(node2.x, node2.y)
-                .closePath()
                 .endFill();
           }
         }
@@ -145,7 +159,11 @@ class ConnectedScene extends GSprite {
             node.color.withOpacity(0.25);
         final Color strokeColor = fillColor.withOpacity(0.5);
 
-        graphics.beginFill(fillColor).lineStyle(2, strokeColor).drawCircle(node.x, node.y, node.radius).endFill();
+        graphics
+            .beginFill(fillColor)
+            .lineStyle(2, strokeColor)
+            .drawCircle(node.x, node.y, node.radius)
+            .endFill();
       }
     }
   }
@@ -184,12 +202,12 @@ class Node {
     required double width,
     required double height,
   }) {
-    final x = Random().nextDouble() * width;
-    final y = Random().nextDouble() * height;
-    final double radius = Random().nextDouble() * 8 + 1;
+    final x = Math.random() * width;
+    final y = Math.random() * height;
+    final double radius = Math.random() * 8 + 1;
     final scale = radius * 0.25;
-    final xSpeed = Random().nextDouble() * scale - scale / 2;
-    final ySpeed = Random().nextDouble() * scale - scale / 2;
+    final xSpeed = Math.random() * scale - scale / 2;
+    final ySpeed = Math.random() * scale - scale / 2;
     final ratio = radius / 16;
     final color = Color.lerp(
           const Color.fromARGB(255, 239, 220, 90),

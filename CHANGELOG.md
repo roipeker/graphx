@@ -1,5 +1,7 @@
 ## [1.0.10] (current dev)
 - fix Color opacity 0 flickering in Graphics.
+- new demo in example gallery "Connected" (node garden).
+- cleanup example code.
 
 ## [1.0.9]
 - minor "fix" for pivot support when doing a rotation in 3d (still missing proper transforms)
