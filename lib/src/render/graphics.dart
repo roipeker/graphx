@@ -194,7 +194,6 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     StrokeJoin? joints,
     double miterLimit = 3.0,
   ]) {
-    alpha;
     alpha = alpha.clamp(0.0, 1.0);
     final paint = Paint();
     paint.style = PaintingStyle.stroke;
@@ -752,7 +751,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
       }
       final fill = graph.fill!;
       final baseColor = fill.color;
-      if (baseColor.alpha == 0) break;
+      // FIX: causes flickering on rendering.
+      // if (baseColor.alpha == 0) break;
 
       /// calculate gradient.
       if (graph.hasGradient) {
@@ -809,6 +809,8 @@ class Graphics with RenderUtilMixin implements GxRenderable {
     _drawingQueue.add(_currentDrawing);
   }
 
+  // TODO: should we avoid rendering if alpha=0 ?
+  // it prevents bounding box calculation.
   bool get _isVisible => alpha > 0.0 || _drawingQueue.isEmpty;
 
   /// push a custom GraphicsDrawingData into the commands list.
