@@ -87,35 +87,21 @@ The repo is in early stages. You can check the [changelog](https://github.com/ro
 GraphX has support for loading `rootBundle` assets:
 
 ```dart
-ResourceLoader.loadBinary
-(
-assetId)
+ResourceLoader.loadBinary(assetId)
 ResourceLoader.loadGif(assetId)
 ResourceLoader.loadTextureAtlas(imagePath, xmlPath)
 ResourceLoader.loadTexture(assetId)
 ResourceLoader.loadImage(assetId)
 ResourceLoader.loadString(assetId)
 ResourceLoader.loadJson(assetId)
-ResourceLoader.
-loadSvg
-(
-assetId
-)
+ResourceLoader.loadSvg(assetId)
 ```
 
 As well as network images (SVG is not supported on non-SKIA targets):
 
 ```dart
-ResourceLoader.loadNetworkTexture
-(
-url
-);
-ResourceLoader
-.
-loadNetworkSvg
-(
-url
-);
+ResourceLoader.loadNetworkTexture(url);
+ResourceLoader.loadNetworkSvg(url);
 ```
 
 ResourceLoader also stores in cache based on the `assetId` or `url` provided. You can pass `cacheId`
@@ -123,13 +109,10 @@ in most methods
 to override that, once the resources loaded, you can access them with:
 
 ```dart
-ResourceLoader.getTexture
-(
-id);
+ResourceLoader.getTexture(id);
 ResourceLoader.getSvg(id);
 ResourceLoader.getAtlas(id);
-ResourceLoader.getGif(id
-);
+ResourceLoader.getGif(id);
 ```
 
 GraphX™ also provides "raw" support for Text rendering, using the `StaticText` class.
@@ -151,31 +134,21 @@ tool).
 ### Sample code.
 
 ```dart
-  body: Center
-(
-child: SceneBuilderWidget( /// wrap any Widget with SceneBuilderWidget
-builder: () => SceneController(
-back: GameSceneBack(), /// optional provide the background layer
-front: GameSceneFront(), /// optional provide the foreground layer
+body: Center(
+  child: SceneBuilderWidget( /// wrap any Widget with SceneBuilderWidget
+    builder: () => SceneController(
+      back: GameSceneBack(), /// optional provide the background layer
+      front: GameSceneFront(), /// optional provide the foreground layer
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text('You have pushed the button this many times:'),
+        Text('$_counter',style: Theme.of(context).textTheme.headline4),
+      ],
+    ),
+  ),
 ),
-child: Column(
-mainAxisAlignment: MainAxisAlignment.center,
-children: <Widget>[
-Text(
-'You have pushed the button this many times:',
-),
-Text(
-'$_counter',
-style: Theme.of(context).textTheme.headline4,
-),
-]
-,
-)
-,
-)
-,
-)
-,
 ```
 
 GraphX™ is based on "Scenes", each `SceneBuilderWidget` requires a `SceneController`.
