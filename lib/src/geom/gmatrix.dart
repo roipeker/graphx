@@ -334,4 +334,19 @@ class GMatrix {
     out.y = d * y + b * x + ty;
     return out;
   }
+
+  /// Given a point in the pretransform coordinate space, returns the
+  /// coordinates of that point after the transformation occurs. Unlike the
+  /// standard transformation applied using the `transformPoint()`
+  /// method, the `deltaTransformPoint()` method's transformation
+  /// does not consider the translation parameters `tx` and
+  /// `ty`.
+  /// @param point — The point for which you want to get the result of the
+  /// matrix transformation.
+  /// @return The point resulting from applying the matrix transformation.
+
+  GPoint deltaTransformPoint(GPoint point, [GPoint? out]) {
+    out ??= GPoint();
+    return out.setTo(point.x * a + point.y * c, point.x * b + point.y * d);
+  }
 }

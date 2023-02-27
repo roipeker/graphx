@@ -14,7 +14,9 @@ class GKeyboard {
   static Stage? _stage;
 
   static bool justReleased(GKey key) {
-    return _justReleased[key] != null;
+    var wasDown = _justReleased[key] != null;
+    _justReleased.remove(key);
+    return wasDown;
   }
 
   static bool anyDown(Iterable<GKey> keys) {
