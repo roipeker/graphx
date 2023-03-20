@@ -1,6 +1,9 @@
 import 'dart:ui' as ui;
 import '../../graphx.dart';
 
+/// The [GShape] class represents a display object that can be used to draw
+/// vector graphics using the [Graphics] class. It extends the [GDisplayObject]
+/// so is renders on screen.
 class GShape extends GDisplayObject {
   Graphics? _graphics;
   static final _sHelperMatrix = GMatrix();
@@ -11,8 +14,28 @@ class GShape extends GDisplayObject {
     return '$runtimeType (Shape)$msg';
   }
 
+  /// Returns the [Graphics] object associated with this [GShape], creating it
+  /// if it doesn't already exist. The [Graphics] object is used to draw vector
+  /// graphics.
   Graphics get graphics => _graphics ??= Graphics();
 
+  /// Returns the bounds of this [GShape] in the coordinate system of the
+  /// [targetSpace] object. If the [out] parameter is not null, the result will
+  /// be stored in that object and returned. Otherwise, a new [GRect] object will
+  /// be created and returned. If this [GShape] has no graphics, the bounds will
+  /// be based on its position and size.
+  ///
+  /// The [matrix] parameter is an optional matrix that is used to transform the
+  /// bounds from the local coordinate space of this [GShape] to the coordinate
+  /// space of the [targetSpace] object. If the [matrix] parameter is not
+  /// specified, the identity matrix will be used.
+  ///
+  /// The [out] parameter is an optional object that will be used to store the
+  /// result. If it is not null, the result will be stored in that object and
+  /// returned. Otherwise, a new [GRect] object will be created and returned.
+  ///
+  /// Returns a [GRect] object representing the bounds of this [GShape] in the
+  /// coordinate space of the [targetSpace] object.
   @override
   GRect? getBounds(GDisplayObject? targetSpace, [GRect? out]) {
     final matrix = _sHelperMatrix;
@@ -42,6 +65,19 @@ class GShape extends GDisplayObject {
     return out;
   }
 
+  /// Determines if the point specified by [localPoint] is contained within this
+  /// [GShape]. If [useShape] is true, the shape of the [GShape] will be used to
+  /// test for containment. Otherwise, the bounds of the [GShape] will be used.
+  ///
+  /// The [localPoint] parameter is a [GPoint] object representing the point to
+  /// test for containment, in the local coordinate space of this [GShape].
+  ///
+  /// The [useShape] parameter is an optional boolean value that determines
+  /// whether to use the shape of the [GShape] or the bounds of the [GShape] to
+  /// test for containment. If it is not specified, it will default to false.
+  ///
+  /// Returns the [GDisplayObject] that contains the point, or null if the point
+  /// is not contained within this [GShape].
   @override
   GDisplayObject? hitTest(GPoint localPoint, [bool useShape = false]) {
     if (!$hasTouchableArea || !mouseEnabled) {
@@ -54,6 +90,10 @@ class GShape extends GDisplayObject {
   }
 
   static ui.Path? _inverseHugePath;
+
+  /// Initializes an inverse "huge" path used for masking when the mask is
+  /// inverted. This method is called internally when needed to initialize the
+  /// path.
   static void _initInversePath() {
     if (_inverseHugePath != null) {
       return;
@@ -65,6 +105,10 @@ class GShape extends GDisplayObject {
     _inverseHugePath!.close();
   }
 
+  /// Applies the paint to the given [canvas] for this [GShape]. If this [GShape]
+  /// is being used as a mask, the graphics will be used to clip the [canvas].
+  ///
+  /// The [canvas] parameter is the [ui.Canvas] object to apply the paint to.
   @override
   void $applyPaint(ui.Canvas canvas) {
     if (isMask && _graphics != null) {
@@ -99,6 +143,7 @@ class GShape extends GDisplayObject {
     }
   }
 
+  /// Disposes of this [GShape] and its graphics resources.
   @override
   void dispose() {
     _graphics?.dispose();

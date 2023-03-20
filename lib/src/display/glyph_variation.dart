@@ -1,5 +1,13 @@
 import 'dart:ui';
 
+/// A class representing glyph variations, used to specify OpenType font variations.
+///
+/// [GlyphVariations] encapsulates a set of font variations, represented by doubles
+/// that modify the default appearance of glyphs rendered with a given font.
+///
+/// This class is typically used to create a font variation axis for a custom font
+/// to provide granular control over aspects like weight, width, slant, and other
+/// attributes.
 class GlyphVariations {
   /// The fill for drawing the icon.
   ///
@@ -67,9 +75,15 @@ class GlyphVariations {
   ///  * https://fonts.google.com/knowledge/glossary/optical_size_axis
   double? _opticalSize;
 
-  /// Internal callback that invalidates the style on [GIcon] and [GText]
+  /// This internal callback is called whenever the [GlyphVariations] data
+  /// changes, and invalidates the style on [GIcon] and [GText]
   Function? onUpdate;
 
+  /// Creates a new instance of [GlyphVariations].
+  ///
+  /// Each of the parameters represents a variation axis in the OpenType font
+  /// format. If a value is not provided for a particular axis, it is considered
+  /// unset.
   GlyphVariations({
     double? fill,
     double? weight,
@@ -80,6 +94,7 @@ class GlyphVariations {
         _grade = grade,
         _opticalSize = opticalSize;
 
+  /// Returns true if any variation value is not null.
   bool $isValid() =>
       _fill != null ||
       _weight != null ||
@@ -87,7 +102,13 @@ class GlyphVariations {
       _opticalSize != null;
 
   List<FontVariation>? _data;
+
+  /// Returns the [FontVariation] list based on the current variation values.
   List<FontVariation>? get data => _data;
+
+  /// Invalidates the current instance, clearing any existing font variations
+  /// and updating the [data] field with a new set of variations, based on the
+  /// values of the various axes.
   void _invalidateModel() {
     if (!$isValid()) {
       _data = null;
@@ -102,32 +123,40 @@ class GlyphVariations {
     onUpdate?.call();
   }
 
+  /// The fill variation value. Null means no fill variation.
   double? get fill => _fill;
 
+  /// Sets the fill variation value. Null means no fill variation.
   set fill(double? value) {
     if (_fill == value) return;
     _fill = value;
     _invalidateModel();
   }
 
+  /// The [weight] variation value. Null means no weight variation.
   double? get weight => _weight;
 
+  /// Sets the [weight] variation value. Null means no weight variation.
   set weight(double? value) {
     if (_weight == value) return;
     _weight = value;
     _invalidateModel();
   }
 
+  /// The optical size variation value. Null means no optical size variation.
   double? get opticalSize => _opticalSize;
 
+  /// Sets the optical size variation value. Null means no optical size variation.
   set opticalSize(double? value) {
     if (_opticalSize == value) return;
     _opticalSize = value;
     _invalidateModel();
   }
 
+  /// The grade variation value. Null means no grade variation.
   double? get grade => _grade;
 
+  /// Sets the grade variation value. Null means no grade variation.
   set grade(double? value) {
     if (_grade == value) return;
     _grade = value;
