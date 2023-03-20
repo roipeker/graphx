@@ -5,22 +5,32 @@ import 'package:flutter/rendering.dart';
 
 import '../../graphx.dart';
 
+/// The `ScenePainter` class is responsible for rendering and managing the
+/// GraphX scene. It is a mixin that can be used with a custom painter to draw
+/// graphics within a Flutter widget. This class contains methods and properties
+/// to handle updates, rendering, and mouse input events. It also manages the
+/// `Stage` instance, which is the root of the display list for the GraphX
+/// scene.
+///
+/// By default, the `ScenePainter` will repaint the custom painter on every tick
+/// of the animation loop. This behavior can be overridden by setting
+/// `autoUpdateAndRender` to `false`. You can also manually trigger a repaint
+/// using the `requestRender()` method.
 class ScenePainter with EventDispatcherMixin {
-  /// Current painter being processed.
+  /// The currently processed painter.
   static late ScenePainter current;
 
-  /// access to SceneController defined in the Widget side.
+  /// The `SceneController` that this `ScenePainter` belongs to.
   SceneController core;
 
-  /// Access to the `root` DisplayObject that will initialize
-  /// the Scene layer.
+  /// The [root] `DisplayObject` that initializes the Scene layer.
   GSprite root;
 
-  /// Allows to re-paint the internal CustomPainter on every tick()
-  /// The flags allow the $render() `tick` process to know if it has to
+  /// Indicates whether the internal `CustomPainter` needs repainting on each
+  /// tick. The flags allow the `$render()` process to know if it has to
   /// [requestRender()] or not.
   ///
-  /// See [CustomPainter.shouldRepaint()]
+  /// See [CustomPainter.shouldRepaint]
   bool needsRepaint = false;
 
   /// Warning: Experimental state
@@ -28,38 +38,48 @@ class ScenePainter with EventDispatcherMixin {
   bool _ownCanvasNeedsRepaint = false;
   late Canvas $canvas;
 
-  /// Size of the area available in `CustomPainter::paint()`
+  /// The size of the area available in `CustomPainter::paint()`.
   Size size = Size.zero;
 
-  /// Scene Layer's stage. The very first DisplayObject where the render
+  /// The stage of the scene layer. The first `DisplayObject` where the render
   /// display list starts.
   Stage? _stage;
 
   Stage? get stage => _stage;
 
-  /// Defines when the Scene is ready and stage is accessible to GraphX root.
-  /// Runs on the first "render".
+  /// Indicates whether the Scene is ready and the stage is accessible to the
+  /// GraphX root. Runs on the first "render".
   bool _isReady = false;
 
   bool get isReady => _isReady;
 
-  /// Automatically manage the `tick()` and `render()` requests.
-  /// Overrides [needsRepaint].
+  /// Automatically manages the `tick()` and `render()` requests. Overrides
+  /// [needsRepaint].
   bool autoUpdateAndRender = false;
 
+  /// The current frame ID.
   int $currentFrameId = 0;
+
+  /// The current runtime.
   double $runTime = 0;
 
+  /// The maximum time of a frame.
   double maxFrameTime = -1;
+
+  /// The current frame delta timestamp (in milliseconds).
   double $currentFrameDeltaTime = 0;
+
+  /// The accumulated frame delta timestamp (in milliseconds).
   double $accumulatedFrameDeltaTime = 0;
 
-  /// Ticker callback, to access the current frame delta timestamp
-  /// (in millisecond).
+  /// Ticker callback, to access the current frame delta timestamp (in
+  /// millisecond).
   EventSignal<double>? _onUpdate;
 
+  /// Dispatched when the frame is updated.
   EventSignal<double> get onUpdate => _onUpdate ??= EventSignal<double>();
 
+  /// The current picture of the canvas.
   ui.Picture? _canvasPicture;
 
   var _mouseMoveInputDetected = false;
@@ -68,7 +88,7 @@ class ScenePainter with EventDispatcherMixin {
   var _lastMouseOut = false;
   MouseInputData? _lastMouseInput;
 
-  /// constructor.
+  /// Creates a new `ScenePainter` with the given `SceneController` and [root].
   ScenePainter(this.core, this.root) {
     _stage = Stage(this);
     makeCurrent();
@@ -77,7 +97,7 @@ class ScenePainter with EventDispatcherMixin {
   // ignore: use_to_and_as_if_applicable
   CustomPainter buildPainter() => _GraphicsPainter(this);
 
-  /// Actual rendering from the `CustomPaint`.
+  /// Renders from the `CustomPaint`.
   void _paint(Canvas canvas, Size size) {
     if (this.size != size) {
       this.size = size;
@@ -97,13 +117,8 @@ class ScenePainter with EventDispatcherMixin {
     }
   }
 
-  void $setup() {
-    makeCurrent();
-
-    /// If needed, can be overridden later by the [root].
-    autoUpdateAndRender = core.config.autoUpdateRender;
-  }
-
+  /// This method creates a picture recorder and a canvas, and draws the [Stage]
+  /// to it.
   void _createPicture() {
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
@@ -111,9 +126,10 @@ class ScenePainter with EventDispatcherMixin {
     _canvasPicture = recorder.endRecording();
   }
 
-  /// The main `enterFrame`, called from the `SceneController` unique `GxTicker`
-  /// only valid when there's a GxTicker running.
-  /// Manages the `update()` and can request to redraw the CustomPainter.
+  /// This method is called every tick() and updates the display list if
+  /// autoUpdateAndRender is true, and calls _onUpdate?.dispatch(time).
+  /// It then calls $render(), and if useOwnCanvas is true, sets
+  /// _ownCanvasNeedsRepaint to true.
   void tick(double time) {
     makeCurrent();
     if (autoUpdateAndRender) {
@@ -128,7 +144,8 @@ class ScenePainter with EventDispatcherMixin {
     }
   }
 
-  /// Update inner display list.
+  /// This method updates the display list and detects any mouse movement.
+  /// Tickers entry point (aka `enterFrame`).
   void $update(double deltaTime) {
     if (maxFrameTime != -1 && deltaTime > maxFrameTime) {
       deltaTime = maxFrameTime;
@@ -136,11 +153,27 @@ class ScenePainter with EventDispatcherMixin {
     $currentFrameDeltaTime = deltaTime;
     $accumulatedFrameDeltaTime += $currentFrameDeltaTime;
     _stage!.$tick(deltaTime);
-    // if (_hasPointer) {
+// if (_hasPointer) {
     _detectMouseMove();
-    // }
+// }
   }
 
+  /// This method is called from the SceneController's ScenePainter's constructor,
+  /// and sets up the autoUpdateAndRender flag to the value of SceneConfig
+  /// autoUpdateRender. It also sets the current ScenePainter instance to
+  /// this instance.
+  void $setup() {
+    makeCurrent();
+
+    /// If needed, can be overridden later by the [root].
+    autoUpdateAndRender = core.config.autoUpdateRender;
+  }
+
+  /// This method detects mouse movement, and dispatches a "still" event if no
+  /// movement was detected. If movement was detected, it sets _lastMouseX and
+  /// _lastMouseY to the current mouse coordinates. If the mouse has left the
+  /// stage, it sets _lastMouseOut to true. It then calls
+  /// stage!.captureMouseInput(input) with input being the [MouseInputData].
   void _detectMouseMove() {
     // If there was no mouse move, dispatch a still event.
     // This handles static mouse OVER/OUT for moving/hiding objects.
@@ -166,6 +199,10 @@ class ScenePainter with EventDispatcherMixin {
     _mouseMoveInputDetected = false;
   }
 
+  /// This method detects mouse movement, and dispatches a "still" event if no
+  /// movement was detected. If movement was detected, it sets _lastMouseX and
+  /// _lastMouseY to the current mouse coordinates. If the mouse has left the
+  /// stage, it sets _lastMouseOut to true.
   void _mouseInputHandler(MouseInputData input) {
     input.time = $accumulatedFrameDeltaTime;
     // if (input.type != MouseInputType.still) {
@@ -226,10 +263,14 @@ class ScenePainter with EventDispatcherMixin {
     _mouseInputHandler(input);
   }
 
+  /// This method sets the [ScenePainter.current] to this instance.
+  /// Currently not used.
   void makeCurrent() {
     ScenePainter.current = this;
   }
 
+  /// Converts the internal canvas to a picture and draws it onto the
+  /// provided canvas.
   void _pictureFromCanvas() {
     if (_ownCanvasNeedsRepaint) {
       _ownCanvasNeedsRepaint = false;
@@ -240,6 +281,7 @@ class ScenePainter with EventDispatcherMixin {
     }
   }
 
+  /// Reset the state of the ScenePainter object
   @override
   void dispose() {
     _isReady = false;
@@ -255,6 +297,11 @@ class ScenePainter with EventDispatcherMixin {
   bool shouldRepaint() => needsRepaint;
 }
 
+/// A custom painter that delegates to the given [ScenePainter].
+///
+/// This custom painter is used to wrap a [ScenePainter] instance and delegate
+/// the paint and [shouldRepaint] methods to it. It also provides a repaint
+/// callback to the [ScenePainter] instance to notify it of a repaint request.
 class _GraphicsPainter extends CustomPainter {
   final ScenePainter scene;
 

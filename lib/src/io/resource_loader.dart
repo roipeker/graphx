@@ -5,13 +5,25 @@ import 'dart:ui';
 import '../../graphx.dart';
 import 'network_image_loader.dart';
 
+/// A static class responsible for loading and caching various resources such
+/// as SVGs, textures, atlases, GIFs, and shaders.
 abstract class ResourceLoader {
+  /// A cache of loaded SVGs.
   static Map<String, SvgData> svgCache = <String, SvgData>{};
+
+  /// A cache of loaded fragment shader programs.
   static Map<String, FragmentProgram> shaderCache = <String, FragmentProgram>{};
+
+  /// A cache of loaded textures.
   static Map<String, GTexture> textureCache = <String, GTexture>{};
+
+  /// A cache of loaded texture atlases.
   static Map<String, GTextureAtlas> atlasCache = <String, GTextureAtlas>{};
+
+  /// A cache of loaded GIF images.
   static Map<String, GifAtlas> gifCache = <String, GifAtlas>{};
 
+  /// Clears all the resource caches.
   static void clearCache() {
     for (var vo in svgCache.values) {
       vo.dispose();
@@ -27,26 +39,44 @@ abstract class ResourceLoader {
     }
   }
 
+  // Returns the loaded fragment shader program corresponding to the given [cacheId].
+  ///
+  /// If the [cacheId] is not present in the [shaderCache], null is returned.
   static FragmentProgram? getShader(String cacheId) {
     return shaderCache[cacheId];
   }
 
+  /// Returns the loaded texture corresponding to the given [cacheId].
+  ///
+  /// If the [cacheId] is not present in the [
   static GTexture? getTexture(String cacheId) {
     return textureCache[cacheId];
   }
 
+  /// Retrieves a cached [SvgData] instance associated with the given [cacheId].
+  /// Returns null if no [SvgData] is found.
   static SvgData? getSvg(String cacheId) {
     return svgCache[cacheId];
   }
 
+  /// Retrieves a cached [GTextureAtlas] instance associated with the given [cacheId].
+  /// Returns null if no [GTextureAtlas] is found.
   static GTextureAtlas? getAtlas(String cacheId) {
     return atlasCache[cacheId];
   }
 
+  /// Retrieves a cached [GifAtlas] instance associated with the given [cacheId].
+  /// Returns null if no [GifAtlas] is found.
   static GifAtlas? getGif(String cacheId) {
     return gifCache[cacheId];
   }
 
+  /// Loads a [GifAtlas] instance from the given asset [path].
+  /// If a [cacheId] is provided, the resulting [GifAtlas] is stored in the
+  /// cache with the given ID.
+  /// If the [cacheId] already exists in the cache, the cached [GifAtlas] is
+  /// returned.
+  /// The [resolution] parameter controls the scaling of the gif's frames.
   static Future<GifAtlas> loadGif(
     String path, {
     double resolution = 1.0,
@@ -74,6 +104,17 @@ abstract class ResourceLoader {
     return atlas;
   }
 
+  /// Loads an image from a network URL and returns a [GTexture] object.
+  /// The image is loaded asynchronously, and the returned [Future] is completed
+  /// with the [GTexture] object when the image is fully loaded.
+  /// The [width] and [height] parameters can be used to resize the image.
+  /// The [resolution] parameter can be used to scale the image.
+  /// If [cacheId] is provided, the loaded texture will be added to the texture
+  /// cache using [cacheId] as the key.
+  /// If the [cacheId] already exists in the cache, the cached texture will be
+  /// returned instead.
+  ///
+  /// Throws a [FlutterError] if the image cannot be loaded.
   static Future<GTexture> loadNetworkTextureSimple(
     String url, {
     int? width,
@@ -104,6 +145,12 @@ abstract class ResourceLoader {
     }
   }
 
+  /// Loads an SVG from a network URL and returns a [SvgData] object. The SVG is
+  /// loaded asynchronously, and the returned [Future] is completed with the
+  /// [SvgData] object when the SVG is fully loaded. If [cacheId] is provided,
+  /// the loaded SVG will be added to the SVG cache using [cacheId] as the key.
+  ///
+  /// Throws a [FlutterError] if the SVG cannot be loaded.
   static Future<SvgData> loadNetworkSvg(
     String url, {
     String? cacheId,
@@ -127,6 +174,12 @@ abstract class ResourceLoader {
     return response.svgData!;
   }
 
+  /// Loads a network texture from the given URL with optional [width], [height],
+  /// [resolution], and [cacheId]. If the texture is already in the cache, it is
+  /// returned directly. Otherwise, the texture is downloaded and converted into
+  /// a [GTexture] instance.
+  ///
+  /// Throws a [FlutterError] if the texture can't be loaded.
   static Future<GTexture> loadNetworkTexture(
     String url, {
     int? width,
@@ -159,6 +212,10 @@ abstract class ResourceLoader {
     return response.texture!;
   }
 
+  /// Loads a shader program from the given [path]. If the program is already
+  /// in the cache, it is returned directly. Otherwise, the program is loaded
+  /// from the given path and stored in the cache (with the optional [cacheId])
+  /// for future use.
   static Future<FragmentProgram> loadShader(String path,
       [String? cacheId]) async {
     if (shaderCache.containsKey(cacheId)) {
@@ -169,6 +226,11 @@ abstract class ResourceLoader {
     return program;
   }
 
+  /// Loads a texture from the given [path] with optional [resolution] and
+  /// [cacheId].
+  /// If the texture is already in the cache, it is returned directly. Otherwise,
+  /// the image at the given path is loaded and converted into a [GTexture]
+  /// instance.
   static Future<GTexture> loadTexture(
     String path, [
     double resolution = 1.0,
@@ -184,6 +246,11 @@ abstract class ResourceLoader {
     return texture;
   }
 
+  /// A static method to load an SVG image from a file.
+  ///
+  /// This method takes the [path] to the SVG file and an optional [cacheId].
+  /// If the [cacheId] is not null it will return the cached SVG data.
+  /// Otherwise, it will load the SVG.
   static Future<SvgData> loadSvg(
     String path, [
     String? cacheId,
@@ -194,6 +261,21 @@ abstract class ResourceLoader {
     return svgCache[cacheId]!;
   }
 
+  /// Loads a texture atlas from an image and XML/JSON data file.
+  ///
+  /// The [imagePath] argument is the path to the image file, while the optional
+  /// [dataPath] argument is the path to the XML data file. The [resolution]
+  /// argument sets the resolution of the texture. The [cacheId] argument sets
+  /// the ID to be used to cache the texture atlas in memory.
+  ///
+  /// If the [cacheId] argument is not `null`, and there is a texture atlas
+  /// already cached with the same ID, this method will return the cached atlas
+  /// instead of loading a new one.
+  ///
+  /// If the [dataPath] argument is not provided, this method will attempt to
+  /// guess the path to the XML data file based on the [imagePath] argument.
+  ///
+  /// Returns a [Future] that completes with a [GTextureAtlas] object.
   static Future<GTextureAtlas> loadTextureAtlas(
     String imagePath, {
     String? dataPath,
@@ -224,11 +306,22 @@ abstract class ResourceLoader {
     return atlas;
   }
 
+  /// Loads a binary file from local assets.
+  ///
+  /// The [path] argument is the path to the binary file to be loaded.
+  ///
+  /// Returns a [Future] that completes with a [ByteData] object.
   static Future<ByteData> loadBinary(String path) async {
     return await rootBundle.load(path);
   }
 
-  /// load local assets.
+  /// Loads an image from local assets.
+  ///
+  /// The [path] argument is the path to the image file to be loaded. The
+  /// optional [targetWidth] and [targetHeight] arguments can be used to specify
+  /// the maximum width and height of the loaded image.
+  ///
+  /// Returns a [Future] that completes with a [ui.Image] object.
   static Future<ui.Image> loadImage(
     String path, {
     int? targetWidth,
@@ -245,10 +338,20 @@ abstract class ResourceLoader {
     return (await codec.getNextFrame()).image;
   }
 
+  /// Loads a string (plain text) file from local assets.
+  ///
+  /// The [path] argument is the path to the string file to be loaded.
+  ///
+  /// Returns a [Future] that completes with a [String] object.
   static Future<String> loadString(String path) async {
     return await rootBundle.loadString(path);
   }
 
+  /// Loads a JSON file from local assets.
+  ///
+  /// The [path] argument is the path to the JSON file to be loaded.
+  ///
+  /// Returns a [Future] that completes with a parsed JSON object.
   static Future<dynamic> loadJson(String path) async {
     final str = await loadString(path);
     return jsonDecode(str);

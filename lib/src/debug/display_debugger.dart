@@ -15,32 +15,53 @@ enum DebugBoundsMode {
   stage,
 }
 
+/// A utility class for debugging and rendering the bounding boxes of
+/// `GDisplayObject` instances. The `DisplayBoundsDebugger` can be used to render
+/// the bounding boxes of display objects when `debugBounds` is enabled on them.
+///
+/// To use the `DisplayBoundsDebugger`, set `$debugBounds=true` on any
+/// `GDisplayObject`.
 class DisplayBoundsDebugger {
+
+  /// The debug mode for rendering bounds. When set to [DebugBoundsMode.internal],
+  /// only display objects with `debugBounds` enabled will be rendered.
+  /// When set to [DebugBoundsMode.full], all display objects will be rendered,
+  /// regardless of the [debugBounds] flag.
   static DebugBoundsMode debugBoundsMode = DebugBoundsMode.internal;
 
-  /// for performance, a global way to deactivate all debug bounds rendering.
+  /// A global flag to disable all debug bounds rendering for performance.
   static bool enabled = true;
 
-  /// global way to render each and every DisplayObject bounding box using the
-  /// current [DisplayBoundsDebugger.debugBoundsMode].
+  /// A global flag to render the bounding box of every display object.
   static bool debugAll = false;
 
+  /// The paint to use for rendering debug bounds.
   static final ui.Paint _debugPaint = ui.Paint()
     ..style = ui.PaintingStyle.stroke
     ..color = kColorCyan
     ..strokeWidth = 1;
 
+  /// The root display object container for the bounds rendering.
   final GDisplayObjectContainer _root;
+
+  /// The canvas to render the bounds onto.
   ui.Canvas? canvas;
+
+  /// A temporary `GRect` instance used for calculating object bounds.
   static final GRect _sHelpRect = GRect();
 
+  /// Creates a new [DisplayBoundsDebugger] instance with the given root
+  /// `GDisplayObjectContainer`. (should be private)
   DisplayBoundsDebugger(GDisplayObjectContainer root) : _root = root;
 
+  /// Renders the bounds of all objects that have [debugBounds] enabled or have
+  /// the [debugAll] flag set to `true`.
   void render() {
     if (debugBoundsMode == DebugBoundsMode.internal || !enabled) return;
     _renderChildren(_root);
   }
 
+  /// Recursively renders the bounds of the children of a given display object.
   void _renderChildren(GDisplayObjectContainer obj) {
     if (obj.$debugBounds || debugAll) _renderBounds(obj);
     for (final child in obj.children) {
@@ -54,6 +75,7 @@ class DisplayBoundsDebugger {
     }
   }
 
+  /// Renders the bounds of a given display object.
   void _renderBounds(GDisplayObject obj) {
     obj.getBounds(_root, _sHelpRect);
     final paint = obj.$debugBoundsPaint ?? _debugPaint;

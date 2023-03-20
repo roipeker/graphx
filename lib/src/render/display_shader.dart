@@ -3,7 +3,10 @@ import 'dart:ui';
 import 'package:graphx/graphx.dart';
 
 /// Utility wrapper for FragmentShader
-/// Allows to set the shader properties and update the shader
+/// It provides a utility to load a shader from resources, and allows setting
+/// floats and images to be used in the shader.
+//
+/// Allows to set the shader properties and update the shader.
 ///
 /// ```dart
 /// class MyCustomShader extends DisplayShader {
@@ -65,12 +68,16 @@ import 'package:graphx/graphx.dart';
 //     fragColor = vec4(st.x, st.y, blue, 1.0);
 // }
 // ```
-
 abstract class DisplayShader implements FragmentShader {
+  /// Loads the shader with the specified [id] from resources.
+  /// Returns a [Future] that completes with a [FragmentProgram] when the shader is loaded.
   static Future<FragmentProgram> load(String id) async {
     return await ResourceLoader.loadShader(id, id);
   }
 
+  // Returns `true` if the shader with the specified [id] is found in the cache.
+  /// If found, sets the [shader] field to the shader.
+  /// If not found, returns `false`
   bool fromCache(String id) {
     final program = ResourceLoader.getShader(id);
     if (program == null) {
@@ -80,14 +87,15 @@ abstract class DisplayShader implements FragmentShader {
     return true;
   }
 
-  // Utility to get the size of an image (width and height) as List<double>
-  // to populate the [floats] in the Shader.
+  /// Utility to get the size of an image (width and height) as List<double>
+  /// to populate the [floats] in the Shader.
   @protected
   List<double> imageSize(Image? img) =>
       img == null ? const [0.0, 0.0] : [img.width + .0, img.height + .0];
 
   static final _emptySamplers = List<Image>.empty();
 
+  /// The fragment shader used to display the images.
   FragmentShader? shader;
 
   /// List of floats IN ORDER to be set into the shader.
@@ -97,6 +105,8 @@ abstract class DisplayShader implements FragmentShader {
   /// List of Images IN ORDER to be set into the shader as sampler2d.
   List<Image> get samplers => _emptySamplers;
 
+  /// Creates a new [DisplayShader] with the specified [shader] and [id].
+  /// If the [shader] is not provided, attempts to load the shader with the [id].
   DisplayShader({this.shader, String? id}) {
     if (shader == null && id != null) {
       if (!fromCache(id)) {
@@ -136,19 +146,23 @@ Did you call await DisplayShader.load("$id")?''');
     shader?.setFloat(index, value);
   }
 
+  /// See [Shader.debugDisposed]
   @override
   bool get debugDisposed => shader?.debugDisposed ?? true;
 
+  /// See [Shader.dispose]
   @override
   void dispose() {
     shader?.dispose();
   }
 
+  /// See [Shader.setFloat]
   @override
   void setFloat(int index, double value) {
     shader?.setFloat(index, value);
   }
 
+  /// See [Shader.setImageSampler]
   @override
   void setImageSampler(int index, Image image) {
     shader?.setImageSampler(index, image);

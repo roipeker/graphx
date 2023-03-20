@@ -21,9 +21,14 @@ class SceneController {
   ///  });`
   Signal? _onHotReload;
 
+  /// The [Signal] that is dispatched when the Stateful Widget gets reassembled.
   Signal get onHotReload => _onHotReload ??= Signal();
 
-  ScenePainter? backScene, frontScene;
+  /// The [ScenePainter] for the back layer of this [SceneController].
+  ScenePainter? backScene;
+
+  /// The [ScenePainter] for the front layer of this SceneController.
+  ScenePainter? frontScene;
 
   /// Access the `ticker` (if any) created by this SceneController.
   GTicker? get ticker {
@@ -44,21 +49,29 @@ class SceneController {
   /// [SceneController].
   PointerManager get pointer => _pointer;
 
+  /// The [KeyboardManager] instance associated with this SceneController.
   late KeyboardManager _keyboard;
+
+  /// The [PointerManager] instance associated with this SceneController.
   late PointerManager _pointer;
 
+  /// The [GTicker] instance associated with this SceneController.
   GTicker? _ticker;
 
+  /// The [InputConverter] instance associated with this SceneController.
   late InputConverter $inputConverter;
 
+  /// The [SceneConfig] instance associated with this SceneController.
   SceneConfig get config => _config;
 
   final _config = SceneConfig();
 
-  /// gets widget's global coordinates.
-  /// useful to compute interactions with children Widgets that gets
+  /// A function that returns the global coordinates of the widget.
+  /// Useful for computing interactions with children Widgets that get added
+  /// later.
   WindowBoundsResolver? resolveWindowBounds;
 
+  /// The ID of this SceneController.
   int id = -1;
 
   bool _isInited = false;
@@ -73,7 +86,11 @@ class SceneController {
     _config.useTicker = sceneConfig.useTicker;
   }
 
-  /// constructor.
+  /// The [SceneController] constructor.
+  ///
+  /// The optional [back] and [front] arguments specify the background and
+  /// foreground [GSprite] objects, respectively. The optional [config]
+  /// argument specifies the configuration for this [SceneController].
   SceneController({
     GSprite? back,
     GSprite? front,
@@ -107,6 +124,7 @@ class SceneController {
     _isInited = true;
   }
 
+  /// Initializes the [SceneController].
   void setup() {
     if (!GTween.initializedCommonWraps) {
       /// you can add your own `CustomTween.wrap()` registering.
@@ -120,6 +138,7 @@ class SceneController {
     frontScene?.$setup();
   }
 
+  /// The function that is called on each frame of the [GTicker].
   /// [GTicker] that runs the `enterFrame`.
   /// Is independent from the rendering pipeline.
   void _onTick(double elapsed) {
@@ -128,10 +147,12 @@ class SceneController {
     backScene?.tick(elapsed);
   }
 
+  /// Resumes the [GTicker].
   void resumeTicker() {
     ticker?.resume();
   }
 
+  /// Disposes of this [SceneController].
   void dispose() {
     if (_config.isPersistent) {
       return;
@@ -144,10 +165,13 @@ class SceneController {
     _isInited = false;
   }
 
+  /// Builds the back [CustomPainter] associated with this [SceneController].
   CustomPainter? buildBackPainter() => backScene?.buildPainter();
 
+  /// Builds the front [CustomPainter] associated with this [SceneController].
   CustomPainter? buildFrontPainter() => frontScene?.buildPainter();
 
+  /// Initializes the input manager for this [SceneController].
   void _initInput() {
     // if (_config.useKeyboard) {
     //   _keyboard ??= KeyboardManager();
@@ -164,6 +188,7 @@ class SceneController {
     $inputConverter = InputConverter(_pointer, _keyboard);
   }
 
+  /// (internal) Called when the Stateful Widget gets reassembled.
   void reassembleWidget() {
     _onHotReload?.dispatch();
     if (_config.rebuildOnHotReload) {
@@ -175,13 +200,20 @@ class SceneController {
     }
   }
 
+  /// Returns `true` if either the back or front [ScenePainter] is set to
+  /// auto-update and render.
   bool _sceneAutoUpdate(ScenePainter? scene) =>
       scene?.autoUpdateAndRender ?? false;
 
+  /// Returns `true` if either the back or front [ScenePainter] is set to
+  /// auto-update and render.
   bool _anySceneAutoUpdate() =>
       _sceneAutoUpdate(backScene) || _sceneAutoUpdate(frontScene);
 
+  /// Returns `true` if either the back or front [ScenePainter] is set to
+  /// auto-update and render, or if the ticker is being used.
   bool _hasTicker() => _anySceneAutoUpdate() || _config.useTicker;
 }
 
+/// A function that returns the global coordinates of the widget.
 typedef WindowBoundsResolver = GRect? Function();
