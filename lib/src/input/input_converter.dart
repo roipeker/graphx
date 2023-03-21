@@ -3,69 +3,27 @@ import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
 
+/// A class that converts various input events into [PointerEventData] or
+/// [KeyboardEventData] to be processed by [PointerManager] or
+/// [KeyboardManager]. For internal use of GraphX.
 class InputConverter {
   final PointerManager pointer;
   final KeyboardManager keyboard;
+
+  /// Creates a new [InputConverter] instance with the given [PointerManager]
+  /// and [KeyboardManager] instances.
   InputConverter(this.pointer, this.keyboard);
 
-  /// mouse stuffs.
-  void pointerEnter(PointerEnterEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.enter,
+  /// Called when a keyboard event is detected.
+  void handleKey(RawKeyEvent event) {
+    final isDown = event is RawKeyDownEvent;
+    keyboard.$process(KeyboardEventData(
+      type: isDown ? KeyEventType.down : KeyEventType.up,
       rawEvent: event,
     ));
   }
 
-  void pointerExit(PointerExitEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.exit,
-      rawEvent: event,
-    ));
-  }
-
-  void pointerHover(PointerHoverEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.hover,
-      rawEvent: event,
-    ));
-  }
-
-  /// touchable stuffs.
-  void pointerSignal(PointerSignalEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.scroll,
-      rawEvent: event,
-    ));
-  }
-
-  void pointerPanZoomStart(PointerPanZoomStartEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.zoomPan,
-      rawEvent: event,
-    ));
-  }
-
-  void pointerPanZoomUpdate(PointerPanZoomUpdateEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.zoomPan,
-      rawEvent: event,
-    ));
-  }
-
-  void pointerPanZoomEnd(PointerPanZoomEndEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.zoomPan,
-      rawEvent: event,
-    ));
-  }
-
-  void pointerMove(PointerMoveEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.move,
-      rawEvent: event,
-    ));
-  }
-
+  /// Called when a pointer is canceled.
   void pointerCancel(PointerCancelEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.cancel,
@@ -73,13 +31,7 @@ class InputConverter {
     ));
   }
 
-  void pointerUp(PointerUpEvent event) {
-    pointer.$process(PointerEventData(
-      type: PointerEventType.up,
-      rawEvent: event,
-    ));
-  }
-
+  /// Called when a pointer down event is detected.
   void pointerDown(PointerDownEvent event) {
     pointer.$process(PointerEventData(
       type: PointerEventType.down,
@@ -87,10 +39,75 @@ class InputConverter {
     ));
   }
 
-  void handleKey(RawKeyEvent event) {
-    final isDown = event is RawKeyDownEvent;
-    keyboard.$process(KeyboardEventData(
-      type: isDown ? KeyEventType.down : KeyEventType.up,
+  /// Called when the pointer enters a region.
+  void pointerEnter(PointerEnterEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.enter,
+      rawEvent: event,
+    ));
+  }
+
+  /// Called when the pointer exits a region.
+  void pointerExit(PointerExitEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.exit,
+      rawEvent: event,
+    ));
+  }
+
+  /// Called when the pointer is hovering (moving inside) over a region.
+  void pointerHover(PointerHoverEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.hover,
+      rawEvent: event,
+    ));
+  }
+
+  /// Called when the pointer is moving.
+  void pointerMove(PointerMoveEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.move,
+      rawEvent: event,
+    ));
+  }
+
+  /// Called when a pointer pan zoom event ends.
+  void pointerPanZoomEnd(PointerPanZoomEndEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.zoomPan,
+      rawEvent: event,
+    ));
+  }
+
+  /// Called when a pointer pan zoom event starts.
+  /// Usually triggered by a 2-finger trackpad or pen gesture.
+  void pointerPanZoomStart(PointerPanZoomStartEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.zoomPan,
+      rawEvent: event,
+    ));
+  }
+
+  /// Called when a pointer pan zoom event is updated.
+  void pointerPanZoomUpdate(PointerPanZoomUpdateEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.zoomPan,
+      rawEvent: event,
+    ));
+  }
+
+  /// Called when a pointer signal (mouse wheel) event is detected.
+  void pointerSignal(PointerSignalEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.scroll,
+      rawEvent: event,
+    ));
+  }
+
+  /// Called when a pointer up event is detected.
+  void pointerUp(PointerUpEvent event) {
+    pointer.$process(PointerEventData(
+      type: PointerEventType.up,
       rawEvent: event,
     ));
   }
