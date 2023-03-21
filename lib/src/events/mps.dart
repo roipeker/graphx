@@ -29,91 +29,6 @@ class MPS {
   final _cache = <String, List<Function?>>{};
   final _cacheOnce = <String, List<Function>>{};
 
-  @override
-  String toString() {
-    return 'MPS {'
-        '\n  cache: $_cache,'
-        '\n  cacheOnce: $_cacheOnce'
-        '\n}';
-  }
-
-  /// Publishes the specified [topic] along with the given [CallbackParams] to
-  /// all registered callbacks for that [topic].
-  ///
-  /// The [CallbackParams] provide positional and named arguments to pass to the
-  /// callbacks.
-  void publishParams(String topic, CallbackParams args) {
-    void _send(Function? fn) =>
-        Function.apply(fn!, args.positional, args.named);
-    _cache[topic]?.forEach(_send);
-    _cacheOnce[topic]?.forEach(_send);
-    _cacheOnce.remove(topic);
-  }
-
-  /// Publishes the specified event [topic] along with the given [arg1]
-  /// (argument) to all registered callbacks for that event.
-  void publish1<T>(String topic, T arg1) {
-    void _send(Function? fn) => fn!.call(arg1);
-    _cache[topic]?.forEach(_send);
-    _cacheOnce[topic]?.forEach(_send);
-    _cacheOnce.remove(topic);
-  }
-
-  /// Publishes the specified event [topic] along with the given arguments
-  /// [arg1] and [arg2] to all registered callbacks for that event.
-  void publish2<T, S>(String topic, T arg1, S arg2) {
-    void _send(Function? fn) => fn!.call(arg1, arg2);
-    _cache[topic]?.forEach(_send);
-    _cacheOnce[topic]?.forEach(_send);
-    _cacheOnce.remove(topic);
-  }
-
-  /// Publishes the specified event [topic] to all registered callbacks for
-  /// that event without any arguments.
-  void publish(String topic) {
-    void _send(Function? fn) => fn!.call();
-    _cache[topic]?.forEach(_send);
-    _cacheOnce[topic]?.forEach(_send);
-    _cacheOnce.remove(topic);
-  }
-
-  /// Registers a callback to listen for the specified event [topic].
-  /// The [callback] will only be called once for this event.
-  ///
-  /// Returns `true` if the callback was added, `false` if it was already added.
-  bool once(String topic, Function callback) {
-    if (!_cacheOnce.containsKey(topic)) {
-      _cacheOnce[topic] = [];
-    }
-    if (!_cacheOnce[topic]!.contains(callback)) {
-      _cacheOnce[topic]!.add(callback);
-      return true;
-    }
-    return false;
-  }
-
-  /// Registers a [callback] to listen for the specified event [topic].
-  ///
-  /// Returns `true` if the callback was added, `false` if it was already added.
-  bool subscribe(String topic, Function callback) {
-    if (!_cache.containsKey(topic)) {
-      _cache[topic] = [];
-    }
-    if (!_cache[topic]!.contains(callback)) {
-      _cache[topic]!.add(callback);
-      return true;
-    }
-    return false;
-  }
-
-  /// Unregisters the specified [callback] from the specified event [topic].
-  ///
-  /// Returns `true` if the callback was found and removed, `false` otherwise.
-  bool unsubscribe(String topic, Function callback) {
-    final subs = _cache[topic]!;
-    return subs.remove(callback);
-  }
-
   /// Get the number of subscriptions for a [topic] in the event system.
   int count(String topic) {
     return _cache[topic]?.length ?? 0;
@@ -125,14 +40,6 @@ class MPS {
     return _cacheOnce[topic]?.length ?? 0;
   }
 
-  /// Remove a specific [callback] from a [topic]'s subscription list in the
-  /// event system. If the function is in the list, removes it from the
-  /// subscription and one-time subscription lists.
-  void off(String topic, Function? callback) {
-    _cache[topic]?.remove(callback);
-    _cacheOnce[topic]?.remove(callback);
-  }
-
   /// Emits a signal to all subscribed functions for a [topic] in the event
   /// system. This method calls all functions subscribed to the topic with no
   /// arguments. Any errors thrown by the functions are silently ignored.
@@ -141,19 +48,6 @@ class MPS {
     _cache[topic]?.forEach(_send);
     _cacheOnce[topic]?.forEach(_send);
     _cacheOnce.remove(topic);
-    return this;
-  }
-
-  /// Subscribe a function to a [topic] in the event system. If the [callback]
-  /// is not already subscribed, adds it to the subscription list. Returns true
-  /// if the function was added to the list, false if it was already subscribed.
-  MPS on(String topic, Function? callback) {
-    if (!_cache.containsKey(topic)) {
-      _cache[topic] = [];
-    }
-    if (!_cache[topic]!.contains(callback)) {
-      _cache[topic]!.add(callback);
-    }
     return this;
   }
 
@@ -207,10 +101,116 @@ class MPS {
     _cacheOnce.remove(topic);
   }
 
+  /// Remove a specific [callback] from a [topic]'s subscription list in the
+  /// event system. If the function is in the list, removes it from the
+  /// subscription and one-time subscription lists.
+  void off(String topic, Function? callback) {
+    _cache[topic]?.remove(callback);
+    _cacheOnce[topic]?.remove(callback);
+  }
+
   /// Removes all callbacks subscribed to the given [event].
   ///
   /// This method removes the list of callbacks subscribed to the given [event]
   /// from the cache, and returns `true` if the event was found and removed. If
   /// no callbacks are found for the given [event], this method returns `false`.
   bool offAll(String event) => _cache.remove(event) != null;
+
+  /// Subscribe a function to a [topic] in the event system. If the [callback]
+  /// is not already subscribed, adds it to the subscription list. Returns true
+  /// if the function was added to the list, false if it was already subscribed.
+  MPS on(String topic, Function? callback) {
+    if (!_cache.containsKey(topic)) {
+      _cache[topic] = [];
+    }
+    if (!_cache[topic]!.contains(callback)) {
+      _cache[topic]!.add(callback);
+    }
+    return this;
+  }
+
+  /// Registers a callback to listen for the specified event [topic].
+  /// The [callback] will only be called once for this event.
+  ///
+  /// Returns `true` if the callback was added, `false` if it was already added.
+  bool once(String topic, Function callback) {
+    if (!_cacheOnce.containsKey(topic)) {
+      _cacheOnce[topic] = [];
+    }
+    if (!_cacheOnce[topic]!.contains(callback)) {
+      _cacheOnce[topic]!.add(callback);
+      return true;
+    }
+    return false;
+  }
+
+  /// Publishes the specified event [topic] to all registered callbacks for
+  /// that event without any arguments.
+  void publish(String topic) {
+    void _send(Function? fn) => fn!.call();
+    _cache[topic]?.forEach(_send);
+    _cacheOnce[topic]?.forEach(_send);
+    _cacheOnce.remove(topic);
+  }
+
+  /// Publishes the specified event [topic] along with the given [arg1]
+  /// (argument) to all registered callbacks for that event.
+  void publish1<T>(String topic, T arg1) {
+    void _send(Function? fn) => fn!.call(arg1);
+    _cache[topic]?.forEach(_send);
+    _cacheOnce[topic]?.forEach(_send);
+    _cacheOnce.remove(topic);
+  }
+
+  /// Publishes the specified event [topic] along with the given arguments
+  /// [arg1] and [arg2] to all registered callbacks for that event.
+  void publish2<T, S>(String topic, T arg1, S arg2) {
+    void _send(Function? fn) => fn!.call(arg1, arg2);
+    _cache[topic]?.forEach(_send);
+    _cacheOnce[topic]?.forEach(_send);
+    _cacheOnce.remove(topic);
+  }
+
+  /// Publishes the specified [topic] along with the given [CallbackParams] to
+  /// all registered callbacks for that [topic].
+  ///
+  /// The [CallbackParams] provide positional and named arguments to pass to the
+  /// callbacks.
+  void publishParams(String topic, CallbackParams args) {
+    void _send(Function? fn) =>
+        Function.apply(fn!, args.positional, args.named);
+    _cache[topic]?.forEach(_send);
+    _cacheOnce[topic]?.forEach(_send);
+    _cacheOnce.remove(topic);
+  }
+
+  /// Registers a [callback] to listen for the specified event [topic].
+  ///
+  /// Returns `true` if the callback was added, `false` if it was already added.
+  bool subscribe(String topic, Function callback) {
+    if (!_cache.containsKey(topic)) {
+      _cache[topic] = [];
+    }
+    if (!_cache[topic]!.contains(callback)) {
+      _cache[topic]!.add(callback);
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  String toString() {
+    return 'MPS {'
+        '\n  cache: $_cache,'
+        '\n  cacheOnce: $_cacheOnce'
+        '\n}';
+  }
+
+  /// Unregisters the specified [callback] from the specified event [topic].
+  ///
+  /// Returns `true` if the callback was found and removed, `false` otherwise.
+  bool unsubscribe(String topic, Function callback) {
+    final subs = _cache[topic]!;
+    return subs.remove(callback);
+  }
 }

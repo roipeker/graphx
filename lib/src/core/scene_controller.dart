@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../graphx.dart';
 
+/// A function that returns the global coordinates of the widget.
+typedef WindowBoundsResolver = GRect? Function();
+
 /// Entry point of GraphX world.
 /// A [SceneController] manages (up to) 2 [SceneRoot]s: `back` and `front`
 /// which correlates to [CustomPainter.painter] and
@@ -21,33 +24,11 @@ class SceneController {
   ///  });`
   Signal? _onHotReload;
 
-  /// The [Signal] that is dispatched when the Stateful Widget gets reassembled.
-  Signal get onHotReload => _onHotReload ??= Signal();
-
   /// The [ScenePainter] for the back layer of this [SceneController].
   ScenePainter? backScene;
 
   /// The [ScenePainter] for the front layer of this SceneController.
   ScenePainter? frontScene;
-
-  /// Access the `ticker` (if any) created by this SceneController.
-  GTicker? get ticker {
-    if (_ticker == null) {
-      throw 'You need to enable ticker usage with '
-          'SceneBuilderWidget( useTicker=true ) or '
-          'RootScene::setup(useTicker: true), or '
-          'RootScene::setup(autoUpdateAndRender: true)';
-    }
-    return _ticker;
-  }
-
-  /// Access the keyboard manager instance associated with this
-  /// [SceneController].
-  KeyboardManager get keyboard => _keyboard;
-
-  /// Access the pointer manager instance associated with this
-  /// [SceneController].
-  PointerManager get pointer => _pointer;
 
   /// The [KeyboardManager] instance associated with this SceneController.
   late KeyboardManager _keyboard;
@@ -58,12 +39,11 @@ class SceneController {
   /// The [GTicker] instance associated with this SceneController.
   GTicker? _ticker;
 
+  /// (Internal usage)
   /// The [InputConverter] instance associated with this SceneController.
   late InputConverter $inputConverter;
 
-  /// The [SceneConfig] instance associated with this SceneController.
-  SceneConfig get config => _config;
-
+  /// The configuration object for the Scene.
   final _config = SceneConfig();
 
   /// A function that returns the global coordinates of the widget.
@@ -71,20 +51,8 @@ class SceneController {
   /// later.
   WindowBoundsResolver? resolveWindowBounds;
 
-  /// The ID of this SceneController.
-  int id = -1;
-
+  /// Flag to track whether the Scene is initialized.
   bool _isInited = false;
-
-  set config(SceneConfig sceneConfig) {
-    _config.rebuildOnHotReload = sceneConfig.rebuildOnHotReload;
-    _config.autoUpdateRender = sceneConfig.autoUpdateRender;
-    _config.isPersistent = sceneConfig.isPersistent;
-    _config.painterWillChange = sceneConfig.painterWillChange;
-    _config.useKeyboard = sceneConfig.useKeyboard;
-    _config.usePointer = sceneConfig.usePointer;
-    _config.useTicker = sceneConfig.useTicker;
-  }
 
   /// The [SceneController] constructor.
   ///
@@ -106,7 +74,42 @@ class SceneController {
     this.config = config ?? SceneConfig.defaultConfig;
   }
 
-  /// WARNING: Internal method
+  /// The [SceneConfig] instance associated with this SceneController.
+  SceneConfig get config => _config;
+
+  set config(SceneConfig sceneConfig) {
+    _config.rebuildOnHotReload = sceneConfig.rebuildOnHotReload;
+    _config.autoUpdateRender = sceneConfig.autoUpdateRender;
+    _config.isPersistent = sceneConfig.isPersistent;
+    _config.painterWillChange = sceneConfig.painterWillChange;
+    _config.useKeyboard = sceneConfig.useKeyboard;
+    _config.usePointer = sceneConfig.usePointer;
+    _config.useTicker = sceneConfig.useTicker;
+  }
+
+  /// Access the keyboard manager instance associated with this
+  /// [SceneController].
+  KeyboardManager get keyboard => _keyboard;
+
+  /// The [Signal] that is dispatched when the Stateful Widget gets reassembled.
+  Signal get onHotReload => _onHotReload ??= Signal();
+
+  /// Access the pointer manager instance associated with this
+  /// [SceneController].
+  PointerManager get pointer => _pointer;
+
+  /// Access the `ticker` (if any) created by this SceneController.
+  GTicker? get ticker {
+    if (_ticker == null) {
+      throw 'You need to enable ticker usage with '
+          'SceneBuilderWidget( useTicker=true ) or '
+          'RootScene::setup(useTicker: true), or '
+          'RootScene::setup(autoUpdateAndRender: true)';
+    }
+    return _ticker;
+  }
+
+  /// (Internal usage)
   /// called internally from [SceneBuilderWidget].
   void $init() {
     if (_isInited) {
@@ -124,33 +127,11 @@ class SceneController {
     _isInited = true;
   }
 
-  /// Initializes the [SceneController].
-  void setup() {
-    if (!GTween.initializedCommonWraps) {
-      /// you can add your own `CustomTween.wrap()` registering.
-      GTween.registerCommonWraps([
-        GTweenableBlur.wrap,
-        GTweenableDropShadowFilter.wrap,
-        GTweenableGlowFilter.wrap,
-      ]);
-    }
-    backScene?.$setup();
-    frontScene?.$setup();
-  }
+  /// Builds the back [CustomPainter] associated with this [SceneController].
+  CustomPainter? buildBackPainter() => backScene?.buildPainter();
 
-  /// The function that is called on each frame of the [GTicker].
-  /// [GTicker] that runs the `enterFrame`.
-  /// Is independent from the rendering pipeline.
-  void _onTick(double elapsed) {
-    GTween.processTick(elapsed);
-    frontScene?.tick(elapsed);
-    backScene?.tick(elapsed);
-  }
-
-  /// Resumes the [GTicker].
-  void resumeTicker() {
-    ticker?.resume();
-  }
+  /// Builds the front [CustomPainter] associated with this [SceneController].
+  CustomPainter? buildFrontPainter() => frontScene?.buildPainter();
 
   /// Disposes of this [SceneController].
   void dispose() {
@@ -165,11 +146,46 @@ class SceneController {
     _isInited = false;
   }
 
-  /// Builds the back [CustomPainter] associated with this [SceneController].
-  CustomPainter? buildBackPainter() => backScene?.buildPainter();
+  /// (Internal usage)
+  /// Called when the Stateful Widget gets reassembled.
+  void reassembleWidget() {
+    _onHotReload?.dispatch();
+    if (_config.rebuildOnHotReload) {
+      GTween.hotReload();
+      dispose();
 
-  /// Builds the front [CustomPainter] associated with this [SceneController].
-  CustomPainter? buildFrontPainter() => frontScene?.buildPainter();
+      /// TODO: check if we need to delay the reinitialization.
+      $init();
+    }
+  }
+
+  /// Resumes the [GTicker].
+  void resumeTicker() {
+    ticker?.resume();
+  }
+
+  /// Initializes the [SceneController].
+  void setup() {
+    if (!GTween.initializedCommonWraps) {
+      /// you can add your own `CustomTween.wrap()` registering.
+      GTween.registerCommonWraps([
+        GTweenableBlur.wrap,
+        GTweenableDropShadowFilter.wrap,
+        GTweenableGlowFilter.wrap,
+      ]);
+    }
+    backScene?.$setup();
+    frontScene?.$setup();
+  }
+
+  /// Returns `true` if either the back or front [ScenePainter] is set to
+  /// auto-update and render.
+  bool _anySceneAutoUpdate() =>
+      _sceneAutoUpdate(backScene) || _sceneAutoUpdate(frontScene);
+
+  /// Returns `true` if either the back or front [ScenePainter] is set to
+  /// auto-update and render, or if the ticker is being used.
+  bool _hasTicker() => _anySceneAutoUpdate() || _config.useTicker;
 
   /// Initializes the input manager for this [SceneController].
   void _initInput() {
@@ -188,32 +204,17 @@ class SceneController {
     $inputConverter = InputConverter(_pointer, _keyboard);
   }
 
-  /// (internal) Called when the Stateful Widget gets reassembled.
-  void reassembleWidget() {
-    _onHotReload?.dispatch();
-    if (_config.rebuildOnHotReload) {
-      GTween.hotReload();
-      dispose();
-
-      /// TODO: check if we need to delay the reinitialization.
-      $init();
-    }
+  /// The function that is called on each frame of the [GTicker].
+  /// [GTicker] that runs the `enterFrame`.
+  /// Is independent from the rendering pipeline.
+  void _onTick(double elapsed) {
+    GTween.processTick(elapsed);
+    frontScene?.tick(elapsed);
+    backScene?.tick(elapsed);
   }
 
   /// Returns `true` if either the back or front [ScenePainter] is set to
   /// auto-update and render.
   bool _sceneAutoUpdate(ScenePainter? scene) =>
       scene?.autoUpdateAndRender ?? false;
-
-  /// Returns `true` if either the back or front [ScenePainter] is set to
-  /// auto-update and render.
-  bool _anySceneAutoUpdate() =>
-      _sceneAutoUpdate(backScene) || _sceneAutoUpdate(frontScene);
-
-  /// Returns `true` if either the back or front [ScenePainter] is set to
-  /// auto-update and render, or if the ticker is being used.
-  bool _hasTicker() => _anySceneAutoUpdate() || _config.useTicker;
 }
-
-/// A function that returns the global coordinates of the widget.
-typedef WindowBoundsResolver = GRect? Function();

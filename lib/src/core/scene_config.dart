@@ -1,3 +1,5 @@
+/// Configuration class used to define the properties and behavior of a GraphX
+/// Scene.
 class SceneConfig {
   /// **static drawing** configuration, this tells the [SceneController] that
   /// this GraphX Scene will not change (although you might invalidate it
@@ -84,6 +86,7 @@ class SceneConfig {
   /// you should leave it as `true`.
   late bool autoUpdateRender;
 
+  /// Creates a new [SceneConfig] instance.
   SceneConfig({
     this.rebuildOnHotReload = true,
     this.useKeyboard = false,
@@ -98,7 +101,6 @@ class SceneConfig {
 
   /// Utility method used by the [SceneBuilderWidget] to set the flag
   /// `CustomPaint.willChange`
-  ///
   bool painterMightChange() {
     if (useTicker || autoUpdateRender || usePointer || useKeyboard) {
       return true;

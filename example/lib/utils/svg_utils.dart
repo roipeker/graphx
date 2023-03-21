@@ -1,7 +1,6 @@
 // import 'dart:ui' as ui;
 
 // import 'package:flutter_svg/flutter_svg.dart' as svg;
-// import 'package:graphx/graphx.dart';
 
 // /// Utilities to work with `flutter_svg`.
 // class SvgUtils {

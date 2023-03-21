@@ -57,6 +57,7 @@ class MouseInputData {
 
   /// Whether the primary mouse button is pressed.
   bool get isPrimaryDown => buttonsFlags! & kPrimaryButton == kPrimaryButton;
+
   /// Whether the secondary mouse button is pressed.
   bool get isSecondaryDown =>
       buttonsFlags! & kSecondaryButton == kSecondaryButton;
