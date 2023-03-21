@@ -81,6 +81,10 @@ class GlyphVariations {
   /// changes, and invalidates the style on [GIcon] and [GText]
   Function? onUpdate;
 
+  /// This field is used to update the glyph variations applied to the [GIcon]
+  /// or [GText] objects that use this [GlyphVariations] instance. The
+  /// variations can be set by modifying the individual variation values using
+  /// the [fill], [weight], [grade], and [opticalSize] setters.
   List<FontVariation>? _data;
 
   /// Creates a new instance of [GlyphVariations].
@@ -99,56 +103,75 @@ class GlyphVariations {
         _opticalSize = opticalSize;
 
   /// Returns the [FontVariation] list based on the current variation values.
-  List<FontVariation>? get data => _data;
+  List<FontVariation>? get data {
+    return _data;
+  }
 
   /// The fill variation value. Null means no fill variation.
-  double? get fill => _fill;
+  double? get fill {
+    return _fill;
+  }
 
   /// Sets the fill variation value. Null means no fill variation.
-  set fill(double? value) {
-    if (_fill == value) return;
-    _fill = value;
+  set fill(double? fill) {
+    if (_fill == fill) {
+      return;
+    }
+    _fill = fill;
     _invalidateModel();
   }
 
   /// The grade variation value. Null means no grade variation.
-  double? get grade => _grade;
+  double? get grade {
+    return _grade;
+  }
 
   /// Sets the grade variation value. Null means no grade variation.
-  set grade(double? value) {
-    if (_grade == value) return;
-    _grade = value;
+  set grade(double? grade) {
+    if (_grade == grade) {
+      return;
+    }
+    _grade = grade;
     _invalidateModel();
   }
 
   /// The optical size variation value. Null means no optical size variation.
-  double? get opticalSize => _opticalSize;
+  double? get opticalSize {
+    return _opticalSize;
+  }
 
   /// Sets the optical size variation value. Null means no optical size
   /// variation.
-  set opticalSize(double? value) {
-    if (_opticalSize == value) return;
-    _opticalSize = value;
+  set opticalSize(double? opticalSize) {
+    if (_opticalSize == opticalSize) {
+      return;
+    }
+    _opticalSize = opticalSize;
     _invalidateModel();
   }
 
   /// The [weight] variation value. Null means no weight variation.
-  double? get weight => _weight;
+  double? get weight {
+    return _weight;
+  }
 
   /// Sets the [weight] variation value. Null means no weight variation.
-  set weight(double? value) {
-    if (_weight == value) return;
-    _weight = value;
+  set weight(double? weight) {
+    if (_weight == weight) {
+      return;
+    }
+    _weight = weight;
     _invalidateModel();
   }
 
   /// (Internal usage)
   /// Returns true if any variation value is not null.
-  bool $isValid() =>
-      _fill != null ||
-      _weight != null ||
-      _grade != null ||
-      _opticalSize != null;
+  bool $isValid() {
+    return _fill != null ||
+        _weight != null ||
+        _grade != null ||
+        _opticalSize != null;
+  }
 
   /// Invalidates the current instance, clearing any existing font variations
   /// and updating the [data] field with a new set of variations, based on the
