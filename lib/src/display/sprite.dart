@@ -6,23 +6,51 @@ import '../../graphx.dart';
 /// vector graphics (using the internal [Graphics] ckass) and can also contain
 /// child display objects.
 class GSprite extends GDisplayObjectContainer {
-  @override
-  String toString() {
-    final msg = name != null ? '(name:"$name")' : '';
-    return '$runtimeType#$hashCode$msg';
-  }
-
+  /// A helper matrix used for various calculations.
   static final _sHelperMatrix = GMatrix();
 
+  // The [graphics] object associated with this sprite.
   Graphics? _graphics;
 
+  // Returns the [graphics] object associated with this sprite.
+  // If the _graphics field is null, it is assigned a new [Graphics] object.
+  // This means that the graphics object is lazily initialized when it is first
+  // requested.
+  // This allows the sprite to be used without graphics until it is needed.
   Graphics get graphics => _graphics ??= Graphics();
 
+  /// (Internal usage)
+  /// Applies the paint to the given [canvas] for this [GSprite]. The graphics
+  /// will be used to paint the [canvas], and if this [GSprite] has child
+  /// display objects, their paint will also be applied.
+  ///
+  /// The [canvas] parameter is the [ui.Canvas] object to apply the paint to.
+  @override
+  void $applyPaint(ui.Canvas canvas) {
+    if (!$hasVisibleArea) return;
+    _graphics?.alpha = worldAlpha;
+    _graphics?.paint(canvas);
+    if (hasChildren) {
+      super.$applyPaint(canvas);
+    }
+  }
+
+  /// Disposes of this [GSprite] and its graphics resources.
+  @override
+  @mustCallSuper
+  void dispose() {
+    /// TODO: dispose children?
+    _graphics?.dispose();
+    _graphics = null;
+    super.dispose();
+  }
+
   /// Returns a [GRect] object representing the bounds of this [GSprite] in the
-  /// coordinate space of the [targetSpace] object. If the [out] parameter is not
-  /// null, the result will be stored in that object and returned. Otherwise, a
-  /// new [GRect] object will be created and returned. If this [GSprite] has
-  /// graphics, the bounds will be expanded to include the bounds of the graphics.
+  /// coordinate space of the [targetSpace] object. If the [out] parameter is
+  /// not null, the result will be stored in that object and returned.
+  /// Otherwise, a new [GRect] object will be created and returned. If this
+  /// [GSprite] has graphics, the bounds will be expanded to include the bounds
+  /// of the graphics.
   ///
   /// The [targetSpace] parameter is the object that defines the coordinate
   /// system to use for the resulting bounds. If it is null, the bounds will be
@@ -62,8 +90,8 @@ class GSprite extends GDisplayObjectContainer {
   /// test for containment, in the local coordinate space of this [GSprite].
   ///
   /// The [useShape] parameter is an optional boolean value that determines
-  /// whether to use the shape of the [GSprite] or the bounds of the [GSprite] to
-  /// test for containment. If it is not specified, it will default to false.
+  /// whether to use the shape of the [GSprite] or the bounds of the [GSprite]
+  /// to test for containment. If it is not specified, it will default to false.
   ///
   /// Returns the [GDisplayObject] that contains the point, or null if the point
   /// is not contained within this [GSprite].
@@ -76,28 +104,10 @@ class GSprite extends GDisplayObjectContainer {
     return target;
   }
 
-  /// Applies the paint to the given [canvas] for this [GSprite]. The graphics
-  /// will be used to paint the [canvas], and if this [GSprite] has child display
-  /// objects, their paint will also be applied.
-  ///
-  /// The [canvas] parameter is the [ui.Canvas] object to apply the paint to.
+  /// Returns a string representation of this object.
   @override
-  void $applyPaint(ui.Canvas canvas) {
-    if (!$hasVisibleArea) return;
-    _graphics?.alpha = worldAlpha;
-    _graphics?.paint(canvas);
-    if (hasChildren) {
-      super.$applyPaint(canvas);
-    }
-  }
-
-  /// Disposes of this [GSprite] and its graphics resources.
-  @override
-  @mustCallSuper
-  void dispose() {
-    /// TODO: dispose children?
-    _graphics?.dispose();
-    _graphics = null;
-    super.dispose();
+  String toString() {
+    final msg = name != null ? '(name:"$name")' : '';
+    return '$runtimeType#$hashCode$msg';
   }
 }

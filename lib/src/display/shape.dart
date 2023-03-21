@@ -1,29 +1,76 @@
 import 'dart:ui' as ui;
+
 import '../../graphx.dart';
 
 /// The [GShape] class represents a display object that can be used to draw
 /// vector graphics using the [Graphics] class. It extends the [GDisplayObject]
 /// so is renders on screen.
 class GShape extends GDisplayObject {
-  Graphics? _graphics;
+  /// A helper matrix used for various calculations.
   static final _sHelperMatrix = GMatrix();
 
-  @override
-  String toString() {
-    final msg = name != null ? ' {name: $name}' : '';
-    return '$runtimeType (Shape)$msg';
-  }
+  static ui.Path? _inverseHugePath;
+
+  // The [Graphics] object associated with this [GShape].
+  Graphics? _graphics;
 
   /// Returns the [Graphics] object associated with this [GShape], creating it
   /// if it doesn't already exist. The [Graphics] object is used to draw vector
   /// graphics.
   Graphics get graphics => _graphics ??= Graphics();
 
+  /// (Internal usage) Applies the paint to the given [canvas] for this
+  /// [GShape]. If this [GShape] is being used as a mask, the graphics will be
+  /// used to clip the [canvas].
+  ///
+  /// The [canvas] parameter is the [ui.Canvas] object to apply the paint to.
+  @override
+  void $applyPaint(ui.Canvas canvas) {
+    if (isMask && _graphics != null) {
+      GMatrix matrix;
+      var paths = _graphics!.getPaths();
+      if (inStage && $maskee!.inStage) {
+        matrix = getTransformationMatrix($maskee);
+      } else {
+        matrix = transformationMatrix;
+      }
+      var clipPath = paths.transform(matrix.toNative().storage);
+      final inverted = maskInverted || $maskee!.maskInverted;
+      if (inverted) {
+        _initInversePath();
+//        var invPath = Graphics.stageRectPath;
+//        var rect = $maskee.bounds;
+//        invPath = invPath.shift(Offset(rect.x, rect.y));
+        if (SystemUtils.usingSkia) {
+          clipPath = ui.Path.combine(
+              ui.PathOperation.difference, _inverseHugePath!, clipPath);
+          canvas.clipPath(clipPath);
+        } else {
+          trace('Shape.maskInverted is unsupported in the current platform');
+        }
+      } else {
+        canvas.clipPath(clipPath);
+      }
+    } else {
+      _graphics?.isMask = isMask;
+      _graphics?.alpha = worldAlpha;
+      _graphics?.paint(canvas);
+    }
+  }
+
+  /// Disposes of this [GShape] and its graphics resources.
+  @override
+  void dispose() {
+    _graphics?.dispose();
+    _graphics = null;
+    super.dispose();
+  }
+
   /// Returns the bounds of this [GShape] in the coordinate system of the
   /// [targetSpace] object. If the [out] parameter is not null, the result will
-  /// be stored in that object and returned. Otherwise, a new [GRect] object will
-  /// be created and returned. If this [GShape] has no graphics, the bounds will
-  /// be based on its position and size.
+  /// be stored in that object and returned. Otherwise, a new [GRect] object
+  /// will be created and returned. If this [GShape] has no graphics, the bounds
+  /// will be based on its position and size.
   ///
   /// The [matrix] parameter is an optional matrix that is used to transform the
   /// bounds from the local coordinate space of this [GShape] to the coordinate
@@ -89,7 +136,12 @@ class GShape extends GDisplayObject {
     return (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;
   }
 
-  static ui.Path? _inverseHugePath;
+  /// Returns a string representation of this object.
+  @override
+  String toString() {
+    final msg = name != null ? ' {name: $name}' : '';
+    return '$runtimeType (Shape)$msg';
+  }
 
   /// Initializes an inverse "huge" path used for masking when the mask is
   /// inverted. This method is called internally when needed to initialize the
@@ -103,51 +155,5 @@ class GShape extends GDisplayObject {
     var r = Pool.getRect(-w / 2, -w / 2, w, w);
     _inverseHugePath!.addRect(r.toNative());
     _inverseHugePath!.close();
-  }
-
-  /// Applies the paint to the given [canvas] for this [GShape]. If this [GShape]
-  /// is being used as a mask, the graphics will be used to clip the [canvas].
-  ///
-  /// The [canvas] parameter is the [ui.Canvas] object to apply the paint to.
-  @override
-  void $applyPaint(ui.Canvas canvas) {
-    if (isMask && _graphics != null) {
-      GMatrix matrix;
-      var paths = _graphics!.getPaths();
-      if (inStage && $maskee!.inStage) {
-        matrix = getTransformationMatrix($maskee);
-      } else {
-        matrix = transformationMatrix;
-      }
-      var clipPath = paths.transform(matrix.toNative().storage);
-      final inverted = maskInverted || $maskee!.maskInverted;
-      if (inverted) {
-        _initInversePath();
-//        var invPath = Graphics.stageRectPath;
-//        var rect = $maskee.bounds;
-//        invPath = invPath.shift(Offset(rect.x, rect.y));
-        if (SystemUtils.usingSkia) {
-          clipPath = ui.Path.combine(
-              ui.PathOperation.difference, _inverseHugePath!, clipPath);
-          canvas.clipPath(clipPath);
-        } else {
-          trace('Shape.maskInverted is unsupported in the current platform');
-        }
-      } else {
-        canvas.clipPath(clipPath);
-      }
-    } else {
-      _graphics?.isMask = isMask;
-      _graphics?.alpha = worldAlpha;
-      _graphics?.paint(canvas);
-    }
-  }
-
-  /// Disposes of this [GShape] and its graphics resources.
-  @override
-  void dispose() {
-    _graphics?.dispose();
-    _graphics = null;
-    super.dispose();
   }
 }
