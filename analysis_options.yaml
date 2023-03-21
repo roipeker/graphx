@@ -13,6 +13,8 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    package_api_docs: true
+    public_member_api_docs: true
     avoid_renaming_method_parameters: false
     prefer_relative_imports: true
     avoid_redundant_argument_values: true

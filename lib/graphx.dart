@@ -5,6 +5,7 @@ export 'package:flutter/services.dart';
 
 export 'src/core/core.dart';
 export 'src/debug/debug.dart';
+export 'src/extensions/extensions.dart';
 export 'src/display/display.dart';
 export 'src/events/events.dart';
 export 'src/geom/geom.dart';

@@ -1,12 +1,18 @@
 import 'dart:ui';
 
-import 'package:graphx/graphx.dart';
+import '../../graphx.dart';
 
-/// Utility wrapper for FragmentShader
-/// It provides a utility to load a shader from resources, and allows setting
-/// floats and images to be used in the shader.
-//
-/// Allows to set the shader properties and update the shader.
+/// Utility wrapper for FragmentShader.
+///
+/// The fragment shader is responsible for rendering the pixel colors of the
+/// canvas.
+///
+/// To create a [DisplayShader] you can either load it from a shader file using
+/// the `await DisplayShader.load("shader_id")` method or create it directly by
+/// subclassing this class and overriding the [floats] getter to return the list
+/// of float values to be used as uniforms in the shader.
+///
+/// Allows to set the shader properties and call update().
 ///
 /// ```dart
 /// class MyCustomShader extends DisplayShader {
@@ -69,13 +75,59 @@ import 'package:graphx/graphx.dart';
 // }
 // ```
 abstract class DisplayShader implements FragmentShader {
-  /// Loads the shader with the specified [id] from resources.
-  /// Returns a [Future] that completes with a [FragmentProgram] when the shader is loaded.
-  static Future<FragmentProgram> load(String id) async {
-    return await ResourceLoader.loadShader(id, id);
+  /// A list of empty samplers that will be used when the fragment shader does
+  /// not require any texture inputs.
+  static final _emptySamplers = List<Image>.empty();
+
+  /// The fragment shader used to display the images.
+  FragmentShader? shader;
+
+  /// Creates a new [DisplayShader] with the specified [shader] and [id].
+  /// If the [shader] is not provided, attempts to load the shader with the [id].
+  DisplayShader({this.shader, String? id}) {
+    if (shader == null && id != null) {
+      if (!fromCache(id)) {
+        trace('''Warning, shader "$id" not found in cache.
+Did you call await DisplayShader.load("$id")?''');
+      }
+    }
   }
 
-  // Returns `true` if the shader with the specified [id] is found in the cache.
+  /// See [Shader.debugDisposed]
+  @override
+  bool get debugDisposed {
+    return shader?.debugDisposed ?? true;
+  }
+
+  /// List of floats IN ORDER to be set into the shader.
+  /// All vec2,vec3,vec4,float must be passed in order here.
+  List<double> get floats;
+
+  /// List of Images IN ORDER to be set into the shader as sampler2d.
+  List<Image> get samplers => _emptySamplers;
+
+  /// This method sets the float value at the specified [index] directly
+  /// into the shader, bypassing the [floats] list. If the [shader] is `null`,
+  /// this method does nothing.
+  void operator []=(int index, double value) {
+    floats[index] = value;
+    shader?.setFloat(index, value);
+  }
+
+  /// Shortcut for callable instance. Instead of calling `shader.update()`
+  /// When a property of a subclass is modified has to be called to commit
+  /// those changes to the FragmentShader.
+  void call() {
+    update();
+  }
+
+  /// See [Shader.dispose]
+  @override
+  void dispose() {
+    shader?.dispose();
+  }
+
+  /// Returns `true` if the shader with the specified [id] is found in the cache.
   /// If found, sets the [shader] field to the shader.
   /// If not found, returns `false`
   bool fromCache(String id) {
@@ -90,37 +142,20 @@ abstract class DisplayShader implements FragmentShader {
   /// Utility to get the size of an image (width and height) as List<double>
   /// to populate the [floats] in the Shader.
   @protected
-  List<double> imageSize(Image? img) =>
-      img == null ? const [0.0, 0.0] : [img.width + .0, img.height + .0];
-
-  static final _emptySamplers = List<Image>.empty();
-
-  /// The fragment shader used to display the images.
-  FragmentShader? shader;
-
-  /// List of floats IN ORDER to be set into the shader.
-  /// All vec2,vec3,vec4,float must be passed in order here.
-  List<double> get floats;
-
-  /// List of Images IN ORDER to be set into the shader as sampler2d.
-  List<Image> get samplers => _emptySamplers;
-
-  /// Creates a new [DisplayShader] with the specified [shader] and [id].
-  /// If the [shader] is not provided, attempts to load the shader with the [id].
-  DisplayShader({this.shader, String? id}) {
-    if (shader == null && id != null) {
-      if (!fromCache(id)) {
-        trace('''Warning, shader "$id" not found in cache.
-Did you call await DisplayShader.load("$id")?''');
-      }
-    }
+  List<double> imageSize(Image? img) {
+    return img == null ? const [0.0, 0.0] : [img.width + .0, img.height + .0];
   }
 
-  /// Shortcut for callable instance. Instead of calling `shader.update()`
-  /// When a property of a subclass is modified has to be called to commit
-  /// those changes to the FragmentShader.
-  void call() {
-    update();
+  /// See [Shader.setFloat]
+  @override
+  void setFloat(int index, double value) {
+    shader?.setFloat(index, value);
+  }
+
+  /// See [Shader.setImageSampler]
+  @override
+  void setImageSampler(int index, Image image) {
+    shader?.setImageSampler(index, image);
   }
 
   /// Updates the shader with the current values of the properties.
@@ -140,31 +175,10 @@ Did you call await DisplayShader.load("$id")?''');
     }
   }
 
-  /// Sets the float index directly into the shader.
-  void operator []=(int index, double value) {
-    floats[index] = value;
-    shader?.setFloat(index, value);
-  }
-
-  /// See [Shader.debugDisposed]
-  @override
-  bool get debugDisposed => shader?.debugDisposed ?? true;
-
-  /// See [Shader.dispose]
-  @override
-  void dispose() {
-    shader?.dispose();
-  }
-
-  /// See [Shader.setFloat]
-  @override
-  void setFloat(int index, double value) {
-    shader?.setFloat(index, value);
-  }
-
-  /// See [Shader.setImageSampler]
-  @override
-  void setImageSampler(int index, Image image) {
-    shader?.setImageSampler(index, image);
+  /// Loads the shader with the specified [id] from resources. Returns a
+  /// [Future] that completes with a [FragmentProgram] when the shader is
+  /// loaded.
+  static Future<FragmentProgram> load(String id) async {
+    return await ResourceLoader.loadShader(id, id);
   }
 }
