@@ -6,42 +6,90 @@ import 'package:http/http.dart' as http;
 
 import '../../graphx.dart';
 
+/// A callback function to handle [NetworkImageEvent] events.
 typedef NetworkEventCallback = Function(NetworkImageEvent);
 
-/// Utility class to load Network Images.
-/// Doesn't handle CORS on web.
+/// Represents an event in the process of loading an image or SVG.
+/// Warning: doesn't handle CORS on web.
 class NetworkImageEvent {
+  /// The number of bytes loaded so far.
   int bytesLoaded = 0;
 
-  /// only svg responses.
+  /// The SVG string data, if this event represents an SVG.
   String? svgString;
+
+  /// The parsed SVG data, if this event represents an SVG.
   SvgData? svgData;
 
-  double get percentLoaded => bytesLoaded / contentLength!;
+  /// The loaded image data, if this event represents an image.
   Image? image;
+
+  /// The scale of the loaded image, which can be used to adjust its size.
   double scale = 1;
 
+  /// The [GTexture] representing the loaded image, if it has been generated.
   GTexture? _texture;
+
+  /// The HTTP response that triggered this event.
   final http.BaseResponse response;
 
+  /// Creates a new [NetworkImageEvent] instance for the given [response].
+  NetworkImageEvent(this.response);
+
+  /// Returns the length of the response content, or null if it is unknown.
+  int? get contentLength {
+    return response.contentLength;
+  }
+
+  /// Returns the headers of the HTTP response.
+  Map<String, String> get headers {
+    return response.headers;
+  }
+
+  /// Returns true if this event represents an HTTP error.
+  bool get isError {
+    return statusCode > 300;
+  }
+
+  /// Returns true if this event represents an image.
+  bool get isImage {
+    return image != null;
+  }
+
+  /// Returns true if this event represents an SVG.
+  bool get isSvg {
+    return svgString != null;
+  }
+
+  /// The percentage of bytes loaded, as a decimal between 0 and 1.
+  double get percentLoaded {
+    return bytesLoaded / contentLength!;
+  }
+
+  /// Returns the reason phrase of the HTTP response.
+  String? get reasonPhrase {
+    return response.reasonPhrase;
+  }
+
+  /// Returns the HTTP request that triggered this event, if available.
+  http.BaseRequest? get request {
+    return response.request;
+  }
+
+  /// Returns the status code of the HTTP response.
+  int get statusCode {
+    return response.statusCode;
+  }
+
+  /// Returns the [GTexture] representing the loaded image, if it has been
+  /// generated.
   GTexture? get texture {
     if (image == null) return null;
     _texture ??= GTexture.fromImage(image!, scale);
     return _texture;
   }
 
-  NetworkImageEvent(this.response);
-
-  bool get isImage => image != null;
-  bool get isSvg => svgString != null;
-
-  int? get contentLength => response.contentLength;
-  int get statusCode => response.statusCode;
-  String? get reasonPhrase => response.reasonPhrase;
-  http.BaseRequest? get request => response.request;
-  Map<String, String> get headers => response.headers;
-  bool get isError => statusCode > 300;
-
+  /// Returns a string representation of this event.
   @override
   String toString() {
     if (isError) {
@@ -55,9 +103,15 @@ class NetworkImageEvent {
   }
 }
 
+/// This class provides methods for loading images and SVGs over the network
+/// and returning the result as a `NetworkImageEvent`.
 class NetworkImageLoader {
+  /// The HTTP client to use for loading images and svgs.
   static final http.Client _client = http.Client();
 
+  /// Loads an image from the specified [url] with the given [width], [height],
+  /// and [scale], and returns a Completer that resolves the [NetworkImageEvent]
+  /// upon completion.
   static Future<NetworkImageEvent> load(
     String url, {
     int? width,
@@ -132,6 +186,8 @@ class NetworkImageLoader {
     return completer.future;
   }
 
+  /// Loads an SVG from the specified [url] and returns a [NetworkImageEvent]
+  /// upon completion.
   static Future<NetworkImageEvent> loadSvg(
     String url, {
     NetworkEventCallback? onComplete,
