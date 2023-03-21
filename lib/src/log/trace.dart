@@ -1,48 +1,33 @@
 import 'dart:developer' as dev;
 
-int _traceCount = 0;
-bool _showOutsideTag = false;
-bool _showFilename = false;
-bool _showLinenumber = false;
-bool _showClassname = false;
-bool _showMethodname = false;
-bool _useStack = false;
+// The tag for anonymous methods in stack traces.
+const _anonymousMethodTag = '<anonymous closure>';
+
+/// Configuration options for [trace].
 String _customTag = 'graphx™🌀';
 String _separator = ', ';
-int _tagPaddingCount = 0;
+bool _showClassname = false;
+bool _showFilename = false;
+bool _showLinenumber = false;
+bool _showMethodname = false;
+bool _showOutsideTag = false;
 String _tagPaddingChar = ', ';
+int _tagPaddingCount = 0;
 
-/// Configure [trace] outputs for debug console.
-/// [showLinenumber] only works if [showFilename] is true.
-/// [tagPaddingCount] should be applied manually if you wanna have a cleaner
-/// tabulated view.
-void traceConfig({
-  String? customTag,
-  int tagPaddingCount = 0,
-  String tagPaddingChar = ' ',
-  bool showFilename = false,
-  bool showLinenumber = false,
-  bool showClassname = false,
-  bool showMethodname = false,
-  bool showOutsideTag = false,
-  String argsSeparator = ', ',
-}) {
-  _tagPaddingCount = tagPaddingCount;
-  _tagPaddingChar = tagPaddingChar;
-  _customTag = customTag ?? 'graphx™🌀';
-  _showFilename = showFilename;
-  _showLinenumber = showLinenumber;
-  _showClassname = showClassname;
-  _showMethodname = showMethodname;
-  _showOutsideTag = showOutsideTag;
-  _separator = argsSeparator;
-  _useStack = _showFilename || _showClassname || _showMethodname;
-}
+/// Counter to keep track of the number of traces logged.
+int _traceCount = 0;
 
-/// global callback that replaces [print()] in a similar way ActionScript
-/// `trace` works. It has up to 10 arguments slots so you can pass any type of
-/// object to be printed. The way trace() shows output in the console can be
-/// defined with [traceConfig()].
+// Determines whether to show the stack trace in the log output.
+bool _useStack = false;
+
+/// Global callback that replaces [print] in a similar way ActionScript
+/// `trace()` works.
+///
+/// It has up to 10 arguments slots so you can pass any type of object to be
+/// printed.
+///
+/// The way `trace()` shows output in the console can be defined with
+/// [traceConfig].
 void trace(
   dynamic arg1, [
   dynamic arg2,
@@ -90,8 +75,33 @@ void trace(
   );
 }
 
-const _anonymousMethodTag = '<anonymous closure>';
+/// Configure [trace] outputs for debug console. [showLinenumber] only works if
+/// [showFilename] is true. [tagPaddingCount] should be applied manually if you
+/// wanna have a cleaner tabulated view.
+void traceConfig({
+  String? customTag,
+  int tagPaddingCount = 0,
+  String tagPaddingChar = ' ',
+  bool showFilename = false,
+  bool showLinenumber = false,
+  bool showClassname = false,
+  bool showMethodname = false,
+  bool showOutsideTag = false,
+  String argsSeparator = ', ',
+}) {
+  _tagPaddingCount = tagPaddingCount;
+  _tagPaddingChar = tagPaddingChar;
+  _customTag = customTag ?? 'graphx™🌀';
+  _showFilename = showFilename;
+  _showLinenumber = showLinenumber;
+  _showClassname = showClassname;
+  _showMethodname = showMethodname;
+  _showOutsideTag = showOutsideTag;
+  _separator = argsSeparator;
+  _useStack = _showFilename || _showClassname || _showMethodname;
+}
 
+// Retrieves a stack trace and returns the corresponding output string.
 String _getStack() {
   var curr = StackTrace.current.toString();
   if (curr.startsWith('#0')) {
@@ -100,11 +110,31 @@ String _getStack() {
   return _stackWeb(curr);
 }
 
-String _stackWeb(String stack) {
-  // TODO: add parsing of stack trace for web.
-  return '';
-}
-
+/// Returns a formatted string with the method call stack trace.
+///
+/// The resulting string will include the file name and line number where the
+/// method was called, as well as the method name and class name (if available).
+/// This method is used internally by the `trace` method to generate the log
+/// tag.
+///
+/// If the `_showFilename` option is enabled, the resulting string will start
+/// with the file name (without the extension) and line number separated by a
+/// `↪` character.
+///
+/// If the `_showClassname` option is enabled, the resulting string will
+/// include the class name and method name separated by a `‣` character.
+///
+/// If the `_showMethodname` option is enabled, only the method name will be
+/// included in the resulting string.
+///
+/// Example output when `_showFilename`, `_showClassname`, and `_showMethodname`
+/// are all enabled:
+///
+/// ```
+/// my_file.dart ↪ 23 ‣ MyClass ‣ myMethod()
+/// ```
+///
+/// Returns an empty string if `_useStack` is false.
 String _stackCommon(String stack) {
   stack = stack.split('\n')[2];
   stack = stack.replaceAll('#2      ', '');
@@ -146,4 +176,10 @@ String _stackCommon(String stack) {
     }
   }
   return output;
+}
+
+/// Retrieves the output string for a stack trace in a web environment.
+String _stackWeb(String stack) {
+  // TODO: add parsing of stack trace for web.
+  return '';
 }
