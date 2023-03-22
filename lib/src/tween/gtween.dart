@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../../graphx.dart';
 
+part 'src/core/g_vars.dart';
 part 'src/core/prop_tween.dart';
 part 'src/easing/ease.dart';
 part 'src/extensions/common_types.dart';
-part 'src/extensions/display_object.dart';
+part 'src/extensions/display_object_types.dart';
 part 'src/extensions/geom_types.dart';
 part 'src/extensions/filter_types.dart';
 part 'src/gtween.dart';

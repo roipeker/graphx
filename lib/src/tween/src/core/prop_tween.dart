@@ -1,38 +1,70 @@
 part of gtween;
 
+/// (Internal usage)
+///
+/// Represents a property tween, which animates a single property of a target
+/// object over time.
+///
+/// This class is used internally by GTween, and should not be instantiated
+/// directly
+///
 class PropTween {
-  /// target or dynamic
+  /// The target or dynamic [GTweenable] object of this property tween.
   GTweenable? t;
 
-  /// property "name" (commonly a String), or value!
+  /// The property "name" (commonly a [String]), or value of this property tween.
   Object? p;
 
-  /// start value
+  /// The start value of this property tween.
   double s = 0.0;
 
-  /// amount to change, diff between end and start.
+  /// The amount to change, the difference between the end and start values.
   double? c;
 
-  /// original target object.
+  /// The original target object of this property tween.
   Object? cObj;
 
-  /// is function
+  /// Indicates if this property tween instance is a function.
   bool? f;
 
-  /// priority in render queue.
+  /// The priority in the render queue.
   int? pr;
 
-  /// target is tween plugin?
+  /// Indicates if the target of this property tween is a tween plugin.
   bool? pg;
 
-  // name of original target property. Typically same as `t`
+  /// The name of the original target property. Typically same as `t`.
   String? n;
 
-  /// rounded
+  /// Indicates if this property tween should be rounded.
   bool? r;
 
-  /// linked list next.
-  PropTween? _next, _prev;
+  /// The next property tween in the linked list.
+  PropTween? _next;
+
+  /// The previous property tween in the linked list.
+  PropTween? _prev;
+
+  /// Creates a new instance of [PropTween].
+  ///
+  /// This constructor is used internally by [GTween], and should not be used
+  /// directly.
+  ///
+  /// [target] The target object to animate.
+  ///
+  /// [property] The property to animate (commonly a String) or the value to
+  /// interpolate.
+  ///
+  /// [start] The starting value of the property.
+  ///
+  /// [change] The difference between the end value and the start value.
+  ///
+  /// [name] The name of the original target property. Typically the same as
+  /// `t`.
+  ///
+  /// [next] A reference to the next [PropTween] in the linked list.
+  ///
+  /// [priority] The priority in the render queue.
   PropTween({
     GTweenable? target,
     Object? property,

@@ -1,8 +1,43 @@
 part of gtween;
 
+/// An extension for the [GDisplayObject] class that provides a getter for
+/// creating a [GTweenableDisplayObject] object.
 extension GTweenDiplayObjectExt on GDisplayObject {
-  GTweenableDisplayObject get twn => GTweenableDisplayObject(this);
+  /// Returns a [GTweenableDisplayObject] object created from the current
+  /// [GDisplayObject].
+  GTweenableDisplayObject get twn {
+    return GTweenableDisplayObject(this);
+  }
 
+  /// Creates a [GTween] animation for the given properties and returns it.
+  ///
+  /// The [duration] parameter specifies the length of the tween animation, and
+  /// the remaining parameters specify the properties to tween (in seconds
+  /// `double` or frames `int`).
+  ///
+  /// The [ease] parameter can be used to specify an easing function to use for
+  /// the tween animation. Use [GEase]
+  ///
+  /// The [delay] parameter can be used to delay the start of the tween
+  /// animation (in seconds `double` or frames `int`).
+  ///
+  /// The [useFrames] parameter can be set to `true` to use frames instead of
+  /// seconds for the tween animation.
+  ///
+  /// The [overwrite] parameter specifies the mode of tweening when the [GTween]
+  /// animation already exists:
+  /// 0 = no overwrite.
+  /// 1 = overwrite all properties.
+  ///
+  /// The [onStart], [onStartParams], [onComplete], [onCompleteParams],
+  /// [onUpdate], and [onUpdateParams] parameters can be used to specify
+  /// functions to call at various stages of the tween animation.
+  ///
+  /// The [runBackwards] parameter can be set to `true` to run the tween
+  /// animation backwards.
+  ///
+  /// The [startAt] parameter can be used to specify the initial values of the
+  /// tween animation properties.
   GTween tween({
     required double duration,
     Object? x,
@@ -76,9 +111,14 @@ extension GTweenDiplayObjectExt on GDisplayObject {
     );
   }
 
-  /// properties and render immediately (using a tween animation with zero
-  /// duration). The [delay] parameter can be used to delay the start of the
-  /// "empty" tween animation that assigns the values.
+  /// Sets properties and renders them immediately (using a tween animation with
+  /// zero duration).
+  ///
+  /// The [delay] parameter can be used to delay the start of the "empty" tween
+  /// animation that assigns the values.
+  ///
+  /// This method calls the `tween` method with the given properties and zero
+  /// duration to apply the properties immediately.
   void setProps({
     Object? x,
     Object? y,
