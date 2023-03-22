@@ -244,23 +244,23 @@ abstract class ResourceLoader {
       return textureCache[cacheId]!;
     }
     Uint8List bytes;
-    try {
-      bytes = await httpGet(url);
-      final codec = await ui.instantiateImageCodec(
-        bytes,
-        allowUpscaling: false,
-        targetWidth: width,
-        targetHeight: height,
-      );
-      final image = (await codec.getNextFrame()).image;
-      final texture = GTexture.fromImage(image, resolution);
-      if (cacheId != null) {
-        textureCache[cacheId] = texture;
-      }
-      return texture;
-    } finally {
-      throw FlutterError('Unable to texture $url.');
+    // try {
+    bytes = await httpGet(url);
+    final codec = await ui.instantiateImageCodec(
+      bytes,
+      allowUpscaling: false,
+      targetWidth: width,
+      targetHeight: height,
+    );
+    final image = (await codec.getNextFrame()).image;
+    final texture = GTexture.fromImage(image, resolution);
+    if (cacheId != null) {
+      textureCache[cacheId] = texture;
     }
+    return texture;
+    // } finally {
+    //   throw FlutterError('Unable to texture $url.');
+    // }
   }
 
   /// Loads a shader program from the given [path]. If the program is already in
