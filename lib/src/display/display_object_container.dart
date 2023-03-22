@@ -46,10 +46,14 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   }
 
   /// Whether this container has any children.
-  bool get hasChildren => children.isNotEmpty;
+  bool get hasChildren {
+    return children.isNotEmpty;
+  }
 
   /// The number of children of this container.
-  int get numChildren => children.length;
+  int get numChildren {
+    return children.length;
+  }
 
   /// (Internal usage)
   /// Applies the container's paint to the specified [canvas].
@@ -61,7 +65,9 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   /// This method should not be called directly.
   @override
   void $applyPaint(ui.Canvas canvas) {
-    if (!$hasVisibleArea) return;
+    if (!$hasVisibleArea) {
+      return;
+    }
     for (var child in children) {
       if (child.$hasVisibleArea) {
         // var mask = child.$mask;
@@ -122,7 +128,9 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   /// well.
   @override
   void captureMouseInput(MouseInputData input) {
-    if (!$hasTouchableArea) return;
+    if (!$hasTouchableArea) {
+      return;
+    }
     if (mouseChildren) {
       /// from last child to the bottom to capture the input.
       for (var i = children.length - 1; i >= 0; --i) {
@@ -135,9 +143,13 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   /// Returns true if a given [child] is a descendant of this container, or
   /// false otherwise.
   bool contains(GDisplayObject? child, [bool recursive = true]) {
-    if (!recursive) return children.contains(child);
+    if (!recursive) {
+      return children.contains(child);
+    }
     while (child != null) {
-      if (child == this) return true;
+      if (child == this) {
+        return true;
+      }
       child = child.$parent;
     }
     return false;
@@ -199,7 +211,9 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   T getChildAt<T extends GDisplayObject>(int index) {
     final len = children.length;
     if (index < 0) index = len + index;
-    if (index >= 0 && index < len) return children[index] as T;
+    if (index >= 0 && index < len) {
+      return children[index] as T;
+    }
     throw RangeError('Invalid child index');
   }
 
@@ -225,14 +239,18 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   /// ```
   T? getChildByName<T extends GDisplayObject>(String name) {
     for (final child in children) {
-      if (child.name == name) return child as T;
+      if (child.name == name) {
+        return child as T;
+      }
     }
     return null;
   }
 
   /// Returns the index of a child in the list of children of this container,
   /// or -1 if the child is not found.
-  int getChildIndex(GDisplayObject child) => children.indexOf(child);
+  int getChildIndex(GDisplayObject child) {
+    return children.indexOf(child);
+  }
 
   /// Returns a list of display objects that are under the specified
   /// [localPoint].
@@ -331,7 +349,9 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
   /// Returns the removed child object, or `null` if the child is not a direct
   /// child of this container.
   T? removeChild<T extends GDisplayObject>(T child, [bool dispose = false]) {
-    if (child.$parent != this) return null;
+    if (child.$parent != this) {
+      return null;
+    }
     final index = getChildIndex(child);
     if (index > -1) return removeChildAt<T>(index, dispose);
     throw 'Invalid child index';
@@ -358,8 +378,12 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
       }
       child.$setParent(null);
       index = children.indexOf(child);
-      if (index >= 0) children.removeAt(index);
-      if (dispose) child.dispose();
+      if (index >= 0) {
+        children.removeAt(index);
+      }
+      if (dispose) {
+        child.dispose();
+      }
       return child as T;
     }
     throw 'Invalid child index';

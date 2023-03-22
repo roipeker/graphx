@@ -239,10 +239,14 @@ abstract class GDisplayObject
 
   /// (Internal usage)
   /// Whether this object has a color applied to it.
-  bool get $hasColorize => $colorize != null && $colorize!.alpha > 0;
+  bool get $hasColorize {
+    return $colorize != null && $colorize!.alpha > 0;
+  }
 
   /// Returns the alpha (transparency) value of this object.
-  double get alpha => $alpha;
+  double get alpha {
+    return $alpha;
+  }
 
   /// Sets the alpha (transparency) value of this object.
   /// The [value] parameter must be a value between 0.0 and 1.0.
@@ -274,10 +278,14 @@ abstract class GDisplayObject
   ///
   /// If [out] is non-null, the resulting bounds will be stored in that object
   /// and returned, otherwise a new [GRect] object will be created and returned.
-  GRect? get bounds => getBounds(this);
+  GRect? get bounds {
+    return getBounds(this);
+  }
 
   /// Gets the color applied to this object.
-  ui.Color? get colorize => $colorize;
+  ui.Color? get colorize {
+    return $colorize;
+  }
 
   /// Sets the color to apply to this object.
   set colorize(ui.Color? value) {
@@ -287,13 +295,19 @@ abstract class GDisplayObject
   }
 
   /// Gets the filters applied to this object.
-  List<GBaseFilter>? get filters => $filters;
+  List<GBaseFilter>? get filters {
+    return $filters;
+  }
 
   /// Sets the filters applied to this object.
-  set filters(List<GBaseFilter>? value) => $filters = value;
+  set filters(List<GBaseFilter>? value) {
+    $filters = value;
+  }
 
   /// Returns true if this object has any filters applied.
-  bool get hasFilters => filters?.isNotEmpty ?? false;
+  bool get hasFilters {
+    return filters?.isNotEmpty ?? false;
+  }
 
   /// Indicates the height of the display object, in dp.
   /// The `height` is calculated based on the bounds of the content of the
@@ -310,7 +324,9 @@ abstract class GDisplayObject
   /// ```
   /// A display object with no content (such as an empty sprite) has a height
   /// of 0, even if you try to set height to a different value.
-  double get height => getBounds($parent, _sHelperRect)!.height;
+  double get height {
+    return getBounds($parent, _sHelperRect)!.height;
+  }
 
   /// Sets the height of this display object to the specified value.
   ///
@@ -339,17 +355,25 @@ abstract class GDisplayObject
   }
 
   /// Returns `true` if this object is on the stage.
-  bool get inStage => base is Stage;
+  bool get inStage {
+    return base is Stage;
+  }
 
   /// Returns whether this object is currently being used as a [mask] for another
   /// object.
-  bool get isMask => $maskee != null;
+  bool get isMask {
+    return $maskee != null;
+  }
 
   /// Returns whether this object has any [rotation] or skew transformation.
-  bool get isRotated => _rotation != 0 || _skewX != 0 || _skewY != 0;
+  bool get isRotated {
+    return _rotation != 0 || _skewX != 0 || _skewY != 0;
+  }
 
   /// Returns the mask of this object.
-  GShape? get mask => $mask;
+  GShape? get mask {
+    return $mask;
+  }
 
   /// The [GShape] to be used as a mask for this object.
   set mask(GShape? value) {
@@ -415,32 +439,42 @@ abstract class GDisplayObject
   }
 
   /// Returns the parent container.
-  GDisplayObjectContainer? get parent => $parent;
+  GDisplayObjectContainer? get parent {
+    return $parent;
+  }
 
   /// Returns the x coordinate of the pivot point,
   /// the center of scaling and rotation.
-  double get pivotX => _pivotX;
+  double get pivotX {
+    return _pivotX;
+  }
 
   /// Sets the x-coordinate of the object's pivot point.
   /// Throws an error if [value] is NaN.
   /// If the value has not changed, does nothing.
   set pivotX(double value) {
     if (value.isNaN) throw '[$this.pivotX] can not be NaN nor null';
-    if (_pivotX == value) return;
+    if (_pivotX == value) {
+      return;
+    }
     _pivotX = value;
     $setTransformationChanged();
   }
 
   /// Returns the y coordinate of the pivot point,
   /// the center of scaling and rotation.
-  double get pivotY => _pivotY;
+  double get pivotY {
+    return _pivotY;
+  }
 
   /// Sets the y-coordinate of the object's pivot point.
   /// Throws an error if [value] is NaN.
   /// If the value has not changed, does nothing.
   set pivotY(double value) {
     if (value.isNaN) throw '[$this.pivotY] can not be NaN nor null';
-    if (_pivotY == value) return;
+    if (_pivotY == value) {
+      return;
+    }
     _pivotY = value;
     $setTransformationChanged();
   }
@@ -457,114 +491,166 @@ abstract class GDisplayObject
   }
 
   /// Returns the angle of rotation in radians.
-  double get rotation => _rotation;
+  double get rotation {
+    return _rotation;
+  }
 
   /// Sets the rotation angle in radians.
   /// Throws an error if [value] is null or NaN.
   /// If the value has not changed, does nothing.
   set rotation(double? value) {
-    if (value?.isNaN ?? true) throw '[$this.rotation] can not be NaN nor null';
-    if (_rotation == value) return;
+    if (value?.isNaN ?? true) {
+      throw '[$this.rotation] can not be NaN nor null';
+    }
+    if (_rotation == value) {
+      return;
+    }
     _rotation = value!;
     $setTransformationChanged();
   }
 
   /// The rotation angle in radians about the x-axis for 3d transformation.
-  double get rotationX => _rotationX;
+  double get rotationX {
+    return _rotationX;
+  }
 
   /// (Experimental)
   /// Sets the rotation angle in degrees about the x-axis for 3d transformation.
   /// Throws an error if [value] is NaN.
   /// If the value has not changed, does nothing.
   set rotationX(double value) {
-    if (value.isNaN) throw '[$this.rotationX] can not be NaN';
-    if (_rotationX == value) return;
+    if (value.isNaN) {
+      throw '[$this.rotationX] can not be NaN';
+    }
+    if (_rotationX == value) {
+      return;
+    }
     _rotationX = value;
-    if (!_isWarned3d) _warn3d();
+    if (!_isWarned3d) {
+      _warn3d();
+    }
     $setTransformationChanged();
   }
 
   /// The rotation angle in radians about the y-axis for 3d transformation.
-  double get rotationY => _rotationY;
+  double get rotationY {
+    return _rotationY;
+  }
 
   /// (Experimental)
   /// Sets the rotation angle in degrees about the x-axis for 3d transformation.
   /// Throws an error if [value] is NaN.
   /// If the value has not changed, does nothing.
   set rotationY(double value) {
-    if (value.isNaN) throw '[$this.rotationY] can not be NaN';
-    if (_rotationY == value) return;
+    if (value.isNaN) {
+      throw '[$this.rotationY] can not be NaN';
+    }
+    if (_rotationY == value) {
+      return;
+    }
     _rotationY = value;
-    if (!_isWarned3d) _warn3d();
+    if (!_isWarned3d) {
+      _warn3d();
+    }
     $setTransformationChanged();
   }
 
   /// Shortcut for setting proportional X and Y scale values.
-  double get scale => _scaleX;
+  double get scale {
+    return _scaleX;
+  }
 
   /// Sets the X and Y scale values proportionally to [value].
   ///
   /// Setting [value] to the same value as the current scale has no effect.
   set scale(double value) {
-    if (value == _scaleX) return;
+    if (value == _scaleX) {
+      return;
+    }
     _scaleY = _scaleX = value;
     $setTransformationChanged();
   }
 
   /// Returns the horizontal scale of the object.
-  double get scaleX => _scaleX;
+  double get scaleX {
+    return _scaleX;
+  }
 
   /// Sets the x-axis scale factor of the object.
   /// Throws an error if [value] is null or NaN.
   /// If the value has not changed, does nothing.
   set scaleX(double? value) {
-    if (value?.isNaN ?? true) throw '[$this.scaleX] can not be NaN nor null';
-    if (_scaleX == value) return;
+    if (value?.isNaN ?? true) {
+      throw '[$this.scaleX] can not be NaN nor null';
+    }
+    if (_scaleX == value) {
+      return;
+    }
     _scaleX = value!;
     $setTransformationChanged();
   }
 
   /// Returns the vertical scale of the object.
-  double get scaleY => _scaleY;
+  double get scaleY {
+    return _scaleY;
+  }
 
   /// Sets the y-axis scale factor of the object.
   /// Throws an error if [value] is null or NaN.
   /// If the value has not changed, does nothing.
   set scaleY(double? value) {
-    if (value?.isNaN ?? true) throw '[$this.scaleY] can not be NaN nor null';
-    if (_scaleY == value) return;
+    if (value?.isNaN ?? true) {
+      throw '[$this.scaleY] can not be NaN nor null';
+    }
+    if (_scaleY == value) {
+      return;
+    }
     _scaleY = value!;
     $setTransformationChanged();
   }
 
   /// Returns the angle of skew on the x-axis in radians.
-  double get skewX => _skewX;
+  double get skewX {
+    return _skewX;
+  }
 
   /// Sets the skew factor along the x-axis.
   /// Throws an error if [value] is NaN.
   /// If the value has not changed, does nothing.
   set skewX(double value) {
-    if (value.isNaN) throw '[$this.skewX] can not be NaN nor null';
-    if (_skewX == value) return;
+    if (value.isNaN) {
+      throw '[$this.skewX] can not be NaN nor null';
+    }
+    if (_skewX == value) {
+      return;
+    }
     _skewX = value;
     $setTransformationChanged();
   }
 
   /// Returns the angle of skew on the y-axis in radians.
-  double get skewY => _skewY;
+  double get skewY {
+    return _skewY;
+  }
 
   /// Sets the skew factor along the y-axis.
   /// Throws an error if [value] is NaN.
   /// If the value has not changed, does nothing.
   set skewY(double value) {
-    if (value.isNaN) throw '[$this.skewY] can not be NaN';
-    if (_skewY == value) return;
+    if (value.isNaN) {
+      throw '[$this.skewY] can not be NaN';
+    }
+    if (_skewY == value) {
+      return;
+    }
     _skewY = value;
     $setTransformationChanged();
   }
 
   /// Returns the stage this object is on or `null` if it's not on a stage.
-  Stage? get stage => base is Stage ? base as Stage? : null;
+  Stage? get stage {
+    return base is Stage ? base as Stage? : null;
+  }
 
   /// Gets the transformation matrix that represents the object's position,
   /// scale, rotation and skew.
@@ -623,7 +709,9 @@ abstract class GDisplayObject
   }
 
   /// Returns whether the display object is visible or not.
-  bool get visible => _visible;
+  bool get visible {
+    return _visible;
+  }
 
   /// Sets whether the display object is visible or not.
   /// It helps to optimize performance skipping the rendering process.
@@ -649,7 +737,9 @@ abstract class GDisplayObject
   /// ```
   /// A display object with no content (such as an empty sprite) has a width
   /// of 0, even if you try to set width to a different value.
-  double get width => getBounds($parent, _sHelperRect)!.width;
+  double get width {
+    return getBounds($parent, _sHelperRect)!.width;
+  }
 
   /// Sets the width of the object to the given [value].
   /// If the given value is null or NaN, an error is thrown.
@@ -661,7 +751,9 @@ abstract class GDisplayObject
   /// determine the new scale based on the new width value.
   /// The [value] parameter should be the desired new width value of the object.
   set width(double? value) {
-    if (value?.isNaN ?? true) throw '[$this.width] can not be NaN nor null';
+    if (value?.isNaN ?? true) {
+      throw '[$this.width] can not be NaN nor null';
+    }
     double? actualW;
     var zeroScale = _scaleX < 1e-8 && _scaleX > -1e-8;
     if (zeroScale) {
@@ -675,56 +767,80 @@ abstract class GDisplayObject
 
   /// Returns the alpha value of the object relative to its parent and all its
   /// ancestors.
-  double get worldAlpha => alpha * ($parent?.worldAlpha ?? 1);
+  double get worldAlpha {
+    return alpha * ($parent?.worldAlpha ?? 1);
+  }
 
   /// Returns the horizontal scaling factor of the object relative to its
   /// parent and all its ancestors.
-  double get worldScaleX => scaleX * ($parent?.worldScaleX ?? 1);
+  double get worldScaleX {
+    return scaleX * ($parent?.worldScaleX ?? 1);
+  }
 
   /// Returns the vertical scaling factor of the object relative to its parent
   /// and all its ancestors.
-  double get worldScaleY => scaleX * ($parent?.worldScaleY ?? 1);
+  double get worldScaleY {
+    return scaleX * ($parent?.worldScaleY ?? 1);
+  }
 
   /// Returns the x coordinate of the object relative to the stage and all its
   /// ancestors.
-  double get worldX => x - pivotX * scaleX + ($parent?.worldX ?? 0);
+  double get worldX {
+    return x - pivotX * scaleX + ($parent?.worldX ?? 0);
+  }
 
   /// Returns the y coordinate of the object relative to the stage and all its
   /// ancestors.
-  double get worldY => y - pivotY * scaleY + ($parent?.worldY ?? 0);
+  double get worldY {
+    return y - pivotY * scaleY + ($parent?.worldY ?? 0);
+  }
 
   /// The [x] coordinate of the display object relative to its parent's
   /// coordinate system.
-  double get x => _x;
+  double get x {
+    return _x;
+  }
 
   /// Sets the [x] coordinate of the display object relative to its parent's
   /// coordinate system.
   /// Throws an exception if the value is `null` or `NaN`.
   /// If the value has not changed, does nothing.
   set x(double? value) {
-    if (value?.isNaN ?? true) throw '[$this.x] can not be NaN nor null';
-    if (_x == value) return;
+    if (value?.isNaN ?? true) {
+      throw '[$this.x] can not be NaN nor null';
+    }
+    if (_x == value) {
+      return;
+    }
     _x = value!;
     $setTransformationChanged();
   }
 
   /// The [y] coordinate of the display object relative to its parent's
   /// coordinate system.
-  double get y => _y;
+  double get y {
+    return _y;
+  }
 
   /// Sets the [y] coordinate of the object's position.
   /// Throws an error if [value] is null or NaN.
   /// If the value has not changed, does nothing.
   set y(double? value) {
-    if (value?.isNaN ?? true) throw '[$this.y] can not be NaN nor null';
-    if (_y == value) return;
+    if (value?.isNaN ?? true) {
+      throw '[$this.y] can not be NaN nor null';
+    }
+    if (_y == value) {
+      return;
+    }
     _y = value!;
     $setTransformationChanged();
   }
 
   /// (Experimental)
   /// The z-coordinate of this object in 3D space.
-  double get z => _z;
+  double get z {
+    return _z;
+  }
 
   /// (Experimental)
   /// Sets the z-axis coordinate of this object in 3D space.
@@ -733,10 +849,16 @@ abstract class GDisplayObject
   /// If the new value is the same as the current one,
   /// the method returns immediately.
   set z(double value) {
-    if (value.isNaN) throw '[$this.z] can not be NaN';
-    if (_z == value) return;
+    if (value.isNaN) {
+      throw '[$this.z] can not be NaN';
+    }
+    if (_z == value) {
+      return;
+    }
     _z = value;
-    if (!_isWarned3d) _warn3d();
+    if (!_isWarned3d) {
+      _warn3d();
+    }
     $setTransformationChanged();
   }
 
@@ -1589,7 +1711,7 @@ abstract class GDisplayObject
         _scaleY != 0;
   }
 
-  // Sets the [x] and [y] transformation of the DisplayObject and returns it.
+  /// Sets the [x] and [y] transformation of the DisplayObject and returns it.
   GDisplayObject setPosition(double x, double y) {
     _x = x;
     _y = y;
@@ -1597,10 +1719,10 @@ abstract class GDisplayObject
     return this;
   }
 
-  // Sets the [scaleX] and [scaleY] transformation of the DisplayObject and
-  // returns it.
-  // If only one argument is provided, both [scaleX] and [scaleY] are set to the
-  // same value.
+  /// Sets the [scaleX] and [scaleY] transformation of the DisplayObject and
+  /// returns it.
+  /// If only one argument is provided, both [scaleX] and [scaleY] are set to the
+  /// same value.
   GDisplayObject setScale(double scaleX, [double? scaleY]) {
     _scaleX = scaleX;
     _scaleY = scaleY ?? scaleX;

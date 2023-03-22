@@ -77,7 +77,9 @@ class Stage extends GDisplayObjectContainer
   }
 
   /// Gets the background color (in [backgroundPaint]) of the stage.
-  ui.Color? get color => _backgroundPaint?.color;
+  ui.Color? get color {
+    return _backgroundPaint?.color;
+  }
 
   /// Sets the background color (in [backgroundPaint]) of the stage.
   set color(ui.Color? value) {
@@ -90,21 +92,29 @@ class Stage extends GDisplayObjectContainer
   }
 
   /// Gets the owner [SceneController] for the stage.
-  SceneController get controller => scene.core;
+  SceneController get controller {
+    return scene.core;
+  }
 
   // Throws an error. Is to comply with the [GDisplayObject] API.
   // Use `stageHeight` property instead.
   @override
-  double get height => throw 'Use `stage.stageHeight` instead.';
+  double get height {
+    throw 'Use `stage.stageHeight` instead.';
+  }
 
   /// The `height` setter is overridden to throw an error since the stage's
   /// height is defined by the size of the canvas and cannot be changed directly.
   @override
-  set height(double? value) => throw 'Cannot set height of stage';
+  set height(double? value) {
+    throw 'Cannot set height of stage';
+  }
 
   /// Returns a boolean indicating whether the mouse pointer is inside the stage.
   /// So if it's available to detect events.
-  bool get isMouseInside => _isMouseInside;
+  bool get isMouseInside {
+    return _isMouseInside;
+  }
 
   /// Access the keyboard instance of the owner `SceneController`,
   /// Only available when [SceneConfig.useKeyboard] is true.
@@ -114,23 +124,33 @@ class Stage extends GDisplayObjectContainer
 
   /// Returns the current x-coordinate of the mouse pointer on the stage.
   @override
-  double get mouseX => pointer!.mouseX;
+  double get mouseX {
+    return pointer!.mouseX;
+  }
 
   /// Returns the current y-coordinate of the mouse pointer on the stage.
   @override
-  double get mouseY => pointer!.mouseY;
+  double get mouseY {
+    return pointer!.mouseY;
+  }
 
   /// A signal that is dispatched when the scene is reloaded (for hot-reloading
   /// purposes).
-  Signal get onHotReload => controller.onHotReload;
+  Signal get onHotReload {
+    return controller.onHotReload;
+  }
 
   /// Throws an error as the `pivotX` property of the stage cannot be set.
   @override
-  set pivotX(double value) => throw 'Cannot pivot stage';
+  set pivotX(double value) {
+    throw 'Cannot pivot stage';
+  }
 
   /// Throws an error as the `pivotY` property of the stage cannot be set.
   @override
-  set pivotY(double value) => throw 'Cannot pivot stage';
+  set pivotY(double value) {
+    throw 'Cannot pivot stage';
+  }
 
   /// Access the pointer (mouse or touch info) instance of the
   /// owner `SceneController`,
@@ -142,50 +162,74 @@ class Stage extends GDisplayObjectContainer
   /// This operation is not allowed for the stage and will throw an exception
   /// if called.
   @override
-  set rotation(double? value) => throw 'Cannot rotate stage';
+  set rotation(double? value) {
+    throw 'Cannot rotate stage';
+  }
 
   /// Throws an error as the `scaleX` property of the stage cannot be set.
   @override
-  set scaleX(double? value) => throw 'Cannot scale stage';
+  set scaleX(double? value) {
+    throw 'Cannot scale stage';
+  }
 
   /// Throws an error as the `scaleY` property of the stage cannot be set.
   @override
-  set scaleY(double? value) => throw 'Cannot scale stage';
+  set scaleY(double? value) {
+    throw 'Cannot scale stage';
+  }
 
   /// Throws an error as the `skewX` property of the stage cannot be set.
   @override
-  set skewX(double value) => throw 'Cannot skew stage';
+  set skewX(double value) {
+    throw 'Cannot skew stage';
+  }
 
   /// Throws an error as the `skewY` property of the stage cannot be set.
   @override
-  set skewY(double value) => throw 'Cannot skew stage';
+  set skewY(double value) {
+    throw 'Cannot skew stage';
+  }
 
   /// The current height of the Stage.
-  double get stageHeight => _size?.height ?? 0;
+  double get stageHeight {
+    return _size?.height ?? 0;
+  }
 
   /// Returns the bounds of the stage as a [GRect].
-  GRect get stageRect => _stageRect;
+  GRect get stageRect {
+    return _stageRect;
+  }
 
   /// The current width of the Stage.
-  double get stageWidth => _size?.width ?? 0;
+  double get stageWidth {
+    return _size?.width ?? 0;
+  }
 
   // Throws an error. Is to comply with the [GDisplayObject] API.
   // Use `stageWidth` property instead.
   @override
-  double get width => throw 'Use `stage.stageWidth` instead.';
+  double get width {
+    throw 'Use `stage.stageWidth` instead.';
+  }
 
   /// The `width` setter is overridden to throw an error since the stage's
   /// height is defined by the size of the canvas and cannot be changed directly.
   @override
-  set width(double? value) => throw 'Cannot set width of stage';
+  set width(double? value) {
+    throw 'Cannot set width of stage';
+  }
 
   /// Throws an error as the `x` coordinate of the stage cannot be set.
   @override
-  set x(double? value) => throw 'Cannot set x-coordinate of stage';
+  set x(double? value) {
+    throw 'Cannot set x-coordinate of stage';
+  }
 
   /// Throws an error as the `y` coordinate of the stage cannot be set.
   @override
-  set y(double? value) => throw 'Cannot set y-coordinate of stage';
+  set y(double? value) {
+    throw 'Cannot set y-coordinate of stage';
+  }
 
   /// (Internal usage)
   /// Initializes the size of the stage.
@@ -284,13 +328,17 @@ class Stage extends GDisplayObjectContainer
   /// there is no such object.
   @override
   GDisplayObject? hitTest(GPoint localPoint, [bool useShape = false]) {
-    if (!visible || !mouseEnabled) return null;
+    if (!visible || !mouseEnabled) {
+      return null;
+    }
 
     /// location outside stage area, is not accepted.
     if (localPoint.x < 0 ||
         localPoint.x > stageWidth ||
         localPoint.y < 0 ||
-        localPoint.y > stageHeight) return null;
+        localPoint.y > stageHeight) {
+      return null;
+    }
 
     /// if nothing is hit, stage returns itself as target.
     return super.hitTest(localPoint) ?? this;
@@ -306,7 +354,9 @@ class Stage extends GDisplayObjectContainer
   /// Returns `true` if the point is inside the stage's boundary, or `false`
   /// otherwise.
   @override
-  bool hitTouch(GPoint localPoint, [bool useShape = false]) => true;
+  bool hitTouch(GPoint localPoint, [bool useShape = false]) {
+    return true;
+  }
 
   /// Renders this stage on the given canvas.
   @override

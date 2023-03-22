@@ -75,7 +75,9 @@ class SceneController {
   }
 
   /// The [SceneConfig] instance associated with this SceneController.
-  SceneConfig get config => _config;
+  SceneConfig get config {
+    return _config;
+  }
 
   set config(SceneConfig sceneConfig) {
     _config.rebuildOnHotReload = sceneConfig.rebuildOnHotReload;
@@ -89,14 +91,20 @@ class SceneController {
 
   /// Access the keyboard manager instance associated with this
   /// [SceneController].
-  KeyboardManager get keyboard => _keyboard;
+  KeyboardManager get keyboard {
+    return _keyboard;
+  }
 
   /// The [Signal] that is dispatched when the Stateful Widget gets reassembled.
-  Signal get onHotReload => _onHotReload ??= Signal();
+  Signal get onHotReload {
+    return _onHotReload ??= Signal();
+  }
 
   /// Access the pointer manager instance associated with this
   /// [SceneController].
-  PointerManager get pointer => _pointer;
+  PointerManager get pointer {
+    return _pointer;
+  }
 
   /// Access the `ticker` (if any) created by this SceneController.
   GTicker? get ticker {
@@ -128,10 +136,14 @@ class SceneController {
   }
 
   /// Builds the back [CustomPainter] associated with this [SceneController].
-  CustomPainter? buildBackPainter() => backScene?.buildPainter();
+  CustomPainter? buildBackPainter() {
+    return backScene?.buildPainter();
+  }
 
   /// Builds the front [CustomPainter] associated with this [SceneController].
-  CustomPainter? buildFrontPainter() => frontScene?.buildPainter();
+  CustomPainter? buildFrontPainter() {
+    return frontScene?.buildPainter();
+  }
 
   /// Disposes of this [SceneController].
   void dispose() {
@@ -180,12 +192,15 @@ class SceneController {
 
   /// Returns `true` if either the back or front [ScenePainter] is set to
   /// auto-update and render.
-  bool _anySceneAutoUpdate() =>
-      _sceneAutoUpdate(backScene) || _sceneAutoUpdate(frontScene);
+  bool _anySceneAutoUpdate() {
+    return _sceneAutoUpdate(backScene) || _sceneAutoUpdate(frontScene);
+  }
 
   /// Returns `true` if either the back or front [ScenePainter] is set to
   /// auto-update and render, or if the ticker is being used.
-  bool _hasTicker() => _anySceneAutoUpdate() || _config.useTicker;
+  bool _hasTicker() {
+    return _anySceneAutoUpdate() || _config.useTicker;
+  }
 
   /// Initializes the input manager for this [SceneController].
   void _initInput() {
@@ -215,6 +230,7 @@ class SceneController {
 
   /// Returns `true` if either the back or front [ScenePainter] is set to
   /// auto-update and render.
-  bool _sceneAutoUpdate(ScenePainter? scene) =>
-      scene?.autoUpdateAndRender ?? false;
+  bool _sceneAutoUpdate(ScenePainter? scene) {
+    return scene?.autoUpdateAndRender ?? false;
+  }
 }

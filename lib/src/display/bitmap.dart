@@ -46,7 +46,9 @@ class GBitmap extends GDisplayObject {
   /// Sets the color of this object.
   @override
   set colorize(ui.Color? value) {
-    if ($colorize == value) return;
+    if ($colorize == value) {
+      return;
+    }
     super.colorize = value;
     _paint.colorFilter =
         $hasColorize ? PainterUtils.getColorize($colorize!) : null;
@@ -55,7 +57,9 @@ class GBitmap extends GDisplayObject {
   /// Sets the list of filters for this object.
   @override
   set filters(List<GBaseFilter>? value) {
-    if ($filters == value) return;
+    if ($filters == value) {
+      return;
+    }
     $filters = value;
     if ($filters == null) {
       _paint.imageFilter = null;
@@ -64,7 +68,9 @@ class GBitmap extends GDisplayObject {
   }
 
   /// Returns the native [ui.Paint] object.
-  ui.Paint get nativePaint => _paint;
+  ui.Paint get nativePaint {
+    return _paint;
+  }
 
   /// Sets the horizontal coordinate of the object's origin point.
   @override
@@ -81,11 +87,15 @@ class GBitmap extends GDisplayObject {
   }
 
   /// Returns the texture image of this [GBitmap] instance.
-  GTexture? get texture => _texture;
+  GTexture? get texture {
+    return _texture;
+  }
 
   /// Sets the texture of this [GBitmap] instance.
   set texture(GTexture? value) {
-    if (_texture == value) return;
+    if (_texture == value) {
+      return;
+    }
     _texture = value;
     if (_texture != null) {
       pivotX = -_texture!.pivotX! + $originalPivotX;
@@ -114,7 +124,9 @@ class GBitmap extends GDisplayObject {
       }
     }
     texture?.render(canvas, _paint);
-    if (_hasScale9Grid) setScale(_buffScaleX, _buffScaleY);
+    if (_hasScale9Grid) {
+      setScale(_buffScaleX, _buffScaleY);
+    }
   }
 
   /// Returns the bounds of this bitmap in the local coordinate system of the
@@ -159,7 +171,9 @@ class GBitmap extends GDisplayObject {
   /// - void
   @override
   void paint(ui.Canvas canvas) {
-    if (texture == null) return;
+    if (texture == null) {
+      return;
+    }
     _hasScale9Grid = texture!.scale9Grid != null;
     if (_hasScale9Grid) {
       _adjustScaleGrid();

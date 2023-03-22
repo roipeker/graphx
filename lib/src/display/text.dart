@@ -17,7 +17,6 @@ import '../../graphx.dart';
 /// You can also use the static [GText.build] method to create a [GText] object
 /// with a set of predefined text styles.
 class GText extends GDisplayObject {
-
   /// A helper matrix used for various calculations.
   static final _sHelperMatrix = GMatrix();
 
@@ -68,7 +67,7 @@ class GText extends GDisplayObject {
   // The text to be rendered.
   String? _text;
 
-  // The background color of the text.
+  /// The background color of the text.
   ui.Color? backgroundColor;
 
   /// Creates a new [GText] instance.
@@ -106,7 +105,9 @@ class GText extends GDisplayObject {
   }
 
   /// Returns the color of the text.
-  ui.Color? get color => _style!.color;
+  ui.Color? get color {
+    return _style!.color;
+  }
 
   /// Sets the color of the text.
   set color(ui.Color? value) {
@@ -118,13 +119,17 @@ class GText extends GDisplayObject {
   /// The intrinsic width of the text. If the width is set to [double.infinity],
   /// this value will be equal to the text width, otherwise it will be equal to
   /// the set width.
-  double get intrinsicWidth => width == double.infinity ? textWidth : width;
+  double get intrinsicWidth {
+    return width == double.infinity ? textWidth : width;
+  }
 
   /// A signal dispatched when the font is loaded.
   ///
   /// Dispatched when a font is loaded on the text field.
   /// Use this signal to handle the completion of font loading.
-  Signal get onFontLoaded => _onFontLoaded ??= Signal();
+  Signal get onFontLoaded {
+    return _onFontLoaded ??= Signal();
+  }
 
   /// Getter for the [_paragraph] variable.
   ///
@@ -135,7 +140,9 @@ class GText extends GDisplayObject {
   /// size.
   ///
   /// Returns null if the paragraph is invalid or not created yet.
-  ui.Paragraph? get paragraph => _paragraph;
+  ui.Paragraph? get paragraph {
+    return _paragraph;
+  }
 
   /// TODO: implement this.
 //  TextFormat get format => _format;
@@ -146,7 +153,9 @@ class GText extends GDisplayObject {
 //  }
 
   /// The text string that will be displayed.
-  String get text => _text ?? '';
+  String get text {
+    return _text ?? '';
+  }
 
   /// Sets the text content of the [GText].
   set text(String? value) {
@@ -219,7 +228,9 @@ class GText extends GDisplayObject {
   /// Setting a value to this property will invalidate the size of the text
   /// and trigger a rebuild on the next render.
   @override
-  double get width => _width;
+  double get width {
+    return _width;
+  }
 
   /// Sets the [width] of the text. Setting a new value will invalidate the size
   /// of the text and trigger a rebuild on the next render.
@@ -302,7 +313,7 @@ class GText extends GDisplayObject {
     if (targetSpace == this) {
       /// optimization.
       return out;
-    } else {}
+    }
     final matrix = _sHelperMatrix;
     matrix.identity();
     getTransformationMatrix(targetSpace, matrix);
@@ -311,17 +322,23 @@ class GText extends GDisplayObject {
   }
 
   /// Returns the paragraph style used by the text.
-  ui.ParagraphStyle? getParagraphStyle() => _paragraphStyle;
+  ui.ParagraphStyle? getParagraphStyle() {
+    return _paragraphStyle;
+  }
 
   /// Returns the text style used by the text.
-  painting.TextStyle? getTextStyle() => _style;
+  painting.TextStyle? getTextStyle() {
+    return _style;
+  }
 
   /// Sets the [ParagraphStyle] for the text.
   ///
   /// If the new style is the same as the current style, this method does
   /// nothing. Otherwise, the new style is assigned and the [GText] repainted.
   void setParagraphStyle(ui.ParagraphStyle style) {
-    if (_paragraphStyle == style) return;
+    if (_paragraphStyle == style) {
+      return;
+    }
     _paragraphStyle = style;
     _invalidBuilder = true;
   }

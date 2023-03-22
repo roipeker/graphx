@@ -17,7 +17,9 @@ class GShape extends GDisplayObject {
   /// Returns the [Graphics] object associated with this [GShape], creating it
   /// if it doesn't already exist. The [Graphics] object is used to draw vector
   /// graphics.
-  Graphics get graphics => _graphics ??= Graphics();
+  Graphics get graphics {
+    return _graphics ??= Graphics();
+  }
 
   /// (Internal usage) Applies the paint to the given [canvas] for this
   /// [GShape]. If this [GShape] is being used as a mask, the graphics will be
@@ -103,7 +105,10 @@ class GShape extends GDisplayObject {
 //      });
       /// single bounds, all paths as 1 rect.
       return MatrixUtils.getTransformedBoundsRect(
-          matrix, _graphics!.getBounds(out), out);
+        matrix,
+        _graphics!.getBounds(out),
+        out,
+      );
     } else {
       final pos = GDisplayObjectContainer.$sBoundsPoint;
       matrix.transformCoords(0, 0, pos);

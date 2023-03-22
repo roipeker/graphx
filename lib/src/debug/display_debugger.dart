@@ -2,6 +2,8 @@ import 'dart:ui' as ui;
 
 import '../../graphx.dart';
 
+/// An enumeration representing different modes for rendering debug bounding
+/// boxes in GraphX.
 enum DebugBoundsMode {
   /// renders the bounding box transformed, inside the current object [paint()]
   /// method process.
@@ -57,7 +59,9 @@ class DisplayBoundsDebugger {
   /// Renders the bounds of all objects that have [debugBounds] enabled or have
   /// the [debugAll] flag set to `true`.
   void render() {
-    if (debugBoundsMode == DebugBoundsMode.internal || !enabled) return;
+    if (debugBoundsMode == DebugBoundsMode.internal || !enabled) {
+      return;
+    }
     _renderChildren(_root);
   }
 
@@ -75,7 +79,9 @@ class DisplayBoundsDebugger {
 
   /// Recursively renders the bounds of the children of a given display object.
   void _renderChildren(GDisplayObjectContainer obj) {
-    if (obj.$debugBounds || debugAll) _renderBounds(obj);
+    if (obj.$debugBounds || debugAll) {
+      _renderBounds(obj);
+    }
     for (final child in obj.children) {
       if (child is GDisplayObjectContainer) {
         _renderChildren(child);

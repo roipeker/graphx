@@ -40,9 +40,11 @@ class SceneConfig {
     useTicker: true,
   );
 
+  /// Property defines the default configuration to be used if no other
+  /// configuration is specified.
   static SceneConfig defaultConfig = interactive;
 
-  /// re-builds the SceneController (the ScenePainter and the scene class).
+  /// Re-builds the SceneController (the ScenePainter and the scene class).
   /// disposes and initializes all the scene.
   late bool rebuildOnHotReload;
 
@@ -96,7 +98,9 @@ class SceneConfig {
     this.autoUpdateRender = true,
     this.painterWillChange = true,
   }) {
-    if (autoUpdateRender) useTicker = true;
+    if (autoUpdateRender) {
+      useTicker = true;
+    }
   }
 
   /// Utility method used by the [SceneBuilderWidget] to set the flag

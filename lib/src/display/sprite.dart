@@ -12,12 +12,14 @@ class GSprite extends GDisplayObjectContainer {
   // The [graphics] object associated with this sprite.
   Graphics? _graphics;
 
-  // Returns the [graphics] object associated with this sprite.
-  // If the _graphics field is null, it is assigned a new [Graphics] object.
-  // This means that the graphics object is lazily initialized when it is first
-  // requested.
-  // This allows the sprite to be used without graphics until it is needed.
-  Graphics get graphics => _graphics ??= Graphics();
+  /// Returns the [graphics] object associated with this sprite. If the
+  /// _graphics field is null, it is assigned a new [Graphics] object. This
+  /// means that the graphics object is lazily initialized when it is first
+  /// requested. This allows the sprite to be used without graphics until it is
+  /// needed.
+  Graphics get graphics {
+    return _graphics ??= Graphics();
+  }
 
   /// (Internal usage)
   /// Applies the paint to the given [canvas] for this [GSprite]. The graphics
@@ -97,7 +99,9 @@ class GSprite extends GDisplayObjectContainer {
   /// is not contained within this [GSprite].
   @override
   GDisplayObject? hitTest(GPoint localPoint, [bool useShape = false]) {
-    if (!visible || !mouseEnabled) return null;
+    if (!visible || !mouseEnabled) {
+      return null;
+    }
     var target = super.hitTest(localPoint);
     target ??=
         (_graphics?.hitTest(localPoint, useShape) ?? false) ? this : null;

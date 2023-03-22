@@ -109,12 +109,23 @@ class ScenePainter with EventDispatcherMixin {
     makeCurrent();
   }
 
-  bool get isReady => _isReady;
+  /// Returns a boolean value indicating whether the GraphX scene is ready and
+  /// the stage is accessible to the GraphX root. Returns true if the scene is
+  /// ready, false otherwise. Runs on the first "render".
+  bool get isReady {
+    return _isReady;
+  }
 
   /// Dispatched when the frame is updated.
-  EventSignal<double> get onUpdate => _onUpdate ??= EventSignal<double>();
+  EventSignal<double> get onUpdate {
+    return _onUpdate ??= EventSignal<double>();
+  }
 
-  Stage? get stage => _stage;
+  /// Returns the [Stage] instance associated with this [ScenePainter].
+  /// The [Stage] is the root display object for the GraphX scene.
+  Stage? get stage {
+    return _stage;
+  }
 
   /// Requests a new frame.
   void $render() {
@@ -149,8 +160,13 @@ class ScenePainter with EventDispatcherMixin {
 // }
   }
 
-  // ignore: use_to_and_as_if_applicable
-  CustomPainter buildPainter() => _GraphicsPainter(this);
+  /// Returns a new instance of [CustomPainter] that delegates to this
+  /// [ScenePainter] instance by wrapping it in a [_GraphicsPainter]. This is
+  /// the painter that is used to draw the graphics within a Flutter widget and
+  /// is responsible for rendering the GraphX scene.
+  CustomPainter buildPainter() {
+    return _GraphicsPainter(this);
+  }
 
   /// Reset the state of the ScenePainter object
   @override
@@ -178,8 +194,10 @@ class ScenePainter with EventDispatcherMixin {
     notify();
   }
 
-  // bool get _hasPointer => core.pointer.onInput != null;
-  bool shouldRepaint() => needsRepaint;
+  /// See [CustomPainter.shouldRepaint]
+  bool shouldRepaint() {
+    return needsRepaint;
+  }
 
   /// This method is called every tick() and updates the display list if
   /// autoUpdateAndRender is true, and calls _onUpdate?.dispatch(time).
