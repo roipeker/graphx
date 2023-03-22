@@ -127,7 +127,9 @@ class GTicker {
   /// Creates a [Ticker] object if it hasn't been created yet, and starts it if
   /// it's not ticking.
   void _createTicker() {
-    if (_ticker != null) return;
+    if (_ticker != null) {
+      return;
+    }
     _ticker = Ticker(_onTick);
     _ticker!.start();
     _ticker!.muted = true;
