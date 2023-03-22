@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
@@ -17,7 +19,7 @@ class HueScene extends GSprite {
   }
 
   @override
-  void addedToStage() {
+  Future<void> addedToStage() async {
     var numHues = 20;
     var hvsList = List.generate(numHues, (index) {
       return HSVColor.fromAHSV(1, index / numHues * 360, 1, 1).toColor();
@@ -94,10 +96,15 @@ class HueScene extends GSprite {
     });
     stage!.onMouseMove.add(_onMouseMove);
 
+    var colorImage = colorSelector.createImageSync();
+    var result = await colorImage.toByteData(format: ImageByteFormat.rawRgba);
+    trace('result is:', result);
+
     /// get the image bytes from capturing the GShape snapshot.
     /// so we can get the colors from the bytes List.
     getImageBytes(colorSelector).then((value) {
       colorsBytes = value;
+      trace(colorsBytes);
       updateColor();
     });
   }
@@ -114,8 +121,10 @@ class HueScene extends GSprite {
   }
 
   void updateColor() {
+    var bytes = colorsBytes;
+    if (bytes == null) return;
     _selectedColor = getPixelColor(
-      colorsBytes!,
+      bytes,
       sw.toInt(),
       sh.toInt(),
       0,

@@ -62,18 +62,18 @@ import '../../graphx.dart';
 ///
 /// ```glsl
 /// #include <flutter/runtime_effect.glsl>
-//
-// uniform float u_time;
-// uniform vec2 u_res;
-// out vec4 fragColor;
-//
-// void main() {
-//     vec2 currentPos = FlutterFragCoord().xy;
-//     vec2 st = currentPos / u_res;
-//     float blue = abs(sin(u_time));
-//     fragColor = vec4(st.x, st.y, blue, 1.0);
-// }
-// ```
+///
+/// uniform float u_time;
+/// uniform vec2 u_res;
+/// out vec4 fragColor;
+///
+/// void main() {
+///     vec2 currentPos = FlutterFragCoord().xy;
+///     vec2 st = currentPos / u_res;
+///     float blue = abs(sin(u_time));
+///     fragColor = vec4(st.x, st.y, blue, 1.0);
+/// }
+/// ```
 abstract class DisplayShader implements FragmentShader {
   /// A list of empty samplers that will be used when the fragment shader does
   /// not require any texture inputs.

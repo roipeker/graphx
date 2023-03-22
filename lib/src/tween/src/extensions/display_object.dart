@@ -76,8 +76,9 @@ extension GTweenDiplayObjectExt on GDisplayObject {
     );
   }
 
-  /// Shortcut to assign multiple properties and render immediately.
-  /// Doesn't wait for the next tick update.
+  /// properties and render immediately (using a tween animation with zero
+  /// duration). The [delay] parameter can be used to delay the start of the
+  /// "empty" tween animation that assigns the values.
   void setProps({
     Object? x,
     Object? y,

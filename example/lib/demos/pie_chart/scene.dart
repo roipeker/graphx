@@ -111,10 +111,3 @@ class PieChartScene extends GSprite {
     }
   }
 }
-
-extension MyObject on GDisplayObject {
-  void centerInStage() {
-    if (!inStage) return;
-    setPosition(stage!.stageWidth / 2, stage!.stageHeight / 2);
-  }
-}

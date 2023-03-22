@@ -5,6 +5,8 @@
 - fixes startDrag() exception when you remove the DisplayObject from the stage.
 - adds Matrix.deltaTransformPoint(point).
 - fixes `GKeyboard.justReleased()` not working properly.
+- MASSIVE comment docs addition.
+- 
 
 ## [1.0.9]
 - minor "fix" for pivot support when doing a rotation in 3d (still missing proper transforms)

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
-import '../pie_chart/scene.dart';
-
 class ZoomGestureScene extends GSprite {
   late GSprite content;
   late GShape box;
