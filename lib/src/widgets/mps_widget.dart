@@ -2,7 +2,17 @@ import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
 
-/// typedef for [MPSBuilder.builder()].
+/// Function builder used to build a widget with an [MPSEvent] event.
+///
+/// The `context` parameter is the build context passed from the [_MPSBuilderState] widget.
+///
+/// The `event` parameter is the event object that contains the type of the event and the data
+/// associated with it. It is updated each time an event is dispatched in any of the subscribed
+/// topics.
+///
+/// The `child` parameter is an optional child widget to be included in the builder.
+///
+/// Returns the built widget tree based on the provided [MPSEvent] object.
 typedef MPSFunctionBuilder<T> = Widget Function(
   BuildContext context,
   MPSEvent<T> event,
@@ -10,20 +20,31 @@ typedef MPSFunctionBuilder<T> = Widget Function(
 );
 
 /// [MPSBuilder] allows you to subscribe to multiple MinPubSub topics.
-/// GraphX has a global `mts` object that you can use to easily publish
-/// data or events to topics.
-/// This Widget listens the [topics] List and rebuilds when an event is
-/// dispatched in any of them.
 ///
-/// You can publish without params (`ems.emit(topic)`),
-/// or 1 parameter[T] `ems.emit1(topic, value)`. Data is captured and sent as
-/// 2nd parameter ([MPSEvent] event object) in the [build] function.
+/// GraphX has a global `mts` object that you can use to easily publish data or events to topics.
+///
+/// This widget listens to the [topics] list and rebuilds when an event is dispatched in any of them.
+///
+/// You can publish without parameters (`ems.emit(topic)`) or with a single parameter `ems.emit1(topic, value)`.
+/// The data is captured and sent as the second parameter ([MPSEvent] event object) in the [build] function.
+///
+/// Experimental! "MPS" is discouraged to use in GraphX. Use [ValueNotifier] or
+/// other [Listenable] objects instead to create the communication.
+///
 class MPSBuilder<T> extends StatefulWidget {
+  /// The optional child widget to be included in the builder.
   final Widget? child;
+
+  /// The [MPS] object instance to be used for subscription.
   final MPS mps;
+
+  /// The builder function to build the widget tree.
   final MPSFunctionBuilder<T> builder;
+
+  /// The list of topics to be subscribed to.
   final List<String> topics;
 
+  /// Creates a new [MPSBuilder] instance.
   const MPSBuilder({
     super.key,
     required this.builder,
@@ -33,10 +54,10 @@ class MPSBuilder<T> extends StatefulWidget {
   });
 
   @override
-  MPSBuilderState<T> createState() => MPSBuilderState<T>();
+  _MPSBuilderState<T> createState() => _MPSBuilderState<T>();
 }
 
-class MPSBuilderState<T> extends State<MPSBuilder<T>> {
+class _MPSBuilderState<T> extends State<MPSBuilder<T>> {
   MPSEvent<T> _data = MPSEvent.empty();
   final _maps = <String, Function>{};
 
@@ -54,7 +75,7 @@ class MPSBuilderState<T> extends State<MPSBuilder<T>> {
             paramStrings = ', "$p3" ';
           }
           trace('''WARNING:
- [MPSBuilder] doesnt support more than 1 argument. $paramStrings will not be reachable in the `builder`''');
+ [MPSBuilder] doesn't support more than 1 argument. $paramStrings will not be reachable in the `builder`''');
         }
         setState(() {
           _data = MPSEvent(t, p1);
@@ -65,7 +86,8 @@ class MPSBuilderState<T> extends State<MPSBuilder<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => widget.builder(context, _data, widget.child);
+  Widget build(BuildContext context) =>
+      widget.builder(context, _data, widget.child);
 
   @override
   void dispose() {
@@ -76,13 +98,18 @@ class MPSBuilderState<T> extends State<MPSBuilder<T>> {
   }
 }
 
-/// Model object passed as 2nd argument in [MPSBuilder.builder].
+/// Model object passed as the second argument in [MPSFunctionBuilder].
 class MPSEvent<T> {
+  /// The type of the event.
   final String type;
+
+  /// The data associated with the event.
   final T? data;
 
+  /// Creates an empty [MPSEvent] object with an empty type.
   factory MPSEvent.empty() => const MPSEvent('');
 
+  /// Creates a new [MPSEvent] object with the given [type] and [data].
   const MPSEvent(
     this.type, [
     this.data,
@@ -90,7 +117,9 @@ class MPSEvent<T> {
 
   @override
   String toString() {
-    if (type == '') return 'MPSEvent [empty]';
+    if (type == '') {
+      return 'MPSEvent [empty]';
+    }
     var str = 'MPSEvent "$type"';
     if (data != null) {
       str += ' data=$data';

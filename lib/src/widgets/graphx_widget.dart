@@ -2,9 +2,25 @@ import 'package:flutter/widgets.dart';
 
 import '../../graphx.dart';
 
+/// A widget that builds a scene using the GraphX engine.
+///
+/// This widget is responsible for rendering the scene using the provided
+/// [builder] function which must return a [SceneController].
+///
+/// [SceneBuilderWidget] also handles the input events from mouse and keyboard
+/// using [SceneInputConverter] and sends them to the [SceneController] as
+/// events.
+///
+/// If [autoSize] is `true`, the widget will wrap the [CustomPaint] in a
+/// [SizedBox.expand()], so it takes the available space in the parent.
+/// Warning: this will not work inside flex widgets.
+///
+/// If the [child] parameter is non-null, it will be drawn above the scene.
 class SceneBuilderWidget extends StatefulWidget {
+  /// The child widget to draw above the scene.
   final Widget? child;
 
+  /// The function that creates a [SceneController].
   final SceneController Function() builder;
 
   /// Rendering caching flag.
@@ -24,6 +40,7 @@ class SceneBuilderWidget extends StatefulWidget {
   /// Warning: will not work with inside Flex Widgets.
   final bool autoSize;
 
+  /// Creates a new instance of [SceneBuilderWidget].
   const SceneBuilderWidget({
     super.key,
     required this.builder,
@@ -38,7 +55,16 @@ class SceneBuilderWidget extends StatefulWidget {
   SceneBuilderWidgetState createState() => SceneBuilderWidgetState();
 }
 
+/// The state object for [SceneBuilderWidget].
 class SceneBuilderWidgetState extends State<SceneBuilderWidget> {
+  /// The [SceneController] instance that manages the state of the
+  /// SceneBuilderWidget. It is created in [initState] using the builder
+  /// function passed to the constructor, and is disposed in [dispose] when the
+  /// widget is removed from the tree. It is also used to access the
+  /// SceneController methods for building the painters, resolving window
+  /// bounds, handling user input, and more.
+  ///
+  /// The starting point core of the GraphX engine.
   late SceneController _controller;
 
   @override
@@ -49,19 +75,25 @@ class SceneBuilderWidgetState extends State<SceneBuilderWidget> {
     _controller.$init();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (context.size?.isEmpty == true) {
-        trace("""WARNING:
-`SceneBuilderWidget` is being rendered without layout, empty sized.
-You will not be able to interact with touches or mouse and the Stage dimensions will report 0.
-To fix this, you can wrap `SceneBuilderWidget()` in a `SizedBox()` or any other Widget to constrain the size.
-Or you can set `SceneBuilderWidget(autoSize: true)`, which will use internally a `SizedBox.expand()` as parent widget.
-Use `Expanded()` or `Flexible()` in Flex Widgets like Column() or Row().
+        trace("""Warning:
+SceneBuilderWidget is being rendered without a layout, resulting in an
+empty size. As a consequence, you will not be able to interact with touch or
+mouse events and the stage dimensions will report 0. 
+
+To resolve this issue, you can either wrap SceneBuilderWidget() in a SizedBox()
+or any other widget that constrains the size, or you can set autoSize to true in
+the constructor, which will use a SizedBox.expand() as the parent widget. If you
+are using flex widgets like Column() or Row(), consider using Expanded() or
+Flexible().
 """);
       }
     });
   }
 
   GRect? _getRenderObjectWindowBounds() {
-    if (!mounted) return null;
+    if (!mounted) {
+      return null;
+    }
     return ContextUtils.getRenderObjectBounds(context);
   }
 

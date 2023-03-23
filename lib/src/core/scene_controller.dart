@@ -46,9 +46,8 @@ class SceneController {
   /// The configuration object for the Scene.
   final _config = SceneConfig();
 
-  /// A function that returns the global coordinates of the widget.
-  /// Useful for computing interactions with children Widgets that get added
-  /// later.
+  /// A function that returns the global coordinates of the widget. Useful for
+  /// computing interactions with children Widgets that get added later.
   WindowBoundsResolver? resolveWindowBounds;
 
   /// Flag to track whether the Scene is initialized.
@@ -57,8 +56,8 @@ class SceneController {
   /// The [SceneController] constructor.
   ///
   /// The optional [back] and [front] arguments specify the background and
-  /// foreground [GSprite] objects, respectively. The optional [config]
-  /// argument specifies the configuration for this [SceneController].
+  /// foreground [GSprite] objects, respectively. The optional [config] argument
+  /// specifies the configuration for this [SceneController].
   SceneController({
     GSprite? back,
     GSprite? front,
