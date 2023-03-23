@@ -134,9 +134,9 @@ class GRect {
     return point.x >= x && point.y >= y && point.x < right && point.y < bottom;
   }
 
-  // Determines whether the [rect] object is contained within this object. A
-  // Rectangle is said to contain another if the second Rectangle falls entirely
-  // within the boundaries of the first.
+  /// Determines whether the [rect] object is contained within this object. A
+  /// Rectangle is said to contain another if the second Rectangle falls entirely
+  /// within the boundaries of the first.
   bool containsRect(GRect rect) {
     if (rect.width <= 0 || rect.height <= 0) {
       return rect.x > x &&
