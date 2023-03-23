@@ -73,7 +73,7 @@ class ColorMatrix {
     copyMatrix(((matrix.length == length) ? matrix : kIdentityMatrix));
   }
 
-  // Returns a copy of the first 20 elements (5x4)  of this matrix.
+  /// Returns a copy of the first 20 elements (5x4)  of this matrix.
   List<double> get storage =>
       _storage.sublist(0, math.min(_storage.length, 20)).toList();
 
@@ -245,15 +245,15 @@ class ColorMatrix {
     ]);
   }
 
-  // Returns a clone of this [ColorMatrix].
+  /// Returns a clone of this [ColorMatrix].
   ColorMatrix clone() => ColorMatrix(_storage);
 
-  // Concatenates the given matrix with this matrix by multiplying them
-  // together. This operation effectively combines the color transformations of
-  // both matrices.
-  //
-  // If the given matrix does not have the same length as this matrix,
-  // this method does nothing.
+  /// Concatenates the given matrix with this matrix by multiplying them
+  /// together. This operation effectively combines the color transformations of
+  /// both matrices.
+  ///
+  /// If the given matrix does not have the same length as this matrix,
+  /// this method does nothing.
   void concat(List<double> pMatrix) {
     pMatrix = _fixMatrix(pMatrix);
     if (pMatrix.length != length) {
@@ -262,20 +262,20 @@ class ColorMatrix {
     multiplyMatrix(pMatrix);
   }
 
-  // Copies the values of the given [matrix] into this matrix. If the given
-  // [matrix] does not have the same length as this matrix, only the values up
-  // to the length of this matrix are copied.
+  /// Copies the values of the given [matrix] into this matrix. If the given
+  /// [matrix] does not have the same length as this matrix, only the values up
+  /// to the length of this matrix are copied.
   void copyMatrix(List<double> matrix) {
     for (var i = 0; i < length; i++) {
       _storage[i] = matrix[i];
     }
   }
 
-  // Multiplies this matrix by the given [matrix] and stores the result in this
-  // matrix. This operation effectively combines the color transformations of
-  // both matrices.
-  //
-  // The given [matrix] must have the same length as this matrix.
+  /// Multiplies this matrix by the given [matrix] and stores the result in this
+  /// matrix. This operation effectively combines the color transformations of
+  /// both matrices.
+  ///
+  /// The given [matrix] must have the same length as this matrix.
   void multiplyMatrix(List<double> matrix) {
     var col = List<double>.filled(25, 0);
     for (var i = 0; i < 5; i++) {
