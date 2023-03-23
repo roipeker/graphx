@@ -38,7 +38,7 @@ enum GradientType {
 /// drawn shapes.
 /// It should not be instantiated, use a [GShape.graphics] or [GSprite.graphics]
 /// instead
-class Graphics with RenderUtilMixin implements GxRenderable {
+class Graphics with RenderUtilMixin {
   /// A helper [GMatrix] used for creating shaders and gradients.
   static final GMatrix _helperMatrix = GMatrix();
 

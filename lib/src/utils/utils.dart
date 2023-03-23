@@ -2,7 +2,6 @@ export '../io/resource_loader.dart';
 export 'color_utils.dart';
 export 'context_utils.dart';
 export 'http/http.dart';
-export 'interfases.dart';
 export 'keyboard_util.dart';
 export 'layout_utils.dart';
 export 'list_utils.dart';
