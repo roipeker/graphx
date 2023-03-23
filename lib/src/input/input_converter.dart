@@ -5,9 +5,18 @@ import '../../graphx.dart';
 
 /// A class that converts various input events into [PointerEventData] or
 /// [KeyboardEventData] to be processed by [PointerManager] or
-/// [KeyboardManager]. For internal use of GraphX.
+/// [KeyboardManager].
+///
+/// For internal use of GraphX.
+///
 class InputConverter {
+  /// Manages pointer events and provides a mechanism for converting them into
+  /// events that can be used in GraphX Scenes. The [PointerManager] class works
+  /// in conjunction with the [InputConverter] class to handle pointer events
+  /// and convert them into higher-level pointer events.
   final PointerManager pointer;
+
+  /// A [KeyboardManager] instance that handles keyboard input events.
   final KeyboardManager keyboard;
 
   /// Creates a new [InputConverter] instance with the given [PointerManager]

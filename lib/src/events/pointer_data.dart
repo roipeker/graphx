@@ -178,24 +178,43 @@ class MouseInputData {
 }
 
 /// An enumeration of mouse input types.
+/// Enumerates the various types of mouse inputs that can be detected.
 enum MouseInputType {
+  /// Mouse pointer has entered the interactive object's area.
   over,
+
+  /// Mouse pointer has exited the interactive object's area.
   out,
+
+  /// Mouse pointer has moved within the interactive object's area.
   move,
+
+  /// Mouse button has been pressed within the interactive object's area.
   down,
+
+  /// Mouse button has been pressed and the mouse pointer is now outside of the interactive object's area.
   exit,
+
+  /// Mouse button has been released within the interactive object's area.
   enter,
+
+  /// Mouse button has been released within the interactive object's area.
   up,
+
+  /// Mouse button has been clicked within the interactive object's area.
   click,
+
+  /// Mouse pointer is within the interactive object's area and has not moved.
   still,
+
+  /// Mouse wheel has been moved while the pointer is within the interactive object's area.
   wheel,
+
+  /// Mouse wheel has been moved while holding down CTRL/CMD or ALT.
   zoomPan,
 
-  /// check button directly with: isPrimaryDown, isSecondaryDown...
-//  rightDown,
-//  rightUp,
-//  rightClick,
-  unknown
+  /// Unrecognized input type.
+  unknown,
 }
 
 /// A class representing the data associated with a pointer event.
