@@ -20,6 +20,7 @@ class ConnectedMain extends StatelessWidget {
 
 class ConnectedScene extends GSprite {
   double get stageWidth => stage!.stageWidth;
+
   double get stageHeight => stage!.stageHeight;
 
   List<Node> nodes = [];
@@ -81,8 +82,9 @@ class ConnectedScene extends GSprite {
     return max(dx, dy);
   }
 
+  bool showSequentialLines = false;
+
   void _update(double delta) {
-    bool showSequentialLines = false;
     bool showNodes = true;
     bool showNearConnections = true;
 
@@ -109,7 +111,7 @@ class ConnectedScene extends GSprite {
 
     graphics.clear();
 
-    // Draw sequential lines
+    /// Uncomment the follow code to draw sequential lines.
     if (showSequentialLines) {
       graphics.lineStyle(1, const Color.fromARGB(176, 64, 69, 132));
       graphics.moveTo(nodes[0].x, nodes[0].y);

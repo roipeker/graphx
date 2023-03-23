@@ -31,8 +31,8 @@ class _ZoomGestureMain extends State<ZoomGestureMain> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Text('reset'),
         onPressed: scene.resetTransform,
+        child: const Text('reset'),
       ),
     );
   }

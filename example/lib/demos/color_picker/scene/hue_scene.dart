@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
@@ -96,8 +94,9 @@ class HueScene extends GSprite {
     });
     stage!.onMouseMove.add(_onMouseMove);
 
-    var colorImage = colorSelector.createImageSync();
-    var result = await colorImage.toByteData();
+    /// old implementation:
+    // var colorImage = colorSelector.createImageSync();
+    // var result = await colorImage.toByteData();
 
     /// get the image bytes from capturing the GShape snapshot.
     /// so we can get the colors from the bytes List.

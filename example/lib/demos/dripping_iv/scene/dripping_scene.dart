@@ -111,8 +111,7 @@ class DrippingScene extends GSprite {
 
   /// experimental particle system.
   void addParticles() async {
-    var particle =
-        await GTextureUtils.createCircle(color: Colors.white, radius: 2);
+    var particle = GTextureUtils.createCircle(color: Colors.white, radius: 2);
 
     /// just play with all the properties.
     var particles = GSimpleParticleSystem();

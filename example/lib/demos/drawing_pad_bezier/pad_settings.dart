@@ -32,8 +32,8 @@ class PadSettings extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Text(
                       'pick a color',
                       style: TextStyle(

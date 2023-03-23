@@ -45,8 +45,8 @@ class _NokiaSnakeMainState extends State<NokiaSnakeMain> {
           toolbarHeight: 50,
           backgroundColor: const Color(0xFF949425),
           centerTitle: true,
-          title: Column(
-            children: const [
+          title: const Column(
+            children: [
               Text(
                 'NOKIA SNAKE',
                 style: TextStyle(

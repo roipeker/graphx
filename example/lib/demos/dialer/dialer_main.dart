@@ -38,8 +38,8 @@ class DialerMain extends StatelessWidget {
                   const SizedBox(height: 30),
 
                   /// smart schedule
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Opacity(opacity: .2, child: Icon(Icons.access_time)),
                       SizedBox(width: 8),
                       Text(
@@ -63,9 +63,9 @@ class DialerMain extends StatelessWidget {
                   ]),
                   const SizedBox(height: 30),
                   const Spacer(),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         Icons.radio_button_off_outlined,
                         color: pinkColor,
@@ -81,7 +81,8 @@ class DialerMain extends StatelessWidget {
                             fontSize: 12,
                             letterSpacing: -.1,
                           ),
-                          strutStyle: StrutStyle(fontSize: 10, forceStrutHeight: true),
+                          strutStyle:
+                              StrutStyle(fontSize: 10, forceStrutHeight: true),
                         ),
                       )
                     ],
@@ -97,10 +98,10 @@ class DialerMain extends StatelessWidget {
   }
 
   Widget _buildTemperature() {
-    return FittedBox(
+    return const FittedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text(
             'TEMPERATURE, C',
             style: TextStyle(
@@ -146,7 +147,8 @@ class DialerMain extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: selected ? pinkColor : Colors.transparent,
-          border: Border.all(color: selected ? pinkColor : Colors.white70, width: 1.2),
+          border: Border.all(
+              color: selected ? pinkColor : Colors.white70, width: 1.2),
         ),
         child: Icon(
           ico,

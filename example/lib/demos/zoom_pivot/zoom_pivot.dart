@@ -15,12 +15,12 @@ class ZoomPivotMain extends StatelessWidget {
         useKeyboard: true,
         usePointer: true,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+      child: const Padding(
+        padding: EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
+          children: [
             Text('''
 - Use your mouse or trackpad (scroll wheel) to test zoom+pan the box (accurate on macOS).
 

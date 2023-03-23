@@ -20,8 +20,8 @@ class IsmaChartMain extends StatelessWidget {
           child: Card(
             child: Column(
               children: [
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     SizedBox(width: 7),
                     OrangeBox(),
                     SizedBox(width: 7),
@@ -71,9 +71,9 @@ class IsmaChartMain extends StatelessWidget {
                 Container(
                   height: 30,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Divider(
                         height: 0,
                       ),
