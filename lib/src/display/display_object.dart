@@ -164,7 +164,7 @@ abstract class GDisplayObject
   bool mouseEnabled = true;
 
   /// (Internal usage)
-  /// The [maskee] of this object, used for masking.
+  /// The display object that acts as a mask of this object.
   GDisplayObject? $maskee;
 
   /// (Internal usage)
@@ -1105,10 +1105,11 @@ abstract class GDisplayObject
   /// true.
   ///
   /// The method checks whether the input is captured or not and updates the
-  /// [captured] property accordingly. If the input is newly captured, it also
-  /// dispatches a [MouseInputType.over] event to this display object. If the
-  /// input was already captured, it checks if the mouse is still over this
-  /// display object and dispatches a [MouseInputType.out] event if it's not.
+  /// [MouseInputData.captured] property accordingly. If the input is newly
+  /// captured, it also dispatches a [MouseInputType.over] event to this display
+  /// object. If the input was already captured, it checks if the mouse is still
+  /// over this display object and dispatches a [MouseInputType.out] event if
+  /// it's not.
   ///
   /// The [input] parameter represents the mouse input data including the input
   /// type and position.
@@ -1508,7 +1509,8 @@ abstract class GDisplayObject
   ///
   /// If [useShape] is `false`, this method uses the axis-aligned bounding box
   /// of the display object to test for a hit. If [useShape] is `true`, this
-  /// method uses the object's [shape] to test for a hit.
+  /// method uses the object's shape [Graphics] to test for a hit, this applies
+  /// to [GSprite] and [GShape].
   ///
   /// This method returns `true` if the point is inside the object's bounds,
   /// and `false` otherwise.

@@ -8,11 +8,10 @@ import '../../graphx.dart';
 /// [builder] function which must return a [SceneController].
 ///
 /// [SceneBuilderWidget] also handles the input events from mouse and keyboard
-/// using [SceneInputConverter] and sends them to the [SceneController] as
-/// events.
+/// and sends them to the [SceneController] as events.
 ///
 /// If [autoSize] is `true`, the widget will wrap the [CustomPaint] in a
-/// [SizedBox.expand()], so it takes the available space in the parent.
+/// [SizedBox.expand], so it takes the available space in the parent.
 /// Warning: this will not work inside flex widgets.
 ///
 /// If the [child] parameter is non-null, it will be drawn above the scene.

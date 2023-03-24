@@ -76,12 +76,12 @@ class Stage extends GDisplayObjectContainer
     _boundsDebugger = DisplayBoundsDebugger(this);
   }
 
-  /// Gets the background color (in [backgroundPaint]) of the stage.
+  /// Gets the background color of the stage.
   ui.Color? get color {
     return _backgroundPaint?.color;
   }
 
-  /// Sets the background color (in [backgroundPaint]) of the stage.
+  /// Sets the background color of the stage.
   set color(ui.Color? value) {
     if (value == null) {
       _backgroundPaint = null;

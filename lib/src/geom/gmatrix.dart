@@ -15,7 +15,7 @@ import 'geom.dart';
 /// The GMatrix class has six fields that define the properties of the matrix:
 ///
 /// * [a], [b], [c], [d]: These fields represent the six elements of the 3x3
-/// transformation matrix in the order: [a b 0 c d 0 0 0 1].
+/// transformation matrix in the order: `[a, b, 0, c, d, 0, 0, 0, 1]`.
 ///
 /// * [tx] and [ty]: These fields define the translation vector.
 class GMatrix {
@@ -56,7 +56,7 @@ class GMatrix {
 
   /// Creates a new [GMatrix] object from a list of 6 doubles.
   ///
-  /// The list is in the format [a, b, tx, c, d, ty], where:
+  /// The list is in the format `[a, b, tx, c, d, ty]`, where:
   ///
   /// - [a] is the scale factor x of the horizontal axis.
   /// - [b] is the shear factor x of the vertical axis.
@@ -66,11 +66,11 @@ class GMatrix {
   /// - [ty] is the translation offset y of the vertical axis.
   ///
   /// The matrix elements are numbered as follows:
-  ///
-  ///     [ a  c  tx ]
-  ///     [ b  d  ty ]
-  ///     [ 0  0  1  ]
-  ///
+  ///```
+  ///     [ a,  c,  tx ]
+  ///     [ b,  d,  ty ]
+  ///     [ 0,  0,  1  ]
+  ///```
   /// Throws a [RangeError] if [value] does not have at least 6 elements.
   GMatrix.fromList(List<double> value) {
     if (value.length < 6) {

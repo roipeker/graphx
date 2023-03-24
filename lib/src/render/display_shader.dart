@@ -146,13 +146,13 @@ Did you call await DisplayShader.load("$id")?''');
     return img == null ? const [0.0, 0.0] : [img.width + .0, img.height + .0];
   }
 
-  /// See [Shader.setFloat]
+  /// See [FragmentShader.setFloat]
   @override
   void setFloat(int index, double value) {
     shader?.setFloat(index, value);
   }
 
-  /// See [Shader.setImageSampler]
+  /// See [FragmentShader.setImageSampler]
   @override
   void setImageSampler(int index, Image image) {
     shader?.setImageSampler(index, image);

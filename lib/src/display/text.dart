@@ -365,10 +365,9 @@ class GText extends GDisplayObject {
   /// adding the current [_text] to it. The resulting [ui.Paragraph] will then be
   /// stored in the [_paragraph] property.
   ///
-  /// If the size is invalid or the builder is invalid, this method will calculate
-  /// the size of the text and store it in the [_width] and [_textHeight]
-  /// properties. This is done by calling the [ui.Paragraph.layout] method with
-  /// the width constraint set to the value of [_width].
+  /// If the size is invalid or the builder is invalid, this method will
+  /// calculate the size of the text and store it. properties. This is done by
+  /// calling the [ui.Paragraph.layout].
   void validate() {
     if (_invalidBuilder) {
       _invalidateBuilder();

@@ -102,7 +102,7 @@ class ColorUtils {
   /// degrees to the hue of the given color, and creating a new color with the
   /// resulting hue value. The saturation and value (brightness) of the
   /// resulting color are the same as the original color. The resulting color is
-  /// similar to the [inverse] color of the given color, but with a slightly
+  /// similar to the [invert] color of the given color, but with a slightly
   /// different shade and hue. This method can be useful for creating color
   /// schemes or palettes that have a high degree of contrast and visual impact,
   /// or for creating complementary color pairs for user interfaces and visual
@@ -141,7 +141,7 @@ class ColorUtils {
   }
 
   /// Returns a color that is the desaturated version of the given [color], with
-  /// the given [desaturation] level (between 0.0 and 1.0). Desaturation is the
+  /// the given desaturation [level] (between 0.0 and 1.0). Desaturation is the
   /// process of reducing the level of saturation in a color, which makes it
   /// appear less vivid or intense. This method calculates the new saturation
   /// level relative to the current level of saturation of the color, so a level

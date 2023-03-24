@@ -2,7 +2,8 @@ import 'dart:ui' as ui;
 
 import '../../graphx.dart';
 
-/// Collection of utility methods for creating and manipulating [GTextures].
+/// Collection of utility methods for creating and manipulating [GTexture]
+/// instances.
 ///
 mixin GTextureUtils {
   /// Helper shape to draw shapes and create textures.

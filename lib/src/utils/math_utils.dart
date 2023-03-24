@@ -75,15 +75,15 @@ class MathUtils {
 
   /// Determines whether a given [point] is inside a triangle defined by three
   /// other points ([a], [b], [c]).
-  static bool isPointInTriangle(GPoint p, GPoint a, GPoint b, GPoint c) {
+  static bool isPointInTriangle(GPoint point, GPoint a, GPoint b, GPoint c) {
     // This algorithm is described well in this article:
     // http://www.blackpawn.com/texts/pointinpoly/default.html
     var v0x = c.x - a.x;
     var v0y = c.y - a.y;
     var v1x = b.x - a.x;
     var v1y = b.y - a.y;
-    var v2x = p.x - a.x;
-    var v2y = p.y - a.y;
+    var v2x = point.x - a.x;
+    var v2y = point.y - a.y;
 
     var dot00 = v0x * v0x + v0y * v0y;
     var dot01 = v0x * v1x + v0y * v1y;

@@ -25,7 +25,7 @@ class GRect {
   double height = 0.0;
 
   /// Represents the corner radius values of a [GRect].
-  GxRectCornerRadius? _corners;
+  GRectCornerRadius? _corners;
 
   /// Creates a new GRect object with the top-left corner specified by the x and
   /// y parameters and with the specified width and height parameters.
@@ -41,16 +41,16 @@ class GRect {
     height = value - y;
   }
 
-  /// Returns the [GxRectCornerRadius] instance that describes the corner radii
+  /// Returns the [GRectCornerRadius] instance that describes the corner radii
   /// of this [GRect].
-  GxRectCornerRadius? get corners {
-    _corners ??= GxRectCornerRadius();
+  GRectCornerRadius? get corners {
+    _corners ??= GRectCornerRadius();
     return _corners;
   }
 
-  /// Sets the [GxRectCornerRadius] instance that describes the corner radii of
+  /// Sets the [GRectCornerRadius] instance that describes the corner radii of
   /// this [GRect].
-  set corners(GxRectCornerRadius? value) {
+  set corners(GRectCornerRadius? value) {
     _corners = value;
   }
 
@@ -326,8 +326,8 @@ class GRect {
   }
 
   /// Converts the [GRect] to a rounded native [RRect] using the corners
-  /// specified in the [GCorner] class, or null for a rectangular [RRect], and
-  /// returns the native [RRect] instance.
+  /// specified in the [GRectCornerRadius] class, or null for a rectangular
+  /// [RRect], and returns the native [RRect] instance.
   RRect toRoundNative() {
     return corners!.toNative(this);
   }
@@ -384,7 +384,7 @@ class GRect {
 /// Represents a set of corner radii for a rounded rectangle. This class is used
 /// internally to build a rounded rectangle by specifying different radii for
 /// each of its corners.
-class GxRectCornerRadius {
+class GRectCornerRadius {
   /// The radius of the top-left corner of the rectangle.
   double topLeft;
 
@@ -397,8 +397,8 @@ class GxRectCornerRadius {
   /// The radius of the bottom-left corner of the rectangle.
   double bottomLeft;
 
-  /// Creates a new [GxRectCornerRadius] instance.
-  GxRectCornerRadius([
+  /// Creates a new [GRectCornerRadius] instance.
+  GRectCornerRadius([
     this.topLeft = 0,
     this.topRight = 0,
     this.bottomRight = 0,
@@ -442,7 +442,7 @@ class GxRectCornerRadius {
   }
 
   /// Returns a native Flutter [RRect] instance based on this
-  /// [GxRectCornerRadius] instance.
+  /// [GRectCornerRadius] instance.
   ///
   /// The [RRect] instance is built using the specified [GRect] instance as its
   /// bounding box and the corner radii for each of its corners.

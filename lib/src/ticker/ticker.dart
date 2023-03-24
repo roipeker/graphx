@@ -78,7 +78,7 @@ class GTicker {
 
   /// Indicates whether the [Ticker] is currently active or not.
   /// Whether time is elapsing for this [Ticker].
-  /// Becomes true when [start] is called and false when [stop] is called.
+  /// Becomes true when [resume] is called and false when [pause] is called.
   bool get isActive {
     return _ticker?.isActive ?? false;
   }

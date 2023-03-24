@@ -47,7 +47,8 @@ mixin DisplayListSignalsMixin {
   }
 }
 
-/// A mixin that provides an [EventDispatcher] with [Listenable] functionality.
+/// A mixin that provides an Event dispatcher system  with [Listenable]
+/// functionality.
 ///
 /// You can notify all registered listeners using the [notify] method.
 mixin EventDispatcherMixin implements Listenable {

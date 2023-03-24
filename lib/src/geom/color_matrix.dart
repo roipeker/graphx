@@ -5,8 +5,7 @@ import 'dart:math' as math;
 
 /// A utility class for working with color matrices. It can be used to adjust
 /// the brightness, contrast, saturation, and hue of an image.
-/// can be used in a custom Color Filter,
-/// # see [BlurFilter] implementation
+/// can be used in a custom Color Filter.
 ///
 /// Example:
 ///

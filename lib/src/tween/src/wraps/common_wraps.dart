@@ -38,21 +38,21 @@ abstract class CommonTweenWraps {
   /// The returned map contains the following properties and their corresponding
   /// accessors:
   ///
-  /// * 'x': [GDisplayObject.x] and [GDisplayObject.x=]
-  /// * 'y': [GDisplayObject.y] and [GDisplayObject.y=]
-  /// * 'scaleX': [GDisplayObject.scaleX] and [GDisplayObject.scaleX=]
-  /// * 'scaleY': [GDisplayObject.scaleY] and [GDisplayObject.scaleY=]
-  /// * 'scale': [GDisplayObject.scale] and [GDisplayObject.scale=]
-  /// * 'rotation': [GDisplayObject.rotation] and [GDisplayObject.rotation=]
-  /// * 'rotationX': [GDisplayObject.rotationX] and [GDisplayObject.rotationX=]
-  /// * 'rotationY': [GDisplayObject.rotationY] and [GDisplayObject.rotationY=]
-  /// * 'pivotX': [GDisplayObject.pivotX] and [GDisplayObject.pivotX=]
-  /// * 'pivotY': [GDisplayObject.pivotY] and [GDisplayObject.pivotY=]
-  /// * 'width': [GDisplayObject.width] and [GDisplayObject.width=]
-  /// * 'height': [GDisplayObject.height] and [GDisplayObject.height=]
-  /// * 'skewX': [GDisplayObject.skewX] and [GDisplayObject.skewX=]
-  /// * 'skewY': [GDisplayObject.skewY] and [GDisplayObject.skewY=]
-  /// * 'alpha': [GDisplayObject.alpha] and [GDisplayObject.alpha=]
+  /// * 'x': [GDisplayObject.x]
+  /// * 'y': [GDisplayObject.y]
+  /// * 'scaleX': [GDisplayObject.scaleX]
+  /// * 'scaleY': [GDisplayObject.scaleY]
+  /// * 'scale': [GDisplayObject.scale]
+  /// * 'rotation': [GDisplayObject.rotation]
+  /// * 'rotationX': [GDisplayObject.rotationX]
+  /// * 'rotationY': [GDisplayObject.rotationY]
+  /// * 'pivotX': [GDisplayObject.pivotX]
+  /// * 'pivotY': [GDisplayObject.pivotY]
+  /// * 'width': [GDisplayObject.width]
+  /// * 'height': [GDisplayObject.height]
+  /// * 'skewX': [GDisplayObject.skewX]
+  /// * 'skewY': [GDisplayObject.skewY]
+  /// * 'alpha': [GDisplayObject.alpha]
   ///
   /// The returned map is a Map<String, List<Function>>, where each key-value pair
   /// represents a property and its corresponding accessors, respectively.

@@ -428,7 +428,7 @@ class Graphics with RenderUtilMixin {
   /// bend. See also:
   ///
   /// * [Path.conicTo], which is used to draw a conic curve in a [Path].
-  /// * [quadraticCurveTo], which is used to draw a quadratic Bezier curve.
+  /// * [Path.quadraticBezierTo], which is used to draw a quadratic Bezier curve.
   /// * [cubicCurveTo], which is used to draw a cubic Bezier curve.
   ///
   /// The method returns this, which allows for method chaining.
@@ -951,14 +951,14 @@ class Graphics with RenderUtilMixin {
   /// current [lineStyle], so is mandatory to have a [lineStyle] before calling
   /// this method.
   ///
-  /// For [GradientType.linear], [Alignment begin] represents the start,
+  /// For [GradientType.linear], [begin] represents the start,
   ///
-  /// for [GradientType.radial] and [GradientType.sweep] represents the center.
-  /// Also for [GradientType.radial], [Alignment end] represents the
-  /// [focalPoint].
+  /// for [GradientType.radial] and [GradientType.sweep], [begin] represents the
+  /// center. Also for [GradientType.radial], [end] represents the
+  /// [RadialGradient.focal].
   ///
-  /// So make sure to increase the [radius] if you use a [focalPoint] alignment
-  /// different than the center (meaning `begin!=end`).
+  /// So make sure to increase the [radius] if you use a [RadialGradient.focal]
+  /// alignment different than the center (meaning `begin!=end`).
   ///
   /// If [_holeMode] is true, the method will do nothing and return this
   /// [Graphics] object.
@@ -1390,7 +1390,7 @@ class GraphicsDrawingData {
   GraphicsVertices? vertices;
 
   /// The texture to be used in the image shader, if any.
-  /// For [Graphics.beginBitmapFill] and [Graphics.beginShaderFill].
+  /// For [Graphics.beginBitmapFill] and [Graphics.beginShader].
   GTexture? shaderTexture;
 
   /// Creates a new instance of [GraphicsDrawingData] with the given [fill] and

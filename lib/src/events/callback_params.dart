@@ -24,12 +24,11 @@ class CallbackParams {
   /// Parses the arguments passed to a callback function.
   ///
   /// The [args] parameter is the argument list that is passed to the function.
-  /// It can be of type [CallbackParams], [List], [Map], or [null]. If [args]
+  /// It can be of type [CallbackParams], [List], [Map], or `null`. If [args]
   /// is [CallbackParams], it is returned as is. If it is a [List], a new
   /// [CallbackParams] object is created with the [List] as its [positional]
   /// parameter. If [args] is a [Map], a new [CallbackParams] object is created
-  /// with the [Map] as its [named] parameter. If [args] is [null], null is
-  /// returned.
+  /// with the [Map] as its [named] parameter.
   static CallbackParams? parse(Object? args) {
     if (args == null) return null;
 

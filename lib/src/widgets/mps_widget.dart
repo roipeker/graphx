@@ -4,13 +4,13 @@ import '../../graphx.dart';
 
 /// Function builder used to build a widget with an [MPSEvent] event.
 ///
-/// The `context` parameter is the build context passed from the [_MPSBuilderState] widget.
+/// The [context] parameter is the build context passed from the [_MPSBuilderState] widget.
 ///
-/// The `event` parameter is the event object that contains the type of the event and the data
+/// The [event] parameter is the event object that contains the type of the event and the data
 /// associated with it. It is updated each time an event is dispatched in any of the subscribed
 /// topics.
 ///
-/// The `child` parameter is an optional child widget to be included in the builder.
+/// The [child] parameter is an optional child widget to be included in the builder.
 ///
 /// Returns the built widget tree based on the provided [MPSEvent] object.
 typedef MPSFunctionBuilder<T> = Widget Function(
@@ -26,7 +26,6 @@ typedef MPSFunctionBuilder<T> = Widget Function(
 /// This widget listens to the [topics] list and rebuilds when an event is dispatched in any of them.
 ///
 /// You can publish without parameters (`ems.emit(topic)`) or with a single parameter `ems.emit1(topic, value)`.
-/// The data is captured and sent as the second parameter ([MPSEvent] event object) in the [build] function.
 ///
 /// Experimental! "MPS" is discouraged to use in GraphX. Use [ValueNotifier] or
 /// other [Listenable] objects instead to create the communication.

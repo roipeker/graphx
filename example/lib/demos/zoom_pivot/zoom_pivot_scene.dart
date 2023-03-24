@@ -1,11 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
 class ZoomPivotScene extends GSprite {
-
   late GSprite box;
   late GShape boxPivot;
 
@@ -53,7 +50,8 @@ class ZoomPivotScene extends GSprite {
     });
 
     // --------------------
-    var dpr = window.devicePixelRatio;
+    // var dpr = window.devicePixelRatio;
+    var dpr = PlatformDispatcher.instance.views.first.devicePixelRatio;
     box.onMouseDown.add((event) {
       centerOnMouse();
 

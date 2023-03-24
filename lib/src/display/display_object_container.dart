@@ -391,8 +391,6 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
 
   /// Removes a child from the list of children of this container based on its
   /// index.
-  ///
-  /// The type parameter [T] specifies the type of the child to remove.
   void removeChildren([
     int fromIndex = 0,
     int endIndex = -1,
@@ -485,7 +483,7 @@ abstract class GDisplayObjectContainer extends GDisplayObject {
     return '$runtimeType ($numChildrenStr, $nameStr)';
   }
 
-  /// Updates all children of this container and then calls [super.update].
+  /// Updates all children of this container.
   ///
   /// The [delta] parameter specifies the time elapsed since the last frame.
   ///

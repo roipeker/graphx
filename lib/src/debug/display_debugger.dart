@@ -5,15 +5,13 @@ import '../../graphx.dart';
 /// An enumeration representing different modes for rendering debug bounding
 /// boxes in GraphX.
 enum DebugBoundsMode {
-  /// renders the bounding box transformed, inside the current object [paint()]
-  /// method process.
+  /// Renders the bounding box transformed, inside the current
+  /// [GDisplayObject.paint] method process.
   internal,
 
-  /// renders the bounding box from the [Stage] itself, translating into each
-  /// object's coordinate
-  /// system. This represents visually the actual bounding boxes without any
-  /// matrix
-  /// transformations.
+  /// Renders the bounding box from the [Stage] itself, translating into each
+  /// object's coordinate system. This represents visually the actual bounding
+  /// boxes without any matrix transformations.
   stage,
 }
 
@@ -26,9 +24,10 @@ enum DebugBoundsMode {
 /// `GDisplayObject`.
 class DisplayBoundsDebugger {
   /// The debug mode for rendering bounds. When set to
-  /// [DebugBoundsMode.internal], only display objects with `debugBounds`
-  /// enabled will be rendered. When set to [DebugBoundsMode.full], all display
-  /// objects will be rendered, regardless of the [debugBounds] flag.
+  /// [DebugBoundsMode.internal], only display objects with
+  /// [GDisplayObject.$debugBounds] enabled will be rendered. When set to
+  /// [DebugBoundsMode.stage], all display objects will be rendered, regardless
+  /// of the [GDisplayObject.$debugBounds] flag.
   static DebugBoundsMode debugBoundsMode = DebugBoundsMode.internal;
 
   /// A global flag to disable all debug bounds rendering for performance.
@@ -56,8 +55,8 @@ class DisplayBoundsDebugger {
   /// `GDisplayObjectContainer`. (should be private)
   DisplayBoundsDebugger(GDisplayObjectContainer root) : _root = root;
 
-  /// Renders the bounds of all objects that have [debugBounds] enabled or have
-  /// the [debugAll] flag set to `true`.
+  /// Renders the bounds of all objects that have [GDisplayObject.$debugBounds]
+  /// enabled or have the [debugAll] flag set to `true`.
   void render() {
     if (debugBoundsMode == DebugBoundsMode.internal || !enabled) {
       return;

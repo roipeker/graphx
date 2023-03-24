@@ -3,7 +3,7 @@ import 'dart:ui';
 import '../../../graphx.dart';
 
 /// A filter that applies a glow effect to an object.
-/// This filter is similar to a [DropShadowFilter] with a [BlurStyle.outer]
+/// This filter is similar to a [GDropShadowFilter] with a [BlurStyle.outer]
 /// [MaskFilter] applied.
 class GlowFilter extends GComposerFilter {
   /// The blur value for the horizontal axis.

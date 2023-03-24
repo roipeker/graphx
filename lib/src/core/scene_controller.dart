@@ -6,10 +6,11 @@ import '../../graphx.dart';
 typedef WindowBoundsResolver = GRect? Function();
 
 /// Entry point of GraphX world.
-/// A [SceneController] manages (up to) 2 [SceneRoot]s: `back` and `front`
-/// which correlates to [CustomPainter.painter] and
-/// [CustomPainter.foregroundPainter]. It takes care of the initialization
-/// and holding the references of the Painters used by [SceneBuilderWidget].
+///
+/// A [SceneController] manages (up to) 2 scenes: [back] and [front] which
+/// correlates to [CustomPaint.painter] and [CustomPaint.foregroundPainter]. It
+/// takes care of the initialization and holding the references of the Painters
+/// used by [SceneBuilderWidget].
 class SceneController {
   /// This Signal will be dispatched when the Stateful Widget gets reassembled.
   /// Which usually means we are running the app in debug mode, and using

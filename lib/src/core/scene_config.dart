@@ -1,3 +1,5 @@
+import '../../graphx.dart';
+
 /// Configuration class used to define the properties and behavior of a GraphX
 /// Scene.
 class SceneConfig {
@@ -54,16 +56,15 @@ class SceneConfig {
   /// If this GraphX [SceneController] will use pointer (touch/mouse) events.
   late bool usePointer;
 
-  /// Will be overwritten to `true` if [autoUpdateAndRender] is set on any
+  /// Will be overwritten to `true` if [autoUpdateRender] is set on any
   /// [ScenePainter] layer.
   bool useTicker = false;
 
   /// See [CustomPaint.willChange].
-  /// Rendering caching flag.
-  /// Set to `true` if using [GxTicker] or pretend to re-render the Scene
-  /// on demand based on keyboard or pointer signals.
-  //  See [CustomPaint.isComplex]
-  /// All these flags overrides the value to `true`:
+  ///
+  /// Rendering caching flag. Set to `true` if using [GTicker] or pretend to
+  /// re-render the Scene on demand based on keyboard or pointer signals. See
+  /// [CustomPaint.isComplex] All these flags overrides the value to `true`:
   /// [autoUpdateRender], [useTicker], [usePointer], [useKeyboard]
   ///
   late bool painterWillChange;
@@ -78,7 +79,7 @@ class SceneConfig {
 
   /// Default flag to make the engine update() the Stage and all
   /// his children (onEnterFrame), needed by [GTween] to run the tweens.
-  /// [MovieClip] and [SimpleParticleSystem] also makes use of this.
+  /// [GMovieClip] and [GSimpleParticleSystem] also makes use of this.
   /// Same applies to basic "mouse out" feature detection (when mouse doesn't
   /// move but objects changed position).
   ///

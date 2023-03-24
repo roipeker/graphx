@@ -103,12 +103,11 @@ class OutlineFilter extends GComposerFilter {
   /// (Internal usage)
   /// Applies the filter to the given canvas.
   ///
-  /// This method is called by [GDisplayObject.applyFilter] to apply the filter
-  /// to the given canvas during the rendering process . It updates the filter's
-  /// properties based on the value of the [adjustToScale] property and the
-  /// current scale of the owner object (if applicable). It then saves the
-  /// current canvas state, applies the filter using the [applyPaint] callback
-  /// function, and restores the canvas state.
+  /// This method applies the filter to the given canvas during the rendering
+  /// process . It updates the filter's properties based on the value of the
+  /// [adjustToScale] property and the current scale of the owner object (if
+  /// applicable). It then saves the current canvas state, applies the filter
+  /// using the [applyPaint] callback function, and restores the canvas state.
   ///
   /// The [canvas] parameter is the canvas that the filter will be applied to.
   ///

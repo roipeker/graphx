@@ -267,7 +267,7 @@ class GSimpleParticleSystem extends GDisplayObject {
 
   /// Gets the [endColor] as a hex value.
   /// The [endRed], [endGreen], and [endBlue] values are converted to
-  /// hex from [0, 255] range and combined to create the hex color
+  /// hex from `[0, 255]` range and combined to create the hex color
   /// with format 0xRRGGBB.
   int get endColor {
     final r = (endRed * 0xff).toInt() << 16;
@@ -278,7 +278,7 @@ class GSimpleParticleSystem extends GDisplayObject {
 
   /// Sets the [endColor] as a hex value.
   /// The integer value is split into its red, green, and blue components,
-  /// which are then converted to floats in the range [0, 1] and assigned to
+  /// which are then converted to floats in the range `[0, 1]` and assigned to
   /// [endRed], [endGreen], and [endBlue] respectively.
   set endColor(int value) {
     endRed = (value >> 16 & 0xff) / 0xff;
@@ -448,7 +448,6 @@ class GSimpleParticleSystem extends GDisplayObject {
   }
 
   /// Sets up the particle system to start fresh.
-  /// Should call [init] before to start the ticking.
   ///
   /// Parameters:
   ///
