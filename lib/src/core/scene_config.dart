@@ -42,7 +42,7 @@ class SceneConfig {
 
   /// Property defines the default configuration to be used if no other
   /// configuration is specified.
-  static SceneConfig defaultConfig = interactive;
+  static SceneConfig defaultConfig = games;
 
   /// Re-builds the SceneController (the ScenePainter and the scene class).
   /// disposes and initializes all the scene.
