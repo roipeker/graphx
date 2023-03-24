@@ -1,4 +1,3 @@
-
 import 'package:graphx/graphx.dart';
 
 class PageDot extends GShape {

@@ -143,8 +143,10 @@ class AltitudIndicatorScene extends GSprite {
     /// center pivot in the drawn object.
     rotatorCircle.alignPivot();
 
-    var sky = buildBox(const Color(0xff3D84A9), innerCircleSize, innerCircleSize);
-    var ground = buildBox(const Color(0xff493F42), innerCircleSize, innerCircleSize);
+    var sky =
+        buildBox(const Color(0xff3D84A9), innerCircleSize, innerCircleSize);
+    var ground =
+        buildBox(const Color(0xff493F42), innerCircleSize, innerCircleSize);
     var line = buildBox(kColorWhite, innerCircleSize, 2);
 
     sky.alignPivot(Alignment.bottomCenter);

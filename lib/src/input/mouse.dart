@@ -3,7 +3,6 @@ import '../../graphx.dart';
 /// "Static" class for managing system mouse cursors.
 /// Accessible from `pointer_manager.dart`
 abstract class GMouse {
-
   /// The current system mouse cursor.
   static SystemMouseCursor _cursor = SystemMouseCursors.basic;
 

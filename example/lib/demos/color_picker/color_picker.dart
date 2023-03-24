@@ -48,14 +48,17 @@ class ColorPickerMain extends StatelessWidget {
               children: [
                 const SizedBox(width: 12),
                 TextButton(
-                  child: const Text('graphx gist', style: TextStyle(fontSize: 12)),
-                  onPressed: () =>
-                      trace('https://gist.github.com/roipeker/6e7d5b30f6b022196bc98e2db14676a2'),
+                  child:
+                      const Text('graphx gist', style: TextStyle(fontSize: 12)),
+                  onPressed: () => trace(
+                      'https://gist.github.com/roipeker/6e7d5b30f6b022196bc98e2db14676a2'),
                 ),
                 const VerticalDivider(),
                 TextButton(
-                  child: const Text('original workshop', style: TextStyle(fontSize: 12)),
-                  onPressed: () => trace('https://www.youtube.com/watch?v=HURA4DKjA1c'),
+                  child: const Text('original workshop',
+                      style: TextStyle(fontSize: 12)),
+                  onPressed: () =>
+                      trace('https://www.youtube.com/watch?v=HURA4DKjA1c'),
                 ),
               ],
             ),

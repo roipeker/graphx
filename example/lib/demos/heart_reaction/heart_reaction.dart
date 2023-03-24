@@ -27,7 +27,9 @@ class HeartReactionMain extends StatelessWidget {
           return FloatingActionButton(
             key: _key,
             onPressed: event.type == 'like' ? null : () => mps.emit('like'),
-            backgroundColor: event.type == 'like' ? Theme.of(context).disabledColor : Colors.red,
+            backgroundColor: event.type == 'like'
+                ? Theme.of(context).disabledColor
+                : Colors.red,
             disabledElevation: 0,
             elevation: 6,
             child: SvgPicture.string(

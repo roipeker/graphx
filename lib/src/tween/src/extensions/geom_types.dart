@@ -7,7 +7,6 @@ part of gtween;
 /// returns a [GTweenableColor] object that can be used to create GTween
 /// animations.
 extension GTweenColorExt on Color {
-
   /// Returns a [GTweenableColor] instance that can be used to animate the
   /// properties of this point with a [GTween] animation.
   GTweenableColor get twn {
@@ -22,7 +21,6 @@ extension GTweenColorExt on Color {
 /// returns a [GTweenablePoint] object that can be used to create GTween
 /// animations.
 extension GTweenPointExt on GPoint {
-
   /// Returns a [GTweenablePoint] instance that can be used to animate the
   /// properties of this point with a [GTween] animation.
   GTweenablePoint get twn {
@@ -37,7 +35,6 @@ extension GTweenPointExt on GPoint {
 /// returns a [GTweenableRect] object that can be used to create GTween
 /// animations.
 extension GTweenRectExt on GRect {
-
   /// Returns a [GTweenableRect] object that wraps this [GRect] instance,
   /// allowing it to be used with GTween animations. Use this to animate
   /// the properties of the rectangle, such as its position, size, and anchor

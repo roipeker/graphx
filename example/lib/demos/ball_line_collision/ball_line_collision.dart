@@ -17,7 +17,10 @@ class BallVsLineMain extends StatelessWidget {
       decoration: const BoxDecoration(
         // color: Color.fromARGB(255, 176, 209, 234),
         gradient: LinearGradient(
-          colors: [Color.fromARGB(255, 6, 4, 96), Color.fromARGB(255, 143, 212, 238)],
+          colors: [
+            Color.fromARGB(255, 6, 4, 96),
+            Color.fromARGB(255, 143, 212, 238)
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),

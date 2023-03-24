@@ -147,8 +147,8 @@ class SnakeGameScene extends GSprite {
     final inflation = isPulsing ? 0.0 : -2.0;
     final outRect = foodRect.clone().inflate(inflation, inflation);
 
-    graphics.drawCircle(
-        outRect.x + outRect.width / 2, outRect.y + outRect.height / 2, outRect.width / 2);
+    graphics.drawCircle(outRect.x + outRect.width / 2,
+        outRect.y + outRect.height / 2, outRect.width / 2);
 
     graphics.endFill();
     graphics.endFill();
@@ -169,7 +169,8 @@ class SnakeGameScene extends GSprite {
     return false;
   }
 
-  double randomFood(double min, double max) => Math.randomRangeClamp(min, max, tileSize);
+  double randomFood(double min, double max) =>
+      Math.randomRangeClamp(min, max, tileSize);
 
   void generateFood() {
     isBig = score % 8 == 0 && score > 0;

@@ -192,7 +192,6 @@ class GIcon extends GDisplayObject {
     variations.weight = weight;
   }
 
-
   /// (Internal usage)
   /// Applies the current paint to the [canvas], drawing the glyph using a
   /// [ui.Paint] object, updating it if necessary.

@@ -21,7 +21,10 @@ class PadPoint {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    return other is PadPoint && other.time == time && other.x == x && other.y == y;
+    return other is PadPoint &&
+        other.time == time &&
+        other.x == x &&
+        other.y == y;
   }
 
   @override

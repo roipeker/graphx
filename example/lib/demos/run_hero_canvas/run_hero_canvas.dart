@@ -31,13 +31,20 @@ class RunHeroScene extends GSprite {
 
   Future<void> _init() async {
     GTextureUtils.resolution = 2;
-    await ResourceLoader.loadTexture('assets/run_hero/parallax/layer_01.png', 2, 'l1');
-    await ResourceLoader.loadTexture('assets/run_hero/parallax/layer_02.png', 2, 'l2');
-    await ResourceLoader.loadTexture('assets/run_hero/parallax/layer_03.png', 2, 'l3');
-    await ResourceLoader.loadTexture('assets/run_hero/parallax/layer_04.png', 2, 'l4');
-    await ResourceLoader.loadTexture('assets/run_hero/parallax/layer_05.png', 2, 'l5');
-    await ResourceLoader.loadGif('assets/run_hero/run_outline.gif', cacheId: 'hero');
-    await ResourceLoader.loadGif('assets/run_hero/midair_outline.gif', cacheId: 'hero_air');
+    await ResourceLoader.loadTexture(
+        'assets/run_hero/parallax/layer_01.png', 2, 'l1');
+    await ResourceLoader.loadTexture(
+        'assets/run_hero/parallax/layer_02.png', 2, 'l2');
+    await ResourceLoader.loadTexture(
+        'assets/run_hero/parallax/layer_03.png', 2, 'l3');
+    await ResourceLoader.loadTexture(
+        'assets/run_hero/parallax/layer_04.png', 2, 'l4');
+    await ResourceLoader.loadTexture(
+        'assets/run_hero/parallax/layer_05.png', 2, 'l5');
+    await ResourceLoader.loadGif('assets/run_hero/run_outline.gif',
+        cacheId: 'hero');
+    await ResourceLoader.loadGif('assets/run_hero/midair_outline.gif',
+        cacheId: 'hero_air');
 
     // var program = await ui.FragmentProgram.fromAsset('shaders/blur.glsl');
     // shader = program.fragmentShader();

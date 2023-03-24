@@ -91,9 +91,13 @@ class _MyMenuState extends State<MyMenu> with TickerProviderStateMixin {
               Expanded(child: widget.child!),
               Container(
                 height: 60,
-                decoration: const BoxDecoration(color: Colors.white, boxShadow: [
+                decoration:
+                    const BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
-                      color: Colors.black38, blurRadius: 12, offset: Offset(0, -1), spreadRadius: 2)
+                      color: Colors.black38,
+                      blurRadius: 12,
+                      offset: Offset(0, -1),
+                      spreadRadius: 2)
                 ]),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -91,7 +91,10 @@ class FunScene extends GSprite {
       final shape = GShape();
       final grx = shape.graphics;
 
-      grx.beginFill(const Color.fromARGB(255, 246, 104, 104)).drawCircle(0, 0, 20).endFill();
+      grx
+          .beginFill(const Color.fromARGB(255, 246, 104, 104))
+          .drawCircle(0, 0, 20)
+          .endFill();
       return shape;
     }();
 
@@ -108,7 +111,11 @@ class FunScene extends GSprite {
           .endFill();
 
       // Eyes
-      grx.beginFill(Colors.black).drawEllipse(-20, -20, 4, 8).drawEllipse(20, -20, 4, 8).endFill();
+      grx
+          .beginFill(Colors.black)
+          .drawEllipse(-20, -20, 4, 8)
+          .drawEllipse(20, -20, 4, 8)
+          .endFill();
 
       /// mouth
       grx.lineStyle(2).moveTo(-16, 32).lineTo(16, 32);
@@ -129,7 +136,11 @@ class FunScene extends GSprite {
           .endFill();
 
       // Eyes
-      grx.beginFill(Colors.black).drawEllipse(-16, -8, 4, 4).drawEllipse(16, -8, 4, 4).endFill();
+      grx
+          .beginFill(Colors.black)
+          .drawEllipse(-16, -8, 4, 4)
+          .drawEllipse(16, -8, 4, 4)
+          .endFill();
 
       // mouth
       grx.lineStyle(2).arc(0, 5, 16, deg2rad(45), deg2rad(90)).endFill();
@@ -150,7 +161,11 @@ class FunScene extends GSprite {
           .endFill();
 
       // Eyes
-      grx.beginFill(Colors.black).drawEllipse(-16, -8, 3, 10).drawEllipse(16, -8, 3, 10).endFill();
+      grx
+          .beginFill(Colors.black)
+          .drawEllipse(-16, -8, 3, 10)
+          .drawEllipse(16, -8, 3, 10)
+          .endFill();
 
       // mouth
       grx.lineStyle(2).arc(0, 36, 16, deg2rad(45 + 180), deg2rad(90)).endFill();

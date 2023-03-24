@@ -1,4 +1,9 @@
+## [1.0.12]
+
+- Missed a <CR> as EOF in a some dart files, failing static analysis.
+
 ## [1.0.11]
+
 - remove private constructors to pass Dart's static analysis
 
 ## [1.0.10]

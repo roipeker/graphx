@@ -145,7 +145,8 @@ class TestSvgScene extends GSprite {
 
       var px = Math.randomRange(10, stage!.stageWidth - 10);
       leaf.setPosition(px, -10);
-      final rndPivot = Math.randomBool() ? Alignment.bottomCenter : Alignment.topCenter;
+      final rndPivot =
+          Math.randomBool() ? Alignment.bottomCenter : Alignment.topCenter;
       leaf.alignPivot(rndPivot);
       leaf.scale = Math.randomRange(.4, 1);
 
@@ -186,7 +187,11 @@ class TestSvgScene extends GSprite {
     );
     final randomX = Math.randomRange(5, 40) * dir;
     final randomY = Math.randomRange(5, 30);
-    leaf.tween(duration: randomDuration * .9, x: '$randomX', y: '$randomY', ease: GEase.linear);
+    leaf.tween(
+        duration: randomDuration * .9,
+        x: '$randomX',
+        y: '$randomY',
+        ease: GEase.linear);
   }
 
   /// utils for parsing SVG.

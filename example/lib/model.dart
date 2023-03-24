@@ -4,7 +4,8 @@ import 'demos/demos.dart';
 import 'utils/utils.dart';
 
 extension GitUrl on String {
-  String get git => 'https://github.com/roipeker/graphx/tree/master/example/lib/demos/$this';
+  String get git =>
+      'https://github.com/roipeker/graphx/tree/master/example/lib/demos/$this';
 }
 
 final demos = <Scene>[

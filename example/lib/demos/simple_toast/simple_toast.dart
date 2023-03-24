@@ -39,7 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
         'text': tec.text == '' ? 'No messege' : tec.text,
         'color': Colors.red,
         'bottomInset': MediaQuery.of(context).viewInsets.bottom,
-        'onMouseClick': (MouseInputData event) => tec.text = event.localX.toString(),
+        'onMouseClick': (MouseInputData event) =>
+            tec.text = event.localX.toString(),
       },
     );
   }

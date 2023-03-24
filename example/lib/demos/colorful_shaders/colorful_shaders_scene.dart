@@ -18,7 +18,7 @@ class ColorfulShadersScene extends GSprite {
   @override
   Future<void> addedToStage() async {
     stage!.color = Colors.black;
-    stage!.maskBounds = true ;
+    stage!.maskBounds = true;
 
     if (kIsWeb) {
       trace("This particular GLSL shader is not supported (currently) on web.");

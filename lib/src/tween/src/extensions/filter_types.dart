@@ -3,7 +3,6 @@ part of gtween;
 /// An extension of [GBlurFilter] to create tween animations for the blur
 /// filter.
 extension GTweenBlurFilterExt on GBlurFilter {
-
   /// Returns a [GTweenableBlur] instance of the blur filter.
   GTweenableBlur get twn {
     return GTweenableBlur(this);
@@ -161,7 +160,6 @@ extension GTweenDropShadowFilterExt on GDropShadowFilter {
 /// Extension on [GlowFilter] providing a getter for [GTweenableGlowFilter]
 /// and a tween method to tween the properties of the glow filter.
 extension GTweenGlowFilterExt on GlowFilter {
-
   /// Returns a [GTweenableGlowFilter] that can be animated with GTween.
   GTweenableGlowFilter get twn {
     return GTweenableGlowFilter(this);
