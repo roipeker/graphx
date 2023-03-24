@@ -108,8 +108,8 @@ class Math {
   // * OLD code
   // static final max = m.max as T Function<T extends num>(T, T);
 
-  /// Private constructor to prevent instantiation
-  Math._();
+  // Private constructor to prevent instantiation
+  // Math._();
 
   /// Computes and returns an absolute value for the number specified by
   /// [value].

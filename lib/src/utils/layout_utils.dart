@@ -20,8 +20,8 @@ class LayoutUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  LayoutUtils._();
+  // Private constructor to prevent instantiation
+  //LayoutUtils._();
 
   /// Arranges the [items] vertically in a single column, similar to Flutter's
   /// [Column], with optional [gap] between them. The column will start at the

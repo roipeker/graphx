@@ -18,8 +18,8 @@ abstract class PainterUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  PainterUtils._();
+  // Private constructor to prevent instantiation
+  //PainterUtils._();
 
   /// Returns a paint object with the specified [alpha] value.
   ///

@@ -11,8 +11,8 @@ class MatrixUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  MatrixUtils._();
+  // Private constructor to prevent instantiation
+  //MatrixUtils._();
 
   /// Returns the bounding rectangle of the specified [rect] after applying the
   /// specified [matrix] transformation.

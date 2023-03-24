@@ -37,8 +37,8 @@ class ColorUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  ColorUtils._();
+  // Private constructor to prevent instantiation
+  // ColorUtils._();
 
   /// Returns a color that is the analogous color of the given [color], with the
   /// given hue shift [angle] (in degrees). Analogous colors are colors that are

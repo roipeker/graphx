@@ -11,8 +11,8 @@ class ListUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  ListUtils._();
+  // Private constructor to prevent instantiation
+  //ListUtils._();
 
   /// Sorts the given list of [GDisplayObject]s using the merge sort algorithm.
   /// The [compare] callback is used to determine the ordering of the elements.

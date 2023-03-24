@@ -1,4 +1,7 @@
-## [1.0.10] (current dev)
+## [1.0.11]
+- remove private constructors to pass Dart's static analysis
+
+## [1.0.10]
 
 - fix Color opacity 0 flickering in Graphics.
 - new demo in example gallery "Connected" (node garden).

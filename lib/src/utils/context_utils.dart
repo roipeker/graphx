@@ -4,8 +4,8 @@ import '../../graphx.dart';
 
 /// A utility class for handling [BuildContext] related operations.
 class ContextUtils {
-  /// Private constructor to prevent instantiation
-  ContextUtils._();
+  // Private constructor to prevent instantiation
+  // ContextUtils._();
 
   /// Factory constructor to ensure exception.
   factory ContextUtils() {

@@ -43,8 +43,8 @@ class MathUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  MathUtils._();
+  // Private constructor to prevent instantiation
+  //MathUtils._();
 
   /// Calculates the next power of two for the given [value].
   /// If [value] is already a power of two, it is returned.

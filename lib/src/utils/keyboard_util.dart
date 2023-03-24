@@ -27,8 +27,8 @@ class GKeyboard {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  GKeyboard._();
+  // Private constructor to prevent instantiation
+  //GKeyboard._();
 
   /// Returns `true` if any of the specified [GKey] instances are currently
   /// pressed.

@@ -8,8 +8,8 @@ class StringUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  StringUtils._();
+  // Private constructor to prevent instantiation
+  // StringUtils._();
 
   /// Parses a string value to become a boolean.
   ///

@@ -27,8 +27,8 @@ class SystemUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  SystemUtils._();
+  // Private constructor to prevent instantiation
+  //SystemUtils._();
 
   /// Initializes and returns the value of [_usesSkia] based on whether Skia can
   /// be used without errors.

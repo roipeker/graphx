@@ -15,8 +15,8 @@ class SvgUtils {
     );
   }
 
-  /// Private constructor to prevent instantiation
-  SvgUtils._();
+  // Private constructor to prevent instantiation
+  //SvgUtils._();
 
   /// Parses a raw SVG string into a [SvgData] object.
   ///
