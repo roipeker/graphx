@@ -1,0 +1,15 @@
+{
+  "name": "GraphX",
+  "theme": "#36B9B9",
+  "description": "GraphX is a project that does awesome things.",
+  "sidebar": [
+    [
+      "Home",
+      "/"
+    ],
+    [
+      "Another Page",
+      "/another-page"
+    ]
+  ]
+}
