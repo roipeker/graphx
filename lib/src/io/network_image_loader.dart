@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:http/http.dart' as http;
@@ -183,53 +182,6 @@ class NetworkImageLoader {
         );
       },
     );
-    return completer.future;
-  }
-
-  /// Loads an SVG from the specified [url] and returns a [NetworkImageEvent]
-  /// upon completion.
-  static Future<NetworkImageEvent> loadSvg(
-    String url, {
-    NetworkEventCallback? onComplete,
-    NetworkEventCallback? onProgress,
-    NetworkEventCallback? onError,
-  }) async {
-    final completer = Completer<NetworkImageEvent>();
-    var loadedBytes = <int>[];
-    var bytesLoaded = 0;
-    var request = http.Request('GET', Uri.parse(url));
-    var response = _client.send(request);
-    void dispatchError(NetworkImageEvent eventData) {
-      if (onError != null) {
-        onError.call(eventData);
-        completer.complete(eventData);
-      } else {
-        completer.completeError(eventData);
-      }
-    }
-
-    response.asStream().listen((r) {
-      var eventData = NetworkImageEvent(r);
-      eventData.scale = 1.0;
-      r.stream.listen((chunk) {
-        loadedBytes.addAll(chunk);
-        bytesLoaded += chunk.length;
-        eventData.bytesLoaded = bytesLoaded;
-        onProgress?.call(eventData);
-      }, onError: (error) {
-        dispatchError(eventData);
-      }, onDone: () async {
-        if (eventData.isError) {
-          dispatchError(eventData);
-          return;
-        }
-        var svgString = utf8.decode(Uint8List.fromList(loadedBytes));
-        eventData.svgString = svgString;
-        eventData.svgData = await SvgUtils.svgDataFromString(svgString);
-        onComplete?.call(eventData);
-        completer.complete(eventData);
-      });
-    });
     return completer.future;
   }
 }

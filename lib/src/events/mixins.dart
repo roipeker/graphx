@@ -79,6 +79,9 @@ mixin EventDispatcherMixin implements Listenable {
 ///
 /// Only use mouse signals for now.
 mixin MouseSignalsMixin<T extends MouseInputData> {
+  /// Track the last mouse down state (for Mouse Click and Tap)
+  MouseInputData? $lastMouseDownInput;
+
   /// (Internal)
   EventSignal<T>? $onRightMouseDown;
 
@@ -96,6 +99,9 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
 
   /// (Internal)
   EventSignal<T>? $onMouseMove;
+
+  /// (Internal)
+  EventSignal<T>? $onTap;
 
   /// (Internal)
   EventSignal<T>? $onMouseOut;
@@ -144,8 +150,12 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
   /// Might change in the future.
   EventSignal<T> get onZoomPan => $onZoomPan ??= EventSignal();
 
+  /// Gesture tap signal similar to Mouse Click but takes movement threshold.
+  EventSignal<T> get onTap => $onTap ??= EventSignal();
+
   /// Disposes all mouse signals to free up memory.
   void $disposePointerSignals() {
+    $lastMouseDownInput = null;
     $onRightMouseDown?.removeAll();
     $onRightMouseDown = null;
     $onMouseClick?.removeAll();
@@ -166,6 +176,8 @@ mixin MouseSignalsMixin<T extends MouseInputData> {
     $onMouseWheel = null;
     $onZoomPan?.removeAll();
     $onZoomPan = null;
+    $onTap?.removeAll();
+    $onTap = null;
   }
 }
 

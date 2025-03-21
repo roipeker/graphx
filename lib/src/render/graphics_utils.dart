@@ -156,8 +156,6 @@ class GraphicsVertices {
             continue;
           }
           break;
-        default:
-          break;
       }
 
       /// TODO: finish implementation.

@@ -117,6 +117,10 @@ abstract class GDisplayObject
   /// The time of the last mouse click.
   double $lastClickTime = -1;
 
+  /// (Internal usage)
+  /// Time of the last mouse down event to register a click.
+  double $lastMouseDownTime = -1;
+
   /// Whether to use a custom cursor for this object.
   bool useCursor = false;
 
@@ -930,6 +934,8 @@ abstract class GDisplayObject
           break;
         case MouseInputType.down:
           $mouseDownObj = object;
+          $lastMouseDownInput = mouseInput;
+          $lastMouseDownTime = mouseInput.time;
           $onMouseDown?.dispatch(mouseInput);
           break;
 //        case MouseInputType.rightDown:
@@ -940,17 +946,37 @@ abstract class GDisplayObject
           $onMouseMove?.dispatch(mouseInput);
           break;
         case MouseInputType.up:
-          if ($mouseDownObj == object &&
-              ($onMouseClick != null || $onMouseDoubleClick != null)) {
-            var mouseClickInput = input.clone(this, object, MouseInputType.up);
-            $onMouseClick?.dispatch(mouseClickInput);
+          if ($mouseDownObj == object) {
+            final mouseDownInput = $lastMouseDownInput;
+            if (mouseDownInput != null && $onTap != null) {
+              final timeDiff = input.time - mouseDownInput.time;
+              // 200ms.
+              if (timeDiff <= MouseInputData.tapMaxTime &&
+                  GPoint.distance(
+                          mouseDownInput.localPosition, input.localPosition) <
+                      MouseInputData.tapMaxDistance) {
+                final tapInput = input.clone(this, object, MouseInputType.tap);
+                $onTap?.dispatch(tapInput);
+              }
+              $lastMouseDownInput = null;
+            }
 
-            if ($lastClickTime > 0 &&
-                input.time - $lastClickTime < MouseInputData.doubleClickTime) {
-              $onMouseDoubleClick?.dispatch(mouseClickInput);
-              $lastClickTime = -1;
-            } else {
-              $lastClickTime = input.time;
+            if ($onMouseClick != null || $onMouseDoubleClick != null) {
+              var clickDiff = input.time - $lastMouseDownTime;
+              if (clickDiff < MouseInputData.doubleClickTime) {
+                // click event
+                var mouseClickInput =
+                    input.clone(this, object, MouseInputType.up);
+                $onMouseClick?.dispatch(mouseClickInput);
+                var diff = input.time - $lastClickTime;
+                if ($lastClickTime > 0 &&
+                    diff < MouseInputData.doubleClickTime) {
+                  $onMouseDoubleClick?.dispatch(mouseClickInput);
+                  $lastClickTime = -1;
+                } else {
+                  $lastClickTime = input.time;
+                }
+              }
             }
           }
           $mouseDownObj = null;

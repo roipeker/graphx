@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
+import 'package:graphx_svg_utils/graphx_svg_utils.dart';
 
 class LungsScene extends GSprite {
   @override

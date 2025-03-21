@@ -238,13 +238,15 @@ class Graphics with RenderUtilMixin {
   /// If [antiAlias] is `true`, the method applies anti-aliasing to the fill.
   ///
   /// Returns this [Graphics] object after beginning the fill.
-  Graphics beginFill(Color color, [bool antiAlias = true]) {
+  Graphics beginFill(Color color,
+      [bool antiAlias = true, ui.BlendMode blendMode = ui.BlendMode.srcOver]) {
     if (_holeMode) {
       return this;
     }
     final fill = Paint();
     fill.style = PaintingStyle.fill;
     fill.isAntiAlias = antiAlias;
+    fill.blendMode = blendMode;
     fill.color = color;
     _addFill(fill);
     return this;
@@ -353,16 +355,12 @@ class Graphics with RenderUtilMixin {
   /// [Graphics] object.
   ///
   /// Returns this [Graphics] object after beginning the fill.
-  Graphics beginShader(Shader shader) {
+  Graphics beginShader(DisplayShader shader) {
     if (_holeMode) {
       return this;
     }
     final fill = Paint();
-    if (shader is DisplayShader) {
-      assert(shader.shader != null);
-      shader = shader.shader!;
-    }
-    fill.shader = shader;
+    fill.shader = shader.shader!;
     _addFill(fill);
     return this;
   }
@@ -1040,16 +1038,12 @@ class Graphics with RenderUtilMixin {
   /// [Graphics] object.
   ///
   /// Returns this [Graphics] object after setting the shader for strokes.
-  Graphics lineShaderStyle(Shader shader) {
+  Graphics lineShaderStyle(DisplayShader shader) {
     if (_holeMode) {
       return this;
     }
     assert(_currentDrawing!.fill?.style == PaintingStyle.stroke);
-    if (shader is DisplayShader) {
-      assert(shader.shader != null);
-      shader = shader.shader!;
-    }
-    _currentDrawing!.fill!.shader = shader;
+    _currentDrawing!.fill!.shader = shader.shader!;
     return this;
   }
 
@@ -1076,6 +1070,7 @@ class Graphics with RenderUtilMixin {
     StrokeCap? caps,
     StrokeJoin? joints,
     double miterLimit = 3.0,
+    ui.BlendMode blendMode = ui.BlendMode.srcOver,
   ]) {
     alpha = alpha.clamp(0.0, 1.0);
     final paint = Paint();
@@ -1085,6 +1080,7 @@ class Graphics with RenderUtilMixin {
     paint.isAntiAlias = pixelHinting;
     paint.strokeCap = caps ?? StrokeCap.butt;
     paint.strokeJoin = joints ?? StrokeJoin.miter;
+    paint.blendMode = blendMode;
     if (SystemUtils.usingSkia) {
       paint.strokeMiterLimit = miterLimit;
     }

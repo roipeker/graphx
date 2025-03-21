@@ -118,7 +118,7 @@ class Stage extends GDisplayObjectContainer
 
   /// Access the keyboard instance of the owner `SceneController`,
   /// Only available when [SceneConfig.useKeyboard] is true.
-  KeyboardManager? get keyboard {
+  KeyboardManager get keyboard {
     return scene.core.keyboard;
   }
 
@@ -197,7 +197,7 @@ class Stage extends GDisplayObjectContainer
 
   /// Returns the bounds of the stage as a [GRect].
   GRect get stageRect {
-    return _stageRect;
+    return _stageRect.clone();
   }
 
   /// The current width of the Stage.
@@ -382,5 +382,17 @@ class Stage extends GDisplayObjectContainer
   @override
   String toString() {
     return '$runtimeType';
+  }
+
+  GPoint _lastHitTestPosition = GPoint();
+
+  GPoint get lastHitTestPosition => _lastHitTestPosition;
+
+  // modify externally.
+  bool canvasHitTest = false;
+
+  bool $canvasHitTest(GPoint position) {
+    _lastHitTestPosition = position;
+    return canvasHitTest;
   }
 }

@@ -1,3 +1,7 @@
+## [1.0.13]
+
+- BREAKING CHANGE: svg support is of a separate package.
+
 ## [1.0.12]
 
 - Missed a <CR> as EOF in a some dart files, failing static analysis.

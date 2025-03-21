@@ -39,7 +39,7 @@ class DrawPadScene extends GSprite {
       var dir = event.scrollDelta.y;
       if (dir == 0) return;
       dir = dir < 0 ? 1 : -1;
-      if (stage!.keyboard!.isShiftPressed) {
+      if (stage!.keyboard.isShiftPressed) {
         pad.minW += (dir * .1);
         pad.minW = pad.minW.clamp(minRad, maxRad);
       } else {

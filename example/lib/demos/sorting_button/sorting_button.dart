@@ -6,7 +6,6 @@
 import 'package:graphx/graphx.dart';
 
 import '../../utils/utils.dart';
-import 'scene/root_scene.dart';
 import 'scene/sorting_button_scene.dart';
 
 class SortingButtonMain extends StatelessWidget {

@@ -11,6 +11,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:graphx/graphx.dart';
+import 'package:graphx_svg_utils/graphx_svg_utils.dart';
 
 /// GSprite that will hold a SVG path drawing with a
 /// filled and outlined version... and the ability to partially

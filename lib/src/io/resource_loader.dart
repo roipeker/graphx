@@ -155,35 +155,6 @@ abstract class ResourceLoader {
     return jsonDecode(str);
   }
 
-  /// Loads an SVG from a network URL and returns a [SvgData] object. The SVG is
-  /// loaded asynchronously, and the returned [Future] is completed with the
-  /// [SvgData] object when the SVG is fully loaded. If [cacheId] is provided,
-  /// the loaded SVG will be added to the SVG cache using [cacheId] as the key.
-  ///
-  /// Throws a [FlutterError] if the SVG cannot be loaded.
-  static Future<SvgData> loadNetworkSvg(
-    String url, {
-    String? cacheId,
-    NetworkEventCallback? onComplete,
-    NetworkEventCallback? onProgress,
-    NetworkEventCallback? onError,
-  }) async {
-    final response = await NetworkImageLoader.loadSvg(
-      url,
-      onComplete: onComplete,
-      onProgress: onProgress,
-      onError: onError,
-    );
-    if (response.isError) {
-      throw FlutterError(
-          'Unable to load SVG $url.\nReason: ${response.reasonPhrase}');
-    }
-    if (response.isSvg && cacheId != null) {
-      svgCache[cacheId] = response.svgData!;
-    }
-    return response.svgData!;
-  }
-
   /// Loads a network texture from the given URL with optional [width], [height],
   /// [resolution], and [cacheId]. If the texture is already in the cache, it is
   /// returned directly. Otherwise, the texture is downloaded and converted into
@@ -284,21 +255,6 @@ abstract class ResourceLoader {
   /// Returns a [Future] that completes with a [String] object.
   static Future<String> loadString(String path) async {
     return await rootBundle.loadString(path);
-  }
-
-  /// A static method to load an SVG image from a file.
-  ///
-  /// This method takes the [path] to the SVG file and an optional [cacheId]. If
-  /// the [cacheId] is not null it will return the cached SVG data. Otherwise,
-  /// it will load the SVG.
-  static Future<SvgData> loadSvg(
-    String path, [
-    String? cacheId,
-  ]) async {
-    cacheId ??= path;
-    svgCache[cacheId] =
-        await SvgUtils.svgDataFromString(await loadString(path));
-    return svgCache[cacheId]!;
   }
 
   /// Loads a texture from the given [path] with optional [resolution] and
