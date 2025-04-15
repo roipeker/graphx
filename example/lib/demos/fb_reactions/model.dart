@@ -73,8 +73,7 @@ class PostVo {
   static String randomImage() {
     var w = 800;
     var h = 600;
-    // ignore: lines_longer_than_80_chars
-    return '${'https://source.unsplash.com/random/$w'}x${'$h'}?c=${Math.random()}';
+    return 'https://picsum.photos/seed/graphx/$w/$h?c=${Math.random()}';
   }
 
   static String randomName() => Math.randomList(_randomNames);

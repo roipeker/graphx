@@ -14,16 +14,13 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-#  flutter_svg: ^1.0.3
-  graphx_svg_utils:
-    path: ../../graphx_svg_utils
-
+ 
   url_launcher: ^6.1.8
+  flutter_svg: ^2.0.17
 
   graphx:
     path: ../
   go_router: ^6.0.6
-#  flutter_blurhash: ^0.7.0
   cupertino_icons: ^1.0.5
   flutter_blurhash: ^0.8.2
 

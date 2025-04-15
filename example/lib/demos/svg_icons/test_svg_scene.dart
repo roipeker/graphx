@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
-import 'package:graphx_svg_utils/svg_utils.dart';
 
 import '../../assets/svg_icons.dart';
+import '../../utils/utils.dart';
 
 class TestSvgScene extends GSprite {
   final groundHeight = 100.0;

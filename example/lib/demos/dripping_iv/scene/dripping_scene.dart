@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
-import 'package:graphx_svg_utils/graphx_svg_utils.dart';
+import 'package:example_graphx/utils/utils.dart';
 import 'svgs.dart';
 
 class DrippingScene extends GSprite {
@@ -21,7 +20,7 @@ class DrippingScene extends GSprite {
     tubeMask = GShape();
     tubeMask!.setPosition(13, 29);
     tubeMask!.graphics
-        .beginFill(Colors.white.withOpacity(.2))
+        .beginFill(Colors.white.withValues(alpha: .2))
         .drawRoundRect(tubeOffset, tubeOffset, tubeW - tubeOffset * 2,
             tubeH - tubeOffset * 2, tubeW / 2)
         .endFill();
