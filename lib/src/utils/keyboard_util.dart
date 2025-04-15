@@ -51,8 +51,8 @@ class GKeyboard {
   ///
   /// This method removes the keyboard event listeners from the current [Stage].
   static void dispose() {
-    _stage?.keyboard?.onDown.remove(_onKey);
-    _stage?.keyboard?.onUp.remove(_onKey);
+    _stage?.keyboard.onDown.remove(_onKey);
+    _stage?.keyboard.onUp.remove(_onKey);
   }
 
   /// Initializes the [GKeyboard] utility class.
@@ -61,8 +61,8 @@ class GKeyboard {
   /// [Stage].
   static void init(Stage stage) {
     _stage = stage;
-    _stage!.keyboard!.onDown.add(_onKey);
-    _stage!.keyboard!.onUp.add(_onKey);
+    _stage!.keyboard.onDown.add(_onKey);
+    _stage!.keyboard.onUp.add(_onKey);
   }
 
   /// Returns `true` if the specified [GKey] instance is currently pressed.

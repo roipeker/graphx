@@ -1,6 +1,7 @@
 import 'package:flutter/scheduler.dart';
 
 import '../events/events.dart';
+import '../log/trace.dart';
 
 /// A [Stopwatch] object used for measuring elapsed time.
 Stopwatch _stopwatch = Stopwatch();
@@ -48,23 +49,25 @@ class GTicker {
   /// The time elapsed since the last frame in seconds.
   double _currentDeltaTime = 0;
 
-  /// The ratio of the current delta time to the expected delta time.
-  /// In a range of [0-1]
-  double _currentDeltaRatio = 0.0;
+  /// The smoothed frame rate over the last few frames.
+  double _smoothedFrameRate = 60.0;
+  static const int _smoothingFrames = 30;
+  final List<double> _frameRateHistory = List.filled(_smoothingFrames, 60.0);
+  int _frameRateHistoryIndex = 0;
 
-  /// The frame rate of the [Ticker] in frames per second.
-  double frameRate = 60.0;
+  /// Gets the current actual frame rate based on the last frame's delta time.
+  /// This provides a real-time measurement of the actual frame rate being achieved.
+  double get currentFrameRate {
+    if (_currentDeltaTime <= 0) return 0;
+    return 1.0 / _currentDeltaTime;
+  }
 
-  /// The expected delta time based on the current frame rate.
-  late double _expectedDelta;
+  /// Gets the smoothed frame rate over the last few frames.
+  /// This provides a more stable measurement of the actual frame rate.
+  double get smoothedFrameRate => _smoothedFrameRate;
 
   /// Creates a [GTicker].
   GTicker();
-
-  /// The ratio of the current delta time to the expected delta time.
-  double get currentDeltaRatio {
-    return _currentDeltaRatio;
-  }
 
   /// The time elapsed since the last frame in seconds.
   double get currentDeltaTime {
@@ -121,7 +124,6 @@ class GTicker {
     }
     _createTicker();
     _ticker?.muted = false;
-    _expectedDelta = 1.0 / frameRate;
   }
 
   /// Creates a [Ticker] object if it hasn't been created yet, and starts it if
@@ -142,17 +144,16 @@ class GTicker {
     _currentDeltaTime = (now - _currentTime);
     _currentTime = now;
 
-    /// Avoid overloading frames (happens per scene).
-    _currentDeltaTime = _currentDeltaTime.clamp(1.0 / frameRate, 1.0);
-    _currentDeltaRatio = _currentDeltaTime / _expectedDelta;
-
+    // Update frame rate history
+    _frameRateHistory[_frameRateHistoryIndex] = currentFrameRate;
+    _frameRateHistoryIndex = (_frameRateHistoryIndex + 1) % _smoothingFrames;
+    _smoothedFrameRate =
+        _frameRateHistory.reduce((a, b) => a + b) / _smoothingFrames;
     if (_nextFrameCallback != null) {
       var callback = _nextFrameCallback;
       _nextFrameCallback = null;
       callback?.call();
     }
     onFrame.dispatch(_currentDeltaTime);
-//    advanceTime(_currentDeltaTime);
-//    render();
   }
 }

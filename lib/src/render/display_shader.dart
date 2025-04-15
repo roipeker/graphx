@@ -74,7 +74,8 @@ import '../../graphx.dart';
 ///     fragColor = vec4(st.x, st.y, blue, 1.0);
 /// }
 /// ```
-abstract class DisplayShader implements FragmentShader {
+abstract class DisplayShader {
+  // `extends FragmentShader`
   /// A list of empty samplers that will be used when the fragment shader does
   /// not require any texture inputs.
   static final _emptySamplers = List<Image>.empty();
@@ -94,7 +95,6 @@ Did you call await DisplayShader.load("$id")?''');
   }
 
   /// See [Shader.debugDisposed]
-  @override
   bool get debugDisposed {
     return shader?.debugDisposed ?? true;
   }
@@ -122,7 +122,6 @@ Did you call await DisplayShader.load("$id")?''');
   }
 
   /// See [Shader.dispose]
-  @override
   void dispose() {
     shader?.dispose();
   }
@@ -147,13 +146,11 @@ Did you call await DisplayShader.load("$id")?''');
   }
 
   /// See [FragmentShader.setFloat]
-  @override
   void setFloat(int index, double value) {
     shader?.setFloat(index, value);
   }
 
   /// See [FragmentShader.setImageSampler]
-  @override
   void setImageSampler(int index, Image image) {
     shader?.setImageSampler(index, image);
   }

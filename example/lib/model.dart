@@ -198,13 +198,6 @@ final demos = <Scene>[
     hash: 'LPR:HGRj~q%MWBofofRjt7ayRjof',
     source: 'dna_3d'.git,
   ),
-  SampleScene(
-    title: "Splash Intro",
-    build: () => const SplashIntroMain(),
-    thumbnail: 'assets/thumbs/example_splash_intro.png',
-    hash: 'LCRH}CZhVsn4yXVsaKaKL#o~kWkW',
-    source: 'splash_intro'.git,
-  ),
   if (isSkia)
     SampleScene(
       title: "Lined Button",

@@ -1,3 +1,9 @@
+## [1.0.14]
+
+- BREAKING CHANGE: flutter_svg dependency removed. see https://github.com/roipeker/graphx_svg_utils
+- Removed fps setter from GTicker, delta time is properly calculated now.
+- 
+
 ## [1.0.12]
 
 - Missed a <CR> as EOF in a some dart files, failing static analysis.

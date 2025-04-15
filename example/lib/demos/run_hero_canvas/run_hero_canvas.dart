@@ -59,7 +59,7 @@ class RunHeroScene extends GSprite {
 
     addChild(RunHeroParallaxView());
 
-    stage!.keyboard!.onDown.add((e) {
+    stage!.keyboard.onDown.add((e) {
       if (e.isKey(LogicalKeyboardKey.space)) {
         mps.emit('jump');
       }

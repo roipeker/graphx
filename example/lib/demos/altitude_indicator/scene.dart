@@ -89,7 +89,7 @@ class AltitudIndicatorScene extends GSprite {
     stage!.onEnterFrame.add(onEnterFrame);
   }
 
-  bool isPressed(LogicalKeyboardKey key) => stage!.keyboard!.isPressed(key);
+  bool isPressed(LogicalKeyboardKey key) => stage!.keyboard.isPressed(key);
 
   int getDirY() {
     if (isPressed(LogicalKeyboardKey.arrowDown)) {

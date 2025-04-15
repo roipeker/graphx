@@ -6,22 +6,23 @@ publish_to: "none"
 version: 1.0.10+37
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.5.3 <4.0.0"
+  flutter: ">=3.24.3"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  flutter_svg: ^1.0.3
-  
+ 
   url_launcher: ^6.1.8
+  flutter_svg: ^2.0.17
 
   graphx:
     path: ../
   go_router: ^6.0.6
-  flutter_blurhash: ^0.7.0
   cupertino_icons: ^1.0.5
+  flutter_blurhash: ^0.8.2
 
 dev_dependencies:
   flutter_lints: ^2.0.1

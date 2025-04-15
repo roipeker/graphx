@@ -46,7 +46,6 @@ export 'simple_toast/simple_toast.dart';
 export 'simple_tween/simple_tween.dart';
 export 'sorting_button/sorting_button.dart';
 export 'spiral_loader/spiral_loader.dart';
-export 'splash_intro/splash_intro.dart';
 export 'submit_button/submit_button.dart';
 export 'svg_icons/svg_icons.dart';
 export 'trigrid/trigrid.dart';

@@ -133,7 +133,7 @@ class BreakoutAtari extends GSprite {
     // stage.color = Colors.black.value;
     // stage.showBoundsRect = true;
     stage!.maskBounds = true;
-    stage!.keyboard!.onUp.add((input) {
+    stage!.keyboard.onUp.add((input) {
       if (input.isKey(LogicalKeyboardKey.escape)) {
         isPaused = !isPaused;
         mps.emit1(GameEvents.action, isPaused);
@@ -146,7 +146,7 @@ class BreakoutAtari extends GSprite {
       }
     });
 
-    stage!.keyboard!.onDown.add((input) {
+    stage!.keyboard.onDown.add((input) {
       if (input.arrowLeft || input.isKey(LogicalKeyboardKey.keyA)) {
         movingLeft = true;
       } else if (input.arrowRight || input.isKey(LogicalKeyboardKey.keyD)) {
@@ -217,7 +217,7 @@ class BreakoutAtari extends GSprite {
     if (isDragging) {
       paddle.x = paddlePressX + (mouseX - stagePressX);
     } else {
-      var thrust = stage!.keyboard!.isShiftPressed ? 2.0 : 1.0;
+      var thrust = stage!.keyboard.isShiftPressed ? 2.0 : 1.0;
       if (movingLeft) {
         paddle.vx = -paddle.speed;
       } else if (movingRight) {

@@ -55,7 +55,7 @@ class SnakeGameScene extends GSprite {
     scoreSt.setPosition(20.0, 20.0);
     generateFood();
     resetSnake();
-    stage!.keyboard!.onDown.add(onKeyDown);
+    stage!.keyboard.onDown.add(onKeyDown);
   }
 
   @override

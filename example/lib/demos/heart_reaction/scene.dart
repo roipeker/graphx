@@ -1,5 +1,4 @@
 import 'package:graphx/graphx.dart';
-
 import '../../utils/utils.dart';
 import 'assets.dart';
 

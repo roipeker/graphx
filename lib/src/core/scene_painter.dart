@@ -234,9 +234,7 @@ class ScenePainter with EventDispatcherMixin {
   void _detectMouseMove() {
     // If there was no mouse move, dispatch a still event.
     // This handles static mouse OVER/OUT for moving/hiding objects.
-    if (_stage!.mouseEnableStillEvents &&
-        !_mouseMoveInputDetected &&
-        _lastMouseX != -1000000) {
+    if (_stage!.mouseEnableStillEvents && !_mouseMoveInputDetected && _lastMouseX != -1000000) {
       final input = MouseInputData(
         target: _stage,
         dispatcher: _stage!,
@@ -266,8 +264,7 @@ class ScenePainter with EventDispatcherMixin {
     //   trace(input.type);
     // }
     /// process it.
-    if (input.type == MouseInputType.move ||
-        input.type == MouseInputType.exit) {
+    if (input.type == MouseInputType.move || input.type == MouseInputType.exit) {
       _mouseMoveInputDetected = true;
       _lastMouseX = input.stageX;
       _lastMouseY = input.stageY;
@@ -280,6 +277,10 @@ class ScenePainter with EventDispatcherMixin {
     _lastMouseInput = input;
 
     stage!.captureMouseInput(input);
+  }
+
+  bool _canvasHitTest(ui.Offset position) {
+    return _stage?.$canvasHitTest(GPoint(position.dx, position.dy)) ?? false;
   }
 
   /// Handles the [PointerEventData] and creates a [MouseInputData] instance
@@ -355,6 +356,11 @@ class _GraphicsPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) =>
-      scene.shouldRepaint();
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => scene.shouldRepaint();
+
+  @override
+  bool hitTest(Offset position) {
+    return true ;
+    // return scene._canvasHitTest(position);
+  }
 }

@@ -9,7 +9,7 @@ class KeyboardEventData {
   final KeyEventType type;
 
   /// The raw key event.
-  final RawKeyEvent rawEvent;
+  final KeyEvent rawEvent;
 
   /// Creates a new instance of [KeyboardEventData] with the specified [type]
   /// and [rawEvent].
@@ -28,7 +28,8 @@ class KeyboardEventData {
 
   /// Returns true if the specified [key] is currently pressed, false otherwise.
   bool isPressed(GKey key) {
-    return rawEvent.isKeyPressed(key);
+    return rawEvent.logicalKey == key;
+    // return rawEvent.isKeyPressed(key);
   }
 
   /// Returns a string representation of the [KeyboardEventData].
@@ -47,7 +48,10 @@ enum KeyEventType {
   down,
 
   /// Signifies a key up event.
-  up
+  up,
+
+  /// keyboard long press (repeat) event.
+  repeat
 }
 
 /// An extension class for [KeyboardEventData], which adds helper properties for
@@ -72,4 +76,24 @@ extension MyKeyEventExt on KeyboardEventData {
   bool get arrowUp {
     return rawEvent.logicalKey == GKey.arrowUp;
   }
+
+  /// Returns `true` if the **Shift** key is currently pressed.
+  ///
+  /// Uses `HardwareKeyboard.instance.isShiftPressed` to check the state of the Shift key.
+  bool get isShift => HardwareKeyboard.instance.isShiftPressed;
+
+  /// Returns `true` if the **Alt (Option)** key is currently pressed.
+  ///
+  /// Useful for detecting multi-key shortcuts or alternative key bindings.
+  bool get isAlt => HardwareKeyboard.instance.isAltPressed;
+
+  /// Returns `true` if the **Control (Ctrl)** key is currently pressed.
+  ///
+  /// Commonly used for shortcuts like `Ctrl+C` (copy) or `Ctrl+V` (paste).
+  bool get isControl => HardwareKeyboard.instance.isControlPressed;
+
+  /// Returns `true` if the **Meta (Command/Windows key)** is currently pressed.
+  ///
+  /// On macOS, this is the **Command (⌘) key**, and on Windows, it is the **Windows key**.
+  bool get isMetaPressed => HardwareKeyboard.instance.isMetaPressed;
 }

@@ -32,6 +32,10 @@ Used at [Flutter Forward Extended London](https://gdg.community.dev/events/detai
 
 ### news.
 
+**v1.0.14** has some breaking changes, the flutter_svg dependency was removed, you can copy paste the
+old [SvgUtils](https://github.com/roipeker/graphx_svg_utils/blob/main/lib/svg_utils.dart) from the repo and use your own
+flutter_svg constraints. Use `ResourceLoader.setSvgDataParser()` to keep the svg loading support. 
+
 Check our [CHANGELOG](https://github.com/roipeker/graphx/blob/master/CHANGELOG.md).
  
 ### wiki-tips.

@@ -26,7 +26,7 @@ class JellyDotsScene extends GSprite {
 
   @override
   void addedToStage() {
-    stage!.keyboard!.onDown.add((event) {
+    stage!.keyboard.onDown.add((event) {
       if (event.isKey(LogicalKeyboardKey.keyD)) {
         points!.forEach(_toggleVisible);
       } else if (event.isKey(LogicalKeyboardKey.keyO)) {

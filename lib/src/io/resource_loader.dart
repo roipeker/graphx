@@ -3,40 +3,90 @@ import 'dart:ui' as ui;
 import 'dart:ui';
 
 import '../../graphx.dart';
-import 'network_image_loader.dart';
 
-/// This class is used to load and cache different types of resources, including
-/// SVG files, images, shaders, and texture atlases. It also provides a method
-/// to clear the cache of all loaded resources.
+/// A callback function that parses SVG string data into an [SvgData] object.
+///
+/// Used by [ResourceLoader] to convert raw SVG strings into renderable [SvgData] objects.
+///
+/// Parameters:
+///   [svgData] - The raw SVG string to parse
+/// Returns:
+///   [SvgData] if parsing succeeds, null if parsing fails
+typedef SvgStringToDataCallback = Future<SvgData?> Function(String svgData);
+
+/// Manages loading and caching of various resource types including SVGs, images, shaders,
+/// and texture atlases.
+///
+/// Key features:
+/// - Caches resources to avoid reloading
+/// - Supports local assets and network resources
+/// - Handles SVG parsing and rendering
+/// - Manages texture atlases and GIF animations
+/// - Provides shader loading capabilities
+///
+/// Usage:
+/// ```dart
+/// // Load a texture from assets
+/// final texture = await ResourceLoader.loadTexture('assets/image.png');
+///
+/// // Load and cache a network image
+/// final networkTexture = await ResourceLoader.loadNetworkTexture(
+///   'https://example.com/image.png',
+///   cacheId: 'unique-id'
+/// );
+///
+/// // Clear all cached resources
+/// ResourceLoader.clearCache();
+/// ```
 abstract class ResourceLoader {
-  /// A static cache of SVG data. The cache is a map, where the key is a unique
-  /// identifier for the SVG, and the value is an instance of the [SvgData]
-  /// class.
-  static Map<String, SvgData> svgCache = <String, SvgData>{};
+  /// Cache for raw SVG string data.
+  /// Keys are unique identifiers, values are the SVG strings.
+  static Map<String, String> svgStringCache = <String, String>{};
 
-  /// A static cache of fragment shaders. The cache is a map, where the key is a
-  /// unique identifier for the shader, and the value is an instance of the
-  /// [FragmentProgram] class.
+  /// Cache for parsed SVG data.
+  /// Keys are unique identifiers, values are parsed [SvgData] objects.
+  static final svgDataCache = <String, SvgData>{};
+
+  /// Cache for fragment shader programs.
+  /// Keys are unique identifiers, values are compiled [FragmentProgram] objects.
   static Map<String, FragmentProgram> shaderCache = <String, FragmentProgram>{};
 
-  /// A static cache of texture data. The cache is a map, where the key is a
-  /// unique identifier for the texture, and the value is an instance of the
-  /// [GTexture] class.
+  /// Cache for texture data.
+  /// Keys are unique identifiers, values are [GTexture] instances.
   static Map<String, GTexture> textureCache = <String, GTexture>{};
 
-  /// A static cache of texture atlases. The cache is a map, where the key is a
-  /// unique identifier for the atlas, and the value is an instance of the
-  /// [GTextureAtlas] class.
+  /// Cache for texture atlases.
+  /// Keys are unique identifiers, values are [GTextureAtlas] instances.
   static Map<String, GTextureAtlas> atlasCache = <String, GTextureAtlas>{};
 
-  /// A static cache of GIF images. The cache is a map, where the key is a
-  /// unique identifier for the GIF, and the value is an instance of the
-  /// [GifAtlas] class.
+  /// Cache for GIF animations.
+  /// Keys are unique identifiers, values are [GifAtlas] instances.
   static Map<String, GifAtlas> gifCache = <String, GifAtlas>{};
 
-  /// Clears all loaded resource caches.
+  /// Parser function for converting SVG strings to [SvgData].
+  /// Must be set via [setSvgDataParser] before loading SVGs.
+  /// Relies on the [graphx_svg_utils] package.
+  static SvgStringToDataCallback? _svgDataParser;
+
+  /// Sets the parser function used to convert SVG strings into [SvgData] objects.
+  ///
+  /// Must be called before attempting to load or parse any SVG resources.
+  ///
+  /// Parameters:
+  ///   [callback] - The parsing function to use
+  static void setSvgDataParser(SvgStringToDataCallback callback) {
+    _svgDataParser = callback;
+  }
+
+  /// Clears all cached resources and disposes of any allocated memory.
+  ///
+  /// This includes:
+  /// - SVG data and strings
+  /// - Textures
+  /// - Texture atlases
+  /// - GIF animations
   static void clearCache() {
-    for (var vo in svgCache.values) {
+    for (var vo in svgDataCache.values) {
       vo.dispose();
     }
     for (var vo in textureCache.values) {
@@ -48,53 +98,90 @@ abstract class ResourceLoader {
     for (var vo in gifCache.values) {
       vo.dispose();
     }
+    svgDataCache.clear();
+    svgStringCache.clear();
+    textureCache.clear();
+    gifCache.clear();
   }
 
-  /// Retrieves a cached [GTextureAtlas] instance associated with the given
-  /// [cacheId]. Returns null if no [GTextureAtlas] is found.
+  /// Retrieves a cached texture atlas by its ID.
+  ///
+  /// Parameters:
+  ///   [cacheId] - The unique identifier for the atlas
+  /// Returns:
+  ///   The [GTextureAtlas] if found, null otherwise
   static GTextureAtlas? getAtlas(String cacheId) {
     return atlasCache[cacheId];
   }
 
-  /// Retrieves a cached [GifAtlas] instance associated with the given
-  /// [cacheId]. Returns null if no [GifAtlas] is found.
+  /// Retrieves a cached GIF animation by its ID.
+  ///
+  /// Parameters:
+  ///   [cacheId] - The unique identifier for the GIF
+  /// Returns:
+  ///   The [GifAtlas] if found, null otherwise
   static GifAtlas? getGif(String cacheId) {
     return gifCache[cacheId];
   }
 
-  /// Returns the loaded fragment shader program corresponding to the given
-  /// [cacheId]. If the [cacheId] is not present in the [shaderCache], null is
-  /// returned.
+  /// Retrieves a cached shader program by its ID.
+  ///
+  /// Parameters:
+  ///   [cacheId] - The unique identifier for the shader
+  /// Returns:
+  ///   The [FragmentProgram] if found, null otherwise
   static FragmentProgram? getShader(String cacheId) {
     return shaderCache[cacheId];
   }
 
-  /// This method returns an [SvgData] instance for a given cacheId, or null if
-  /// the cacheId is not present in the [svgCache] cache.
-  static SvgData? getSvg(String cacheId) {
-    return svgCache[cacheId];
+  /// Retrieves a cached SVG string by its ID.
+  ///
+  /// Parameters:
+  ///   [cacheId] - The unique identifier for the SVG string
+  /// Returns:
+  ///   The SVG string if found, null otherwise
+  static String? getSvgString(String cacheId) {
+    return svgStringCache[cacheId];
   }
 
-  /// This method returns a [GTexture] instance for a given cacheId, or null if
-  /// the cacheId is not present in the [textureCache] cache.
+  /// Retrieves cached SVG data by its ID.
+  ///
+  /// Parameters:
+  ///   [cacheId] - The unique identifier for the SVG data
+  /// Returns:
+  ///   The [SvgData] if found, null otherwise
+  static SvgData? getSvgData(String cacheId) {
+    return svgDataCache[cacheId];
+  }
+
+  /// Retrieves a cached texture by its ID.
+  ///
+  /// Parameters:
+  ///   [cacheId] - The unique identifier for the texture
+  /// Returns:
+  ///   The [GTexture] if found, null otherwise
   static GTexture? getTexture(String cacheId) {
     return textureCache[cacheId];
   }
 
-  /// Loads a binary file from local assets.
+  /// Loads binary data from a local asset file.
   ///
-  /// The [path] argument is the path to the binary file to be loaded.
-  ///
-  /// Returns a [Future] that completes with a [ByteData] object.
+  /// Parameters:
+  ///   [path] - The asset path to load from
+  /// Returns:
+  ///   A [Future] completing with the loaded [ByteData]
   static Future<ByteData> loadBinary(String path) async {
     return await rootBundle.load(path);
   }
 
-  /// Loads a [GifAtlas] instance from the given asset [path]. If a [cacheId] is
-  /// provided, the resulting [GifAtlas] is stored in the cache with the given
-  /// ID. If the [cacheId] already exists in the cache, the cached [GifAtlas] is
-  /// returned. The [resolution] parameter controls the scaling of the gif's
-  /// frames.
+  /// Loads and caches a GIF animation from a local asset file.
+  ///
+  /// Parameters:
+  ///   [path] - The asset path to the GIF file
+  ///   [resolution] - Scale factor for the GIF frames (default: 1.0)
+  ///   [cacheId] - Optional ID to cache the loaded GIF
+  /// Returns:
+  ///   A [Future] completing with the loaded [GifAtlas]
   static Future<GifAtlas> loadGif(
     String path, {
     double resolution = 1.0,
@@ -122,13 +209,14 @@ abstract class ResourceLoader {
     return atlas;
   }
 
-  /// Loads an image from local assets.
+  /// Loads an image from a local asset file with optional resizing.
   ///
-  /// The [path] argument is the path to the image file to be loaded. The
-  /// optional [targetWidth] and [targetHeight] arguments can be used to specify
-  /// the maximum width and height of the loaded image.
-  ///
-  /// Returns a [Future] that completes with a [ui.Image] object.
+  /// Parameters:
+  ///   [path] - The asset path to the image file
+  ///   [targetWidth] - Optional maximum width for the loaded image
+  ///   [targetHeight] - Optional maximum height for the loaded image
+  /// Returns:
+  ///   A [Future] completing with the loaded [ui.Image]
   static Future<ui.Image> loadImage(
     String path, {
     int? targetWidth,
@@ -145,51 +233,38 @@ abstract class ResourceLoader {
     return (await codec.getNextFrame()).image;
   }
 
-  /// Loads a JSON file from local assets.
+  /// Loads and parses a JSON file from a local asset.
   ///
-  /// The [path] argument is the path to the JSON file to be loaded.
-  ///
-  /// Returns a [Future] that completes with a parsed JSON object.
+  /// Parameters:
+  ///   [path] - The asset path to the JSON file
+  /// Returns:
+  ///   A [Future] completing with the parsed JSON data
   static Future<dynamic> loadJson(String path) async {
     final str = await loadString(path);
     return jsonDecode(str);
   }
 
-  /// Loads an SVG from a network URL and returns a [SvgData] object. The SVG is
-  /// loaded asynchronously, and the returned [Future] is completed with the
-  /// [SvgData] object when the SVG is fully loaded. If [cacheId] is provided,
-  /// the loaded SVG will be added to the SVG cache using [cacheId] as the key.
+  /// Loads and optionally caches a texture from a network URL.
   ///
-  /// Throws a [FlutterError] if the SVG cannot be loaded.
-  static Future<SvgData> loadNetworkSvg(
-    String url, {
-    String? cacheId,
-    NetworkEventCallback? onComplete,
-    NetworkEventCallback? onProgress,
-    NetworkEventCallback? onError,
-  }) async {
-    final response = await NetworkImageLoader.loadSvg(
-      url,
-      onComplete: onComplete,
-      onProgress: onProgress,
-      onError: onError,
-    );
-    if (response.isError) {
-      throw FlutterError(
-          'Unable to load SVG $url.\nReason: ${response.reasonPhrase}');
-    }
-    if (response.isSvg && cacheId != null) {
-      svgCache[cacheId] = response.svgData!;
-    }
-    return response.svgData!;
-  }
-
-  /// Loads a network texture from the given URL with optional [width], [height],
-  /// [resolution], and [cacheId]. If the texture is already in the cache, it is
-  /// returned directly. Otherwise, the texture is downloaded and converted into
-  /// a [GTexture] instance.
+  /// Features:
+  /// - Supports image resizing via [width] and [height]
+  /// - Configurable resolution scaling
+  /// - Progress tracking via callbacks
+  /// - Automatic caching with [cacheId]
   ///
-  /// Throws a [FlutterError] if the texture can't be loaded.
+  /// Parameters:
+  ///   [url] - The URL to load the image from
+  ///   [width] - Optional target width
+  ///   [height] - Optional target height
+  ///   [resolution] - Scale factor for the texture (default: 1.0)
+  ///   [cacheId] - Optional ID to cache the texture
+  ///   [onComplete] - Called when loading completes
+  ///   [onProgress] - Called with loading progress updates
+  ///   [onError] - Called if loading fails
+  /// Returns:
+  ///   A [Future] completing with the loaded [GTexture]
+  /// Throws:
+  ///   [FlutterError] if loading fails
   static Future<GTexture> loadNetworkTexture(
     String url, {
     int? width,
@@ -223,16 +298,116 @@ abstract class ResourceLoader {
     return response.texture!;
   }
 
-  /// Loads an image from a network URL and returns a [GTexture] object. The
-  /// image is loaded asynchronously, and the returned [Future] is completed
-  /// with the [GTexture] object when the image is fully loaded. The [width] and
-  /// [height] parameters can be used to resize the image. The [resolution]
-  /// parameter can be used to scale the image. If [cacheId] is provided, the
-  /// loaded texture will be added to the texture cache using [cacheId] as the
-  /// key. If the [cacheId] already exists in the cache, the cached texture will
-  /// be returned instead.
+  /// Loads and parses an SVG from a network URL into [SvgData].
   ///
-  /// Throws a [FlutterError] if the image cannot be loaded.
+  /// Features:
+  /// - Automatic caching with [cacheId]
+  /// - Progress tracking via callbacks
+  /// - Built-in SVG parsing
+  ///
+  /// Parameters:
+  ///   [url] - The URL to load the SVG from
+  ///   [cacheId] - Optional ID to cache the parsed SVG
+  ///   [onComplete] - Called when loading completes
+  ///   [onProgress] - Called with loading progress updates
+  ///   [onError] - Called if loading fails
+  /// Returns:
+  ///   A [Future] completing with the parsed [SvgData]
+  /// Throws:
+  ///   [FlutterError] if loading fails or parser is not initialized
+  static Future<SvgData> loadNetworkSvgData(
+    String url, {
+    String? cacheId,
+    NetworkEventCallback? onComplete,
+    NetworkEventCallback? onProgress,
+    NetworkEventCallback? onError,
+  }) async {
+    if (svgDataCache.containsKey(cacheId)) {
+      return svgDataCache[cacheId]!;
+    }
+    if (_svgDataParser == null) {
+      throw FlutterError('You need to initialize the parser with '
+          '[ResourceLoader.setSvgDataParser] callback first');
+    }
+    final svgString = await loadNetworkSvgString(
+      url,
+      cacheId: cacheId,
+      onComplete: onComplete,
+      onProgress: onProgress,
+      onError: onError,
+    );
+    final svgData = await _svgDataParser!(svgString);
+    if (svgData == null) {
+      throw FlutterError(
+        'Unable to parse SVG.\nstring data: $svgString',
+      );
+    }
+    if (cacheId != null) {
+      // only track valid svg strings.
+      svgDataCache[cacheId] = svgData;
+    }
+    return svgData;
+  }
+
+  /// Loads an SVG string from a network URL.
+  ///
+  /// Features:
+  /// - Automatic caching with [cacheId]
+  /// - Progress tracking via callbacks
+  ///
+  /// Parameters:
+  ///   [url] - The URL to load the SVG from
+  ///   [cacheId] - Optional ID to cache the SVG string
+  ///   [onComplete] - Called when loading completes
+  ///   [onProgress] - Called with loading progress updates
+  ///   [onError] - Called if loading fails
+  /// Returns:
+  ///   A [Future] completing with the SVG string
+  /// Throws:
+  ///   [FlutterError] if loading fails
+  static Future<String> loadNetworkSvgString(
+    String url, {
+    String? cacheId,
+    NetworkEventCallback? onComplete,
+    NetworkEventCallback? onProgress,
+    NetworkEventCallback? onError,
+  }) async {
+    if (cacheId != null && svgStringCache.containsKey(cacheId)) {
+      return svgStringCache[cacheId]!;
+    }
+    final response = await NetworkImageLoader.loadSvgString(
+      url,
+      onComplete: onComplete,
+      onProgress: onProgress,
+      onError: onError,
+    );
+    if (response.isError) {
+      throw FlutterError(
+          'Unable to load SVG $url.\nReason: ${response.reasonPhrase}');
+    }
+    if (response.isSvg && cacheId != null) {
+      svgStringCache[cacheId] = response.svgString!;
+    }
+    return response.svgString!;
+  }
+
+  /// Simplified version of [loadNetworkTexture] without progress tracking.
+  ///
+  /// Features:
+  /// - Supports image resizing
+  /// - Configurable resolution scaling
+  /// - Optional caching
+  ///
+  /// Parameters:
+  ///   [url] - The URL to load the image from
+  ///   [width] - Optional target width
+  ///   [height] - Optional target height
+  ///   [resolution] - Scale factor for the texture (default: 1.0)
+  ///   [cacheId] - Optional ID to cache the texture
+  /// Returns:
+  ///   A [Future] completing with the loaded [GTexture]
+  /// Throws:
+  ///   [FlutterError] if loading fails
   static Future<GTexture> loadNetworkTextureSimple(
     String url, {
     int? width,
@@ -263,10 +438,13 @@ abstract class ResourceLoader {
     // }
   }
 
-  /// Loads a shader program from the given [path]. If the program is already in
-  /// the cache, it is returned directly. Otherwise, the program is loaded from
-  /// the given path and stored in the cache (with the optional [cacheId]) for
-  /// future use.
+  /// Loads and optionally caches a shader program from a local asset.
+  ///
+  /// Parameters:
+  ///   [path] - The asset path to the shader file
+  ///   [cacheId] - Optional ID to cache the shader program
+  /// Returns:
+  ///   A [Future] completing with the loaded [FragmentProgram]
   static Future<FragmentProgram> loadShader(String path,
       [String? cacheId]) async {
     if (shaderCache.containsKey(cacheId)) {
@@ -277,35 +455,24 @@ abstract class ResourceLoader {
     return program;
   }
 
-  /// Loads a string (plain text) file from local assets.
+  /// Loads a text file from a local asset.
   ///
-  /// The [path] argument is the path to the string file to be loaded.
-  ///
-  /// Returns a [Future] that completes with a [String] object.
+  /// Parameters:
+  ///   [path] - The asset path to the text file
+  /// Returns:
+  ///   A [Future] completing with the loaded string
   static Future<String> loadString(String path) async {
     return await rootBundle.loadString(path);
   }
 
-  /// A static method to load an SVG image from a file.
+  /// Loads and optionally caches a texture from a local asset.
   ///
-  /// This method takes the [path] to the SVG file and an optional [cacheId]. If
-  /// the [cacheId] is not null it will return the cached SVG data. Otherwise,
-  /// it will load the SVG.
-  static Future<SvgData> loadSvg(
-    String path, [
-    String? cacheId,
-  ]) async {
-    cacheId ??= path;
-    svgCache[cacheId] =
-        await SvgUtils.svgDataFromString(await loadString(path));
-    return svgCache[cacheId]!;
-  }
-
-  /// Loads a texture from the given [path] with optional [resolution] and
-  /// [cacheId].
-  /// If the texture is already in the cache, it is returned directly.
-  /// Otherwise, the image at the given path is loaded and converted into a
-  /// [GTexture] instance.
+  /// Parameters:
+  ///   [path] - The asset path to the image file
+  ///   [resolution] - Scale factor for the texture (default: 1.0)
+  ///   [cacheId] - Optional ID to cache the texture
+  /// Returns:
+  ///   A [Future] completing with the loaded [GTexture]
   static Future<GTexture> loadTexture(
     String path, [
     double resolution = 1.0,
@@ -321,21 +488,21 @@ abstract class ResourceLoader {
     return texture;
   }
 
-  /// Loads a texture atlas from an image and XML/JSON data file.
+  /// Loads and optionally caches a texture atlas from image and data files.
   ///
-  /// The [imagePath] argument is the path to the image file, while the optional
-  /// [dataPath] argument is the path to the XML data file. The [resolution]
-  /// argument sets the resolution of the texture. The [cacheId] argument sets
-  /// the ID to be used to cache the texture atlas in memory.
+  /// Features:
+  /// - Supports XML and JSON data formats
+  /// - Automatic data file path inference
+  /// - Configurable resolution scaling
+  /// - Optional caching
   ///
-  /// If the [cacheId] argument is not `null`, and there is a texture atlas
-  /// already cached with the same ID, this method will return the cached atlas
-  /// instead of loading a new one.
-  ///
-  /// If the [dataPath] argument is not provided, this method will attempt to
-  /// guess the path to the XML data file based on the [imagePath] argument.
-  ///
-  /// Returns a [Future] that completes with a [GTextureAtlas] object.
+  /// Parameters:
+  ///   [imagePath] - The asset path to the atlas image
+  ///   [dataPath] - Optional path to the atlas data file (XML/JSON)
+  ///   [resolution] - Scale factor for the atlas (default: 1.0)
+  ///   [cacheId] - Optional ID to cache the atlas
+  /// Returns:
+  ///   A [Future] completing with the loaded [GTextureAtlas]
   static Future<GTextureAtlas> loadTextureAtlas(
     String imagePath, {
     String? dataPath,

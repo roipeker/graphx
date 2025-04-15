@@ -6,7 +6,16 @@ import '../../graphx.dart';
 class MouseInputData {
   /// Duration in milliseconds within which two mouse clicks count as a double
   /// click.
-  static int doubleClickTime = 250;
+  static double doubleClickTime = 0.5;
+
+  /// Max click time duration.
+  static double clickTime = 0.200;
+
+  /// on Release this distance is the max threshold to allow a tap
+  static double tapMaxDistance = 30.0;
+
+  /// on Release this is the max elapsed time to allow a tap.
+  static double tapMaxTime = 0.250;
 
   static final GPoint _localDelta = GPoint();
 
@@ -212,6 +221,9 @@ enum MouseInputType {
 
   /// Mouse wheel has been moved while holding down CTRL/CMD or ALT.
   zoomPan,
+
+  /// Tap gesture on mobile.
+  tap,
 
   /// Unrecognized input type.
   unknown,

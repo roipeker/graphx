@@ -155,7 +155,9 @@ class GPoint {
   /// pointing to the right and increasing in the counterclockwise direction.
   /// Returns a [GPoint] object with x and y coordinates calculated from the
   /// polar coordinates.
-  static GPoint polar(double length, double angle) {
-    return GPoint(Math.cos(angle) * length, Math.sin(angle) * length);
+  static GPoint polar(double length, double angle,
+      [double centerX = 0, double centerY = 0,]) {
+    return GPoint(
+        centerX + Math.cos(angle) * length, centerY + Math.sin(angle) * length);
   }
 }

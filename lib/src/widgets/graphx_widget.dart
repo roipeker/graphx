@@ -72,6 +72,9 @@ class SceneBuilderWidgetState extends State<SceneBuilderWidget> {
     _controller = widget.builder();
     _controller.resolveWindowBounds = _getRenderObjectWindowBounds;
     _controller.$init();
+    if (_controller.config.useKeyboard) {
+      HardwareKeyboard.instance.addHandler(_keyboardHandler);
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (context.size?.isEmpty == true) {
         trace("""Warning:
@@ -98,6 +101,7 @@ Flexible().
 
   @override
   void dispose() {
+    HardwareKeyboard.instance.removeHandler(_keyboardHandler);
     _controller.dispose();
     super.dispose();
   }
@@ -113,6 +117,9 @@ Flexible().
 
   // @override
   // void didUpdateWidget(SceneBuilderWidget oldWidget) {}
+
+  bool _keyboardHandler(KeyEvent event) =>
+      _controller.$inputConverter.handleKey(event);
 
   @override
   Widget build(BuildContext context) {
@@ -151,16 +158,9 @@ Flexible().
     }
     if (_controller.config.useKeyboard) {
       child = Focus(
-        onKeyEvent: (node, event) => KeyEventResult.handled,
-        // autofocus: true,
-        // descendantsAreFocusable: true,
-        child: RawKeyboardListener(
-          onKey: converter.handleKey,
-          autofocus: true,
-          includeSemantics: false,
-          focusNode: converter.keyboard.focusNode,
-          child: child,
-        ),
+        focusNode: converter.keyboard.focusNode,
+        autofocus: true,
+        child: child,
       );
     }
     return child;

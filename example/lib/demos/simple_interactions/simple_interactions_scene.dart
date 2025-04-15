@@ -37,8 +37,8 @@ class SimpleInteractionsScene extends GSprite {
     ball.x = 100;
     ball.y = 100;
 
-    stage!.keyboard!.onDown.add(_onKeyboardDown);
-    stage!.keyboard!.onUp.add(_onKeyboardUp);
+    stage!.keyboard.onDown.add(_onKeyboardDown);
+    stage!.keyboard.onUp.add(_onKeyboardUp);
   }
 
   /// Only the stage has access to keyboard events.
@@ -54,7 +54,7 @@ class SimpleInteractionsScene extends GSprite {
     /// for access modifiers keys, is better to check the raw event itself.
     /// as multiple physical keys have the same behaviour (shift, command,
     /// alt, etc) but different key codes.
-    if (event.rawEvent.isShiftPressed) {
+    if (event.isShift) {
       pixelsToMove = 30.0;
     }
 

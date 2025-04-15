@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graphx/graphx.dart';
 
+import '../../utils/utils.dart';
+
 class LungsScene extends GSprite {
   @override
   Future<void> addedToStage() async {

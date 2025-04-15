@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart' show Colors, BlendMode;
 import 'package:graphx/graphx.dart';
 
@@ -92,7 +94,7 @@ class ColorfulShadersScene extends GSprite {
   }
 }
 
-class ColorfulShader extends DisplayShader {
+final class ColorfulShader extends DisplayShader {
   // Change params.
   double time = 0;
   double width = 100;

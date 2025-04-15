@@ -18,9 +18,6 @@ class NetworkImageEvent {
   /// The SVG string data, if this event represents an SVG.
   String? svgString;
 
-  /// The parsed SVG data, if this event represents an SVG.
-  SvgData? svgData;
-
   /// The loaded image data, if this event represents an image.
   Image? image;
 
@@ -188,7 +185,7 @@ class NetworkImageLoader {
 
   /// Loads an SVG from the specified [url] and returns a [NetworkImageEvent]
   /// upon completion.
-  static Future<NetworkImageEvent> loadSvg(
+  static Future<NetworkImageEvent> loadSvgString(
     String url, {
     NetworkEventCallback? onComplete,
     NetworkEventCallback? onProgress,
@@ -223,9 +220,8 @@ class NetworkImageLoader {
           dispatchError(eventData);
           return;
         }
-        var svgString = utf8.decode(Uint8List.fromList(loadedBytes));
+        final svgString = utf8.decode(Uint8List.fromList(loadedBytes));
         eventData.svgString = svgString;
-        eventData.svgData = await SvgUtils.svgDataFromString(svgString);
         onComplete?.call(eventData);
         completer.complete(eventData);
       });

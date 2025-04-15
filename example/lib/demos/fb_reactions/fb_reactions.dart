@@ -190,9 +190,8 @@ class _IconReaction extends StatelessWidget {
   final int? count;
 
   const _IconReaction({
-    super.key,
     this.iconData,
-    this.color = Colors.black,
+    required this.color,
     this.count,
   });
 

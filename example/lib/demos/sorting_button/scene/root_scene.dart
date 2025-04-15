@@ -5,12 +5,12 @@
 ///      builder: () => SceneController(front: RootScene()),
 ///      child: MaterialApp(
 ///        home: Scaffold(
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RootWidget;
 import 'package:graphx/graphx.dart';
 
-class RootWidget extends StatelessWidget {
+class SceneRootWidget extends StatelessWidget {
   final Widget? child;
-  const RootWidget({super.key, this.child});
+  const SceneRootWidget({super.key, this.child});
   @override
   Widget build(BuildContext context) {
     return SceneBuilderWidget(

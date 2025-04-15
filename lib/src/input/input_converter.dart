@@ -24,12 +24,19 @@ class InputConverter {
   InputConverter(this.pointer, this.keyboard);
 
   /// Called when a keyboard event is detected.
-  void handleKey(RawKeyEvent event) {
-    final isDown = event is RawKeyDownEvent;
-    keyboard.$process(KeyboardEventData(
-      type: isDown ? KeyEventType.down : KeyEventType.up,
-      rawEvent: event,
-    ));
+  /// Returns `true` if the event was handled, otherwise `false`.
+  bool handleKey(KeyEvent event) {
+    return keyboard.$process(
+      KeyboardEventData(
+        type: const {
+          KeyDownEvent: KeyEventType.down,
+          KeyUpEvent: KeyEventType.up,
+          KeyRepeatEvent: KeyEventType.repeat,
+        }[event.runtimeType] ??
+            KeyEventType.up,
+        rawEvent: event,
+      ),
+    );
   }
 
   /// Called when a pointer is canceled.

@@ -76,8 +76,8 @@ class PageIndicatorPaged extends BaseScene {
     /// -- end masking.
 
     /// only for testing.
-    stage!.keyboard!.focusNode.requestFocus();
-    stage!.keyboard!.onDown.add((event) {
+    stage!.keyboard.focusNode.requestFocus();
+    stage!.keyboard.onDown.add((event) {
       if (event.arrowLeft) {
         moveDir(-1);
       } else if (event.arrowRight) {
